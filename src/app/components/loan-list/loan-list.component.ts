@@ -20,7 +20,7 @@ export class LoanListComponent implements OnInit {
   }
 
   getloanlist() {
-    this.loanService.getloanslistshort(this.pagesize, this.previndex).subscribe(res => {
+    this.loanService.getLoanList(this.pagesize, this.previndex).subscribe(res => {
       debugger
       if (res.ResCode == 1) {
         this.loanlist = res.Data;
@@ -29,6 +29,6 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: number) {
-    this.route.navigate(['/loanoverview/borrower', id]);
+    this.route.navigate(['/master/loanoverview', id]);
   }
 }

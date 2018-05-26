@@ -27,7 +27,7 @@ const appRoutes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'summary', component: SummaryComponent },
       { path: 'loans', component: LoanListComponent },
-      { path: 'loanoverview', component: LoanOverviewComponent },
+      { path: 'loanoverview/:id', component: LoanOverviewComponent },
     ]
   },
   { path: '**', component: PageNotFoundComponent }
