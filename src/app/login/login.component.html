@@ -1,0 +1,42 @@
+<div class="loginContainer">
+    <div class="InnerLogin">
+        <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
+        <h1>Welcome to Lenda Plus</h1>
+        <span>Sign in your account</span>
+        <!-- <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" /> -->
+        <p id="profile-name" class="profile-name-card"></p>
+        <form #loginForm="ngForm" class="form-signin">
+            <span id="reauth-email" cl ass="reauth-email"></span>
+            <div class="LoginRow">
+                <div class="mainUnput">
+                    <i class="material-icons">email</i>
+                    <input id="inputEmail" name="LoginId" #LoginId="ngModel" [(ngModel)]="username" [ngClass]="LoginId.invalid && !isValidForm?'errorlogin':''"
+                        placeholder="Username" type="text" required>
+                </div>
+            </div>
+            <div class="LoginRow">
+                <div class="mainUnput">
+                    <i class="material-icons">vpn_key</i>
+                    <input id="inputPassword" name="Password" #Password="ngModel" [(ngModel)]="password" [ngClass]="Password.invalid && !isValidForm?'errorlogin':''"
+                        placeholder="Password" type="password" required>
+                </div>
+            </div>
+            <button (click)="login()" class="btn btn-lg btn-primary btn-block btn-signin" type="submit">
+                Sign In
+            </button>
+        </form>
+        <!-- <div class="loginLogo">
+            <img src="../assets/images/login_logo.png">
+        </div> -->
+        <!-- /form -->
+        <!-- <a [routerLink]="['/login']" class="sign-up">
+            SignUp
+        </a> -->
+        <!-- <a href="#" class="forgot-password">
+            Forgot the password?
+        </a> -->
+    </div>
+
+    <!-- /card-container -->
+</div>
+<!-- /container -->

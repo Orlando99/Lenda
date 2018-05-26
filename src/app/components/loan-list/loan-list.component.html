@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-sm-12">
+
+    <div class="table-responsive">
+      <table class="table table-styling">
+        <thead>
+        <tr class="table-secondary">
+          <th>Loan No</th>
+          <th>Farmer</th>
+          <th>Application Date</th>
+          <th>Applicant</th>
+          <th>Type</th>
+          <th>Year</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr style="cursor:pointer" (click)="navigatetoloan(loan.Id)" *ngFor="let loan of loanlist">
+          <th scope="row">{{loan.Id}}</th>
+          <td>{{loan.FarmerName}}</td>
+          <td>{{loan.ApplicationDate | date:short}}</td>
+          <td>{{loan.ApplicantName}}</td>
+          <td>{{loan.LoanTypeName}}</td>
+          <td>{{loan.CropYear}}</td>
+        </tr> 
+        </tbody>
+      </table>
+    </div>
+    <!-- Custom Table color with hover and stripped table end -->
+  </div>
+</div>

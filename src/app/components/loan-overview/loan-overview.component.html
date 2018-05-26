@@ -1,0 +1,194 @@
+<div class="profile_page_wrapper">
+  <!-- Sub Header -->
+  <div class="profile_page_header">
+    <div class="profile_page_header_left">
+      <div class="avatar circle orange">
+        <div class="initials">
+          <span *ngIf="infoModel.ProfileURL!='' && infoModel.ProfileURL!=undefined && infoModel.ProfileURL!=null" title="FirstName"
+            class="initial_text">
+          </span>
+          <div title="FirstName" class="initial_text">
+            <span class="img_icon">AA</span>
+          </div>
+        </div>
+      </div>
+      <div id="profile_section" class="profile_info" *ngIf="infoModel!=undefined">
+        <h2 class="name">Dummy Name
+          <button class="btn-flat edit-profile">
+            <i class="material-icons">mode_edit</i>
+          </button>
+        </h2>
+        <div class="detail">
+          <span>
+            <strong>Age:</strong> 10</span>
+          <span>
+            <strong>Gender:</strong> Male</span>
+          <span>
+            <strong>Date Of Birth:</strong>10-10-2018</span>
+          <span>
+            <strong>Id:</strong> {{infoModel.MRN}}</span>
+          <span>
+            <strong>Email:</strong> gsingh@boldbuiness.com</span>
+          <span>
+            <strong>PhoneNumber:</strong> +91 8146069999</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile_page_header_right right-align childOverviewbtn">
+      <button class="green lighten-1 mat-btn-custom right modal-save btn_bck_staff_list" type="button" mat-button>
+        <span class="icon_mat left">
+          <mat-icon class="white-text">arrow_back</mat-icon>
+        </span>
+        Go Back to Child Overview
+      </button>
+    </div>
+  </div>
+
+  <div class="profile_page_content_wrapper has_sidebar">
+    <!-- Sidebar -->
+    <div class="sidebarHolder">
+      <div class="sidebarWrap">
+        <div class="sidebarContent">
+          <div class="SectionSidebar_nav">
+            <ul class="Section_nav">
+              <li>
+                <a scrollTo href="#profile_section">asdasd</a>
+                <ul>
+                  <li class="active">
+                    <a scrollTo href="#parentSection">asdasd</a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#referralSection">asdasd</a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#siblingSection">asdasd</a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#languageSection">asdasd</a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#agencySection">asdasdasd</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a scrollTo href="#medical_section"></a>
+                <ul>
+                  <li>
+                    <a scrollTo href="#PsychologySection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#MedicalSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#AllergySection"></a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a scrollTo href="#education_section"></a>
+                <ul>
+                  <li>
+                    <a scrollTo href="#SchoolDetailSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#WeeklyScheduleSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#SchoolHolidaysSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#SchoolServicesSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#ABAServiceSection"></a>
+                  </li>
+                  <li>
+                    <a scrollTo href="#OtherInfoSection"></a>
+                  </li>
+                </ul>
+
+              </li>
+              <li>
+                <a scrollTo href="#CurrentFunctionalitySection"></a>
+              </li>
+              <li>
+                <a scrollTo href="#FamilyInteractionSection"></a>
+              </li>
+              <li>
+                <a scrollTo href="#FundingSourceSection"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pageContent">
+      <div class="Childprofileinfo Collapseinfo">
+        <!-- BasicInfo Section -->
+        <mat-accordion>
+          <mat-expansion-panel [expanded]="true" hideToggle="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div class="collapsible-header active">
+                  <span>asdas</span>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="mat-collapsable">
+              <div class="Childdetailsection parentCare" id="parentSection">
+                <div class="topProfilesection">
+                  <div class="leftTitledetail">
+                    <h4>asdasd</h4>
+                  </div>
+                  <div class="rightActiondetail">
+                    <a (click)="openParentModal()" class="waves-effect waves-light btn-outline">
+                      <i class="material-icons left">add</i>sdasd</a>
+                  </div>
+                </div>
+                <span class="noDatafound" *ngIf="parents==undefined || parents.length==0">No record found</span>
+                <div class="childParentinfo">
+                  <div class="parentHeaderinfo">
+                    <div class="leftParentheaderinfo">
+
+                      <span class="rightParentinfo">
+                        <h4>sddsfdsf</h4>
+                        <span>sdsdff</span>
+                      </span>
+                    </div>
+                    <div class="rightParentaction list">
+
+                      <!-- Show More Tools -->
+                      <div class="outerAction">
+                        <div class="show_hide_tools">
+                          <a>
+                            <i class="material-icons">more_vert</i>
+                          </a>
+
+                          <ul class="tools" id="parent_more_{{parent.Id}}">
+                            <li>
+                              <a (click)="deleteParentInfo(parent.Id)" >
+                                <i class="material-icons">delete</i>
+                              </a>
+                            </li>
+                            <li>
+                              <a (click)="editParentModal(parent)" >
+                                <i class="material-icons">mode_edit</i>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+</div>

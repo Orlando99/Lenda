@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.ag-theme-blue .ag-header{
+    background-color:green !important
+}
+
+.ag-theme-blue .ag-row-odd {
+    background-color: white;
+}

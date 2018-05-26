@@ -1,0 +1,107 @@
+<!-- Start Top Nav Bar -->
+<nav class="top_NavBar is_fixed">
+  <div class="navbar-wrapper">
+
+    <!-- Company Brand -->
+    <div class="navLogo">
+      <a href="" class="navIcons">
+        <img src="../../../assets/images/logo.svg" alt="FirstPath Logo"> Lenda APP
+      </a>
+    </div>
+
+    <!-- Select Center -->
+    <!-- <div class="webApp_selectCenter">
+      <button mat-button [matMenuTriggerFor]="menu">
+        <span>All Centers</span>
+        <i class="material-icons">arrow_drop_down</i>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Item 1</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
+    </div> -->
+
+    <!-- Main Navigation -->
+
+
+    <!-- Quick Add Global -->
+
+
+    <!-- <button mat-button class="quickAdd"  >
+      <span class="quickAdd_btn btn green lighten-1 modal-trigger">
+        <i class="material-icons left">add</i> Quick Add</span>
+    </button> -->
+
+    <!-- System Navigation -->
+    <ul class="SystemNavigation">
+      <li class="headerNavigation_item" routerLinkActive="active">
+        <a [routerLink]="['/master/loans']">Loans</a>
+      </li>
+      <!-- <li class="headerNavigation_item" routerLinkActive="active">
+        <a [routerLink]="['/admin/getloanstatus']">LoanStatus</a>
+      </li>sss
+      <li class="headerNavigation_item" routerLinkActive="active">
+        <a [routerLink]="['/loanpreview']">Preview Current Loan Object</a>
+      </li>
+      <li class="headerNavigation_item" routerLinkActive="active">
+        <a [routerLink]="['/admin/namingconventions']">Naming Conventions</a>
+      </li> -->
+    </ul>
+
+  </div>
+</nav>
+<!-- End Nav Bar -->
+
+<!-- Start Application Header -->
+<header class="webApp_header">
+  <div class="header_Content plum-purple white-text">
+
+    <div class="contentTitle">
+      <h1> </h1>
+    </div>
+
+    <div class="WebAppHeader_search">
+      <div class="WebApp_globalSearch is_empty">
+        <div class="searchForm">
+
+        </div>
+      </div>
+    </div>
+    <span></span>
+
+
+    <div class="user_menu">
+      <div class="user_menu_contents" id="user_menu_contents">
+        <div class="user_menu_avatar dropdown" [matMenuTriggerFor]="LoginMenu">
+          <div class="avatar circle orange has_image">
+            <div class="initials">
+              <span class="initial_text">T</span>
+            </div>
+            <img src="../assets/images/noPhoto.png">
+          </div>
+          <i class="material-icons md-18">arrow_drop_down</i>
+          <mat-menu #LoginMenu="matMenu" id="LoginMenu">
+            <button mat-menu-item class="loginProfileMenu">
+              <i class="material-icons left">settings</i>
+              <span>Profile Setting</span>
+            </button>
+            <button id="user_menu_logout" mat-menu-item class="loginProfileMenu" title="Logout left">
+              <i class="material-icons">power_settings_new</i>
+              <span>Sign Out</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+</header>
+<!-- End Application Header -->

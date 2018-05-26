@@ -1,0 +1,969 @@
+<!--<button *ngIf="fullAccess(permission)" class="btn btn-primary btn-lg">Full-Access</button>
+<button *ngIf="modifyAccess(permission)" class="btn btn-primary btn-lg">Modify</button>
+<button *ngIf="viewAccess(permission)" class="btn btn-primary btn-lg">Readonly</button> -->
+<!-- Application Main Content Wrapper -->
+<div class="webApp_mainContent">
+  <div class="contentWrapper">
+    <!-- Tabed Menu -->
+    <section>
+      <div class="container">
+        <div class="row margin-0">
+          <div class="col l12">
+            <h2>LENDA PLUS</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabsNavigation border">
+        <ul class="tabsNavigation_list rounded">
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">remove_red_eye</i>
+              </span> Summary</a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">extension</i>
+              </span> Loans</a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#" class="active">
+              <span>
+                <i class="material-icons">mood_bad</i>
+              </span> Crops</a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">event</i>
+              </span> Farms </a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">assignment</i>
+              </span> Collateral</a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">note</i>
+              </span> Income</a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">equalizer</i>
+              </span> Reports </a>
+          </li>
+          <li class="tabsNavigation_item">
+            <a href="#">
+              <span>
+                <i class="material-icons">more_horiz</i>
+              </span> More</a>
+          </li>
+        </ul>
+      </div>
+
+
+      <!-- Style 2 (Square Tabs) -->
+      <div class="tabsNavigation depth">
+        <mat-tab-group class="demo-tab-group">
+          <mat-tab label="Summary">
+            <div class="tab-content">
+            </div>
+          </mat-tab>
+          <mat-tab label="Activity">
+            <div class="demo-tab-content">
+
+            </div>
+          </mat-tab>
+          <mat-tab label="Targets">
+
+          </mat-tab>
+          <mat-tab label="Notes">
+
+          </mat-tab>
+          <mat-tab label="Deficit Info">
+
+          </mat-tab>
+          <mat-tab label="Color Pale">
+
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+      <!-- End Style 2 -->
+    </section>
+    <!-- End Tabed Menu -->
+    <!-- Color Palette -->
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col l12">
+            <h2>Color Palette</h2>
+          </div>
+          <div class="col s12 m6 l2">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Primary Color (Plum Purple)</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box plum-purple darken-1"></div>
+                    <div class="text">Darken 1</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box plum-purple base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m6 l2">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Secondary (Green)</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box green base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box green lighten-1"></div>
+                    <div class="text">Lighten 1</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m6 l4">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Blue</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box blue darken-1"></div>
+                    <div class="text">Darken 1</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box blue base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box blue lighten-1"></div>
+                    <div class="text">Lighten 1</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box blue bg"></div>
+                    <div class="text">Bg</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m6 l2">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Red</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box red base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box red lighten-1"></div>
+                    <div class="text">Lighten 1</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s6 m3 l1">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Purple</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box purple base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s6 m3 l1">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Orange</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box orange base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m6 l2">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Amber </span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box amber base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box amber bg"></div>
+                    <div class="text">Bg</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col s12 m6 l3">
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">Grey</span>
+                <div class="color-plats clearfix">
+                  <div class="color-plat-item left">
+                    <div class="box grey base"></div>
+                    <div class="text">Base</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box grey lighten-1"></div>
+                    <div class="text">Lighten 1</div>
+                  </div>
+                  <div class="color-plat-item left">
+                    <div class="box grey bg"></div>
+                    <div class="text">Bg</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+    <!-- End Color Palette -->
+
+    <!-- UI -->
+    <section>
+      <div class="container">
+        <div class="row flexbox">
+          <div class="col l12">
+            <h2>Things that we need</h2>
+          </div>
+
+          <div class="row">
+            <!-- Typography -->
+            <div class="col s12 m6 l3">
+              <div class="card">
+                <div class="card-content typography">
+                  <span class="card-title">Typography</span>
+                  <h1>Heading h1</h1>
+                  <h2>Heading h2</h2>
+                  <h3>Heading h3</h3>
+                  <h4>Heading h4</h4>
+                  <p>Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text. Normal text.
+                    Normal text. Normal text. Normal text. Normal text. Normal text. </p>
+                  <br>
+                  <p class="secondary-font">Secondary text. Secondary text. Secondary text. Secondary text. Secondary text. Secondary text. Secondary
+                    text. Secondary text. Secondary text. Secondary text. Secondary text. </p>
+                </div>
+              </div>
+            </div>
+            <!-- Labels -->
+            <div class="col s12 m6 l3">
+              <div class="card">
+                <div class="card-content">
+                  <span class="card-title">Labels</span>
+                  <div class="status_list">
+                    <div class="row">
+                      <div class="col s12 m6 l6">
+                        <!-- Style 1 -->
+                        <span class="status"> Default</span>
+                        <span class="status color_blue"> Blue</span>
+                        <span class="status color_green"> Green</span>
+                        <span class="status color_amber"> Amber</span>
+                        <span class="status color_red"> Red</span>
+                        <span class="status color_purple"> Purple</span>
+                      </div>
+                      <div class="col s12 m6 l6">
+                        <!-- Style 2 (Filled) -->
+                        <div>
+                          <span class="status_fill grey lighten-1"> Default</span>
+                        </div>
+
+                        <div>
+                          <span class="status_fill blue"> Blue</span>
+                        </div>
+
+                        <div>
+                          <span class="status_fill green"> Green</span>
+                        </div>
+
+                        <div>
+                          <span class="status_fill amber"> Amber</span>
+                        </div>
+
+                        <div>
+                          <span class="status_fill red"> Red</span>
+                        </div>
+
+                        <div>
+                          <span class="status_fill purple"> Purple</span>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toasts -->
+            <!-- <div class="col s12 m6 l3">
+                      <div class="card">
+                        <div class="card-content">
+                          <span class="card-title">Toasts</span>
+                        </div>
+                      </div>
+                    </div> -->
+
+            <!-- Toggles -->
+            <div class="col s12 m6 l3">
+              <div class="card">
+                <div class="card-content">
+                  <span class="card-title">Toggles</span>
+
+                  <!-- Checkbox -->
+                  <div class="form-elements">
+                    <h4>Checkbox</h4>
+                    <form action="#">
+                      <div class="row">
+                        <div class="col m4">
+                          <p>
+                            <label>
+                              <mat-checkbox></mat-checkbox>
+                              <span>Filled in</span>
+                            </label>
+                          </p>
+                        </div>
+                        <div class="col m4">
+                          <p>
+                            <label>
+                              <mat-checkbox aria-label="Disabled checkbox" disabled></mat-checkbox>
+                              <span>Disabled</span>
+                            </label>
+                          </p>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Radio Button -->
+                  <div class="form-elements">
+                    <h4>Radio Buttons</h4>
+                    <form>
+                      <div class="row">
+                        <div class="col m4">
+                          <p>
+                            <label>
+                              <mat-radio-button value="1"></mat-radio-button>
+                              <span>Red</span>
+                            </label>
+                          </p>
+                        </div>
+                        <div class="col m4">
+                          <p>
+                            <label>
+                              <mat-radio-button value="2" ></mat-radio-button>
+                              <span>Yellow</span>
+                            </label>
+                          </p>
+                        </div>
+                        <div class="col m4">
+                          <p>
+                            <label>
+                              <mat-radio-button value="1" aria-label="Disabled radio" disabled></mat-radio-button>
+                              <span>Disabled</span>
+                            </label>
+                          </p>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+
+                  <!-- Switches -->
+                  <div class="form-elements">
+                    <h4>Switches</h4>
+
+                    <!-- Style 1 -->
+                    <form>
+                      <div class="row">
+                        <div class="col m6">
+                          <div class="switch">
+                            <label>
+                              Off
+                              <mat-slide-toggle></mat-slide-toggle>
+                              <span class="lever"></span>
+                              On
+                            </label>
+                          </div>
+                        </div>
+                        <div class="col m6">
+                          <div class="switch">
+                            <label>
+                              Off
+                              <mat-slide-toggle aria-label="Disabled radio" disabled></mat-slide-toggle>
+                              <span class="lever"></span>
+                              On
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </form>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="col s12 m6 l3">
+              <div class="card">
+                <div class="card-content">
+                  <span class="card-title">Buttons </span>
+                  <div class="buttons_list">
+                    <!-- Material Buttons -->
+                    <div class="button_large">
+                      <h4>Large</h4>
+                      <button class="btn-large mat-btn-custom" mat-button>Button</button>
+
+                      <button class="btn-large mat-btn-custom w_icon" mat-button>
+                        <span class="icon_mat left">
+                          <mat-icon class="white-text">file_download</mat-icon>
+                        </span>
+                        Button
+                      </button>
+
+                      <button class="btn-large mat-btn-custom w_icon" mat-button>
+                        Button
+                        <span class="icon_mat right">
+                          <mat-icon class="white-text">send</mat-icon>
+                        </span>
+                      </button>
+                    </div>
+
+                    <!-- Normal -->
+                    <div class="button_normal">
+                      <h4>Normal</h4>
+                      <button class="btn sm mat-btn-custom" mat-button>Add Target</button>
+
+                      <button class="btn sm mat-btn-custom w_icon" mat-button>
+                        <span class="icon_mat left">
+                          <mat-icon class="white-text">add</mat-icon>
+                        </span>
+                        Add Target
+                      </button>
+
+                      <button class="btn sm mat-btn-custom w_icon" mat-button>
+                        Add Target
+                        <span class="icon_mat right">
+                          <mat-icon class="white-text">add</mat-icon>
+                        </span>
+                      </button>
+                    </div>
+
+                    <!-- <div class="button_normal">
+                      <h4>Normal</h4>
+                      <a class="waves-effect waves-light btn">Add Target</a>
+                      <a class="waves-effect waves-light btn">
+                        <i class="material-icons left">add</i>Add Target</a>
+                      <a class="waves-effect waves-light btn">
+                        <i class="material-icons right">add</i>Add Target</a>
+                    </div> -->
+
+                    <!-- Normal -->
+                    <div class="button_normal">
+                      <h4>Other</h4>
+                      <button class="btn sm mat-btn-custom w_icon btn-outline" mat-button>
+                        <span class="icon_mat left">
+                          <mat-icon>add</mat-icon>
+                        </span>
+                        Add Target</button>
+                      <button class="btn sm mat-btn-custom btn-small" mat-button>Edit</button>
+
+                      <button class="btn sm mat-btn-custom btn-small" mat-button>
+                        <span class="icon_mat">
+                          <mat-icon>more_horiz</mat-icon>
+                        </span>
+                      </button>
+                      <button class="btn sm mat-btn-custom w_icon btn-outline no-border" mat-button>
+                        <span class="icon_mat left">
+                          <mat-icon>add</mat-icon>
+                        </span>
+                        Add Target</button>
+                    </div>
+
+                    <!-- <div class="button_normal">
+                      <h4>Other</h4>
+                      <a class="waves-effect waves-light btn-outline">
+                        <i class="material-icons left">add</i>Add Target</a>
+                      <a class="waves-effect waves-light btn-small">Edit</a>
+
+                      <a class="waves-effect waves-light btn-small">
+                        <i class="material-icons">more_horiz</i>
+                      </a>
+
+                      <a class="waves-effect waves-light btn-flat">
+                        <i class="material-icons left">add</i>Add Target</a>
+                    </div> -->
+
+                    <!-- Modal save close Buttons -->
+                    <div class="button_normal">
+                      <h4>Modal</h4>
+                      <div class="grey bg modal-footer-ui-kit clearfix">
+                        <button class="btn-outline modal-close modal-cancel mat-btn-custom left" mat-button>Close</button>
+                        <button class="green modal-trigger mat-btn-custom right modal-save" mat-button>Save
+                          <span class="icon_mat right">
+                            <mat-icon class="white-text">arrow_forward</mat-icon>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End UI -->
+
+    <!-- Form -->
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col l12">
+            <h2>Form</h2>
+          </div>
+
+          <!-- Forms -->
+          <div class="col s12 m12">
+            <div class="card">
+              <div class="card-content">
+
+                <div class="row margin-0">
+                  <form class="col s12 m3">
+                    <div class="input-field">
+
+                      <mat-form-field>
+                        <input matInput placeholder="Normal with hint text">
+                      </mat-form-field>
+                    </div>
+                    <div class="input-field">
+                      <mat-form-field>
+                        <input matInput placeholder="Disabled" aria-label="Disabled input" disabled>
+                      </mat-form-field>
+                    </div>
+                  </form>
+
+                  <form class="col s12 m3">
+                    <div class="input-field">
+                      <mat-form-field>
+                        <input matInput placeholder="Password">
+                      </mat-form-field>
+                    </div>
+                    <div class="input-field">
+                      <mat-form-field hintLabel="Helper text">
+                        <input matInput placeholder="Email">
+                      </mat-form-field>
+
+                    </div>
+                  </form>
+
+                  <form class="col s12 m3">
+                    <div class="input-field">
+                      <div class="with_icon">
+                        <mat-form-field class="example-full-width">
+
+                          <input type="tel" matInput placeholder="Input with icon">
+                          <mat-icon matPrefix class=" green-text">assignment_turned_in</mat-icon>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="input-field">
+                      <mat-form-field>
+                        <mat-select placeholder="Select Box">
+                          <mat-option value="primary">Primary</mat-option>
+                          <mat-option value="accent">Accent</mat-option>
+                          <mat-option value="warn">Warn</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </form>
+
+                  <form class="col s12 m3">
+                    <div class="input-field">
+                      <mat-form-field>
+                        <textarea matInput placeholder="Autosize textarea" matTextareaAutosize matAutosizeMinRows="3" matAutosizeMaxRows="5"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Form -->
+
+    <!-- Advanced textareas & Text editor -->
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col s12 m6">
+            <h2>Advanced textarea</h2>
+
+            <div class="card">
+              <div class="card-content">
+
+                <!-- Advanced textareas -->
+                <div class="advancedTextarea">
+                  <div class="add_title">
+                    <div class="title_icon">
+                      <i class="material-icons red-text">gps_fixed</i>
+                    </div>
+                    <input class="add_titleInput" type="tel" matInput placeholder="Add your goal title" value="Identify upper and lower case letters">
+                  </div>
+                  <div class="add_content">
+                    <mat-form-field>
+                      <textarea matInput class="add_contentTextarea" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="1">Christopher Augustine will be able to identify A-Z and a-z with 80% success in 3 consecutive seasons with 80% independence.</textarea>
+                    </mat-form-field>
+                    <a href="#" class="add_sortcodes">[Sortcodes]</a>
+                  </div>
+                </div>
+                <!-- End Advanced textareas -->
+              </div>
+            </div>
+          </div>
+          <!-- Text editor -->
+          <div class="col s12 m12 l6">
+            <h2>Text editor</h2>
+          </div>
+
+
+        </div>
+      </div>
+    </section>
+    <!-- End Advanced textareas & Text editor -->
+
+    <!-- Table -->
+    <section>
+      <div class="container">
+        <div class="row">
+          <div class="col m12">
+            <h2>Table</h2>
+
+            <table class="data_table">
+              <thead>
+                <tr>
+                  <th>Targets</th>
+                  <th>Success (%)</th>
+                  <th>Data Sheets</th>
+                  <th>Notes</th>
+                  <th>Status </th>
+                  <th>Status Updated Date</th>
+                  <th></th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="list">
+                  <td>
+                    <div class="list_title">
+                      <span class="icon">
+                        <img src="images/target.svg" alt="target">
+                      </span>
+                      <span class="text">Target</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="list_progress">
+                      <span class="value">56%</span>
+                      <div class="progress">
+                        <div class="determinate" style="width: 56%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value datasheets">
+                      <span class="icon">
+                        <img src="images/datasheet-icon.png" alt="target">
+                      </span>
+                      <span class="text">26</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value notes">
+                      <span class="icon">
+                        <i class="material-icons amber-text">note</i>
+                      </span>
+                      <span class="text">5</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status color_green"> Mastered</span>
+                  </td>
+                  <td>May 20, 2017</td>
+                  <td>
+                    <div class="data_table_actions">
+
+                      <!-- Show More Tools -->
+                      <div class="show_hide_tools">
+                        <a href="#" class="show_more_tools">
+                          <i class="material-icons">more_vert</i>
+                        </a>
+
+                        <ul class="tools">
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">delete</i>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">mode_edit</i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="list">
+                  <td>
+                    <div class="list_title">
+                      <span class="icon">
+                        <img src="images/target.svg" alt="target">
+                      </span>
+                      <span class="text">Target</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="list_progress">
+                      <span class="value">56%</span>
+                      <div class="progress">
+                        <div class="determinate" style="width: 56%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value datasheets">
+                      <span class="icon">
+                        <img src="images/datasheet-icon.png" alt="target">
+                      </span>
+                      <span class="text">26</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value notes">
+                      <span class="icon">
+                        <i class="material-icons amber-text">note</i>
+                      </span>
+                      <span class="text">5</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status color_green"> Mastered</span>
+                  </td>
+                  <td>May 20, 2017</td>
+                  <td>
+                    <div class="data_table_actions">
+
+                      <!-- Show More Tools -->
+                      <div class="show_hide_tools">
+                        <a href="#" class="show_more_tools">
+                          <i class="material-icons">more_vert</i>
+                        </a>
+
+                        <ul class="tools">
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">delete</i>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">mode_edit</i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="list">
+                  <td>
+                    <div class="list_title">
+                      <span class="icon">
+                        <img src="images/target.svg" alt="target">
+                      </span>
+                      <span class="text">Target</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="list_progress">
+                      <span class="value">56%</span>
+                      <div class="progress">
+                        <div class="determinate" style="width: 56%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value datasheets">
+                      <span class="icon">
+                        <img src="images/datasheet-icon.png" alt="target">
+                      </span>
+                      <span class="text">26</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value notes">
+                      <span class="icon">
+                        <i class="material-icons amber-text">note</i>
+                      </span>
+                      <span class="text">5</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status color_green"> Mastered</span>
+                  </td>
+                  <td>May 20, 2017</td>
+                  <td>
+                    <div class="data_table_actions">
+
+                      <!-- Show More Tools -->
+                      <div class="show_hide_tools">
+                        <a href="#" class="show_more_tools">
+                          <i class="material-icons">more_vert</i>
+                        </a>
+
+                        <ul class="tools">
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">delete</i>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">mode_edit</i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </td>
+                </tr>
+
+                <tr class="list">
+                  <td>
+                    <div class="list_title">
+                      <span class="icon">
+                        <img src="images/target.svg" alt="target">
+                      </span>
+                      <span class="text">Target</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="list_progress">
+                      <span class="value">56%</span>
+                      <div class="progress">
+                        <div class="determinate" style="width: 56%"></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value datasheets">
+                      <span class="icon">
+                        <img src="images/datasheet-icon.png" alt="target">
+                      </span>
+                      <span class="text">26</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="column-icon-value notes">
+                      <span class="icon">
+                        <i class="material-icons amber-text">note</i>
+                      </span>
+                      <span class="text">5</span>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="status color_green"> Mastered</span>
+                  </td>
+                  <td>May 20, 2017</td>
+                  <td>
+                    <div class="data_table_actions">
+
+                      <!-- Show More Tools -->
+                      <div class="show_hide_tools">
+                        <a href="#" class="show_more_tools">
+                          <i class="material-icons">more_vert</i>
+                        </a>
+
+                        <ul class="tools">
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">mode_edit</i>
+                            </a>
+                          </li>
+                          <li>
+                            <a href="#">
+                              <i class="material-icons">delete</i>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- End Application Main Content Wrapper -->
+
+
+<script type="text/javascript">
+  $('.dropdown-trigger').dropdown();
+  $('input#input_text, textarea#textarea1').characterCounter();
+  $('select').select();
+  $('.tooltipped').tooltip();
+</script>
