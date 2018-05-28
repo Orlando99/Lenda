@@ -33,6 +33,34 @@ export class Borrowercalculationworker {
   prepare_FICO(){
     this.input.FC_Borrower_FICO= 4;
   }
+  //Balance sheet item calculations
+  prepare_current_Adjvalue(){
+   this.input.FC_Borrower_Current_Adjvalue=this.input.Borrower_Current_Assets * this.input.Borrower_Current_Assets_Disc/100;
+  }
+  prepare_Intermediate_Adjvalue(){
+    this.input.FC_Borrower_Intermediate_Adjvalue=this.input.Borrower_Intermediate_Assets * this.input.Borrower_Intermediate_Assets_Disc/100;
+  }
+  prepare_Fixed_Adjvalue(){
+    this.input.FC_Borrower_Fixed_Adjvalue=this.input.Borrower_Fixed_Assets * this.input.Borrower_Fixed_Assets_Disc/100;
+  }
+  prepare_current_DiscValue(){
+    this.input.FC_Borrower_Current_Discvalue=this.input.FC_Borrower_Current_Adjvalue - this.input.Borrower_Current_Liabilities;
+   }
+   prepare_Intermediate_DiscValue(){
+     this.input.FC_Borrower_Intermediate_Discvalue=this.input.FC_Borrower_Intermediate_Adjvalue - this.input.Borrower_Intermediate_Liabilities;
+   }
+   prepare_Fixed_DiscValue(){
+     this.input.FC_Borrower_Fixed_Discvalue=this.input.FC_Borrower_Fixed_Adjvalue - this.input.Borrower_Fixed_Liabilities;
+   }
+   prepare_total_DiscValue(){
+     this.input.FC_Borrower_Total_Discvalue=this.input.FC_Borrower_Fixed_Discvalue+ this.input.FC_Borrower_Intermediate_Discvalue+  this.input.FC_Borrower_Current_Discvalue;
+   }
+   prepare_total_Adjvalue(){
+    this.input.FC_Borrower_Total_Adjvalue=this.input.FC_Borrower_Current_Adjvalue+ this.input.FC_Borrower_Intermediate_Adjvalue+  this.input.FC_Borrower_Fixed_Adjvalue;
+  }
+  
+
+  //ends here
   prepareborrowermodel(input:borrower_model):borrower_model{
     debugger
     this.input=input;
@@ -45,6 +73,14 @@ export class Borrowercalculationworker {
     this.prepare_current_ratio();
     this.preparenetratio();
     this.prepare_FICO();
+    this.prepare_current_Adjvalue()
+    this.prepare_Intermediate_Adjvalue()
+    this.prepare_Fixed_Adjvalue()
+    this.prepare_current_DiscValue()
+    this.prepare_Intermediate_DiscValue()
+    this.prepare_Fixed_DiscValue()
+    this.prepare_total_DiscValue()
+    this.prepare_total_Adjvalue()
     return this.input;
   }
 

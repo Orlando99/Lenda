@@ -33,6 +33,7 @@ export class LoanOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(this.localstorageservice.retrieve(environment.loankey).Borrower.Borrower_Loan_Id!=this.loanid)
     this.getLoanBasicDetails();
   }
 

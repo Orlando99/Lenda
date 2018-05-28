@@ -10,58 +10,81 @@
       <div class="row">
         <div class="col s12">
           <!-- Table Here -->
-       
+       <h4>Financials as of : {{localloanobject.Borrower.Borrower_Financials_Date |date:short}}</h4>
           <table class="bordered">
             <thead>
               <tr>
                   <th>Financials</th>
                   <th>Assets</th>
+                  <th>Discount</th>
+                  <th>Adj.Value</th>
                   <th>Debt</th>
-                  <th>Equity</th>
-                  <th>Ratios</th>
-                  <th>FICO</th>
-                  <th>Rating</th>
+                  <th>Discounted NW</th>
               </tr>
             </thead>
     
             <tbody>
               <tr>
                 <td>Current</td>
-                <td>$ {{localborrowerobject.Borrower_Current_Assets}}</td>
-                <td>$ {{localborrowerobject.Borrower_Current_Liabilities}}</td>
-                <td>$ {{localborrowerobject.FC_Borrower_Current_Equity}}</td>
-                <td>{{localborrowerobject.FC_Borrower_Current_Ratio}} %</td>
-                <td>{{localborrowerobject.FC_Borrower_FICO}}</td>
-                <td></td>
+                <td (click)="startediting('Borrower_Current_Assets')">
+                    <div *ngIf="!editarray['Borrower_Current_Assets']">$ {{localloanobject.Borrower.Borrower_Current_Assets}}</div>
+                    <div *ngIf="editarray['Borrower_Current_Assets']"><input type="number" value="{{localloanobject.Borrower.Borrower_Current_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Assets')" ></div> 
+                </td>
+                <td (click)="startediting('Borrower_Current_Assets_Disc')">
+                    <div *ngIf="!editarray['Borrower_Current_Assets_Disc']">{{localloanobject.Borrower.Borrower_Current_Assets_Disc}} %</div>
+                    <div *ngIf="editarray['Borrower_Current_Assets_Disc']"><input type="number" value="{{localloanobject.Borrower.Borrower_Current_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Assets_Disc')" ></div> 
+                </td>
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Current_Adjvalue}}</td>
+                <td (click)="startediting('Borrower_Current_Liabilities')">
+                    <div *ngIf="!editarray['Borrower_Current_Liabilities']">$ {{localloanobject.Borrower.Borrower_Current_Liabilities}}</div>
+                    <div *ngIf="editarray['Borrower_Current_Liabilities']"><input type="number" value="{{localloanobject.Borrower.Borrower_Current_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Liabilities')" ></div> 
+                </td>
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Current_Discvalue}}</td>
+                
               </tr>
               <tr>
                 <td>Intermediate</td>
-                <td>$ {{localborrowerobject.Borrower_Intermediate_Assets}}</td>
-                <td>$ {{localborrowerobject.Borrower_Intermediate_Liabilities}}</td>
-                <td>$ {{localborrowerobject.FC_Borrower_Intermediate_Equity}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td (click)="startediting('Borrower_Intermediate_Assets')">
+                    <div *ngIf="!editarray['Borrower_Intermediate_Assets']">$ {{localloanobject.Borrower.Borrower_Intermediate_Assets}}</div>
+                    <div *ngIf="editarray['Borrower_Intermediate_Assets']"><input type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Assets')" ></div> 
+                </td>
+                <td (click)="startediting('Borrower_Intermediate_Assets_Disc')">
+                    <div *ngIf="!editarray['Borrower_Intermediate_Assets_Disc']">{{localloanobject.Borrower.Borrower_Intermediate_Assets_Disc}} %</div>
+                    <div *ngIf="editarray['Borrower_Intermediate_Assets_Disc']"><input type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Assets_Disc')" ></div> 
+                </td>
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Intermediate_Adjvalue}}</td>
+                <td (click)="startediting('Borrower_Intermediate_Liabilities')">
+                    <div *ngIf="!editarray['Borrower_Intermediate_Liabilities']">$ {{localloanobject.Borrower.Borrower_Intermediate_Liabilities}}</div>
+                    <div *ngIf="editarray['Borrower_Intermediate_Liabilities']"><input type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Liabilities')" ></div> 
+                </td>
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Intermediate_Discvalue}}</td>
+                
               </tr>
               <tr>
                 <td>Long Term</td>
-                <td>$ {{localborrowerobject.Borrower_Fixed_Assets}}</td>
-                <td>$ {{localborrowerobject.Borrower_Fixed_Liabilities}}</td>
-                <td>$ {{localborrowerobject.FC_Borrower_Fixed_Equity}}</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td (click)="startediting('Borrower_Fixed_Assets')">
+                 <div *ngIf="!editarray['Borrower_Fixed_Assets']">$ {{localloanobject.Borrower.Borrower_Fixed_Assets}}</div>
+                 <div *ngIf="editarray['Borrower_Fixed_Assets']"><input type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Assets')" ></div> 
+                </td>
+                <td (click)="startediting('Borrower_Fixed_Assets_Disc')">
+                    <div *ngIf="!editarray['Borrower_Fixed_Assets_Disc']">{{localloanobject.Borrower.Borrower_Fixed_Assets_Disc}} %</div>
+                    <div *ngIf="editarray['Borrower_Fixed_Assets_Disc']"><input type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Assets_Disc')" ></div> 
+                </td>
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Fixed_Adjvalue}}</td>
+                <td (click)="startediting('Borrower_Fixed_Liabilities')">
+                    <div *ngIf="!editarray['Borrower_Fixed_Liabilities']">$ {{localloanobject.Borrower.Borrower_Fixed_Liabilities}}</div>
+                    <div *ngIf="editarray['Borrower_Fixed_Liabilities']"><input type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Liabilities')" ></div> 
+                <td>$ {{localloanobject.Borrower.FC_Borrower_Fixed_Discvalue}}</td>
               </tr>
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total Financials</td>
-                    <td>{{localborrowerobject.FC_Borrower_TotalAssets}}</td>
-                    <td>{{localborrowerobject.FC_Borrower_TotalDebt}}</td>
-                    <td>{{localborrowerobject.FC_Borrower_TotalEquity}}</td>
-                    <td>{{localborrowerobject.FC_Borrower_NetRatio}} % Debt/Equity</td>
-                    <td>Financials as of</td>
-                    <td>{{localborrowerobject.Borrower_Financials_Date |date:short}}</td>
+                    <td>Total</td>
+                    <td>$ {{localloanobject.Borrower.FC_Borrower_TotalAssets}}</td>
+                    <td></td>
+                    <td>$ {{localloanobject.Borrower.FC_Borrower_Total_Adjvalue}}</td>
+                    <td>$ {{localloanobject.Borrower.FC_Borrower_TotalDebt}}</td>
+                    <td>$ {{localloanobject.Borrower.FC_Borrower_Total_Discvalue}}</td>
                 </tr>
             </tfoot>
           </table>

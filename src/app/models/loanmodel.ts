@@ -203,6 +203,16 @@ export class borrower_model
         FC_Borrower_NetRatio:number=0;
         FC_Borrower_Current_Ratio:number=0;
         FC_Borrower_FICO:number=0;
+        //for balancesheet
+        FC_Borrower_Current_Adjvalue:number=0;
+        FC_Borrower_Intermediate_Adjvalue:number=0;
+        FC_Borrower_Fixed_Adjvalue:number=0;
+        FC_Borrower_Total_Adjvalue:number=0;
+        FC_Borrower_Current_Discvalue:number=0;
+        FC_Borrower_Intermediate_Discvalue:number=0;
+        FC_Borrower_Fixed_Discvalue:number=0;
+        FC_Borrower_Total_Discvalue:number=0;
+
     }
     @JsonObject
     export class loan_model{
