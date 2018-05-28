@@ -1,7 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { LendaStorageService } from '../../services/localstorage/lendalocalstorageservice';
 import { environment } from '../../../environments/environment';
 import { loan_model, borrower_model } from '../../models/loanmodel';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-summary',
@@ -11,13 +11,19 @@ import { loan_model, borrower_model } from '../../models/loanmodel';
 export class SummaryComponent implements OnInit {
   private localborrowerobject:borrower_model=new borrower_model();
   public allDataFetched=false;  
-  constructor(public localstorageservice:LendaStorageService) { }
+  constructor(public localstorageservice:LocalStorageService) { }
   ngOnInit() {
-    this.localstorageservice.changes.subscribe(res=>{
-      if(res.key==environment.loankey)
+    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       debugger
-      this.localborrowerobject=res.value.Borrower;
+      this.localborrowerobject=res.Borrower;
       this.allDataFetched=true;
     })
+    this.getdataforgrid();
+  }
+  getdataforgrid(){
+    debugger
+    let obj:any=this.localstorageservice.retrieve(environment.loankey);
+    this.localborrowerobject=obj.Borrower;
+    this.allDataFetched=true;
   }
 }

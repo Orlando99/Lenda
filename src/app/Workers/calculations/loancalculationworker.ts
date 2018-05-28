@@ -3,7 +3,6 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { observeOn } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { loan_model } from '../../models/loanmodel';
-import { LendaStorageService } from '../../services/localstorage/lendalocalstorageservice';
 import { Borrowercalculationworker } from './borrowercalculationworker.service';
 
 
@@ -11,7 +10,7 @@ import { Borrowercalculationworker } from './borrowercalculationworker.service';
 @Injectable()
 export class LoancalculationWorker {
   constructor(
-    private localst: LendaStorageService,
+    private localst: LocalStorageService,
     private borrowerworker:Borrowercalculationworker
 ) {}
 

@@ -8,6 +8,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SummaryComponent } from "./components/summary/summary.component";
 import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from "./components/loan-overview/loan-overview.component";
+import { BorrowerComponent } from "./components/borrower/borrower.component";
 
 
 const appRoutes: Routes = [
@@ -27,7 +28,8 @@ const appRoutes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'loans', component: LoanListComponent },
       { path: 'loanoverview/:id', component: LoanOverviewComponent,children:[
-        { path: 'summary', component: SummaryComponent }
+        { path: 'summary', component: SummaryComponent },
+        { path: 'borrower', component: BorrowerComponent }
       ] },
     ]
   },

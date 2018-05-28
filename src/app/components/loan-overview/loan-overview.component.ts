@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastsManager } from "ng2-toastr";
 import { LoanApiService } from '../../services/loan/loanapi.service';
-import { LendaStorageService } from '../../services/localstorage/lendalocalstorageservice';
 import { environment } from '../../../environments/environment';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { deserialize, serialize } from 'serializer.ts/Serializer';
 import { loan_model } from '../../models/loanmodel';
 import { JsonConvert } from 'json2typescript';
+import { LocalStorageService } from 'ngx-webstorage';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class LoanOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private loanservice: LoanApiService,
-    private localstorageservice:LendaStorageService,
+    private localstorageservice:LocalStorageService,
     private loancalculationservice:LoancalculationWorker
   ) {
 
@@ -58,5 +58,14 @@ export class LoanOverviewComponent implements OnInit {
     else {
       this.toaster.error("Something went wrong");
     }
+  }
+
+  // Navigational Methods
+
+  gotosummary(){
+    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/summary")
+  }
+  gotoborrower(){
+    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/borrower")
   }
 }

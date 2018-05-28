@@ -56,10 +56,11 @@ import { MasterComponent } from "./master/master.component";
 import { SummaryComponent } from './components/summary/summary.component';
 import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from './components/loan-overview/loan-overview.component';
-import { LendaStorageService } from './services/localstorage/lendalocalstorageservice';
 import { FinancialsComponent } from './components/summary/financials/financials.component';
 import { Borrowercalculationworker } from './Workers/calculations/borrowercalculationworker.service';
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
+import { BorrowerComponent } from './components/borrower/borrower.component';
+import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,9 @@ import { LoancalculationWorker } from './Workers/calculations/loancalculationwor
     SummaryComponent,
     LoanListComponent,
     LoanOverviewComponent,
-    FinancialsComponent
+    FinancialsComponent,
+    BorrowerComponent,
+    BalancesheetComponent
   ],
   imports: [
     BrowserModule,
@@ -153,7 +156,6 @@ import { LoancalculationWorker } from './Workers/calculations/loancalculationwor
     AlertifyService,
     LoanApiService,
     ApiService,
-    LendaStorageService,
     Borrowercalculationworker,
     LoancalculationWorker
   ],

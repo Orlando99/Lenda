@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { loan_model, borrower_model } from '../../../models/loanmodel';
+import { borrower_model, loan_model } from '../../../models/loanmodel';
 import { environment } from '../../../../environments/environment';
-import { deserialize } from 'serializer.ts/Serializer';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
 
-
 @Component({
-  selector: 'app-financials',
-  templateUrl: './financials.component.html',
-  styleUrls: ['./financials.component.scss']
+  selector: 'app-balancesheet',
+  templateUrl: './balancesheet.component.html',
+  styleUrls: ['./balancesheet.component.scss']
 })
-export class FinancialsComponent implements OnInit {
-  private localborrowerobject:borrower_model;
+export class BalancesheetComponent implements OnInit {
+
+  private localborrowerobject:borrower_model=new borrower_model();
   public allDataFetched=false;  
   constructor(public localstorageservice:LocalStorageService) { }
   ngOnInit() {
@@ -23,13 +22,11 @@ export class FinancialsComponent implements OnInit {
     })
     this.getdataforgrid();
   }
-
   getdataforgrid(){
     debugger
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
     this.localborrowerobject=obj.Borrower;
     this.allDataFetched=true;
   }
-
 
 }

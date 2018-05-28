@@ -1,0 +1,74 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        BALANCE SHEET
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div *ngIf="allDataFetched" class="container">
+      <div class="row">
+        <div class="col s12">
+          <!-- Table Here -->
+       
+          <table class="bordered">
+            <thead>
+              <tr>
+                  <th>Financials</th>
+                  <th>Assets</th>
+                  <th>Debt</th>
+                  <th>Equity</th>
+                  <th>Ratios</th>
+                  <th>FICO</th>
+                  <th>Rating</th>
+              </tr>
+            </thead>
+    
+            <tbody>
+              <tr>
+                <td>Current</td>
+                <td>$ {{localborrowerobject.Borrower_Current_Assets}}</td>
+                <td>$ {{localborrowerobject.Borrower_Current_Liabilities}}</td>
+                <td>$ {{localborrowerobject.FC_Borrower_Current_Equity}}</td>
+                <td>{{localborrowerobject.FC_Borrower_Current_Ratio}} %</td>
+                <td>{{localborrowerobject.FC_Borrower_FICO}}</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Intermediate</td>
+                <td>$ {{localborrowerobject.Borrower_Intermediate_Assets}}</td>
+                <td>$ {{localborrowerobject.Borrower_Intermediate_Liabilities}}</td>
+                <td>$ {{localborrowerobject.FC_Borrower_Intermediate_Equity}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Long Term</td>
+                <td>$ {{localborrowerobject.Borrower_Fixed_Assets}}</td>
+                <td>$ {{localborrowerobject.Borrower_Fixed_Liabilities}}</td>
+                <td>$ {{localborrowerobject.FC_Borrower_Fixed_Equity}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total Financials</td>
+                    <td>{{localborrowerobject.FC_Borrower_TotalAssets}}</td>
+                    <td>{{localborrowerobject.FC_Borrower_TotalDebt}}</td>
+                    <td>{{localborrowerobject.FC_Borrower_TotalEquity}}</td>
+                    <td>{{localborrowerobject.FC_Borrower_NetRatio}} % Debt/Equity</td>
+                    <td>Financials as of</td>
+                    <td>{{localborrowerobject.Borrower_Financials_Date |date:short}}</td>
+                </tr>
+            </tfoot>
+          </table>
+          <!-- Ends Here -->
+          <br>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
