@@ -22,12 +22,13 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'master', component: MasterComponent,
+    path: 'home', component: MasterComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'summary', component: SummaryComponent },
       { path: 'loans', component: LoanListComponent },
-      { path: 'loanoverview/:id', component: LoanOverviewComponent },
+      { path: 'loanoverview/:id', component: LoanOverviewComponent,children:[
+        { path: 'summary', component: SummaryComponent }
+      ] },
     ]
   },
   { path: '**', component: PageNotFoundComponent }

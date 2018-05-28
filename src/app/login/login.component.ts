@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.username == 'admin' && this.password == 'admin') {
-      this.router.navigateByUrl('/master/dashboard');
+      this.router.navigateByUrl('/home/loanoverview/1/summary');
     }
     else {
       this.toastr.error('Invalid username or password');

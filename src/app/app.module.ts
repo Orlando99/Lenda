@@ -5,6 +5,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'ng2-toastr';
+import "reflect-metadata";
 
 //START MATERIAL COMPONENTS 
 import { MatButtonModule, MatCheckboxModule, MatNativeDateModule, MAT_DATE_LOCALE, MatProgressSpinner, MatProgressSpinnerModule, MatTooltipModule, MatChipsModule } from '@angular/material';
@@ -55,6 +56,10 @@ import { MasterComponent } from "./master/master.component";
 import { SummaryComponent } from './components/summary/summary.component';
 import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from './components/loan-overview/loan-overview.component';
+import { LendaStorageService } from './services/localstorage/lendalocalstorageservice';
+import { FinancialsComponent } from './components/summary/financials/financials.component';
+import { Borrowercalculationworker } from './Workers/calculations/borrowercalculationworker.service';
+import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 
 @NgModule({
   declarations: [
@@ -69,7 +74,8 @@ import { LoanOverviewComponent } from './components/loan-overview/loan-overview.
     HeaderComponent,
     SummaryComponent,
     LoanListComponent,
-    LoanOverviewComponent
+    LoanOverviewComponent,
+    FinancialsComponent
   ],
   imports: [
     BrowserModule,
@@ -147,6 +153,9 @@ import { LoanOverviewComponent } from './components/loan-overview/loan-overview.
     AlertifyService,
     LoanApiService,
     ApiService,
+    LendaStorageService,
+    Borrowercalculationworker,
+    LoancalculationWorker
   ],
   bootstrap: [AppComponent]
 })

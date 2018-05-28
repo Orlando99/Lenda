@@ -29,6 +29,6 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: number) {
-    this.route.navigate(['/master/loanoverview', id]);
+    this.route.navigateByUrl("/master/loanoverview/"+id+"/summary");
   }
 }

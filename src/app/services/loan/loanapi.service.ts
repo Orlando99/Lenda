@@ -16,7 +16,7 @@ export class LoanApiService {
    }
 
    getLoanById(loanid:number) : Observable<ResponseModel>{
-    const route='/api/Loan/GetLoanbyId?loanid='+loanid;
+    const route='/api/Loans/GetLoanbyId?loanid='+loanid;
    return this.apiservice.get(route).map(res=>res);
    }
 
