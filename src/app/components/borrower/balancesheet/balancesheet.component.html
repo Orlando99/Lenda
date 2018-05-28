@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         BALANCE SHEET
@@ -10,7 +10,10 @@
       <div class="row">
         <div class="col s12">
           <!-- Table Here -->
-       <h4>Financials as of : {{localloanobject.Borrower.Borrower_Financials_Date |date:short}}</h4>
+       <h4>Financials as of : {{localloanobject.Borrower.Borrower_Financials_Date |date:short}}
+          <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
+          <mat-icon >publish</mat-icon>
+        </button></h4>
           <table class="bordered">
             <thead>
               <tr>
@@ -19,7 +22,7 @@
                   <th>Discount</th>
                   <th>Adj.Value</th>
                   <th>Debt</th>
-                  <th>Discounted NW</th>
+                  <th>Discounted NW </th>
               </tr>
             </thead>
     

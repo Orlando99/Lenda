@@ -27,8 +27,11 @@ export class FinancialsComponent implements OnInit {
   getdataforgrid(){
     debugger
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
+    if(obj!=null && obj!=undefined)
+    {
     this.localborrowerobject=obj.Borrower;
     this.allDataFetched=true;
+    }
   }
 
 

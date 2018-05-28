@@ -61,6 +61,7 @@ import { Borrowercalculationworker } from './Workers/calculations/borrowercalcul
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
+import { BorrowerapiService } from './services/borrower/borrowerapi.service';
 
 @NgModule({
   declarations: [
@@ -157,7 +158,8 @@ import { BalancesheetComponent } from './components/borrower/balancesheet/balanc
     LoanApiService,
     ApiService,
     Borrowercalculationworker,
-    LoancalculationWorker
+    LoancalculationWorker,
+    BorrowerapiService
   ],
   bootstrap: [AppComponent]
 })

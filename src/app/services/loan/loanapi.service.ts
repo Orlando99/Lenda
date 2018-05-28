@@ -19,5 +19,6 @@ export class LoanApiService {
     const route='/api/Loans/GetLoanbyId?loanid='+loanid;
    return this.apiservice.get(route).map(res=>res);
    }
+   
 
 }
