@@ -32,6 +32,8 @@ import { MatCardModule, MatSnackBarModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
+
+
 //ENDS MATERIAL COMPONENTS
 
 //START SERVICES 
@@ -61,6 +63,8 @@ import { Borrowercalculationworker } from './Workers/calculations/borrowercalcul
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { NamingConventionComponent } from './components/naming-convention/naming-convention.component';
 import { BorrowerapiService } from './services/borrower/borrowerapi.service';
 import { LoggingService } from './services/Logs/logging.service';
 import { ProjectedincomeComponent } from './components/summary/projectedincome/projectedincome.component';
@@ -68,9 +72,15 @@ import { LoancropunitcalculationworkerService } from './Workers/calculations/loa
 import { CropComponent } from './components/crop/crop.component';
 import { PriceComponent } from './components/crop/price/price.component';
 
+import { NamingConventionapiService } from './services/admin/namingconventionapi.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { NumericEditor } from "../app/aggridfilters/numericaggrid";
+import { AggridTxtAreaComponent } from './aggridfilters/textarea';
+import { LoadingModule } from 'ngx-loading';
 
 @NgModule({
   declarations: [
+    NumericEditor,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -88,7 +98,11 @@ import { PriceComponent } from './components/crop/price/price.component';
     BalancesheetComponent,
     ProjectedincomeComponent,
     CropComponent,
-    PriceComponent
+    PriceComponent,
+    AdminComponent,
+    NamingConventionComponent,
+    AggridTxtAreaComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -126,6 +140,8 @@ import { PriceComponent } from './components/crop/price/price.component';
     MatSidenavModule,
     MatPaginatorModule,
     MatButtonToggleModule,
+    LoadingModule,
+    AgGridModule.withComponents([NumericEditor]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -170,7 +186,8 @@ import { PriceComponent } from './components/crop/price/price.component';
     LoancalculationWorker,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
-    LoggingService
+    LoggingService,
+    NamingConventionapiService
   ],
   bootstrap: [AppComponent]
 })

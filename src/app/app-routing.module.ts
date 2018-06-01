@@ -11,6 +11,8 @@ import { LoanOverviewComponent } from "./components/loan-overview/loan-overview.
 import { BorrowerComponent } from "./components/borrower/borrower.component";
 import { CropComponent } from "./components/crop/crop.component";
 
+import { AdminComponent } from "./components/admin/admin.component";
+import { NamingConventionComponent } from "./components/naming-convention/naming-convention.component";
 
 const appRoutes: Routes = [
 
@@ -32,6 +34,15 @@ const appRoutes: Routes = [
         { path: 'summary', component: SummaryComponent },
         { path: 'borrower', component: BorrowerComponent },
         { path: 'crop', component: CropComponent }
+      ] },
+    ]
+  },
+  {
+    path: 'home', component: MasterComponent,
+    children: [
+     
+      { path: 'admin', component: AdminComponent, children:[
+         { path: 'namingconvention', component: NamingConventionComponent },
       ] },
     ]
   },
