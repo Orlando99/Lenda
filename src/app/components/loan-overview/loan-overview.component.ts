@@ -8,6 +8,7 @@ import { deserialize, serialize } from 'serializer.ts/Serializer';
 import { loan_model } from '../../models/loanmodel';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
+import { LoggingService } from '../../services/Logs/logging.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class LoanOverviewComponent implements OnInit {
     private route: ActivatedRoute,
     private loanservice: LoanApiService,
     private localstorageservice:LocalStorageService,
-    private loancalculationservice:LoancalculationWorker
+    private loancalculationservice:LoancalculationWorker,
+    private logging:LoggingService
   ) {
 
     let temp = this.route.params.subscribe(params => {
@@ -48,6 +50,7 @@ export class LoanOverviewComponent implements OnInit {
       let loaded=false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
         debugger
+        this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
           debugger
           let jsonConvert: JsonConvert = new JsonConvert();
@@ -74,5 +77,8 @@ export class LoanOverviewComponent implements OnInit {
   }
   gotoborrower(){
     this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/borrower")
+  }
+  gotocrop(){
+    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/crop")
   }
 }

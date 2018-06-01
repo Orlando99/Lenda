@@ -9,6 +9,7 @@ import { SummaryComponent } from "./components/summary/summary.component";
 import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from "./components/loan-overview/loan-overview.component";
 import { BorrowerComponent } from "./components/borrower/borrower.component";
+import { CropComponent } from "./components/crop/crop.component";
 
 
 const appRoutes: Routes = [
@@ -29,7 +30,8 @@ const appRoutes: Routes = [
       { path: 'loans', component: LoanListComponent },
       { path: 'loanoverview/:id', component: LoanOverviewComponent,children:[
         { path: 'summary', component: SummaryComponent },
-        { path: 'borrower', component: BorrowerComponent }
+        { path: 'borrower', component: BorrowerComponent },
+        { path: 'crop', component: CropComponent }
       ] },
     ]
   },

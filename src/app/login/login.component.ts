@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr';
 import { AlertifyService } from '../alertify/alertify.service'
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../environments/environment';
+import { Logpriority } from '../models/loanmodel';
 
 @Component({
   selector: 'auth-page',
@@ -25,7 +28,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     public toastr: ToastsManager,
-    public alertifyService: AlertifyService
+    public alertifyService: AlertifyService,
+    public localst:LocalStorageService
   ) {
 
     this.authForm = this.fb.group({
@@ -62,6 +66,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.username == 'admin' && this.password == 'admin') {
+      this.localst.store(environment.logpriority,Logpriority.Low);
       this.router.navigateByUrl('/home/loanoverview/1/summary');
     }
     else {

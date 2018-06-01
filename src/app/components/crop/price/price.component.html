@@ -1,0 +1,67 @@
+<mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          PRICE
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div *ngIf="allDataFetched" class="container">
+        <div class="row">
+          <div class="col s12">
+            <!-- Table Here -->
+         <h4>PRICE
+            <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
+            <mat-icon >publish</mat-icon>
+          </button></h4>
+            <table class="bordered">
+              <thead>
+                <tr>
+                    <th>Crop</th>
+                    <th>Crop Type</th>
+                    <th>Crop Price</th>
+                    <th>Basis Adj</th>
+                    <th>Marketing Adj</th>
+                    <th>Rebate Adj</th>
+                    <th>Adj Price</th>
+                    <th>Contract Qty</th>
+                    <th>Contract Price</th>
+                    <th>% Booked</th>
+                    <th>Ins UOM</th>
+                </tr>
+              </thead>
+      
+              <tbody>
+                <tr *ngFor="let cropunit of localloanobject.LoanCropUnits;let i=index">
+                  <td>{{cropunit.Crop_Type_Code}}</td>
+                  <td>-</td>
+                  <td>{{cropunit.Price}}</td>
+                  <td (click)="startediting('Basis_Adj'+i)">
+                      <div *ngIf="!editarray['Basis_Adj'+i]">$ {{cropunit.Basis_Adj}}</div>
+                      <div *ngIf="editarray['Basis_Adj'+i]"><input type="number" value="{{cropunit.Basis_Adj}}" (blur)="valueupdate($event.srcElement.value,'Basis_Adj'+i,cropunit.Loan_CU_ID)" ></div> 
+                  </td>
+                  <td>{{cropunit.Marketing_Adj}}</td>
+                  <td (click)="startediting('Rebate_Adj'+i)">
+                      <div *ngIf="!editarray['Rebate_Adj'+i]">$ {{cropunit.Rebate_Adj}}</div>
+                      <div *ngIf="editarray['Rebate_Adj'+i]"><input type="number" value="{{cropunit.Rebate_Adj}}" (blur)="valueupdate($event.srcElement.value,'Rebate_Adj'+i,cropunit.Loan_CU_ID)" ></div> 
+                  </td>
+                  <td>-</td>
+
+                  <td>-</td>
+                  <td>{{cropunit.Booking_Ind}}</td>
+
+                  <td> Bu </td>
+                 
+                  
+                  
+                </tr>
+               
+              </tbody>
+              </table>
+            <!-- Ends Here -->
+            <br>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>

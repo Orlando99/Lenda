@@ -66,6 +66,15 @@
     <div class="WebAppHeader_search">
       <div class="WebApp_globalSearch is_empty">
         <div class="searchForm">
+          <div class="input-field">
+            <mat-form-field>
+              <mat-select [value]="value" (change)="changepriority($event)" placeholder="Select Log Priority">
+                <mat-option value="1">Low</mat-option>
+                <mat-option value="2">High</mat-option>
+                <mat-option value="3">VeryHigh</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
 
         </div>
       </div>

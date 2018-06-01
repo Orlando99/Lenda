@@ -62,6 +62,12 @@ import { LoancalculationWorker } from './Workers/calculations/loancalculationwor
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
 import { BorrowerapiService } from './services/borrower/borrowerapi.service';
+import { LoggingService } from './services/Logs/logging.service';
+import { ProjectedincomeComponent } from './components/summary/projectedincome/projectedincome.component';
+import { LoancropunitcalculationworkerService } from './Workers/calculations/loancropunitcalculationworker.service';
+import { CropComponent } from './components/crop/crop.component';
+import { PriceComponent } from './components/crop/price/price.component';
+
 
 @NgModule({
   declarations: [
@@ -79,7 +85,10 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
     LoanOverviewComponent,
     FinancialsComponent,
     BorrowerComponent,
-    BalancesheetComponent
+    BalancesheetComponent,
+    ProjectedincomeComponent,
+    CropComponent,
+    PriceComponent
   ],
   imports: [
     BrowserModule,
@@ -159,7 +168,9 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
     ApiService,
     Borrowercalculationworker,
     LoancalculationWorker,
-    BorrowerapiService
+    BorrowerapiService,
+    LoancropunitcalculationworkerService,
+    LoggingService
   ],
   bootstrap: [AppComponent]
 })

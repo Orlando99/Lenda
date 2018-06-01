@@ -1,33 +1,7 @@
 import { JsonProperty, JsonObject, JsonConverter, JsonCustomConvert } from "json2typescript";
+import { Loan_Crop_Unit, Loan_Crop_Unit_FC } from "./cropmodel";
+import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
 
-@JsonConverter
-class StringConverter implements JsonCustomConvert<String> {
-    serialize(value:string): any {
-        return value;
-    }
-    deserialize(value: any): string {
-        if(value==undefined || value==null){
-            return "";
-        }
-        else{
-            return value.toString();
-        }
-    }
-}
-@JsonConverter
-class IntConverter implements JsonCustomConvert<number> {
-    serialize(value:number): any {
-        return value;
-    }
-    deserialize(value: any): number {
-        if(value==undefined || value==null){
-            return 0;
-        }
-        else{
-            return parseInt(value);
-        }
-    }
-}
 
 @JsonObject
 export class borrower_model
@@ -212,6 +186,7 @@ export class borrower_model
         FC_Borrower_Intermediate_Discvalue:number=0;
         FC_Borrower_Fixed_Discvalue:number=0;
         FC_Borrower_Total_Discvalue:number=0;
+        App_Logpriority:Logpriority=Logpriority.VeryHigh;
 
     }
     @JsonObject
@@ -219,6 +194,11 @@ export class borrower_model
 
         @JsonProperty("Borrower", borrower_model)
         Borrower: borrower_model=undefined;
+
+        @JsonProperty("LoanCropUnits", [Loan_Crop_Unit])
+        LoanCropUnits:Loan_Crop_Unit[]=undefined;
+        
+        LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
     }
     export class borrower_income_history_model
     {
@@ -228,4 +208,16 @@ export class borrower_model
         Borrower_Expense: number=undefined;
         Borrower_Revenue: number=undefined;
         Borrower_Income: number=undefined;
+    }
+    export enum Logpriority{
+        Low=1,//Logs all events
+        High,
+        VeryHigh
+    }
+    export class Logs
+    {
+        Log_Id: number;
+        Log_Section: string;
+        Log_Message: string;
+       
     }

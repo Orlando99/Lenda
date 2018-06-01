@@ -4,6 +4,7 @@ import { environment } from '../../../../environments/environment';
 import { deserialize } from 'serializer.ts/Serializer';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
+import { LoggingService } from '../../../services/Logs/logging.service';
 
 
 @Component({
@@ -14,10 +15,13 @@ import { LocalStorageService } from 'ngx-webstorage';
 export class FinancialsComponent implements OnInit {
   private localborrowerobject:borrower_model;
   public allDataFetched=false;  
-  constructor(public localstorageservice:LocalStorageService) { }
+  constructor(public localstorageservice:LocalStorageService,public logging:LoggingService) { }
+  
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-      debugger
+      // log
+      this.logging.checkandcreatelog(1,'financials',"LocalStorage updated");
+      //
       this.localborrowerobject=res.Borrower;
       this.allDataFetched=true;
     })
@@ -25,8 +29,9 @@ export class FinancialsComponent implements OnInit {
   }
 
   getdataforgrid(){
-    debugger
+    
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
+    this.logging.checkandcreatelog(1,'financials',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
     this.localborrowerobject=obj.Borrower;
