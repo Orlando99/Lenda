@@ -32,6 +32,8 @@ import { MatCardModule, MatSnackBarModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
+
+
 //ENDS MATERIAL COMPONENTS
 
 //START SERVICES 
@@ -61,10 +63,18 @@ import { Borrowercalculationworker } from './Workers/calculations/borrowercalcul
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { NamingConventionComponent } from './components/naming-convention/naming-convention.component';
 import { BorrowerapiService } from './services/borrower/borrowerapi.service';
+import { NamingConventionapiService } from './services/admin/namingconventionapi.service';
+import { AgGridModule } from 'ag-grid-angular';
+import { NumericEditor } from "../app/aggridfilters/numericaggrid";
+import { AggridTxtAreaComponent } from './aggridfilters/textarea';
+import { LoadingModule } from 'ngx-loading';
 
 @NgModule({
   declarations: [
+    NumericEditor,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -79,7 +89,11 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
     LoanOverviewComponent,
     FinancialsComponent,
     BorrowerComponent,
-    BalancesheetComponent
+    BalancesheetComponent,
+    AdminComponent,
+    NamingConventionComponent,
+    AggridTxtAreaComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -117,6 +131,8 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
     MatSidenavModule,
     MatPaginatorModule,
     MatButtonToggleModule,
+    LoadingModule,
+    AgGridModule.withComponents([NumericEditor]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -159,7 +175,8 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
     ApiService,
     Borrowercalculationworker,
     LoancalculationWorker,
-    BorrowerapiService
+    BorrowerapiService,
+    NamingConventionapiService
   ],
   bootstrap: [AppComponent]
 })
