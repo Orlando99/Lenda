@@ -22,7 +22,7 @@ export class ProjectedincomeComponent implements OnInit {
     this.getdataforgrid();
   }
   getdataforgrid(){
-    debugger
+    
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)

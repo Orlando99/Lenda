@@ -39,14 +39,14 @@
                 <td></td>
               </tr>
               <tr *ngFor="let cropunit of localloanobject.LoanCropUnits">
-                <td>{{cropunit.Crop_Type_Code}}</td>
+                <td>{{cropunit.Crop_Code}}</td>
                 <td>{{cropunit.CU_Acres}}</td>
                 <td>200</td>
                 <td>95%</td>
-                <td>$ {{cropunit.Price}}</td>
-                <td>$ {{cropunit.Basis_Adj}}</td>
-                <td>$ {{cropunit.Marketing_Adj}}</td>
-                <td>$ {{cropunit.Rebate_Adj}}</td>
+                <td>$ {{cropunit.Z_Price}}</td>
+                <td>$ {{cropunit.Z_Basis_Adj}}</td>
+                <td>$ {{cropunit.Z_Marketing_Adj}}</td>
+                <td>$ {{cropunit.Z_Rebate_Adj}}</td>
                 <td>$ {{cropunit.FC_Revenue}}</td>
               </tr>
               <tr>

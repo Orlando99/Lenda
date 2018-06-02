@@ -77,6 +77,9 @@ import { AgGridModule } from 'ag-grid-angular';
 import { NumericEditor } from "../app/aggridfilters/numericaggrid";
 import { AggridTxtAreaComponent } from './aggridfilters/textarea';
 import { LoadingModule } from 'ngx-loading';
+import { CropapiService } from './services/crop/cropapi.service';
+import { YieldComponent } from './components/crop/yield/yield.component';
+import { LoancrophistoryService } from './Workers/calculations/loancrophistory.service';
 
 @NgModule({
   declarations: [
@@ -101,7 +104,8 @@ import { LoadingModule } from 'ngx-loading';
     PriceComponent,
     AdminComponent,
     NamingConventionComponent,
-    AggridTxtAreaComponent
+    AggridTxtAreaComponent,
+    YieldComponent
     
   ],
   imports: [
@@ -186,8 +190,10 @@ import { LoadingModule } from 'ngx-loading';
     LoancalculationWorker,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
+    LoancrophistoryService,
     LoggingService,
-    NamingConventionapiService
+    NamingConventionapiService,
+    CropapiService
   ],
   bootstrap: [AppComponent]
 })

@@ -47,7 +47,7 @@ export class NamingConventionComponent implements OnInit {
     }
   
     ngOnInit() {
-      debugger
+      
       this.columnDefs = [
   
         {
@@ -126,7 +126,7 @@ export class NamingConventionComponent implements OnInit {
     }
   
     getNamingConventionList() {
-      debugger
+      
       this.loading=true;
       this.namingconventionservice.getNamingConventionList().subscribe(res => {
         if (res.ResCode == 1) {
@@ -141,7 +141,7 @@ export class NamingConventionComponent implements OnInit {
      
     }
     onSelectionChanged() {
-      debugger
+      
       this.selectedrows = this.gridApi.getSelectedRows();
       if (this.selectedrows.length > 0) {
         this.btndsb = false;
@@ -153,7 +153,7 @@ export class NamingConventionComponent implements OnInit {
   
   
   celleditingstopped(event: any) {
-    debugger
+    
   if(event.value.trim()!=""){
     this.loading=true;
     if (event.data.Id == undefined || event.data.Id === "") {

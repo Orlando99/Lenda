@@ -21,7 +21,7 @@ export class LoanListComponent implements OnInit {
 
   getloanlist() {
     this.loanService.getLoanList(this.pagesize, this.previndex).subscribe(res => {
-      debugger
+      
       if (res.ResCode == 1) {
         this.loanlist = res.Data;
       }

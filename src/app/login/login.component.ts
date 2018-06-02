@@ -6,6 +6,8 @@ import { AlertifyService } from '../alertify/alertify.service'
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../environments/environment';
 import { Logpriority } from '../models/loanmodel';
+import { ApiService } from '../services';
+import { CropapiService } from '../services/crop/cropapi.service';
 
 @Component({
   selector: 'auth-page',
@@ -29,7 +31,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     public toastr: ToastsManager,
     public alertifyService: AlertifyService,
-    public localst:LocalStorageService
+    public localst:LocalStorageService,
+    public cropapiservice:CropapiService
   ) {
 
     this.authForm = this.fb.group({
@@ -67,10 +70,17 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.username == 'admin' && this.password == 'admin') {
       this.localst.store(environment.logpriority,Logpriority.Low);
+      this.getcropprices();
       this.router.navigateByUrl('/home/loanoverview/1/summary');
     }
     else {
       this.toastr.error('Invalid username or password');
     }
+  }
+
+  getcropprices(){
+    this.cropapiservice.getcropprices().subscribe(res=>{
+      this.localst.store(environment.croppriceskey,res.Data);
+    })
   }
 }

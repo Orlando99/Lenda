@@ -62,7 +62,7 @@ export class Borrowercalculationworker {
 
   //ends here
   prepareborrowermodel(input:borrower_model):borrower_model{
-    debugger
+    
     this.input=input;
     this.prepare_current_equity();
     this.prepare_intermediate_equity();

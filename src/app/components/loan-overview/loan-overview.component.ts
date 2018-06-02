@@ -49,10 +49,10 @@ export class LoanOverviewComponent implements OnInit {
     if (this.loanid != null) {
       let loaded=false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
-        debugger
+        
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
-          debugger
+          
           let jsonConvert: JsonConvert = new JsonConvert();
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also

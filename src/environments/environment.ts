@@ -8,5 +8,6 @@ export const environment = {
   apiUrl: 'http://lendav2api.azurewebsites.net/',
   loankey:"currentselectedloan",
   loankey_copy:"rawcurrentselectedloan",
-  logpriority:"logpriority"
+  logpriority:"logpriority",
+  croppriceskey:"cropprices"
 };
