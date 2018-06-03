@@ -81,4 +81,7 @@ export class LoanOverviewComponent implements OnInit {
   gotocrop(){
     this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/crop")
   }
+  gotofarm(){
+    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/farm")
+  }
 }

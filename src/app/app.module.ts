@@ -80,6 +80,7 @@ import { LoadingModule } from 'ngx-loading';
 import { CropapiService } from './services/crop/cropapi.service';
 import { YieldComponent } from './components/crop/yield/yield.component';
 import { LoancrophistoryService } from './Workers/calculations/loancrophistory.service';
+import { FarmComponent } from './components/farm/farm.component';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import { LoancrophistoryService } from './Workers/calculations/loancrophistory.s
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
-    YieldComponent
+    YieldComponent,
+    FarmComponent
     
   ],
   imports: [

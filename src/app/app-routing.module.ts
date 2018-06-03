@@ -13,6 +13,7 @@ import { CropComponent } from "./components/crop/crop.component";
 
 import { AdminComponent } from "./components/admin/admin.component";
 import { NamingConventionComponent } from "./components/naming-convention/naming-convention.component";
+import { FarmComponent } from "./components/farm/farm.component";
 
 const appRoutes: Routes = [
 
@@ -33,7 +34,8 @@ const appRoutes: Routes = [
       { path: 'loanoverview/:id', component: LoanOverviewComponent,children:[
         { path: 'summary', component: SummaryComponent },
         { path: 'borrower', component: BorrowerComponent },
-        { path: 'crop', component: CropComponent }
+        { path: 'crop', component: CropComponent },
+        { path: 'farm', component: FarmComponent }
       ] },
     ]
   },
