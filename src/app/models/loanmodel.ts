@@ -1,6 +1,7 @@
 import { JsonProperty, JsonObject, JsonConverter, JsonCustomConvert } from "json2typescript";
 import { Loan_Crop_Unit, Loan_Crop_Unit_FC, V_Crop_Price_Details, Loan_Crop_Type_Practice_Type_Yield, Loan_Crop_History_FC } from "./cropmodel";
 import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
+import { Loan_Farm } from "./farmmodel.";
 
 
 @JsonObject
@@ -200,6 +201,9 @@ export class borrower_model
         
         @JsonProperty("CropYield", [Loan_Crop_Type_Practice_Type_Yield])
         CropYield:Loan_Crop_Type_Practice_Type_Yield[]=undefined;
+        
+        @JsonProperty("Farms", [Loan_Farm])
+        Farms:Loan_Farm[]=undefined;
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 

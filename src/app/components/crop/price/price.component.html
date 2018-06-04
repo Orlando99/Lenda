@@ -43,7 +43,7 @@
                   <td>{{cropunit.Marketing_Adj}}</td>
                   <td (click)="startediting('Z_Rebate_Adj'+i)">
                       <div *ngIf="!editarray['Z_Rebate_Adj'+i]">$ {{cropunit.Z_Rebate_Adj}}</div>
-                      <div *ngIf="editarray['Z_Rebate_Adj'+i]"><input type="number" value="{{cropunit.Z_Rebate_Adj}}" (blur)="valueupdate($event.srcElement.value,'Z_Rebate_Adj'+i,cropunit.Loan_CU_ID,cropunit.)" ></div> 
+                      <div *ngIf="editarray['Z_Rebate_Adj'+i]"><input type="number" value="{{cropunit.Z_Rebate_Adj}}" (blur)="valueupdate($event.srcElement.value,'Z_Rebate_Adj'+i,cropunit.Loan_CU_ID)" ></div> 
                   </td>
                   <td>{{cropunit.Z_Adj_Price}}</td>
                   <td>-</td>
