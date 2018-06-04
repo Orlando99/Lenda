@@ -36,7 +36,7 @@
                    <td>{{item.IrNI}}</td>
                    <td>{{item.Practice}}</td>
                    <td *ngFor="let year of years" (click)="startediting('z_'+year+i.toString())">
-                    <div *ngIf="!editarray['z_'+year+i.toString()]">$ {{item[year]}}</div>
+                    <div *ngIf="!editarray['z_'+year+i.toString()]">{{item[year]}}</div>
                     <div *ngIf="editarray['z_'+year+i.toString()]"><input type="number" value="{{item[year]}}" (blur)="valueupdate($event.srcElement.value,'z_'+year+i.toString(),year,item.Crop_ID,item.Loan_ID)" ></div> 
                 </td>
                    <td>{{item.CropYield}}</td>

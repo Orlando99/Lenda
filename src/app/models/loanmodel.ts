@@ -207,7 +207,6 @@ export class borrower_model
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
-        CropYieldHistoryFCvalues:Array<Loan_Crop_History_FC>=new Array<Loan_Crop_History_FC>();
     }
     export class borrower_income_history_model
     {

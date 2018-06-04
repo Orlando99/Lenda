@@ -81,6 +81,7 @@ export class YieldComponent implements OnInit {
       })
     });
     this.editorder=[];
+    this.syncenabled=false;
    }
 
 
