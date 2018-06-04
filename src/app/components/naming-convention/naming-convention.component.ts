@@ -183,12 +183,23 @@ export class NamingConventionComponent implements OnInit {
     this.gridApi.setQuickFilter(event.target.value);
   }
   Deleterow(){
+    
+    var ids = [];
     this.selectedrows.forEach(element => {
-      this.namingconventionservice.deleteNamingConvention(element.Id).subscribe(res => {
-        this.rows = this.rows.filter(p => p.Id != element.Id);
-      })
+      ids.push(element.Id);
     });
-    this.rows.push({});
+    this.loading=true;
+    this.namingconventionservice.deleteNamingConvention(ids).subscribe(res => {
+      if (res.ResCode == 1) {
+            this.rows = res.Data;
+            if(res.Data==null){
+              this.rows=[];
+            }
+            this.rows.push({});
+          }
+          this.loading=false;
+
+    });
   }
 
 }

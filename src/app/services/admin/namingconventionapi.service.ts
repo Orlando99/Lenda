@@ -19,8 +19,8 @@ export class NamingConventionapiService {
     }
 
     deleteNamingConvention(params): Observable<ResponseModel> {
-        const route = 'api/NamingConvention/DeleteNamingConvention?id='+params;
-        return this.apiservice.delete(route).map(res => res);
+        const route = 'api/NamingConvention/DeleteNamingConvention';
+        return this.apiservice.post(route, params).map(res => res);
     }
 
 }
