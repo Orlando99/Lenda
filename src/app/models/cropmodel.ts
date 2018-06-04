@@ -112,37 +112,47 @@ export class V_Crop_Price_Details
 
 }
 
-@JsonObject
-export class Loan_Crop_Type_Practice_Type_Yield
-{
+// @JsonObject
+// export class Loan_Crop_Type_Practice_Type_Yield
+// {
     
-    @JsonProperty("Loan_Crop_Type_Practice_Type_ID", IntConverter,false)
-    Loan_Crop_Type_Practice_Type_ID: number=undefined;
+//     @JsonProperty("Loan_Crop_Type_Practice_Type_ID", IntConverter,false)
+//     Loan_Crop_Type_Practice_Type_ID: number=undefined;
     
-    @JsonProperty("Loan_ID", IntConverter,false)
-    Loan_ID: number=undefined;
+//     @JsonProperty("Loan_ID", IntConverter,false)
+//     Loan_ID: number=undefined;
     
-    @JsonProperty("Loan_Seq_Num", IntConverter,false)
-    Loan_Seq_Num: number=undefined;
+//     @JsonProperty("Loan_Seq_Num", IntConverter,false)
+//     Loan_Seq_Num: number=undefined;
     
-    @JsonProperty("Crop_Type_Code", StringConverter,false)
-    Crop_Type_Code: string=undefined;
+//     @JsonProperty("Crop_Type_Code", StringConverter,false)
+//     Crop_Type_Code: string=undefined;
     
-    @JsonProperty("Practice_Type_Code", StringConverter,false)
-    Practice_Type_Code: string=undefined;
+//     @JsonProperty("Practice_Type_Code", StringConverter,false)
+//     Practice_Type_Code: string=undefined;
     
-    @JsonProperty("Yield_Line", StringConverter,false)
-    Yield_Line: string=undefined;
+//     @JsonProperty("Yield_Line", StringConverter,false)
+//     Yield_Line: string=undefined;
     
-    @JsonProperty("Crop_Yield", IntConverter,false)
-    Crop_Yield: number=undefined;
+//     @JsonProperty("Crop_Yield", IntConverter,false)
+//     Crop_Yield: number=undefined;
     
-    @JsonProperty("Crop_Year", IntConverter,false)
-    Crop_Year: number=undefined;
+//     @JsonProperty("Crop_Year", IntConverter,false)
+//     Crop_Year: number=undefined;
     
-    @JsonProperty("Status", IntConverter,false)
-    Status: number=undefined;
+//     @JsonProperty("Status", IntConverter,false)
+//     Status: number=undefined;
 
-}
+// }
 
+
+export class Loan_Crop_Type_Practice_Type_Yield_EditModel
+    {
+        CropId: number | null;
+        LoanID: number | null;
+        PropertyName: string;
+        PropertyValue: string;
+        CropYear: number | null;
+        IsPropertyYear: boolean;
+    }
 

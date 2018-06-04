@@ -30,13 +30,16 @@
             </thead>
     
             <tbody>
-              <tr *ngFor="let item of arrayrow">
+              <tr *ngFor="let item of localloanobject.CropYield;let i=index">
+                   <td>{{item.Crop}}</td>
                    <td>{{item.Crop_Type}}</td>
-                   <td>{{item.Crop_Type_Code}}</td>
-                   <td>{{item.Practice_Type_Code}}</td>
-                   <td>{{item.Practice_Type_Code}}</td>
-                   <td *ngFor="let year of years">{{item[year+'_yield']}}</td>
-                   <td>{{item.Crop_Yield}}</td>
+                   <td>{{item.IrNI}}</td>
+                   <td>{{item.Practice}}</td>
+                   <td *ngFor="let year of years" (click)="startediting('z_'+year+i.toString())">
+                    <div *ngIf="!editarray['z_'+year+i.toString()]">$ {{item[year]}}</div>
+                    <div *ngIf="editarray['z_'+year+i.toString()]"><input type="number" value="{{item[year]}}" (blur)="valueupdate($event.srcElement.value,'z_'+year+i.toString(),year,item.Crop_ID,item.Loan_ID)" ></div> 
+                </td>
+                   <td>{{item.CropYield}}</td>
                    <td>{{item.APH}}</td>
                    <td>Bu</td>
                    

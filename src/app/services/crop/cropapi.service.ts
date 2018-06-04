@@ -18,4 +18,9 @@ export class CropapiService {
     return this.apiservice.post(route,Object).map(res=>res);
    }
 
+   saveupdateLoanCropYield(Object:any) : Observable<ResponseModel>{
+    const route='/api/Crop/EditLoanCropTypePracticeTypeYield';
+    return this.apiservice.post(route,Object).map(res=>res);
+   }
+
 }

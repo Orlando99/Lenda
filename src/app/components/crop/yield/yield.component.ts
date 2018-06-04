@@ -6,7 +6,8 @@ import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { View_cropyield } from '../../../models/view_models/View_Crop';
+import { Loan_Crop_Type_Practice_Type_Yield_EditModel } from '../../../models/cropmodel';
+import { CropapiService } from '../../../services/crop/cropapi.service';
 
 @Component({
   selector: 'app-yield',
@@ -19,11 +20,12 @@ export class YieldComponent implements OnInit {
   public allDataFetched=false;  
   public editarray=[];
   public arrayrow=[];
+  public editorder=[];
   public syncenabled=false;
   public croppricesdetails:[any];
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
-  //public borrowerservice:BorrowerapiService,
+  public cropserviceapi:CropapiService,
   private toaster: ToastsManager,
   public logging:LoggingService
   ) { }
@@ -46,62 +48,39 @@ export class YieldComponent implements OnInit {
     if(obj!=null && obj!=undefined)
     {
     this.localloanobject=obj;
-    this.createbindablemodel();
     this.allDataFetched=true;
     }
-  }
-
-
-  createbindablemodel(){
-    
-    this.arrayrow=new Array<View_cropyield>(); 
-    let valuestouse=this.localloanobject.CropYield.filter(p=>this.years.indexOf(p.Crop_Year)!=-1);
-    let uniquerops=this.localloanobject.CropYield.map(p=>p.Crop_Type_Code).filter((value, index, self) => self.indexOf(value) === index)
-    uniquerops.forEach(element => {
-      let obj=new View_cropyield()
-      obj.Crop_Type_Code=element;
-      obj.Crop_Type=this.croppricesdetails.find(p=>p.Crop_Type_Code==element).Crop_Code;
-      this.years.forEach(element1 => {
-        let foundobj=this.localloanobject.CropYield.find(p=>p.Crop_Year==element1 && p.Crop_Type_Code==element);
-        if(foundobj!=null){
-          obj[element1+"_yield"]=foundobj.Crop_Yield;
-        }
-        else{
-          obj[element1+"_yield"]=0;
-        }
-        obj.Loan_ID=valuestouse[0].Loan_ID;
-        obj.Practice_Type_Code=valuestouse.find(p=>p.Crop_Type_Code==element).Practice_Type_Code;
-        obj.APH=this.localloanobject.CropYieldHistoryFCvalues.find(p=>p.FC_Crop_Type_Code==element).FC_Crop_APH;
-        obj.Crop_Yield=this.localloanobject.CropYieldHistoryFCvalues.find(p=>p.FC_Crop_Type_Code==element).FC_Crop_Yield;
-      });
-      this.arrayrow.push(obj);
-     });
   }
   startediting(value:string){
     
    if(this.editarray[value]!=true)
   this.editarray[value]=true;
   }
-  valueupdate(value:any,key:string,lon_id:number){
-    
+  valueupdate(value:any,key:string,year:number,cropid:number,lon_id:number){
+    debugger
     this.editarray[key]=false;
-    this.localloanobject.CropYield.find(p=>p.Loan_ID==lon_id)[key.substr(0,key.length-1)] =parseInt(value);
+    this.localloanobject.CropYield.find(p=>p.Loan_ID==lon_id && p.Crop_ID==cropid)[year] =parseInt(value);
     this.logging.checkandcreatelog(3,'CropYield',"Field Edited -"+key);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    let edit=new Loan_Crop_Type_Practice_Type_Yield_EditModel();
+    edit.CropId=cropid;
+    edit.CropYear=year;
+    edit.IsPropertyYear=true;
+    edit.LoanID=lon_id;
+    edit.PropertyName=year.toString();
+    edit.PropertyValue=value;
+    this.editorder.push(edit);
     this.syncenabled=true;
   }
 
    synctoDb(){
-    var obj=modelparserfordb(this.localloanobject.Borrower);
-    // this.borrowerservice.saveupdateborrower(obj).subscribe(res=>{
-    //   this.logging.checkandcreatelog(3,'BalanceSheet',"Code Synced to DB with ResCode "+res.ResCode);
-    //   if(res.ResCode==1){
-    //     this.toaster.success("Object Synced Successfully");
-    //   }
-    //   else{
-    //     this.toaster.error("Error Encountered while Syncing");
-    //    }
-    // });
+     debugger
+    this.editorder.forEach(element => {
+      this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>{
+        this.toaster.success("Object Synchronized Successfully")
+      })
+    });
+    this.editorder=[];
    }
 
 

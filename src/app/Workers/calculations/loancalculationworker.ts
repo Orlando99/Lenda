@@ -26,7 +26,7 @@ export class LoancalculationWorker {
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
     localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
-    localloanobj.CropYieldHistoryFCvalues=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
+    localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");
       // At End push the new obj with new caluclated values into localstorage and emit value changes
       this.localst.store(environment.loankey,localloanobj);
