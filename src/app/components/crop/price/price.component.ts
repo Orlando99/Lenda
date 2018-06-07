@@ -45,12 +45,15 @@ export class PriceComponent implements OnInit {
 
   startediting(value: string) {
 
-    if (this.editarray[value] != true)
+    this.editarray=[];
       this.editarray[value] = true;
   }
   valueupdate(value: any, key: string, lon_id: number) {
     debugger
     this.editarray[key] = false;
+    if(value==""){
+      value="0";
+    }
     this.localloanobject.LoanCropUnits.find(p => p.Loan_CU_ID == lon_id)[key.substr(0, key.length - 1)] = parseFloat(value);
     this.editedLoanCuids.push(lon_id);
     this.logging.checkandcreatelog(3, 'CropPrice', "Field Edited -" + key);

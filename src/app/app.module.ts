@@ -81,6 +81,11 @@ import { CropapiService } from './services/crop/cropapi.service';
 import { YieldComponent } from './components/crop/yield/yield.component';
 import { LoancrophistoryService } from './Workers/calculations/loancrophistory.service';
 import { FarmComponent } from './components/farm/farm.component';
+import { FarmcalculationworkerService } from './Workers/calculations/farmcalculationworker.service';
+import { FarmapiService } from './services/farm/farmapi.service';
+import { FocusDirective } from './directives/focusInput';
+import { BudgetComponent } from './components/budget/budget.component';
+import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cropbasedbudget.component';
 
 @NgModule({
   declarations: [
@@ -107,7 +112,10 @@ import { FarmComponent } from './components/farm/farm.component';
     NamingConventionComponent,
     AggridTxtAreaComponent,
     YieldComponent,
-    FarmComponent
+    FarmComponent,
+    FocusDirective,
+    BudgetComponent,
+    CropbasedbudgetComponent
     
   ],
   imports: [
@@ -180,6 +188,7 @@ import { FarmComponent } from './components/farm/farm.component';
     MatSidenavModule,
     MatPaginatorModule,
     MatButtonToggleModule,
+    FocusDirective
   ],
   providers: [
     LocalStorageService,
@@ -193,9 +202,12 @@ import { FarmComponent } from './components/farm/farm.component';
     BorrowerapiService,
     LoancropunitcalculationworkerService,
     LoancrophistoryService,
+    FarmcalculationworkerService,
     LoggingService,
+    FarmapiService,
     NamingConventionapiService,
     CropapiService
+    
   ],
   bootstrap: [AppComponent]
 })

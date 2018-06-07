@@ -45,5 +45,7 @@ export class Loan_Farm
     Crop_share_Detail_Indicator: number=undefined;
     @JsonProperty("Status", IntConverter,false)
     Status: number=undefined;
+
+    FC_Total_Acres:number;
     
 }

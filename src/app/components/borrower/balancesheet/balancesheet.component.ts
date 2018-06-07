@@ -45,11 +45,15 @@ export class BalancesheetComponent implements OnInit {
   }
 
   startediting(value:string){
-   if(this.editarray[value]!=true)
+  this.editarray=[];
   this.editarray[value]=true;
   }
   valueupdate(value:any,key:string){
+    debugger
     this.editarray[key]=false;
+    if(value==""){
+      value="0";
+    }
     this.localloanobject.Borrower[key]=parseInt(value);
     this.logging.checkandcreatelog(3,'BalanceSheet',"Field Edited -"+key);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);

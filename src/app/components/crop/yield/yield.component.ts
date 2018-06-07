@@ -53,12 +53,15 @@ export class YieldComponent implements OnInit {
   }
   startediting(value:string){
     
-   if(this.editarray[value]!=true)
+    this.editarray=[];
   this.editarray[value]=true;
   }
   valueupdate(value:any,key:string,year:number,cropid:number,lon_id:number){
     debugger
     this.editarray[key]=false;
+    if(value==""){
+      value="0";
+    }
     this.localloanobject.CropYield.find(p=>p.Loan_ID==lon_id && p.Crop_ID==cropid)[year] =parseInt(value);
     this.logging.checkandcreatelog(3,'CropYield',"Field Edited -"+key);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
