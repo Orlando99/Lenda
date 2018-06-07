@@ -7,8 +7,11 @@ import { Loan_Farm } from "./farmmodel.";
 @JsonObject
 export class borrower_model
     {
-        @JsonProperty("Borrower_Loan_Id", IntConverter,false)
-        Borrower_Loan_Id: number=undefined;
+        @JsonProperty("Loan_PK_ID", IntConverter,false)
+        Loan_PK_ID: number=undefined;
+
+        @JsonProperty("Loan_Full_ID", IntConverter,false)
+        Loan_Full_ID: number=undefined;
 
         @JsonProperty("Borrower_ID", IntConverter,false)
         Borrower_ID: number=undefined;

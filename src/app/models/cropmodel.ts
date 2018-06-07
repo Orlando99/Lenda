@@ -8,6 +8,8 @@ export class Loan_Crop_Unit
     Loan_CU_ID: number=undefined;
     @JsonProperty("Loan_ID", IntConverter,false)
     Loan_ID: number=undefined;
+    @JsonProperty("Farm_ID", IntConverter,false)
+    Farm_ID: number=undefined;
     @JsonProperty("CU_Acres", IntConverter,false)
     CU_Acres: number=undefined;
     @JsonProperty("Crop_Type_Code", StringConverter,false)
@@ -52,17 +54,17 @@ export class Loan_Crop_History_FC{
 @JsonObject
 export class V_Crop_Price_Details
 {
-    @JsonProperty("Crop_ID", IntConverter,false)
-    Crop_ID: number=undefined;
+    @JsonProperty("Crop_And_Practice_ID", StringConverter,false)
+    Crop_And_Practice_ID: string=undefined;
+
+    // @JsonProperty("Crop_ID", IntConverter,false)
+    // Crop_ID: number=undefined;
     
     @JsonProperty("Crop_Code", StringConverter,false)
     Crop_Code: string=undefined;
     
     @JsonProperty("Crop_Name", StringConverter,false)
     Crop_Name: string=undefined;
-    
-    @JsonProperty("Crop_Type_Code", StringConverter,false)
-    Crop_Type_Code: string=undefined;
     
     @JsonProperty("Crop_Type_Name", StringConverter,false)
     Crop_Type_Name: String=undefined;
@@ -75,6 +77,9 @@ export class V_Crop_Price_Details
     
     @JsonProperty("State_ID", StringConverter,false)
     State_ID: String=undefined;
+
+    @JsonProperty("RMA_Ref_Yield", IntConverter,false)
+    RMA_Ref_Yield: number=undefined;
     
     @JsonProperty("Std_Crop_Type_Practice_Type_Ind", IntConverter,false)
     Std_Crop_Type_Practice_Type_Ind: number=undefined;
