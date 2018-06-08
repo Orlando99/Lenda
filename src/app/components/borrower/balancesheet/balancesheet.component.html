@@ -5,96 +5,23 @@
         BALANCE SHEET
       </mat-panel-title>
     </mat-expansion-panel-header>
-
-    <div *ngIf="allDataFetched" class="container">
-      <div class="row">
-        <div class="col s12">
-          <!-- Table Here -->
-       <h4>Financials as of : {{localloanobject.Borrower.Borrower_Financials_Date |date:short}}
-          <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
-          <mat-icon >publish</mat-icon>
-        </button></h4>
-          <table class="bordered">
-            <thead>
-              <tr>
-                  <th>Financials</th>
-                  <th>Assets</th>
-                  <th>Discount</th>
-                  <th>Adj.Value</th>
-                  <th>Debt</th>
-                  <th>Discounted NW </th>
-              </tr>
-            </thead>
-    
-            <tbody>
-              <tr>
-                <td>Current</td>
-                <td class="editable" (click)="startediting('Borrower_Current_Assets')">
-                    <div *ngIf="!editarray['Borrower_Current_Assets']">$ {{localloanobject.Borrower.Borrower_Current_Assets}}</div>
-                    <div *ngIf="editarray['Borrower_Current_Assets']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Current_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Assets')" ></div> 
-                </td>
-                <td class="editable" (click)="startediting('Borrower_Current_Assets_Disc')">
-                    <div *ngIf="!editarray['Borrower_Current_Assets_Disc']">{{localloanobject.Borrower.Borrower_Current_Assets_Disc}} %</div>
-                    <div *ngIf="editarray['Borrower_Current_Assets_Disc']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Current_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Assets_Disc')" ></div> 
-                </td>
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Current_Adjvalue}}</td>
-                <td class="editable" (click)="startediting('Borrower_Current_Liabilities')">
-                    <div *ngIf="!editarray['Borrower_Current_Liabilities']">$ {{localloanobject.Borrower.Borrower_Current_Liabilities}}</div>
-                    <div *ngIf="editarray['Borrower_Current_Liabilities']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Current_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Current_Liabilities')" ></div> 
-                </td>
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Current_Discvalue}}</td>
-                
-              </tr>
-              <tr>
-                <td>Intermediate</td>
-                <td class="editable" (click)="startediting('Borrower_Intermediate_Assets')">
-                    <div *ngIf="!editarray['Borrower_Intermediate_Assets']">$ {{localloanobject.Borrower.Borrower_Intermediate_Assets}}</div>
-                    <div *ngIf="editarray['Borrower_Intermediate_Assets']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Assets')" ></div> 
-                </td>
-                <td class="editable" (click)="startediting('Borrower_Intermediate_Assets_Disc')">
-                    <div *ngIf="!editarray['Borrower_Intermediate_Assets_Disc']">{{localloanobject.Borrower.Borrower_Intermediate_Assets_Disc}} %</div>
-                    <div *ngIf="editarray['Borrower_Intermediate_Assets_Disc']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Assets_Disc')" ></div> 
-                </td>
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Intermediate_Adjvalue}}</td>
-                <td class="editable" (click)="startediting('Borrower_Intermediate_Liabilities')">
-                    <div *ngIf="!editarray['Borrower_Intermediate_Liabilities']">$ {{localloanobject.Borrower.Borrower_Intermediate_Liabilities}}</div>
-                    <div *ngIf="editarray['Borrower_Intermediate_Liabilities']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Intermediate_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Intermediate_Liabilities')" ></div> 
-                </td>
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Intermediate_Discvalue}}</td>
-                
-              </tr>
-              <tr>
-                <td>Long Term</td>
-                <td class="editable" (click)="startediting('Borrower_Fixed_Assets')">
-                 <div *ngIf="!editarray['Borrower_Fixed_Assets']">$ {{localloanobject.Borrower.Borrower_Fixed_Assets}}</div>
-                 <div *ngIf="editarray['Borrower_Fixed_Assets']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Assets}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Assets')" ></div> 
-                </td>
-                <td class="editable"  (click)="startediting('Borrower_Fixed_Assets_Disc')">
-                    <div *ngIf="!editarray['Borrower_Fixed_Assets_Disc']">{{localloanobject.Borrower.Borrower_Fixed_Assets_Disc}} %</div>
-                    <div *ngIf="editarray['Borrower_Fixed_Assets_Disc']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Assets_Disc}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Assets_Disc')" ></div> 
-                </td>
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Fixed_Adjvalue}}</td>
-                <td class="editable" (click)="startediting('Borrower_Fixed_Liabilities')">
-                    <div *ngIf="!editarray['Borrower_Fixed_Liabilities']">$ {{localloanobject.Borrower.Borrower_Fixed_Liabilities}}</div>
-                    <div *ngIf="editarray['Borrower_Fixed_Liabilities']"><input setfocus type="number" value="{{localloanobject.Borrower.Borrower_Fixed_Liabilities}}" (blur)="valueupdate($event.srcElement.value,'Borrower_Fixed_Liabilities')" ></div> 
-                <td>$ {{localloanobject.Borrower.FC_Borrower_Fixed_Discvalue}}</td>
-              </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>Total</td>
-                    <td>$ {{localloanobject.Borrower.FC_Borrower_TotalAssets}}</td>
-                    <td></td>
-                    <td>$ {{localloanobject.Borrower.FC_Borrower_Total_Adjvalue}}</td>
-                    <td>$ {{localloanobject.Borrower.FC_Borrower_TotalDebt}}</td>
-                    <td>$ {{localloanobject.Borrower.FC_Borrower_Total_Discvalue}}</td>
-                </tr>
-            </tfoot>
-          </table>
-          <!-- Ends Here -->
-          <br>
+    <button (click)="synctoDb()"  mat-icon-button>
+        <mat-icon >publish</mat-icon>
+      </button>
+    <div class="container bottom">
+        <ag-grid-angular 
+        style="width: 96%; height: 180px;" 
+        class="ag-theme-balham"
+        [singleClickEdit]="true" 
+        (cellEditingStopped)="celleditingstopped($event)"
+        [enableSorting]="true"
+        [enableFilter]="true"
+        [rowData]="rowData" 
+        [getRowClass]="getRowClass"
+        (gridReady)="onGridReady($event)"
+        [pinnedBottomRowData]="pinnedBottomRowData"
+        [columnDefs]="columnDefs">
+        </ag-grid-angular>
         </div>
-      </div>
-    </div>
   </mat-expansion-panel>
 </mat-accordion>

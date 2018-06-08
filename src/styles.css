@@ -27,6 +27,7 @@ input[type=number]::-webkit-outer-spin-button {
 /* Ag grid  */
 
 .ag-aggregate-row{
-    background-color: lightgreen !important
+    background-color: lightgreen !important;
+    font-weight: bold
 }
 /* Ends here */
