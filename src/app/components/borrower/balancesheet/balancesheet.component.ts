@@ -21,7 +21,7 @@ export class BalancesheetComponent implements OnInit {
   // Aggrid
   public rowData = [];
   public pinnedBottomRowData = [];
-  private getRowClass;
+  public getRowClass;
   private gridApi;
   private columnApi;
    //region Ag grid Configuration
