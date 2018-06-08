@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ToastsManager } from "ng2-toastr";
+import { ToastsManager } from 'ng2-toastr';
 import { NamingConventionapiService } from '../../services/admin/namingconventionapi.service';
 import { environment } from '../../../environments/environment';
 import { deserialize, serialize } from 'serializer.ts/Serializer';
@@ -32,12 +32,11 @@ export class NamingConventionComponent implements OnInit {
   constructor(
     private toaster: ToastsManager,
     private namingconventionservice: NamingConventionapiService,
-    private localstorageservice:LocalStorageService) { 
+    private localstorageservice: LocalStorageService) {
 
     }
 
     onGridReady(params) {
-      
       this.gridApi = params.api;
       this.gridColumnApi = params.columnApi;
       params.api.setRowData(this.rows);
@@ -45,161 +44,150 @@ export class NamingConventionComponent implements OnInit {
         params.api.resetRowHeights();
       }, 500);
     }
-  
+
+    onColumnResized(params) {
+      if (params.finished) {
+        params.api.resetRowHeights();
+      }
+    }
+
     ngOnInit() {
-      
       this.columnDefs = [
-  
         {
-          headerName: "Id",
-          field: "Id",
+          headerName: 'Id',
+          field: 'Id',
           width: 80,
           checkboxSelection: true,
-          editable: true
+          editable: false
         },
         {
-          headerName: "Old_LM_Table",
-          field: "Old_LM_Table",
+          headerName: 'Old_LM_Table',
+          field: 'Old_LM_Table',
           width: 150,
           editable: true
         },
         {
-          headerName: "Old_LM_Field",
-          field: "Old_LM_Field",
+          headerName: 'Old_LM_Field',
+          field: 'Old_LM_Field',
           width: 150,
           editable: true
         },
         {
-          headerName: "New_LM_Table",
-          field: "New_LM_Table",
+          headerName: 'New_LM_Table',
+          field: 'New_LM_Table',
           width: 150,
           editable: true
         },
         {
-          headerName: "New_LM_Field",
-          field: "New_LM_Field",
+          headerName: 'New_LM_Field',
+          field: 'New_LM_Field',
           width: 150,
           editable: true
         },
         {
-          headerName: "Seq_Num",
-          field: "Seq_Num",
+          headerName: 'Seq_Num',
+          field: 'Seq_Num',
           width: 100,
           editable: true
         },
         {
-          headerName: "Formula",
-          field: "Formula",
+          headerName: 'Formula',
+          field: 'Formula',
           width: 200,
-          editable: true
+          editable: true,
+          autoHeight: true,
+          cellClass: 'cell-wrap-text',
         },
         {
-          headerName: "LoanObject",
-          field: "LoanObject",
+          headerName: 'LoanObject',
+          field: 'LoanObject',
           width: 150, editable:  true,
-          cellStyle: { "white-space": "normal" },
+          cellStyle: { 'white-space': 'normal' },
         },
         {
-          headerName: "Level",
-          field: "Level",
+          headerName: 'Level',
+          field: 'Level',
           width: 150, editable:  true,
-          cellStyle: { "white-space": "normal" },
+          cellStyle: { 'white-space': 'normal' },
         },
         {
-          headerName: "LendaPlusName",
-          field: "LendaPlusName",
+          headerName: 'LendaPlusName',
+          field: 'LendaPlusName',
           width: 150, editable:  true,
-          cellStyle: { "white-space": "normal" },
+          cellStyle: { 'white-space': 'normal' },
         },
         {
-          headerName: "Comments",
-          field: "Comments",
-          cellStyle: { "white-space": "normal" },
-          autoHeight:true,
-          cellEditor:'agLargeTextCellEditor',
-          width: 250, editable:  true
+          headerName: 'Comments',
+          field: 'Comments',
+          cellStyle: { 'white-space': 'normal' },
+          autoHeight: true,
+          cellEditor: 'agLargeTextCellEditor',
+          width: 250, editable:  true,
+          cellClass: 'cell-wrap-text',
         }
       ];
-      
-      this.rowSelection = "multiple";
+      this.rowSelection = 'multiple';
       this.getNamingConventionList();
+
     }
-  
     getNamingConventionList() {
-      
-      this.loading=true;
+      this.loading = true;
       this.namingconventionservice.getNamingConventionList().subscribe(res => {
-        if (res.ResCode == 1) {
+        if (res.ResCode === 1) {
           this.rows = res.Data;
-          if(res.Data==null){
-            this.rows=[];
+          if (res.Data === null) {
+            this.rows = [];
           }
           this.rows.push({});
         }
-        this.loading=false;
+        this.loading = false;
       });
-     
     }
     onSelectionChanged() {
-      
       this.selectedrows = this.gridApi.getSelectedRows();
       if (this.selectedrows.length > 0) {
         this.btndsb = false;
-      }
-      else {
+      } else {
         this.btndsb = true;
       }
     }
-  
-  
   celleditingstopped(event: any) {
-    
-  if(event.value.trim()!=""){
-    this.loading=true;
-    if (event.data.Id == undefined || event.data.Id === "") {
-      
-      var newItem ={};
+  if (event.value.trim() !== '') {
+    this.loading = true;
+    if (event.data.Id === undefined || event.data.Id === '') {
+      const newItem = {};
       event.data.Id = 0;
       this.namingconventionservice.addEditNamingConvention(event.data).subscribe(res => {
-        this.rows[event.rowIndex]=event.data;
+        this.rows[event.rowIndex] = event.data;
         this.rows[event.rowIndex].Id = parseInt(res.Data);
-        this.gridApi.setRowData(this.rows);
         this.gridApi.updateRowData({ add: [newItem] });
-        this.loading=false;
+        this.loading = false;
       });
-     
-    }
-    else {
+    } else {
       this.namingconventionservice.addEditNamingConvention(event.data).subscribe(res => {
-        this.loading=false;
+        this.loading = false;
       });
     }
-   
   }
   }
-  
-  search(event:any){
-      
+  search(event: any) {
     this.gridApi.setQuickFilter(event.target.value);
   }
-  Deleterow(){
-    
-    var ids = [];
+  Deleterow() {
+    const ids = [];
     this.selectedrows.forEach(element => {
       ids.push(element.Id);
     });
-    this.loading=true;
+    this.loading = true;
     this.namingconventionservice.deleteNamingConvention(ids).subscribe(res => {
-      if (res.ResCode == 1) {
+      if (res.ResCode === 1) {
             this.rows = res.Data;
-            if(res.Data==null){
-              this.rows=[];
+            if (res.Data === null) {
+              this.rows = [];
             }
             this.rows.push({});
           }
-          this.loading=false;
-
+          this.loading = false;
     });
   }
-
 }
