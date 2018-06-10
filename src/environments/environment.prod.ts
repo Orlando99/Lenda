@@ -6,6 +6,6 @@ export const environment = {
   loankey:"currentselectedloan",
   loankey_copy:"rawcurrentselectedloan",
   logpriority:"logpriority",
-  croppriceskey:"cropprices"
+  referencedatakey:"refdata"
 };
 

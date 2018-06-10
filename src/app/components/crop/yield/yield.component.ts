@@ -39,7 +39,7 @@ export class YieldComponent implements OnInit {
     for(let i=1;i<7;i++){
        this.years.push(new Date().getFullYear()-i);
     }
-    this.croppricesdetails=this.localstorageservice.retrieve(environment.croppriceskey);
+    this.croppricesdetails=this.localstorageservice.retrieve(environment.referencedatakey);
     this.getdataforgrid();
   }
   getdataforgrid(){

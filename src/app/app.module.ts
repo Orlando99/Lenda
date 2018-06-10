@@ -86,10 +86,13 @@ import { FarmapiService } from './services/farm/farmapi.service';
 import { FocusDirective } from './directives/focusInput';
 import { BudgetComponent } from './components/budget/budget.component';
 import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cropbasedbudget.component';
+import { ReferenceService } from './services/reference/reference.service';
+import { SelectEditor } from './aggridfilters/selectbox';
 
 @NgModule({
   declarations: [
     NumericEditor,
+    SelectEditor,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -155,7 +158,7 @@ import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cr
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
-    AgGridModule.withComponents([NumericEditor]),
+    AgGridModule.withComponents([NumericEditor,SelectEditor]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -206,7 +209,8 @@ import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cr
     LoggingService,
     FarmapiService,
     NamingConventionapiService,
-    CropapiService
+    CropapiService,
+    ReferenceService
     
   ],
   bootstrap: [AppComponent]

@@ -33,6 +33,8 @@ export class Loan_Crop_Unit
     @JsonProperty("Status", IntConverter,false)
     Status: number=undefined;
 
+    @JsonProperty("ActionStatus", IntConverter,false)
+    ActionStatus: number=undefined;
     FC_Revenue: number=0;
 }
 

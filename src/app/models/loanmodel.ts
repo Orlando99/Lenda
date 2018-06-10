@@ -172,6 +172,9 @@ export class borrower_model
         @JsonProperty("Status", IntConverter,false)
         Status: number=undefined;
 
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=undefined;
+        
         FC_Borrower_TotalAssets:number=0;
         FC_Borrower_TotalDebt:number=0;
         FC_Borrower_TotalEquity:number=0;
@@ -207,6 +210,9 @@ export class borrower_model
         
         @JsonProperty("Farms", [Loan_Farm])
         Farms:Loan_Farm[]=undefined;
+        
+        @JsonProperty("Loan_PK_ID", IntConverter)
+        Loan_PK_ID:number=undefined;
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
