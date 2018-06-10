@@ -7,7 +7,7 @@ import {ICellEditorAngularComp} from "ag-grid-angular";
     selector: 'editor-cell',
     template: `
     <div fxLayout="row" class="grid-actions">
-    <select (change)="invokeParentMethod($event)" [value]="selectedValue">
+    <select [value]="selectedValue">
       <option *ngFor="let value of values" [value]="value.key">{{value.value}}</option>
   </select>
   </div>

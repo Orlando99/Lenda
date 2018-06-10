@@ -25,7 +25,7 @@ export class FarmComponent implements OnInit {
   public syncenabled = false;
   // Aggrid
   public rowData = [];
-  private components;
+  public components;
   public editType;
   public pinnedBottomRowData = [];
   private gridApi;
