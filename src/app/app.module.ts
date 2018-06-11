@@ -88,11 +88,13 @@ import { BudgetComponent } from './components/budget/budget.component';
 import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cropbasedbudget.component';
 import { ReferenceService } from './services/reference/reference.service';
 import { SelectEditor } from './aggridfilters/selectbox';
+import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
 
 @NgModule({
   declarations: [
     NumericEditor,
     SelectEditor,
+    DeleteButtonRenderer,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -118,7 +120,8 @@ import { SelectEditor } from './aggridfilters/selectbox';
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent
+    CropbasedbudgetComponent,
+   
     
   ],
   imports: [
@@ -158,7 +161,7 @@ import { SelectEditor } from './aggridfilters/selectbox';
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
-    AgGridModule.withComponents([NumericEditor,SelectEditor]),
+    AgGridModule.withComponents([NumericEditor,SelectEditor,DeleteButtonRenderer]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -213,6 +216,9 @@ import { SelectEditor } from './aggridfilters/selectbox';
     ReferenceService
     
   ],
+  entryComponents :[ 
+    //alertify
+    ConfirmComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

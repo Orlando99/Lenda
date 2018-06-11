@@ -11,6 +11,8 @@ import { FarmapiService } from '../../services/farm/farmapi.service';
 import { numberValueSetter, getNumericCellEditor } from '../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../aggridfilters/selectbox';
+import { DeleteButtonRenderer } from '../../aggridcolumns/deletebuttoncolumn';
+import { AlertifyService } from '../../alertify/alertify.service';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -26,14 +28,16 @@ export class FarmComponent implements OnInit {
   // Aggrid
   public rowData = [];
   public components;
+  public context;
+  public frameworkcomponents;
   public editType;
   public pinnedBottomRowData = [];
   private gridApi;
   private columnApi;
   //region Ag grid Configuration
-  
 
-   returncountylist(){
+
+  returncountylist() {
     return this.refdata.CountyList;
   }
 
@@ -49,9 +53,11 @@ export class FarmComponent implements OnInit {
     public loanserviceworker: LoancalculationWorker,
     public farmservice: FarmapiService,
     private toaster: ToastsManager,
-    public logging: LoggingService
+    public logging: LoggingService,
+    public alertify: AlertifyService
   ) {
-    this.components = { numericCellEditor: getNumericCellEditor(),selectEditor:SelectEditor };
+    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
+    this.components = { numericCellEditor: getNumericCellEditor() };
     debugger
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
@@ -88,16 +94,19 @@ export class FarmComponent implements OnInit {
       { headerName: 'Perm to Ins', field: 'Permission_To_Insure', width: 80, editable: true },
       { headerName: 'IR Acres', field: 'Irr_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
       { headerName: 'NI Acres', field: 'NI_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres', width: 80 }
+      { headerName: 'Total Acres', field: 'FC_Total_Acres', width: 80 },
+      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+
     ];
     ///
+    this.context = { componentParent: this };
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
       debugger
       this.localloanobject = res;
-      this.gridApi.setRowData(res.Farms);
+      this.gridApi.setRowData(res.Farms.filter(p => p.ActionStatus != -1));
 
     });
 
@@ -105,19 +114,26 @@ export class FarmComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
+    let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       debugger
-      this.rowData = obj.Farms;
+      this.rowData = obj.Farms.filter(p => p.ActionStatus != -1);
     }
   }
 
 
   rowvaluechanged(value: any) {
     debugger
-    this.localloanobject.Farms[value.rowIndex] = value.data;
+    var obj = value.data;
+    if (obj.Farm_ID == undefined) {
+      obj.ActionStatus = -1;
+    }
+    else {
+      obj.ActionStatus = 2;
+    }
+    this.localloanobject.Farms[value.rowIndex] = obj;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -147,6 +163,22 @@ export class FarmComponent implements OnInit {
       rowIndex: this.rowData.length,
       colKey: "Farm_State_ID"
     });
+  }
+
+  DeleteClicked(rowIndex: any) {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+      if (res == true) {
+        var obj = this.localloanobject.Farms[rowIndex];
+        if (obj.Farm_ID == undefined) {
+          this.localloanobject.Farms.splice(rowIndex, 1);
+        }
+        else {
+          obj.ActionStatus = -1;
+        }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+      }
+    })
+
   }
   //
 
