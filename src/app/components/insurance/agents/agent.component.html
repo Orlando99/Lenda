@@ -1,0 +1,27 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        AGENTS
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button (click)="synctoDb()"  mat-icon-button>
+        <mat-icon >publish</mat-icon>
+      </button>
+    <div class="container bottom">
+        <ag-grid-angular 
+        style="width: 96%; height: 180px;" 
+        class="ag-theme-balham"
+        [singleClickEdit]="true" 
+        (cellEditingStopped)="celleditingstopped($event)"
+        [enableSorting]="true"
+        [enableFilter]="true"
+        [rowData]="rowData" 
+        [getRowClass]="getRowClass"
+        (gridReady)="onGridReady($event)"
+        [pinnedBottomRowData]="pinnedBottomRowData"
+        [columnDefs]="columnDefs">
+        </ag-grid-angular>
+        </div>
+  </mat-expansion-panel>
+</mat-accordion>

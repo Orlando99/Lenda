@@ -10,11 +10,11 @@ import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 
 @Component({
-  selector: 'app-balancesheet',
-  templateUrl: './balancesheet.component.html',
-  styleUrls: ['./balancesheet.component.scss']
+  selector: 'app-agent',
+  templateUrl: './agent.component.html',
+  styleUrls: ['./agent.component.scss']
 })
-export class BalancesheetComponent implements OnInit {
+export class AgentComponent implements OnInit {
 
   private localloanobject: loan_model = new loan_model();
   public syncenabled = false;
@@ -27,12 +27,11 @@ export class BalancesheetComponent implements OnInit {
    //region Ag grid Configuration
 
    columnDefs = [
-    { headerName: 'Financials', field: 'Financials' },
-    { headerName: 'Assets', field: 'Assets',editable:true },
-    { headerName: 'Discount', field: 'Discount',editable:true },
-    { headerName: 'AdjValue', field: 'AdjValue' },
-    { headerName: 'Debt', field: 'Debt',editable:true },
-    { headerName: 'Discounted NW', field: 'DiscountedNW' }
+    { headerName: 'Agent', field: 'Financials' },
+    { headerName: 'Agency', field: 'Assets',editable:true },
+    { headerName: 'Location', field: 'Discount',editable:true },
+    { headerName: 'Phone', field: 'AdjValue' },
+    { headerName: 'Email', field: 'Debt',editable:true },
   ];
 
   onGridReady(params) {
@@ -62,7 +61,6 @@ export class BalancesheetComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;

@@ -15,6 +15,7 @@ import { AdminComponent } from "./components/admin/admin.component";
 import { NamingConventionComponent } from "./components/naming-convention/naming-convention.component";
 import { FarmComponent } from "./components/farm/farm.component";
 import { BudgetComponent } from "./components/budget/budget.component";
+import { InsuranceComponent } from "./components/insurance/insurance.component";
 
 const appRoutes: Routes = [
 
@@ -37,6 +38,7 @@ const appRoutes: Routes = [
         { path: 'borrower', component: BorrowerComponent },
         { path: 'crop', component: CropComponent },
         { path: 'farm', component: FarmComponent },
+        { path: 'insurance', component: InsuranceComponent },
         { path: 'budget', component: BudgetComponent }
       ] },
     ]

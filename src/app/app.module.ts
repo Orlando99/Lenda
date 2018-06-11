@@ -86,15 +86,13 @@ import { FarmapiService } from './services/farm/farmapi.service';
 import { FocusDirective } from './directives/focusInput';
 import { BudgetComponent } from './components/budget/budget.component';
 import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cropbasedbudget.component';
-import { ReferenceService } from './services/reference/reference.service';
-import { SelectEditor } from './aggridfilters/selectbox';
-import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
+
+import { InsuranceComponent } from "./components/insurance/insurance.component";
+import { AgentComponent } from "./components/insurance/agents/agent.component";
 
 @NgModule({
   declarations: [
     NumericEditor,
-    SelectEditor,
-    DeleteButtonRenderer,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -121,7 +119,8 @@ import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
     FocusDirective,
     BudgetComponent,
     CropbasedbudgetComponent,
-   
+    InsuranceComponent,
+    AgentComponent
     
   ],
   imports: [
@@ -161,7 +160,7 @@ import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
-    AgGridModule.withComponents([NumericEditor,SelectEditor,DeleteButtonRenderer]),
+    AgGridModule.withComponents([NumericEditor]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -212,13 +211,9 @@ import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
     LoggingService,
     FarmapiService,
     NamingConventionapiService,
-    CropapiService,
-    ReferenceService
+    CropapiService
     
   ],
-  entryComponents :[ 
-    //alertify
-    ConfirmComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
