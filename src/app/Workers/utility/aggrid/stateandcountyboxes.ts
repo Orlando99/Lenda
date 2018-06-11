@@ -2,7 +2,7 @@ import { isNumber } from "util";
 
 // States
 
-var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
+
 export function extractStateValues(mappings) {
     var obj = [];
     mappings.forEach(element => {
@@ -43,6 +43,7 @@ export function extractCountyValues(mappings) {
 }
 
 export function lookupCountyValue(key) {
+    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key != undefined && key != "") {
         if (isNumber(key))
             return refdata.CountyList.find(p => p.County_ID == key).County_Name;
@@ -53,6 +54,7 @@ export function lookupCountyValue(key) {
 }
 
 export function Countyvaluesetter(params) {
+    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     var county = params.newValue;
     var values = refdata.CountyList;
     for (var key in values) {
@@ -65,7 +67,7 @@ export function Countyvaluesetter(params) {
 }
 
 export function getfilteredcounties(params) {
-
+    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     var selectedstate = params.data.Farm_State_ID;
     var allowedCounties = refdata.CountyList.filter(p => p.State_ID == selectedstate);
     return { values: extractCountyValues(allowedCounties) };

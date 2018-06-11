@@ -13,6 +13,7 @@ import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyVa
 import { SelectEditor } from '../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../alertify/alertify.service';
+import { LoanApiService } from '../../services/loan/loanapi.service';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -24,7 +25,7 @@ export class FarmComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = false;
+  public syncenabled = true;
   // Aggrid
   public rowData = [];
   public components;
@@ -54,7 +55,8 @@ export class FarmComponent implements OnInit {
     public farmservice: FarmapiService,
     private toaster: ToastsManager,
     public logging: LoggingService,
-    public alertify: AlertifyService
+    public alertify: AlertifyService,
+    public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
@@ -127,37 +129,31 @@ export class FarmComponent implements OnInit {
   rowvaluechanged(value: any) {
     debugger
     var obj = value.data;
-    if (obj.Farm_ID == undefined) {
-      obj.ActionStatus = -1;
+    if (obj.Farm_ID == 0) {
+      obj.ActionStatus = 1;
+      obj.Farm_ID=0;
+      this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
+      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
       obj.ActionStatus = 2;
+      this.localloanobject.Farms[rowindex]=obj;
     }
-    this.localloanobject.Farms[value.rowIndex] = obj;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   synctoDb() {
-    debugger
-    this.indexsedit.forEach(element => {
-      var obj = modelparserfordb(this.localloanobject.Farms[element]);
-      this.farmservice.saveupdateFarm(obj).subscribe(res => {
-        this.logging.checkandcreatelog(3, 'Farm', "Code Synced to DB with ResCode " + res.ResCode);
-        if (res.ResCode == 1) {
-          this.toaster.success("Object Synced Successfully");
-        }
-        else {
-          this.toaster.error("Error Encountered while Syncing");
-        }
-      });
-    });
-    this.indexsedit = [];
+    
+   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+     debugger
+   })
 
   }
 
   //Grid Events
   addrow() {
     var newItem = new Loan_Farm();
+    newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
     var res = this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length,
@@ -169,7 +165,7 @@ export class FarmComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.localloanobject.Farms[rowIndex];
-        if (obj.Farm_ID == undefined) {
+        if (obj.Farm_ID == 0) {
           this.localloanobject.Farms.splice(rowIndex, 1);
         }
         else {

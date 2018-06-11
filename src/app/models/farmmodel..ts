@@ -4,23 +4,23 @@ import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors
 export class Loan_Farm
 {
     @JsonProperty("Farm_ID", IntConverter,false)
-    Farm_ID: number=undefined;
+    Farm_ID: number=0;
     @JsonProperty("Loan_Full_ID", IntConverter,false)
-    Loan_Full_ID: number=undefined;
+    Loan_Full_ID: number=0;
     @JsonProperty("Farm_State_ID", IntConverter,false)
-    Farm_State_ID: number=undefined;
+    Farm_State_ID: number=0;
     @JsonProperty("Farm_County_ID", IntConverter,false)
-    Farm_County_ID: number=undefined;
+    Farm_County_ID: number=0;
     @JsonProperty("FSN", StringConverter,false)
-    FSN: string=undefined;
+    FSN: string='';
     @JsonProperty("Section", StringConverter,false)
-    Section: string=undefined;
+    Section: string='';
     @JsonProperty("Rated", StringConverter,false)
-    Rated: string=undefined;
+    Rated: string='';
     @JsonProperty("Owned", IntConverter,false)
     Owned: number=0;
     @JsonProperty("Landowner", StringConverter,false)
-    Landowner: string=undefined;
+    Landowner: string='';
     @JsonProperty("Share_Rent", IntConverter,false)
     Share_Rent: number=0;
     @JsonProperty("Cash_Rent_Total", IntConverter,false)
@@ -28,11 +28,11 @@ export class Loan_Farm
     @JsonProperty("Cash_Rent_Per_Acre", IntConverter,false)
     Cash_Rent_Per_Acre: number=0;
     @JsonProperty("Cash_Rent_Due_Date", StringConverter,false)
-    Cash_Rent_Due_Date: string=undefined;
+    Cash_Rent_Due_Date: string='';
     @JsonProperty("Cash_Rent_Paid", IntConverter,false)
     Cash_Rent_Paid: number=0;
     @JsonProperty("Permission_To_Insure", IntConverter,false)
-    Permission_To_Insure: number=undefined;
+    Permission_To_Insure: number=0;
     @JsonProperty("Cash_Rent_Waived", IntConverter,false)
     Cash_Rent_Waived: number=0;
     @JsonProperty("Cash_Rent_Waived_Amount", IntConverter,false)
@@ -42,9 +42,9 @@ export class Loan_Farm
     @JsonProperty("NI_Acres", IntConverter,false)
     NI_Acres: number=0;
     @JsonProperty("Crop_share_Detail_Indicator", IntConverter,false)
-    Crop_share_Detail_Indicator: number=undefined;
+    Crop_share_Detail_Indicator: number=0;
     @JsonProperty("Status", IntConverter,false)
-    Status: number=undefined;
+    Status: number=0;
 
     @JsonProperty("ActionStatus", IntConverter,false)
     ActionStatus: number=undefined;
