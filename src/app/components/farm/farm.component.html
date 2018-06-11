@@ -9,89 +9,29 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="allDataFetched" class="container">
-      <div class="row">
-        <div class="col s12">
-          <!-- Table Here -->
-       <h4>
-          <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
-          <mat-icon >publish</mat-icon>
-        </button></h4>
-          <table class="bordered">
-            <thead>
-              <tr>
-                  <th>State</th>
-                  <th>County</th>
-                  <th>% Prod</th>
-                  <th>Landlord</th>
-                  <th>FSN</th>
-                  <th>Section</th>
-                  <th>Rated</th>
-                  <th>$ Rent</th>
-                  <th>Rent UoM</th>
-                  <th>$ Rent Due</th>
-                  <th>$ Waived</th>
-                  <th>% Rent</th>
-                  <th>Perm to Ins</th>
-                  <th>IR Acres</th>
-                  <th>NI Acres</th>
-                  <th>Total Acres</th>
-              </tr>
-            </thead>
-    
-            <tbody>
-              <tr *ngFor="let farm of localloanobject.Farms;let i=index">
-                <td>LA</td>
-                <td>Richland</td>
-                <td>
-                  {{farm.Permission_To_Insure==1?100:0}} %
-              </td>
-                <td class="editable" (click)="startediting('f_'+i+'Landowner')">
-                  <div *ngIf="!editarray['f_'+i+'Landowner']">{{farm.Landowner}} </div>
-                  <div *ngIf="editarray['f_'+i+'Landowner']"><input setfocus type="text" value="{{farm.Landowner}} " (blur)="valueupdate($event.srcElement.value,'f_'+i+'Landowner','Landowner',i)" ></div> 
-              </td>
-              <td class="editable" (click)="startediting('f_'+i+'FSN')">
-                <div *ngIf="!editarray['f_'+i+'FSN']">{{farm.FSN}} </div>
-                <div *ngIf="editarray['f_'+i+'FSN']"><input setfocus type="text" value="{{farm.FSN}} " (blur)="valueupdate($event.srcElement.value,'f_'+i+'FSN','FSN',i)" ></div> 
-            </td>
-            <td class="editable" (click)="startediting('f_'+i+'Section')">
-              <div *ngIf="!editarray['f_'+i+'Section']">{{farm.Section}} </div>
-              <div *ngIf="editarray['f_'+i+'Section']"><input setfocus type="text" value="{{farm.Section}} " (blur)="valueupdate($event.srcElement.value,'f_'+i+'Section','Section',i)" ></div> 
-            </td>
-            <td class="editable" (click)="startediting('f_'+i+'Rated')">
-              <div *ngIf="!editarray['f_'+i+'Rated']">{{farm.Rated}} </div>
-              <div *ngIf="editarray['f_'+i+'Rated']"><input setfocus type="text" value="{{farm.Rated}} " (blur)="valueupdate($event.srcElement.value,'f_'+i+'Rated','Rated',i)" ></div> 
-            </td>
-            <td class="editable" (click)="startediting('f_'+i+'Share_Rent')">
-              <div *ngIf="!editarray['f_'+i+'Share_Rent']">{{farm.Share_Rent}} </div>
-              <div *ngIf="editarray['f_'+i+'Share_Rent']"><input setfocus type="number" value="{{farm.Share_Rent}}" (blur)="valueupdate($event.srcElement.value,'f_'+i+'Share_Rent','Share_Rent',i)" ></div> 
-            </td>
-                <td>-</td>
-                <td>{{farm.Cash_Rent_Due_Date | date:short}}</td>
-                <td class="editable" (click)="startediting('f_'+i+Cash_Rent_Waived)">
-                  <div *ngIf="!editarray['f_'+i+Cash_Rent_Waived]">{{farm.Cash_Rent_Waived}} </div>
-                  <div *ngIf="editarray['f_'+i+Cash_Rent_Waived]"><input setfocus type="number" value="{{farm.Cash_Rent_Waived}} " (blur)="valueupdate($event.srcElement.value,'f_'+i+Cash_Rent_Waived,'Cash_Rent_Waived',i)" ></div> 
-                </td>
-                <td>-</td>
-                <td>{{farm.Permission_To_Insure}}</td>
-                <td class="editable" (click)="startediting('f_'+i+'Irr_Acres')">
-                  <div *ngIf="!editarray['f_'+i+'Irr_Acres']">{{farm.Irr_Acres}} </div>
-                  <div *ngIf="editarray['f_'+i+'Irr_Acres']"><input setfocus type="number" value="{{farm.Irr_Acres}}" (blur)="valueupdate($event.srcElement.value,'f_'+i+'Irr_Acres','Irr_Acres',i)" ></div> 
-                </td>
-                <td class="editable" (click)="startediting('f_'+i+'NI_Acres')">
-                  <div *ngIf="!editarray['f_'+i+'NI_Acres']">{{farm.NI_Acres}} </div>
-                  <div *ngIf="editarray['f_'+i+'NI_Acres']"><input setfocus type="number" value="{{farm.NI_Acres}}" (blur)="valueupdate($event.srcElement.value,'f_'+i+'NI_Acres','NI_Acres',i)" ></div> 
-                </td>
-                <td>{{farm.FC_Total_Acres}}</td>
-              </tr>
-             
-            </tbody>
-            </table>
-          <!-- Ends Here -->
+      <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
+      <mat-icon >publish</mat-icon>
+    </button>
+
+    <button (click)="addrow()" mat-button-primary >Add </button>
+      
+          <div class="container bottom">
+            <div class="row">
+            <ag-grid-angular 
+            style="width: 96%; height: 250px;" 
+            class="ag-theme-balham"
+            [context]="context"
+            [frameworkComponents]="frameworkcomponents"
+            [components]="components"
+            (rowEditingStopped)="rowvaluechanged($event)"
+            [rowData]="rowData" 
+            [editType]="editType"
+            (gridReady)="onGridReady($event)"
+            [columnDefs]="columnDefs">
+            </ag-grid-angular>
+            </div>
+          </div>
           <br>
-        </div>
-      </div>
-    </div>
   </mat-expansion-panel>
   </mat-accordion>
  

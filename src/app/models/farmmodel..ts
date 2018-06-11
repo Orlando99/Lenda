@@ -46,6 +46,8 @@ export class Loan_Farm
     @JsonProperty("Status", IntConverter,false)
     Status: number=0;
 
+    @JsonProperty("ActionStatus", IntConverter,false)
+    ActionStatus: number=undefined;
     FC_Total_Acres:number;
     
 }

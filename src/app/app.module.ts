@@ -86,13 +86,15 @@ import { FarmapiService } from './services/farm/farmapi.service';
 import { FocusDirective } from './directives/focusInput';
 import { BudgetComponent } from './components/budget/budget.component';
 import { CropbasedbudgetComponent } from './components/budget/cropbasedbudget/cropbasedbudget.component';
-
-import { InsuranceComponent } from "./components/insurance/insurance.component";
-import { AgentComponent } from "./components/insurance/agents/agent.component";
+import { ReferenceService } from './services/reference/reference.service';
+import { SelectEditor } from './aggridfilters/selectbox';
+import { InsuranceComponent } from './components/insurance/insurance.component';
+import { AgentComponent } from './components/insurance/agents/agent.component';
 
 @NgModule({
   declarations: [
     NumericEditor,
+    SelectEditor,
     AppComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -118,9 +120,7 @@ import { AgentComponent } from "./components/insurance/agents/agent.component";
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,
-    InsuranceComponent,
-    AgentComponent
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent
     
   ],
   imports: [
@@ -160,7 +160,7 @@ import { AgentComponent } from "./components/insurance/agents/agent.component";
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
-    AgGridModule.withComponents([NumericEditor]),
+    AgGridModule.withComponents([NumericEditor,SelectEditor]),
     ToastModule.forRoot()
   ],
   exports: [
@@ -211,7 +211,8 @@ import { AgentComponent } from "./components/insurance/agents/agent.component";
     LoggingService,
     FarmapiService,
     NamingConventionapiService,
-    CropapiService
+    CropapiService,
+    ReferenceService
     
   ],
   bootstrap: [AppComponent]

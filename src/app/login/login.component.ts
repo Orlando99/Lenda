@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Logpriority } from '../models/loanmodel';
 import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';
+import { ReferenceService } from '../services/reference/reference.service';
 
 @Component({
   selector: 'auth-page',
@@ -32,7 +33,7 @@ export class LoginComponent implements OnInit {
     public toastr: ToastsManager,
     public alertifyService: AlertifyService,
     public localst:LocalStorageService,
-    public cropapiservice:CropapiService
+    public referencedataapi:ReferenceService
   ) {
 
     this.authForm = this.fb.group({
@@ -70,7 +71,7 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.username == 'admin' && this.password == 'admin') {
       this.localst.store(environment.logpriority,Logpriority.Low);
-      this.getcropprices();
+      this.getreferencedata();
       this.router.navigateByUrl('/home/loanoverview/1/summary');
     }
     else {
@@ -78,9 +79,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  getcropprices(){
-    this.cropapiservice.getcropprices().subscribe(res=>{
-      this.localst.store(environment.croppriceskey,res.Data);
+  getreferencedata(){
+    this.referencedataapi.getreferencedata().subscribe(res=>{
+      this.localst.store(environment.referencedatakey,res.Data);
     })
   }
+
+
 }
