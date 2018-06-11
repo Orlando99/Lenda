@@ -10,6 +10,8 @@ import {ICellRendererAngularComp} from "ag-grid-angular";
         }`
     ]
 })
+
+
 export class DeleteButtonRenderer implements ICellRendererAngularComp {
     public params: any;
     public btntext:string="Delete"

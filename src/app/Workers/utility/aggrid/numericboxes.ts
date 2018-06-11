@@ -3,6 +3,7 @@ export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
       return !!/\d/.test(charStr);
     }
+    
     function isKeyPressedNumeric(event) {
       var charCode = getCharCodeFromEvent(event);
       var charStr = String.fromCharCode(charCode);

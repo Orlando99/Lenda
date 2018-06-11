@@ -43,6 +43,7 @@ export class YieldComponent implements OnInit {
     this.getdataforgrid();
   }
   getdataforgrid(){
+    
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
