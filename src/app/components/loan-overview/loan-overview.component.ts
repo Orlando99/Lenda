@@ -39,14 +39,13 @@ export class LoanOverviewComponent implements OnInit {
     if((obj==null || obj==undefined))
     this.getLoanBasicDetails();
     else{
-      if(obj.Loan_PK_ID!=this.loanid){
+      if(obj.Borrower.Borrower_Loan_Id!=this.loanid){
         this.getLoanBasicDetails();
       }
     }
   }
 
   getLoanBasicDetails() {
-    debugger
     if (this.loanid != null) {
       let loaded=false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
@@ -84,6 +83,9 @@ export class LoanOverviewComponent implements OnInit {
   }
   gotofarm(){
     this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/farm")
+  }
+  gotoinsurance() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/insurance")
   }
   gotobudget(){
     this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/budget")

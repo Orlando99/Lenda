@@ -17,7 +17,7 @@ export class FinancialsComponent implements OnInit {
   public allDataFetched = false;
   public rowData = [];
   public pinnedBottomRowData=[];
-  public getRowClass;
+  private getRowClass;
   private gridApi;
   private columnApi;
   constructor(public localstorageservice: LocalStorageService, public logging: LoggingService) { 
