@@ -90,6 +90,7 @@ import { ReferenceService } from './services/reference/reference.service';
 import { SelectEditor } from './aggridfilters/selectbox';
 import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AgentComponent } from './components/insurance/agents/agent.component';
+import { InsuranceapiService } from './services/insurance/insuranceapi.service';
 
 @NgModule({
   declarations: [
@@ -212,7 +213,8 @@ import { AgentComponent } from './components/insurance/agents/agent.component';
     FarmapiService,
     NamingConventionapiService,
     CropapiService,
-    ReferenceService
+    ReferenceService,
+    InsuranceapiService
     
   ],
   bootstrap: [AppComponent]
