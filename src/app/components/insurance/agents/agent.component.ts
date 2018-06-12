@@ -94,7 +94,8 @@ export class AgentComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       debugger
-      this.rowData = obj.Farms.filter(p => p.ActionStatus != -1);
+      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
+      this.rowData = obj.Association;
     }
   }
 
