@@ -223,8 +223,10 @@ export class borrower_model
         Amount: number=0;
         @JsonProperty("Assoc_Status", IntConverter,false)
         Assoc_Status: number=undefined;
-        // @JsonProperty("ActionStatus", IntConverter,false)
-        // ActionStatus: number=undefined;
+        @JsonProperty("Status", IntConverter,false)
+        Status: number=0;
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=undefined;
         
     }
     @JsonObject
