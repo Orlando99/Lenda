@@ -91,6 +91,7 @@ import { SelectEditor } from './aggridfilters/selectbox';
 import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AgentComponent } from './components/insurance/agents/agent.component';
 import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
+import { InsuranceapiService } from './services/insurance/insuranceapi.service';
 
 @NgModule({
   declarations: [
@@ -215,7 +216,8 @@ import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
     FarmapiService,
     NamingConventionapiService,
     CropapiService,
-    ReferenceService
+    ReferenceService,
+    InsuranceapiService
     
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent],

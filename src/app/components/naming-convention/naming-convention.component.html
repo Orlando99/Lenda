@@ -25,9 +25,8 @@ class="ag-theme-blue"
 [rowData]="rows"
 [enableSorting]="true"
 [enableFilter]="true"
-[enableColResize]="true"
+[getRowHeight]="getRowHeight"
 (gridReady)="onGridReady($event)"
-(column-resized)="onColumnResized($event)"
 [frameworkComponents]="frameworkComponents"
 ></ag-grid-angular>
 

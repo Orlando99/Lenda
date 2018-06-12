@@ -7,7 +7,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.environment = {
     production: false,
     //apiUrl: 'http://lendav2api.azurewebsites.net/',
-    apiUrl: 'http://lendav2api.azurewebsites.net/',
+    //apiUrl: 'http://lendav2api.azurewebsites.net/',
+    apiUrl: 'http://localhost:61002/',
     loankey: "currentselectedloan",
     loankey_copy: "rawcurrentselectedloan",
     logpriority: "logpriority",

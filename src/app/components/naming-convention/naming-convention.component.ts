@@ -21,14 +21,15 @@ export class NamingConventionComponent implements OnInit {
   private gridApi;
   public defaultColDef;
   public btndsb: boolean = true;
-  private gridColumnApi;
+  public gridColumnApi;
+  public getRowHeight;
   public columnDefs;
   public selectedrows = [];
   public frameworkComponents;
   public rowSelection;
   editing = {};
   rows = [];
-
+  public allColumnIds = [];
   constructor(
     private toaster: ToastsManager,
     private namingconventionservice: NamingConventionapiService,
@@ -43,15 +44,24 @@ export class NamingConventionComponent implements OnInit {
       setTimeout(function() {
         params.api.resetRowHeights();
       }, 500);
+
+      setTimeout(function() {
+        const allColumnIds = [];
+        allColumnIds.push('Formula');
+        allColumnIds.push('Comments');
+        params.columnApi.autoSizeColumns(allColumnIds);
+      }, 2500);
     }
 
-    onColumnResized(params) {
+    onColumnEvent(params) {
       if (params.finished) {
         params.api.resetRowHeights();
       }
     }
 
     ngOnInit() {
+      this.allColumnIds.push('Formula');
+      this.allColumnIds.push('Comments');
       this.columnDefs = [
         {
           headerName: 'Id',
@@ -96,7 +106,7 @@ export class NamingConventionComponent implements OnInit {
           width: 200,
           editable: true,
           autoHeight: true,
-          cellClass: 'cell-wrap-text',
+          cellStyle: { 'white-space': 'normal' },
         },
         {
           headerName: 'LoanObject',
@@ -122,13 +132,18 @@ export class NamingConventionComponent implements OnInit {
           cellStyle: { 'white-space': 'normal' },
           autoHeight: true,
           cellEditor: 'agLargeTextCellEditor',
-          width: 250, editable:  true,
-          cellClass: 'cell-wrap-text',
+          width: 250, editable:  true
         }
       ];
       this.rowSelection = 'multiple';
       this.getNamingConventionList();
-
+      this.getRowHeight = function(params) {
+        if (params.data.Formula !== undefined) {
+          return  30;
+        } else {
+          return 30;
+        }
+      };
     }
     getNamingConventionList() {
       this.loading = true;
@@ -152,7 +167,7 @@ export class NamingConventionComponent implements OnInit {
       }
     }
   celleditingstopped(event: any) {
-  if (event.value.trim() !== '') {
+  if (event.value.trim() !== '' || (event.data.Id > 0 && event.value.trim() === '')) {
     this.loading = true;
     if (event.data.Id === undefined || event.data.Id === '') {
       const newItem = {};
@@ -161,10 +176,14 @@ export class NamingConventionComponent implements OnInit {
         this.rows[event.rowIndex] = event.data;
         this.rows[event.rowIndex].Id = parseInt(res.Data);
         this.gridApi.updateRowData({ add: [newItem] });
+        event.api.resetRowHeights();
+        this.gridColumnApi.autoSizeColumns(this.allColumnIds);
         this.loading = false;
       });
     } else {
       this.namingconventionservice.addEditNamingConvention(event.data).subscribe(res => {
+        event.api.resetRowHeights();
+        this.gridColumnApi.autoSizeColumns(this.allColumnIds);
         this.loading = false;
       });
     }

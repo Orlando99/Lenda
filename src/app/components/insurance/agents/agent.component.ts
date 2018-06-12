@@ -1,146 +1,157 @@
 import { Component, OnInit } from '@angular/core';
-import { borrower_model, loan_model } from '../../../models/loanmodel';
-import { environment } from '../../../../environments/environment';
-import { JsonConvert } from 'json2typescript';
+import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
-import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { BorrowerapiService } from '../../../services/borrower/borrowerapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
-
+import { environment } from '../../../../environments/environment';
+import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
+import { Loan_Farm } from '../../../models/farmmodel.';
+import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
+import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
+import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
+import { AlertifyService } from '../../../alertify/alertify.service';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
+/// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-agent',
   templateUrl: './agent.component.html',
   styleUrls: ['./agent.component.scss']
 })
 export class AgentComponent implements OnInit {
-
+  public refdata: any = {};
+  indexsedit = [];
+  public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = false;
+  public syncenabled = true;
   // Aggrid
   public rowData = [];
+  public components;
+  public context;
+  public frameworkcomponents;
+  public editType;
   public pinnedBottomRowData = [];
-  public getRowClass;
   private gridApi;
   private columnApi;
-   //region Ag grid Configuration
+  //region Ag grid Configuration
 
-   columnDefs = [
-    { headerName: 'Agent', field: 'Financials' },
-    { headerName: 'Agency', field: 'Assets',editable:true },
-    { headerName: 'Location', field: 'Discount',editable:true },
-    { headerName: 'Phone', field: 'AdjValue' },
-    { headerName: 'Email', field: 'Debt',editable:true },
-  ];
+
+  returncountylist() {
+    return this.refdata.CountyList;
+  }
+
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.gridApi.sizeColumnsToFit();
-    window.onresize = () => {
-        this.gridApi.sizeColumnsToFit();
-    }
-}
+
+  }
   //End here
   // Aggrid ends
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    public borrowerservice: BorrowerapiService,
+    public insuranceservice: InsuranceapiService,
     private toaster: ToastsManager,
-    public logging: LoggingService
-  ) { 
-
-    this.getRowClass = function(params) {
-      debugger
-      if (params.node.rowPinned) {
-        debugger
-        return  'ag-aggregate-row';
-      }
-    };
+    public logging: LoggingService,
+    public alertify: AlertifyService,
+    public loanapi:LoanApiService
+  ) {
+    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
+    this.components = { numericCellEditor: getNumericCellEditor() };
+    debugger
+    this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    //Coldef here
+    debugger
+    this.columnDefs = [
+      
+      { headerName: 'Agent', field: 'Assoc_Name',  editable: true },
+      { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: true },
+      { headerName: 'Location', field: 'Location',  editable: true },
+      { headerName: 'Phone', field: 'Phone', editable: true},
+      { headerName: 'Email', field: 'Email', editable: true},
+      
+    ];
+    ///
+    this.context = { componentParent: this };
   }
-
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
+      debugger
       this.localloanobject = res;
-      this.rowData=[];
-      this.pinnedBottomRowData=[];
-      this.prepareviewmodel();
-    })
+      this.gridApi.setRowData(res.Farms.filter(p => p.ActionStatus != -1));
+
+    });
+
     this.getdataforgrid();
-    this.prepareviewmodel();
+    this.editType = "fullRow";
   }
   getdataforgrid() {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage retrieved");
+    let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
+    this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
+      debugger
+      this.rowData = obj.Farms.filter(p => p.ActionStatus != -1);
     }
   }
 
-  // Ag grid Editing Event
-  celleditingstopped(event: any) {
-    
-    var financetype=event.data.Financials;
-    if(financetype=="Long Term"){
-      financetype="Fixed";
+
+  rowvaluechanged(value: any) {
+    debugger
+    var obj = value.data;
+    if (obj.Farm_ID == 0) {
+      obj.ActionStatus = 1;
+      obj.Farm_ID=0;
+      this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
-  var property="";
-  if(event.colDef.field=="Discount")
-  {
-    property="Borrower_"+financetype+"_Assets_Disc";
-  }
-  if(event.colDef.field=="Assets")
-  {
-  property="Borrower_"+financetype+"_"+event.colDef.field;
-  }
-  if(event.colDef.field=="Debt")
-  {
-    property="Borrower_"+financetype+"_Liabilities";
-  }
-  this.localloanobject.Borrower[property]=parseFloat(event.value);
-  this.logging.checkandcreatelog(3,'BalanceSheet',"Field Edited -"+property);
-  this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    else {
+      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
+      obj.ActionStatus = 2;
+      this.localloanobject.Farms[rowindex]=obj;
+    }
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
-  //Aggrid Data Preperation 
-  prepareviewmodel() {
-    //prepare three rows here
-      //1st Current Financial Row 
-      var currentobj={Financials:'Current',Assets:this.localloanobject.Borrower.Borrower_Current_Assets,Discount:this.localloanobject.Borrower.Borrower_Current_Assets_Disc,
-      AdjValue:this.localloanobject.Borrower.FC_Borrower_Current_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Current_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Current_Discvalue}
-      this.rowData.push(currentobj);
-
-       //1st Intermediate Financial Row 
-      var Intermediateobj={Financials:'Intermediate',Assets:this.localloanobject.Borrower.Borrower_Intermediate_Assets,Discount:this.localloanobject.Borrower.Borrower_Intermediate_Assets_Disc,
-      AdjValue:this.localloanobject.Borrower.FC_Borrower_Intermediate_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Intermediate_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Intermediate_Discvalue}
-      this.rowData.push(Intermediateobj)
-
-      
-       //1st LongTerm Financial Row 
-       var LongTermobj={Financials:'Long Term',Assets:this.localloanobject.Borrower.Borrower_Fixed_Assets,Discount:this.localloanobject.Borrower.Borrower_Fixed_Assets_Disc,
-       AdjValue:this.localloanobject.Borrower.FC_Borrower_Fixed_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Fixed_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Fixed_Discvalue}
-       this.rowData.push(LongTermobj)
-
-       //Last Aggregate Row
-       var Aggregateobj={Financials:'Total',Assets:this.localloanobject.Borrower.FC_Borrower_TotalAssets,Discount:'',
-       AdjValue:this.localloanobject.Borrower.FC_Borrower_Total_Adjvalue,Debt:this.localloanobject.Borrower.FC_Borrower_TotalDebt,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Total_Discvalue}
-       this.pinnedBottomRowData.push(Aggregateobj);
-
-  }
-  //ends here
   synctoDb() {
-    var obj = modelparserfordb(this.localloanobject.Borrower);
-    this.borrowerservice.saveupdateborrower(obj).subscribe(res => {
-      this.logging.checkandcreatelog(3, 'BalanceSheet', "Code Synced to DB with ResCode " + res.ResCode);
-      if (res.ResCode == 1) {
-        this.toaster.success("Object Synced Successfully");
-      }
-      else {
-        this.toaster.error("Error Encountered while Syncing");
-      }
+    
+   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+     debugger
+   })
+
+  }
+
+  //Grid Events
+  addrow() {
+    var newItem = new Loan_Farm();
+    newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
+    var res = this.gridApi.updateRowData({ add: [newItem] });
+    this.gridApi.startEditingCell({
+      rowIndex: this.rowData.length,
+      colKey: "Farm_State_ID"
     });
   }
 
+  DeleteClicked(rowIndex: any) {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+      if (res == true) {
+        var obj = this.localloanobject.Farms[rowIndex];
+        if (obj.Farm_ID == 0) {
+          this.localloanobject.Farms.splice(rowIndex, 1);
+        }
+        else {
+          obj.ActionStatus = -1;
+        }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+      }
+    })
+
+  }
+  //
+
 }
+
+
+

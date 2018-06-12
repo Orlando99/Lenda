@@ -88,4 +88,7 @@ export class LoanOverviewComponent implements OnInit {
   gotobudget(){
     this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/budget")
   }
+  gotoinsurance(){
+    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/insurance")
+  }
 }
