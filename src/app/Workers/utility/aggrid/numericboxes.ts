@@ -57,8 +57,9 @@ export function getNumericCellEditor() {
   }
   
 export function numberValueSetter(params) {
-    debugger
-   var data=parseFloat(params.newValue);
+    if(params.newValue==undefined || params.newValue==null)
+    params.newValue=0;
+    var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;
     return true;
   }

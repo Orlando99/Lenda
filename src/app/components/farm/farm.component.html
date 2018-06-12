@@ -9,7 +9,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-      <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
+      <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
       <mat-icon >publish</mat-icon>
     </button>
 
@@ -23,9 +23,8 @@
             [context]="context"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
-            (rowEditingStopped)="rowvaluechanged($event)"
+            (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
-            [editType]="editType"
             (gridReady)="onGridReady($event)"
             [columnDefs]="columnDefs">
             </ag-grid-angular>

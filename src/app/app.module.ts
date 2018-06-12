@@ -90,6 +90,7 @@ import { ReferenceService } from './services/reference/reference.service';
 import { SelectEditor } from './aggridfilters/selectbox';
 import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AgentComponent } from './components/insurance/agents/agent.component';
+import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
 import { InsuranceapiService } from './services/insurance/insuranceapi.service';
 
 @NgModule({
@@ -97,6 +98,8 @@ import { InsuranceapiService } from './services/insurance/insuranceapi.service';
     NumericEditor,
     SelectEditor,
     AppComponent,
+    DeleteButtonRenderer,
+    ConfirmComponent,
     LoginComponent,
     PageNotFoundComponent,
     DashboardComponent,
@@ -217,6 +220,7 @@ import { InsuranceapiService } from './services/insurance/insuranceapi.service';
     InsuranceapiService
     
   ],
+  entryComponents:[DeleteButtonRenderer,ConfirmComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

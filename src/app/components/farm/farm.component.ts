@@ -14,6 +14,8 @@ import { SelectEditor } from '../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
+import { JsonConvert } from 'json2typescript';
+import { Action } from 'rxjs/scheduler/Action';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -25,7 +27,6 @@ export class FarmComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = true;
   // Aggrid
   public rowData = [];
   public components;
@@ -108,12 +109,13 @@ export class FarmComponent implements OnInit {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
       debugger
       this.localloanobject = res;
-      this.gridApi.setRowData(res.Farms.filter(p => p.ActionStatus != -1));
+      this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
+      this.gridApi.setRowData(this.rowData);
 
     });
 
     this.getdataforgrid();
-    this.editType = "fullRow";
+    //this.editType = "fullRow";
   }
   getdataforgrid() {
     let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
@@ -121,22 +123,22 @@ export class FarmComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       debugger
-      this.rowData = obj.Farms.filter(p => p.ActionStatus != -1);
+      this.rowData = obj.Farms.filter(p => p.ActionStatus != 3);
     }
   }
 
 
   rowvaluechanged(value: any) {
-    debugger
     var obj = value.data;
-    if (obj.Farm_ID == 0) {
+    if (obj.Farm_ID == undefined) {
       obj.ActionStatus = 1;
       obj.Farm_ID=0;
       this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
       var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
-      obj.ActionStatus = 2;
+      if(obj.ActionStatus!=1)
+       obj.ActionStatus = 2;
       this.localloanobject.Farms[rowindex]=obj;
     }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -145,18 +147,36 @@ export class FarmComponent implements OnInit {
   synctoDb() {
     
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-     debugger
+     if(res.ResCode==1){
+      this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+        
+        this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+        if (res.ResCode == 1) {
+          this.toaster.success("Records Synced");
+          let jsonConvert: JsonConvert = new JsonConvert();
+          this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+        }
+        else{
+          this.toaster.error("Could not fetch Loan Object from API")
+        }
+      });
+     }
+     else{
+       this.toaster.error("Error in Sync");
+     }
    })
 
   }
 
   //Grid Events
   addrow() {
+    debugger
     var newItem = new Loan_Farm();
     newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
-    var res = this.gridApi.updateRowData({ add: [newItem] });
+    var res = this.rowData.push(newItem);
+    this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length,
+      rowIndex: this.rowData.length-1,
       colKey: "Farm_State_ID"
     });
   }
@@ -169,13 +189,20 @@ export class FarmComponent implements OnInit {
           this.localloanobject.Farms.splice(rowIndex, 1);
         }
         else {
-          obj.ActionStatus = -1;
+          obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
 
   }
+
+
+  syncenabled(){
+    debugger
+   return this.rowData.filter(p=>p.ActionStatus!=0).length>0
+  }
+
   //
 
 }
