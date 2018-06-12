@@ -65,40 +65,13 @@ export class AgentComponent implements OnInit {
     //Coldef here
     debugger
     this.columnDefs = [
-      {
-        headerName: 'State', field: 'Farm_State_ID', width: 80, editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: {
-          values: extractStateValues(this.refdata.StateList)
-        },
-        valueFormatter: function (params) {
-          return lookupStateValue(params.colDef.cellEditorParams.values, params.value);
-        },
-        valueSetter: Statevaluesetter
-      },
-      {
-        headerName: 'County', field: 'Farm_County_ID', width: 80, editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: getfilteredcounties,
-        valueFormatter: function (params) {
-          return lookupCountyValue(params.value);
-        },
-        valueSetter: Countyvaluesetter
-      },
-      { headerName: '% Prod', field: 'Prod', width: 80, editable: false },
-      { headerName: 'Landlord', field: 'Landowner', editable: true, width: 80 },
-      { headerName: 'FSN', field: 'FSN', editable: true, width: 80 },
-      { headerName: 'Section', field: 'Section', width: 80, editable: true },
-      { headerName: 'Rated', field: 'Rated', width: 80, editable: true },
-      { headerName: 'Rent', field: 'Share_Rent', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Rent UoM', field: 'RentUoM', width: 80, editable: true },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', editable: true, width: 80 },
-      { headerName: 'Waived', field: 'Cash_Rent_Waived', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: '% Rent', field: 'Rentperc', width: 80, editable: true },
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', width: 80, editable: true },
-      { headerName: 'IR Acres', field: 'Irr_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'NI Acres', field: 'NI_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres', width: 80 },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
-
+      
+      { headerName: 'Agent', field: 'Assoc_Name',  editable: true },
+      { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: true },
+      { headerName: 'Location', field: 'Location',  editable: true },
+      { headerName: 'Phone', field: 'Phone', editable: true},
+      { headerName: 'Email', field: 'Email', editable: true},
+      
     ];
     ///
     this.context = { componentParent: this };
