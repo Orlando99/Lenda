@@ -30,7 +30,7 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     agInit(params: any): void {
         debugger
         this.params = params;
-this.values=params.values;
+        this.values=params.values;
         this.selectedValue=parseInt(params.value);
     }
 
