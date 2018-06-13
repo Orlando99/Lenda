@@ -28,7 +28,7 @@ export class AgentComponent implements OnInit {
   private localloanobject: loan_model = new loan_model();
   public syncenabled = true;
   // Aggrid
-  public rowData = [];
+  public rowData = new Array<Loan_Association>();
   public components;
   public context;
   public frameworkcomponents;
@@ -79,23 +79,23 @@ export class AgentComponent implements OnInit {
     this.context = { componentParent: this };
   }
   ngOnInit() {
-    debugger
-    let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanInsuranceAgent', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
-      debugger
-      this.rowData = obj.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
-    }
-
-    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
-    //   this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-    //   this.localloanobject = res.Data;
+    // debugger
+    // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
+    // this.logging.checkandcreatelog(1, 'LoanInsuranceAgent', "LocalStorage retrieved");
+    // if (obj != null && obj != undefined) {
+    //   this.localloanobject = obj;
+    //   debugger
+    //   this.rowData = obj.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+    // }
+debugger
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      this.localloanobject = res.Data;
       
-    //   //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
-    //   this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
 
-    // });
+    });
   
 
     this.getdataforgrid();
@@ -104,10 +104,10 @@ export class AgentComponent implements OnInit {
   getdataforgrid() {
     let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-    //if (this.localloanobject != null && this.localloanobject != undefined) {
-      this.localloanobject = obj;
-      this.rowData = obj.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+    //if (obj != null && obj != undefined) {
+    if (this.localloanobject != null && this.localloanobject != undefined) {
+      //this.localloanobject = obj;
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
     }
   }
 
@@ -156,13 +156,22 @@ export class AgentComponent implements OnInit {
   //Grid Events
   addrow() {
     debugger
+    // var newItem = new Loan_Association();
+    // newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+    // newItem.Assoc_Type_Code="AGT";
+    // var res = this.gridApi.updateRowData({ add: [newItem] });
+    // this.gridApi.startEditingCell({
+    //   rowIndex: this.rowData.length,
+    //   colKey: "Assoc_ID"
+    // });
     var newItem = new Loan_Association();
     newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
     newItem.Assoc_Type_Code="AGT";
-    var res = this.gridApi.updateRowData({ add: [newItem] });
+    var res = this.rowData.push(newItem);
+    this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length,
-      colKey: "Assoc_ID"
+      rowIndex: this.rowData.length-1,
+      colKey: "Assoc_Name"
     });
   }
 
