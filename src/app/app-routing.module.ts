@@ -17,7 +17,7 @@ import { FarmComponent } from "./components/farm/farm.component";
 import { BudgetComponent } from "./components/budget/budget.component";
 import { InsuranceComponent } from "./components/insurance/insurance.component";
 
-const appRoutes: Routes = [
+const appRoutes: Routes = [ 
 
   {
     path: 'login',

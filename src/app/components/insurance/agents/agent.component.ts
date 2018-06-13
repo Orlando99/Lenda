@@ -125,7 +125,7 @@ debugger
       obj.ActionStatus = 2;
       this.localloanobject.Association[rowindex]=obj;
     }
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    //this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   synctoDb() {
@@ -138,7 +138,7 @@ debugger
        if (res.ResCode == 1) {
          this.toaster.success("Records Synced");
          let jsonConvert: JsonConvert = new JsonConvert();
-         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+         //this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
        }
        else{
          this.toaster.error("Could not fetch Loan Object from API")
