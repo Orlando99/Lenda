@@ -1,5 +1,6 @@
 
-<div class="basic-container">
+<div class=".
+6basic-container">
 
   <mat-accordion>
   <mat-expansion-panel [expanded]="true">
@@ -13,13 +14,16 @@
       <mat-icon >publish</mat-icon>
     </button>
 
-    <button (click)="addrow()" mat-button-primary >Add </button>
+    <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
       
           <div class="container bottom">
             <div class="row">
             <ag-grid-angular 
             style="width: 96%; height: 250px;" 
             class="ag-theme-balham"
+            [animateRows]="true"
+            [enableSorting]="true"
+           [enableFilter]="true"
             [context]="context"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"

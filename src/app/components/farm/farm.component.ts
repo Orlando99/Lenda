@@ -24,7 +24,6 @@ import { Action } from 'rxjs/scheduler/Action';
 })
 export class FarmComponent implements OnInit {
   public refdata: any = {};
-  indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
   // Aggrid
@@ -33,7 +32,6 @@ export class FarmComponent implements OnInit {
   public context;
   public frameworkcomponents;
   public editType;
-  public pinnedBottomRowData = [];
   private gridApi;
   private columnApi;
   //region Ag grid Configuration
