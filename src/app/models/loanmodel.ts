@@ -197,6 +197,39 @@ export class borrower_model
 
     }
     @JsonObject
+    export class Loan_Association
+    {
+        @JsonProperty("Assoc_ID", IntConverter,false)
+        Assoc_ID: number=0;
+        @JsonProperty("Loan_ID", IntConverter,false)
+        Loan_ID: number=0;
+        @JsonProperty("Loan_Seq_Num", IntConverter,false)
+        Loan_Seq_Num: number=0;
+        @JsonProperty("Loan_Full_ID", StringConverter,false)
+        Loan_Full_ID: string='';
+        @JsonProperty("Assoc_Type_Code", StringConverter,false)
+        Assoc_Type_Code: string='';
+        @JsonProperty("Assoc_Name", StringConverter,false)
+        Assoc_Name: string='';
+        @JsonProperty("Contact", StringConverter,false)
+        Contact: string='';
+        @JsonProperty("Location", StringConverter,false)
+        Location: string='';
+        @JsonProperty("Phone", StringConverter,false)
+        Phone: string='';
+        @JsonProperty("Email", StringConverter,false)
+        Email: string='';
+        @JsonProperty("Amount", IntConverter,false)
+        Amount: number=0;
+        @JsonProperty("Assoc_Status", IntConverter,false)
+        Assoc_Status: number=undefined;
+        @JsonProperty("Status", IntConverter,false)
+        Status: number=0;
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=undefined;
+        
+    }
+    @JsonObject
     export class loan_model{
 
         @JsonProperty("Borrower", borrower_model)
@@ -213,10 +246,16 @@ export class borrower_model
         
         @JsonProperty("Loan_PK_ID", IntConverter)
         Loan_PK_ID:number=undefined;
+
+        @JsonProperty("Association", [Loan_Association])
+        Association: Loan_Association[]=undefined;
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
     }
+
+    
+
     export class borrower_income_history_model
     {
         BIH_ID: number=undefined;

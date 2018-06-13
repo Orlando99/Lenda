@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { loan_model } from '../../../models/loanmodel';
+import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -62,6 +62,7 @@ export class AgentComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor() };
     debugger
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     //Coldef here
     debugger
     this.columnDefs = [
@@ -78,10 +79,11 @@ export class AgentComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      this.localloanobject = res.Data;
       debugger
-      this.localloanobject = res;
-      this.gridApi.setRowData(res.Farms.filter(p => p.ActionStatus != -1));
+      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
 
     });
 
@@ -89,12 +91,10 @@ export class AgentComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
-      debugger
-      this.rowData = obj.Farms.filter(p => p.ActionStatus != -1);
+    
+    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    if (this.localloanobject != null && this.localloanobject != undefined) {
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
     }
   }
 
@@ -102,15 +102,15 @@ export class AgentComponent implements OnInit {
   rowvaluechanged(value: any) {
     debugger
     var obj = value.data;
-    if (obj.Farm_ID == 0) {
+    if (obj.Assoc_ID == 0) {
       obj.ActionStatus = 1;
-      obj.Farm_ID=0;
-      this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
+      obj.Assoc_ID=0;
+      this.localloanobject.Association[this.localloanobject.Association.length]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
+      var rowindex=this.localloanobject.Association.findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       obj.ActionStatus = 2;
-      this.localloanobject.Farms[rowindex]=obj;
+      this.localloanobject.Association[rowindex]=obj;
     }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
@@ -125,21 +125,21 @@ export class AgentComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    var newItem = new Loan_Farm();
-    newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
+    var newItem = new Loan_Association();
+    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
     var res = this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length,
-      colKey: "Farm_State_ID"
+      colKey: "Assoc_ID"
     });
   }
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Farms[rowIndex];
-        if (obj.Farm_ID == 0) {
-          this.localloanobject.Farms.splice(rowIndex, 1);
+        var obj = this.localloanobject.Association[rowIndex];
+        if (obj.Assoc_ID == 0) {
+          this.localloanobject.Association.splice(rowIndex, 1);
         }
         else {
           obj.ActionStatus = -1;

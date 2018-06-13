@@ -9,6 +9,7 @@ import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
 import { NumericEditor } from '../../aggridfilters/numericaggrid';
 import { AggridTxtAreaComponent } from '../../aggridfilters/textarea';
+import { IfObservable } from 'rxjs/observable/IfObservable';
 
 @Component({
   selector: 'app-naming-convention',
@@ -43,14 +44,7 @@ export class NamingConventionComponent implements OnInit {
       params.api.setRowData(this.rows);
       setTimeout(function() {
         params.api.resetRowHeights();
-      }, 500);
-
-      setTimeout(function() {
-        const allColumnIds = [];
-        allColumnIds.push('Formula');
-        allColumnIds.push('Comments');
-        params.columnApi.autoSizeColumns(allColumnIds);
-      }, 2500);
+      }, 1000);
     }
 
     onColumnEvent(params) {
@@ -103,9 +97,10 @@ export class NamingConventionComponent implements OnInit {
         {
           headerName: 'Formula',
           field: 'Formula',
-          width: 200,
+          width: 300,
           editable: true,
           autoHeight: true,
+          cellEditor: 'agLargeTextCellEditor',
           cellStyle: { 'white-space': 'normal' },
         },
         {
@@ -139,7 +134,19 @@ export class NamingConventionComponent implements OnInit {
       this.getNamingConventionList();
       this.getRowHeight = function(params) {
         if (params.data.Formula !== undefined) {
-          return  30;
+         let formulaLength = 0;
+         let commentLength = 0;
+          if  (params.data.Formula.length > 0 || params.data.Comments.length) {
+            formulaLength = 25 * (params.data.Formula.split('\n').length + 1);
+            commentLength = 25 * (params.data.Comments.split('\n').length + 1);
+            if ( formulaLength > commentLength ) {
+              return formulaLength;
+            } else {
+              return commentLength;
+            }
+          } else {
+            return 30;
+          }
         } else {
           return 30;
         }
@@ -177,13 +184,11 @@ export class NamingConventionComponent implements OnInit {
         this.rows[event.rowIndex].Id = parseInt(res.Data);
         this.gridApi.updateRowData({ add: [newItem] });
         event.api.resetRowHeights();
-        this.gridColumnApi.autoSizeColumns(this.allColumnIds);
         this.loading = false;
       });
     } else {
       this.namingconventionservice.addEditNamingConvention(event.data).subscribe(res => {
         event.api.resetRowHeights();
-        this.gridColumnApi.autoSizeColumns(this.allColumnIds);
         this.loading = false;
       });
     }
