@@ -168,7 +168,7 @@ debugger
     newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
     newItem.Assoc_Type_Code="AGT";
     var res = this.rowData.push(newItem);
-    this.gridApi.setRowData(this.rowData);
+    this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
       colKey: "Assoc_Name"
