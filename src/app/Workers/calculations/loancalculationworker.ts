@@ -8,6 +8,7 @@ import { LoggingService } from '../../services/Logs/logging.service';
 import { LoancropunitcalculationworkerService } from './loancropunitcalculationworker.service';
 import { LoancrophistoryService } from './loancrophistory.service';
 import { FarmcalculationworkerService } from './farmcalculationworker.service';
+import { AssociationcalculationworkerService } from './associationcalculationworker.service';
 
 
 
@@ -19,6 +20,7 @@ export class LoancalculationWorker {
     private loancropunitworker:LoancropunitcalculationworkerService,
     private loanyieldhistoryworker:LoancrophistoryService,
     private farmcalculation:FarmcalculationworkerService,
+   // private associationcalculation:AssociationcalculationworkerService,
     public logging:LoggingService
 ) {}
 
@@ -30,6 +32,7 @@ export class LoancalculationWorker {
     localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
     localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
     localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
+    //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");
 
       // At End push the new obj with new caluclated values into localstorage and emit value changes

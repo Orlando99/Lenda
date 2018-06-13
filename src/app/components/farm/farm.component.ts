@@ -129,6 +129,7 @@ export class FarmComponent implements OnInit {
 
 
   rowvaluechanged(value: any) {
+    debugger
     var obj = value.data;
     if (obj.Farm_ID == undefined) {
       obj.ActionStatus = 1;
@@ -145,7 +146,7 @@ export class FarmComponent implements OnInit {
   }
 
   synctoDb() {
-    
+    debugger
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
       this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
@@ -199,7 +200,7 @@ export class FarmComponent implements OnInit {
 
 
   syncenabled(){
-    debugger
+    
    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
   }
 
