@@ -61,11 +61,11 @@ export class AgentComponent implements OnInit {
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
-    debugger
+    
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     //Coldef here
-    debugger
+    
     this.columnDefs = [
       
       { headerName: 'Agent', field: 'Assoc_Name',  editable: true },
@@ -90,7 +90,7 @@ export class AgentComponent implements OnInit {
 debugger
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = res.Data;
+      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
       
       //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
@@ -102,7 +102,7 @@ debugger
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
+   // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject != null && this.localloanobject != undefined) {
@@ -117,19 +117,21 @@ debugger
     var obj = value.data;
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
-      obj.Assoc_ID=0;      
-      this.localloanobject.Association[this.localloanobject.Association.length]=value.data;
+      obj.Assoc_ID=0;  
+      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT").length;
+      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT")[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       obj.ActionStatus = 2;
-      this.localloanobject.Association[rowindex]=obj;
+      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT")[rowindex]=obj;
     }
+    debugger
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   synctoDb() {
-    debugger  
+      debugger
   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
     if(res.ResCode==1){
      this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
@@ -173,15 +175,17 @@ debugger
       rowIndex: this.rowData.length-1,
       colKey: "Assoc_Name"
     });
+    this.localloanobject.Association.push(newItem);
   }
 
   DeleteClicked(rowIndex: any) {
     debugger
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association[rowIndex];
+        debugger
+        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT")[rowIndex];
         if (obj.Assoc_ID == 0) {
-          this.localloanobject.Association.splice(rowIndex, 1);
+          this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT").splice(rowIndex, 1);
         }
         else {
           obj.ActionStatus = -1;
