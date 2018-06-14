@@ -50,19 +50,16 @@ export class BalancesheetComponent implements OnInit {
     public borrowerservice: BorrowerapiService,
     private toaster: ToastsManager,
     public logging: LoggingService
-  ) { 
+  ) {
 
     this.getRowClass = function(params) {
-      debugger
       if (params.node.rowPinned) {
-        debugger
         return  'ag-aggregate-row';
       }
     };
   }
 
   ngOnInit() {
-    debugger
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
@@ -83,7 +80,7 @@ export class BalancesheetComponent implements OnInit {
 
   // Ag grid Editing Event
   celleditingstopped(event: any) {
-    
+
     var financetype=event.data.Financials;
     if(financetype=="Long Term"){
       financetype="Fixed";
@@ -106,21 +103,21 @@ export class BalancesheetComponent implements OnInit {
   this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
-  //Aggrid Data Preperation 
+  //Aggrid Data Preperation
   prepareviewmodel() {
     //prepare three rows here
-      //1st Current Financial Row 
+      //1st Current Financial Row
       var currentobj={Financials:'Current',Assets:this.localloanobject.Borrower.Borrower_Current_Assets,Discount:this.localloanobject.Borrower.Borrower_Current_Assets_Disc,
       AdjValue:this.localloanobject.Borrower.FC_Borrower_Current_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Current_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Current_Discvalue}
       this.rowData.push(currentobj);
 
-       //1st Intermediate Financial Row 
+       //1st Intermediate Financial Row
       var Intermediateobj={Financials:'Intermediate',Assets:this.localloanobject.Borrower.Borrower_Intermediate_Assets,Discount:this.localloanobject.Borrower.Borrower_Intermediate_Assets_Disc,
       AdjValue:this.localloanobject.Borrower.FC_Borrower_Intermediate_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Intermediate_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Intermediate_Discvalue}
       this.rowData.push(Intermediateobj)
 
-      
-       //1st LongTerm Financial Row 
+
+       //1st LongTerm Financial Row
        var LongTermobj={Financials:'Long Term',Assets:this.localloanobject.Borrower.Borrower_Fixed_Assets,Discount:this.localloanobject.Borrower.Borrower_Fixed_Assets_Disc,
        AdjValue:this.localloanobject.Borrower.FC_Borrower_Fixed_Adjvalue,Debt:this.localloanobject.Borrower.Borrower_Fixed_Liabilities,DiscountedNW:this.localloanobject.Borrower.FC_Borrower_Fixed_Discvalue}
        this.rowData.push(LongTermobj)

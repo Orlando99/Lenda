@@ -59,10 +59,8 @@ export class FarmComponent implements OnInit {
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
-    debugger
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
-    debugger
     this.columnDefs = [
       {
         headerName: 'State', field: 'Farm_State_ID', width: 80, editable: true, cellEditor: "agSelectCellEditor",
@@ -120,14 +118,12 @@ export class FarmComponent implements OnInit {
     this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      debugger
       this.rowData = obj.Farms.filter(p => p.ActionStatus != 3);
     }
   }
 
 
   rowvaluechanged(value: any) {
-    debugger
     var obj = value.data;
     if (obj.Farm_ID == undefined) {
       obj.ActionStatus = 1;
@@ -148,7 +144,7 @@ export class FarmComponent implements OnInit {
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
       this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
-        
+
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
           this.toaster.success("Records Synced");
@@ -169,7 +165,6 @@ export class FarmComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    debugger
     var newItem = new Loan_Farm();
     newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
     var res = this.rowData.push(newItem);
@@ -198,7 +193,7 @@ export class FarmComponent implements OnInit {
 
 
   syncenabled(){
-    
+
    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
   }
 

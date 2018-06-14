@@ -92,6 +92,10 @@ import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AgentComponent } from './components/insurance/agents/agent.component';
 import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
 import { InsuranceapiService } from './services/insurance/insuranceapi.service';
+import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info.component';
+import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
+import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
+import { BuyerAssociationComponent } from './components/borrower/buyer-association/buyer-association.component';
 
 @NgModule({
   declarations: [
@@ -124,7 +128,7 @@ import { InsuranceapiService } from './services/insurance/insuranceapi.service';
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent
     
   ],
   imports: [

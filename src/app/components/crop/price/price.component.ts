@@ -38,15 +38,13 @@ export class PriceComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify:AlertifyService
-  ) { 
+  ) {
 
     //Aggrid Specific Code
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
-    debugger
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
-    debugger
     this.columnDefs = [
       {
         headerName: 'Crop', field: 'Crop_Code', width: 120, editable: true, cellEditor: "selectEditor",
@@ -99,7 +97,7 @@ export class PriceComponent implements OnInit {
     }
   }
 
- 
+
   // valueupdate(value: any, key: string, lon_id: number) {
   //   debugger
   //   this.editarray[key] = false;

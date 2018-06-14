@@ -22,14 +22,12 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
 
     // dont use afterGuiAttached for post gui events - hook into ngAfterViewInit instead for this
     ngAfterViewInit() {
-        debugger
         // setTimeout(() => {
         //     this.container.element.nativeElement.focus();
         // })
     }
 
     agInit(params: any): void {
-        debugger
         this.params = params;
         this.values=params.values;
         if(isNumber(params.value))
@@ -40,11 +38,10 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
 
     getValue(): any {
        return this.selectedValue;
-        
+
     }
 
     isPopup(): boolean {
-        debugger
         return true;
     }
 
@@ -53,12 +50,10 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     onClick(happy: boolean) {
-        debugger
         this.params.api.stopEditing();
     }
 
     onKeyDown(event): void {
-        debugger
         let key = event.which || event.keyCode;
         if (key == 37 ||  // left
             key == 39) {  // right

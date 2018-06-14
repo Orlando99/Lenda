@@ -4,10 +4,10 @@ import { isNumber } from "util";
 
 
 export function extractCropValues(mappings) {
-    
+
     var obj = [];
     mappings.forEach((element,index) => {
-        
+
         if(obj.findIndex(p=>p.key==element.Crop_Code)==-1)
         obj[obj.length] = {key:element.Crop_Code,value:element.Crop_Name}
     });
@@ -31,23 +31,22 @@ export function Cropvaluesetter(params) {
     }
     return true;
 }
-// Ends Here   
+// Ends Here
 
 // County
 
 export function extractCropTypeValues(mappings) {
-    
+
     var obj = [];
     mappings.forEach((element,index) => {
-        
+
         if(obj.findIndex(p=>p.key==element.Crop_Type_Code)==-1)
         obj[obj.length] = {key:element.Crop_Type_Code,value:element.Crop_Type_Name}
     });
-    return obj; 
+    return obj;
 }
 
 export function lookupCropTypeValue(key) {
-    debugger
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key != undefined && key != "") {
             return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_;
@@ -56,7 +55,6 @@ export function lookupCropTypeValue(key) {
 
 
 export function CropTypevaluesetter(params) {
-    debugger
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     var county = params.newValue;
     var values = refdata.CropList;
@@ -70,10 +68,10 @@ export function CropTypevaluesetter(params) {
 }
 
 export function getfilteredCropType(params) {
-    
+
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     var selectedcrop = params.data.Crop_Code;
     var allowedcroptypes = refdata.CropList.filter(p => p.Crop_Code == selectedcrop);
     return { values: extractCropTypeValues(allowedcroptypes) };
 }
- // Ends Here   
+ // Ends Here
