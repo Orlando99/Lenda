@@ -10,12 +10,17 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { NumericEditor } from '../../aggridfilters/numericaggrid';
 import { AggridTxtAreaComponent } from '../../aggridfilters/textarea';
 import { IfObservable } from 'rxjs/observable/IfObservable';
+import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material';
 
 @Component({
   selector: 'app-naming-convention',
   templateUrl: './naming-convention.component.html',
-  styleUrls: ['./naming-convention.component.scss']
+  styleUrls: ['./naming-convention.component.scss'],
+  providers: [
+    {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: {float: 'never'}}
+  ]
 })
+
 export class NamingConventionComponent implements OnInit {
 
   public loading = false;
@@ -31,6 +36,7 @@ export class NamingConventionComponent implements OnInit {
   editing = {};
   rows = [];
   public allColumnIds = [];
+
   constructor(
     private toaster: ToastsManager,
     private namingconventionservice: NamingConventionapiService,
