@@ -2,12 +2,13 @@
 import {AfterViewInit, Component, ViewChild, ViewContainerRef} from "@angular/core";
 
 import {ICellEditorAngularComp} from "ag-grid-angular";
+import { isNumber } from "util";
 
 @Component({
     selector: 'editor-cell',
     template: `
     <div fxLayout="row" class="grid-actions">
-    <select [value]="selectedValue">
+    <select (change)="change($event.target.value)" [value]="selectedValue">
       <option *ngFor="let value of values" [value]="value.key">{{value.value}}</option>
   </select>
   </div>
@@ -15,27 +16,30 @@ import {ICellEditorAngularComp} from "ag-grid-angular";
 })
 export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     private params: any;
-    public selectedValue:number;
+    public selectedValue:any;
     public values=[];
     @ViewChild('container', {read: ViewContainerRef}) public container;
 
     // dont use afterGuiAttached for post gui events - hook into ngAfterViewInit instead for this
     ngAfterViewInit() {
         debugger
-        setTimeout(() => {
-            this.container.element.nativeElement.focus();
-        })
+        // setTimeout(() => {
+        //     this.container.element.nativeElement.focus();
+        // })
     }
 
     agInit(params: any): void {
         debugger
         this.params = params;
         this.values=params.values;
+        if(isNumber(params.value))
         this.selectedValue=parseInt(params.value);
+        else
+        this.selectedValue=params.value;
     }
 
     getValue(): any {
-       return this.params.value;
+       return this.selectedValue;
         
     }
 
@@ -44,6 +48,9 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
         return true;
     }
 
+    change(event:any){
+        this.selectedValue=event;
+    }
 
     onClick(happy: boolean) {
         debugger
