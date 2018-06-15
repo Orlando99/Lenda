@@ -29,7 +29,6 @@ export class QuestionsComponent implements OnInit {
   }
 
   change() {
-    console.log(23)
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 

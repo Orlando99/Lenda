@@ -18,7 +18,7 @@
         <div class="right-side">
           <span>{{q.Question_ID_Text}}</span>
           <mat-form-field *ngIf="LoanQResponse[i].Response_Ind.toString() === '0'">
-            <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (ngModelChange)="change()" matInput placeholder="Answer"></textarea>
+            <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (blur)="change()" matInput placeholder="Answer"></textarea>
           </mat-form-field>
         </div>
       </div>
