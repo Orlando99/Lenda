@@ -1,0 +1,122 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Farmer
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <button (click)="synctoDb()" mat-icon-button *ngIf="farmerInfoForm" [disabled]="!farmerInfoForm.dirty">
+      <mat-icon>publish</mat-icon>
+    </button>
+
+
+    <div class="container bottom width-auto">
+      <div class="row">
+        <form [formGroup]="farmerInfoForm">
+          <div class="input-field col m3">
+
+            <mat-form-field>
+              <input matInput placeholder="First Name" formControlName="Farmer_First_Name">
+            </mat-form-field>
+          </div>
+          <div class="input-field col m1">
+
+            <mat-form-field>
+              <input matInput placeholder="Middle Initial" formControlName="Farmer_MI">
+            </mat-form-field>
+          </div>
+          <div class="input-field col m3">
+
+            <mat-form-field>
+              <input matInput placeholder="Last Name" formControlName="Farmer_Last_Name">
+            </mat-form-field>
+          </div>
+          <div class="input-field col m2">
+
+            <mat-form-field>
+              <input matInput placeholder="SSN" formControlName="Farmer_SSN_Hash">
+            </mat-form-field>
+          </div>
+          <div class="input-field col m4">
+
+            <mat-form-field>
+              <input matInput placeholder="Address" formControlName="Farmer__Address">
+            </mat-form-field>
+          </div>
+
+          <div class="input-field col m2">
+            <mat-form-field>
+              <input matInput placeholder="City" formControlName="Farmer_City">
+            </mat-form-field>
+          </div>
+
+          <div class="input-field col m2">
+           
+            <mat-form-field id="forceStyle">
+              <mat-select placeholder="State" formControlName="Farmer_State">
+                <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev" >
+                  {{ state.State_Name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="input-field col m2">
+            <mat-form-field>
+              <input matInput placeholder="Zip" formControlName="Farmer_Zip" pattern="^\d{5}(?:[-\s]\d{4})?$">
+              <mat-error *ngIf="farmerInfoForm.get('Farmer_Zip').hasError('pattern') && !farmerInfoForm.get('Farmer_Zip').hasError('required')">
+                Please enter a valid zip code
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="input-field col m3">
+            <mat-form-field>
+              <input matInput placeholder="Phone [(123)123-1234]" formControlName="Farmer_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
+              <mat-error *ngIf="farmerInfoForm.get('Farmer_Phone').hasError('pattern') && !farmerInfoForm.get('Farmer_Phone').hasError('required')">
+                Please enter a valid phone no
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="input-field col m3">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email" formControlName="Farmer_Email">
+              <mat-error *ngIf="farmerInfoForm.get('Farmer_Email').hasError('email') && !farmerInfoForm.get('Farmer_Email').hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="input-field col m2">
+            <mat-form-field>
+              <input matInput placeholder="DOB [mm/dd/yyyy]" formControlName="Farmer_DOB" pattern="^(0?[1-9]|1[0-2])/(0?[1-9]|1[0-9]|2[0-9]|3[01])/\d{4}$">
+              <mat-error *ngIf="farmerInfoForm.get('Farmer_DOB').hasError('pattern') && !farmerInfoForm.get('Farmer_DOB').hasError('required')">
+                Please enter a valid date
+              </mat-error>
+            </mat-form-field>
+           
+          </div>
+          <div class="input-field col m2">
+            <mat-form-field>
+              <input matInput placeholder="Year Began Farming" formControlName="Year_Begin_Farming" pattern="^\d{4}$">
+              <mat-error *ngIf="farmerInfoForm.get('Year_Begin_Farming').hasError('pattern') && !farmerInfoForm.get('Year_Begin_Farming').hasError('required')">
+                Please enter a valid year
+              </mat-error>
+            </mat-form-field>
+            
+          </div>
+          <div class="input-field col m2">
+            <mat-form-field>
+              <input matInput placeholder="Client Since" formControlName="Year_Begin_Client"  pattern="^\d{4}$">
+              <mat-error *ngIf="farmerInfoForm.get('Year_Begin_Client').hasError('pattern') && !farmerInfoForm.get('Year_Begin_Client').hasError('required')">
+                Please enter a valid year
+              </mat-error>
+            </mat-form-field>
+            
+          </div>
+
+
+
+        </form>
+      </div>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

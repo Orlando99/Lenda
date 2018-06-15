@@ -18,10 +18,9 @@ export class LoanListComponent implements OnInit {
   ngOnInit() {
     this.getloanlist();
   }
-
+  
   getloanlist() {
-    this.loanService.getLoanList(this.pagesize, this.previndex).subscribe(res => {
-      
+    this.loanService.getLoanList().subscribe(res => {
       if (res.ResCode == 1) {
         this.loanlist = res.Data;
       }
