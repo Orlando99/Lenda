@@ -11,5 +11,5 @@ export const environment = {
   loankey_copy:"rawcurrentselectedloan",
   logpriority:"logpriority",
   referencedatakey:"refdata"
-  
+
 };

@@ -17,7 +17,7 @@ import { CropapiService } from '../../../services/crop/cropapi.service';
 export class YieldComponent implements OnInit {
   public years=[];
   private localloanobject:loan_model=new loan_model();
-  public allDataFetched=false;  
+  public allDataFetched=false;
   public editarray=[];
   public arrayrow=[];
   public editorder=[];
@@ -35,7 +35,7 @@ export class YieldComponent implements OnInit {
       this.localloanobject=res;
       this.allDataFetched=true;
     })
-   
+
     for(let i=1;i<7;i++){
        this.years.push(new Date().getFullYear()-i);
     }
@@ -43,7 +43,7 @@ export class YieldComponent implements OnInit {
     this.getdataforgrid();
   }
   getdataforgrid(){
-    
+
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
@@ -53,12 +53,11 @@ export class YieldComponent implements OnInit {
     }
   }
   startediting(value:string){
-    
+
     this.editarray=[];
   this.editarray[value]=true;
   }
   valueupdate(value:any,key:string,year:number,cropid:number,lon_id:number){
-    debugger
     this.editarray[key]=false;
     if(value==""){
       value="0";

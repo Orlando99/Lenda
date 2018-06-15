@@ -2,6 +2,7 @@ import { JsonProperty, JsonObject, JsonConverter, JsonCustomConvert } from "json
 import { Loan_Crop_Unit, Loan_Crop_Unit_FC, V_Crop_Price_Details, Loan_Crop_History_FC } from "./cropmodel";
 import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
 import { Loan_Farm } from "./farmmodel.";
+import {LoanQResponse} from './loan-response.model';
 
 
 @JsonObject
@@ -132,7 +133,7 @@ export class borrower_model
 
         @JsonProperty("Borrower_Income_detail_Ind", IntConverter,false)
         Borrower_Income_detail_Ind: number=undefined;
-        
+
         @JsonProperty("Spouse_SSN_Hash", IntConverter,false)
         Spouse_SSN_Hash: number=undefined;
 
@@ -174,7 +175,7 @@ export class borrower_model
 
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=undefined;
-        
+
         FC_Borrower_TotalAssets:number=0;
         FC_Borrower_TotalDebt:number=0;
         FC_Borrower_TotalEquity:number=0;
@@ -221,13 +222,15 @@ export class borrower_model
         Email: string='';
         @JsonProperty("Amount", IntConverter,false)
         Amount: number=0;
+        @JsonProperty("Preferred_Contact_Ind", IntConverter,false)
+        Preferred_Contact_Ind: number=0;
         @JsonProperty("Assoc_Status", IntConverter,false)
         Assoc_Status: number=undefined;
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=undefined;
-        
+
     }
     @JsonObject
     export class loan_model{
@@ -237,24 +240,27 @@ export class borrower_model
 
         @JsonProperty("LoanCropUnits", [Loan_Crop_Unit])
         LoanCropUnits:Loan_Crop_Unit[]=undefined;
-        
+
         @JsonProperty("CropYield", [])
         CropYield:any=undefined;
-        
+
         @JsonProperty("Farms", [Loan_Farm])
         Farms:Loan_Farm[]=undefined;
-        
+
+        @JsonProperty("LoanQResponse", [])
+        LoanQResponse:any=undefined;
+
         @JsonProperty("Loan_PK_ID", IntConverter)
         Loan_PK_ID:number=undefined;
 
         @JsonProperty("Association", [Loan_Association])
         Association: Loan_Association[]=undefined;
-        
+
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
     }
 
-    
+
 
     export class borrower_income_history_model
     {
@@ -275,5 +281,5 @@ export class borrower_model
         Log_Id: number;
         Log_Section: string;
         Log_Message: string;
-       
+
     }
