@@ -19,6 +19,12 @@ export function lookupCropValue(mappings, key) {
     return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
 }
 
+export function lookupCropValuewithoutmapping(key) {
+    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
+    let mappings=extractCropValues(refdata.CropList)
+    return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
+}
+
 export function Cropvaluesetter(params) {
 
     var crop = params.newValue;
@@ -47,12 +53,16 @@ export function extractCropTypeValues(mappings) {
 }
 
 export function lookupCropTypeValue(key) {
-    debugger
+    try{
     key=key.trim();
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key != undefined && key != "") {
             return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_Name;
     }
+}
+catch{
+    return "";
+}
 }
 
 

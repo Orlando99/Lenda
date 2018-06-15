@@ -1,3 +1,5 @@
+
+
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -6,51 +8,29 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <div *ngIf="allDataFetched" class="container">
-      <div class="row">
-        <div class="col s12">
-          <!-- Table Here -->
-       <h4>
-          <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
-          <mat-icon >publish</mat-icon>
-        </button></h4>
-          <table class="bordered">
-            <thead>
-              <tr>
-                  <th>Crop</th>
-                  <th>Crop Type</th>
-                  <th>Ir/Ni</th>
-                  <th>Practice</th>
-                  <th *ngFor="let year of years">{{year}}</th>
-                  <th>Crop Yield</th>
-                  <th>APH</th>
-                  <th> Ins UOM </th>
+      <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+      <mat-icon >publish</mat-icon>
+    </button>
 
-              </tr>
-            </thead>
-    
-            <tbody>
-              <tr *ngFor="let item of localloanobject.CropYield;let i=index">
-                   <td>{{item.Crop}}</td>
-                   <td>{{item.Crop_Type}}</td>
-                   <td>{{item.IrNI}}</td>
-                   <td>{{item.Practice}}</td>
-                   <td  class="editable" *ngFor="let year of years" (click)="startediting('z_'+year+i.toString())">
-                    <div *ngIf="!editarray['z_'+year+i.toString()]">{{item[year]}}</div>
-                    <div *ngIf="editarray['z_'+year+i.toString()]"><input setfocus type="number" value="{{item[year]}}" (blur)="valueupdate($event.srcElement.value,'z_'+year+i.toString(),year,item.Crop_ID,item.Loan_ID)" ></div> 
-                </td>
-                   <td>{{item.CropYield}}</td>
-                   <td>{{item.APH}}</td>
-                   <td>Bu</td>
-                   
-              </tr>
-             
-            </tbody>
-            </table>
-          <!-- Ends Here -->
+    <!-- <button (click)="addrow()" mat-raised-button color="primary" >Add </button> -->
+      
+          <div class="container bottom">
+            <div class="row">
+            <ag-grid-angular 
+            style="width: 96%; height: 250px;" 
+            class="ag-theme-balham"
+            [animateRows]="true"
+            [enableSorting]="true"
+            [enableFilter]="true"
+            [context]="context"
+            [components]="components"
+            (cellEditingStopped)="rowvaluechanged($event)"
+            [rowData]="rowData" 
+            (gridReady)="onGridReady($event)"
+            [columnDefs]="columnDefs">
+            </ag-grid-angular>
+            </div>
+          </div>
           <br>
-        </div>
-      </div>
-    </div>
   </mat-expansion-panel>
-</mat-accordion>
+  </mat-accordion>
