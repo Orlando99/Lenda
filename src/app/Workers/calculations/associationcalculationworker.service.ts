@@ -7,7 +7,6 @@ export class AssociationcalculationworkerService {
 
 
   prepareLoanassociationmodel(input:loan_model):loan_model{
-    debugger
     // for(let i =0;i<input.Association.length;i++){
     //   input.Farms[i].FC_Total_Acres=input.Association[i].Irr_Acres+input.Association[i].NI_Acres;
     // }

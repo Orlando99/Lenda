@@ -38,18 +38,16 @@ export class PriceComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify:AlertifyService
-  ) { 
+  ) {
 
     //Aggrid Specific Code
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
-    debugger
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
-    debugger
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop_Code', width: 80, editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop', field: 'Crop_Code', width: 120, editable: true, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
@@ -59,23 +57,23 @@ export class PriceComponent implements OnInit {
         valueSetter: Cropvaluesetter
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code', width: 80, editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'Crop type', field: 'Crop_Type_Code', width: 120, editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredCropType,
         valueFormatter: function (params) {
           return lookupCropTypeValue(params.value);
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', width: 80, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 80, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: true, width: 80 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true, width: 80 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Qty', field: 'value', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Price', field: 'value', width: 80, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: '% Booked', field: 'Booking_Ind', editable: true, width: 80 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Ins UOM', field: 'Bu', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: 'Crop Price', field: 'Z_Price', width: 120, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 120, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Adj Price', field: 'Z_Adj_Price', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Contract Qty', field: 'value', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Contract Price', field: 'value', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: '% Booked', field: 'Booking_Ind', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Ins UOM', field: 'Bu', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" },
 
     ];
     ///
@@ -99,7 +97,7 @@ export class PriceComponent implements OnInit {
     }
   }
 
- 
+
   // valueupdate(value: any, key: string, lon_id: number) {
   //   debugger
   //   this.editarray[key] = false;
@@ -146,19 +144,19 @@ export class PriceComponent implements OnInit {
 }
 
 rowvaluechanged(value: any) {
-  // var obj = value.data;
-  // if (obj.Farm_ID == undefined) {
-  //   obj.ActionStatus = 1;
-  //   obj.Farm_ID=0;
-  //   this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
-  // }
-  // else {
-  //   var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
-  //   if(obj.ActionStatus!=1)
-  //    obj.ActionStatus = 2;
-  //   this.localloanobject.Farms[rowindex]=obj;
-  // }
-  // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+  var obj = value.data;
+  if (obj.Loan_CU_ID == undefined) {
+    obj.ActionStatus = 1;
+    obj.Loan_CU_ID=0;
+    this.localloanobject.LoanCropUnits[this.localloanobject.LoanCropUnits.length]=value.data;
+  }
+  else {
+    var rowindex=this.localloanobject.LoanCropUnits.findIndex(p=>p.Loan_CU_ID==obj.Loan_CU_ID);
+    if(obj.ActionStatus!=1)
+     obj.ActionStatus = 2;
+    this.localloanobject.LoanCropUnits[rowindex]=obj;
+  }
+  this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
 
 }
 onGridReady(params) {
@@ -183,7 +181,6 @@ DeleteClicked(rowIndex: any) {
 }
 
   syncenabled(){
-    
    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
   }
 }

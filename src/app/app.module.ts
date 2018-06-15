@@ -95,6 +95,11 @@ import { InsuranceapiService } from './services/insurance/insuranceapi.service';
 import { DistributerComponent } from './components/budget/distributer/distributer.component';
 import {ThirdpartyComponent} from './components/budget/thirdparty/thirdparty.component';
 import {HarvesterComponent }from './components/budget/harvester/harvester.component';
+import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info.component';
+import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
+import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
+import { BuyerAssociationComponent } from './components/borrower/buyer-association/buyer-association.component';
+import { QuestionsComponent } from './components/borrower/questions/questions.component';
 
 @NgModule({
   declarations: [
@@ -127,7 +132,7 @@ import {HarvesterComponent }from './components/budget/harvester/harvester.compon
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent
     
   ],
   imports: [

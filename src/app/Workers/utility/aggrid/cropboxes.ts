@@ -4,9 +4,10 @@ import { isNumber } from "util";
 
 
 export function extractCropValues(mappings) {
-    debugger
+
     var obj = [];
     mappings.forEach((element,index) => {
+
         if(obj.findIndex(p=>p.key==element.Crop_Code)==-1)
         obj[obj.length] = {key:element.Crop_Code,value:element.Crop_Name}
     });
@@ -14,44 +15,41 @@ export function extractCropValues(mappings) {
 }
 
 export function lookupCropValue(mappings, key) {
-debugger
+
     return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
 }
 
 export function Cropvaluesetter(params) {
-debugger
-    var state = params.newValue;
+
+    var crop = params.newValue;
     var values = params.colDef.cellEditorParams.values;
-    for (var key in values) {
-        var value = values[key];
+    for (let object of values) {
+        var value = object.key;
         if (value == params.newValue) {
-            params.data[params.colDef.field] = parseInt(key);
+            params.data[params.colDef.field] = crop;
         }
     }
     return true;
 }
-// Ends Here   
+// Ends Here
 
 // County
 
 export function extractCropTypeValues(mappings) {
-    debugger
+
     var obj = [];
-    mappings.forEach(element => {
-        obj[element.County_ID] = element.County_Name;
+    mappings.forEach((element,index) => {
+
+        if(obj.findIndex(p=>p.key==element.Crop_Type_Code)==-1)
+        obj[obj.length] = {key:element.Crop_Type_Code,value:element.Crop_Type_Name}
     });
-    debugger
     return obj;
 }
 
 export function lookupCropTypeValue(key) {
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key != undefined && key != "") {
-        if (isNumber(key))
-            return refdata.CountyList.find(p => p.County_ID == key).County_Name;
-        else {
-
-        }
+            return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_;
     }
 }
 
@@ -59,20 +57,21 @@ export function lookupCropTypeValue(key) {
 export function CropTypevaluesetter(params) {
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     var county = params.newValue;
-    var values = refdata.CountyList;
-    for (var key in values) {
-        var value = values[key].County_Name;
+    var values = refdata.CropList;
+    for (let object of values) {
+        var value = object.Crop_Type_Code;
         if (value == params.newValue) {
-            params.data[params.colDef.field] = parseInt(values[key].County_ID);
+            params.data[params.colDef.field] =  object.Crop_Type_Code;
         }
     }
     return true;
 }
 
 export function getfilteredCropType(params) {
+
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
-    var selectedstate = params.data.Farm_State_ID;
-    var allowedCounties = refdata.CountyList.filter(p => p.State_ID == selectedstate);
-    return { values: extractCropTypeValues(allowedCounties) };
+    var selectedcrop = params.data.Crop_Code;
+    var allowedcroptypes = refdata.CropList.filter(p => p.Crop_Code == selectedcrop);
+    return { values: extractCropTypeValues(allowedcroptypes) };
 }
- // Ends Here   
+ // Ends Here

@@ -46,14 +46,15 @@ export class LoanOverviewComponent implements OnInit {
   }
 
   getLoanBasicDetails() {
-    debugger
+    console.log(this.loanid)
+
     if (this.loanid != null) {
       let loaded=false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
-        
+        console.log(res)
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
-          
+
           let jsonConvert: JsonConvert = new JsonConvert();
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also
@@ -64,7 +65,7 @@ export class LoanOverviewComponent implements OnInit {
         }
         loaded=true;
       });
-    
+
     }
     else {
       this.toaster.error("Something went wrong");

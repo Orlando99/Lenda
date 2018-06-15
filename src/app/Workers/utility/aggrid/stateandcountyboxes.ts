@@ -28,17 +28,15 @@ export function Statevaluesetter(params) {
     }
     return true;
 }
-// Ends Here   
+// Ends Here
 
 // County
 
 export function extractCountyValues(mappings) {
-    debugger
     var obj = [];
     mappings.forEach(element => {
         obj[element.County_ID] = element.County_Name;
     });
-    debugger
     return obj;
 }
 
@@ -73,4 +71,4 @@ export function getfilteredcounties(params) {
     var allowedCounties = refdata.CountyList.filter(p => p.State_ID == selectedstate);
     return { values: extractCountyValues(allowedCounties) };
 }
- // Ends Here   
+ // Ends Here

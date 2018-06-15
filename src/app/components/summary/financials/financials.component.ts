@@ -20,12 +20,10 @@ export class FinancialsComponent implements OnInit {
   public getRowClass;
   private gridApi;
   private columnApi;
-  constructor(public localstorageservice: LocalStorageService, public logging: LoggingService) { 
+  constructor(public localstorageservice: LocalStorageService, public logging: LoggingService) {
 
     this.getRowClass = function(params) {
-      debugger
       if (params.node.rowPinned) {
-        debugger
         return  'ag-aggregate-row';
       }
     };
@@ -78,18 +76,18 @@ export class FinancialsComponent implements OnInit {
   }
   prepareviewmodel() {
     //prepare three rows here
-      //1st Current Financial Row 
+      //1st Current Financial Row
       var currentobj={Financials:'Current',Assets:this.localborrowerobject.Borrower_Current_Assets,Debt:this.localborrowerobject.Borrower_Current_Liabilities,
       Equity:this.localborrowerobject.FC_Borrower_Current_Equity,Ratios:this.localborrowerobject.FC_Borrower_Current_Ratio,FICO:this.localborrowerobject.FC_Borrower_FICO,Rating:'-'}
       this.rowData.push(currentobj);
 
-       //1st Intermediate Financial Row 
+       //1st Intermediate Financial Row
       var Intermediateobj={Financials:'Intermediate',Assets:this.localborrowerobject.Borrower_Intermediate_Assets,Debt:this.localborrowerobject.Borrower_Intermediate_Liabilities,
       Equity:this.localborrowerobject.FC_Borrower_Intermediate_Equity,Ratios:"",FICO:"",Rating:'-'}
       this.rowData.push(Intermediateobj)
 
-      
-       //1st LongTerm Financial Row 
+
+       //1st LongTerm Financial Row
        var LongTermobj={Financials:'Long Term',Assets:this.localborrowerobject.Borrower_Fixed_Assets,Debt:this.localborrowerobject.Borrower_Fixed_Liabilities,
        Equity:this.localborrowerobject.FC_Borrower_Fixed_Equity,Ratios:"",FICO:"",Rating:'-'}
        this.rowData.push(LongTermobj)
