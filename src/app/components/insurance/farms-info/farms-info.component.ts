@@ -117,11 +117,11 @@ export class FarmsInfoComponent implements OnInit {
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
-      var rowIndex=this.localloanobject.Farms;
-      this.localloanobject.Farms[rowIndex]=value.data;
+      var rowIndex=this.localloanobject.Farms.length;
+      this.localloanobject.Farms[rowIndex] = value.data;
     }
     else {
-      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.Farms.length;
       obj.ActionStatus = 2;
       this.localloanobject.Farms[rowindex]=obj;
     }
@@ -162,9 +162,9 @@ export class FarmsInfoComponent implements OnInit {
     //   rowIndex: this.rowData.length,
     //   colKey: "Assoc_ID"
     // });
-    var newItem = new Loan_Association();
-    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
-    newItem.Assoc_Type_Code="AGT";
+    var newItem = new Loan_Farm();
+    // newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+    // newItem.Assoc_Type_Code="AGT";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({

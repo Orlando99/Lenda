@@ -15,6 +15,7 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import {Loan_Crop_Unit} from '../../../models/cropmodel';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-loan-crop-units-info',
@@ -174,7 +175,7 @@ export class LoanCropUnitsInfoComponent implements OnInit {
       this.localloanobject.LoanCropUnits[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.LoanCropUnits.findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.LoanCropUnits.length;
       obj.ActionStatus = 2;
       this.localloanobject.LoanCropUnits[rowindex]=obj;
     }
@@ -215,9 +216,9 @@ export class LoanCropUnitsInfoComponent implements OnInit {
     //   rowIndex: this.rowData.length,
     //   colKey: "Assoc_ID"
     // });
-    var newItem = new Loan_Association();
-    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
-    newItem.Assoc_Type_Code="AGT";
+    var newItem = new Loan_Crop_Unit();
+    // newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+    // newItem.Assoc_Type_Code="AGT";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -231,12 +232,8 @@ export class LoanCropUnitsInfoComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.localloanobject.LoanCropUnits[rowIndex];
-        if (obj.Assoc_ID == 0) {
           this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
-        }
-        else {
-          obj.ActionStatus = -1;
-        }
+
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })

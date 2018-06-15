@@ -115,7 +115,7 @@ export class CropYieldInfoComponent implements OnInit {
       this.localloanobject.CropYield[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.CropYield.findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.CropYield;
       obj.ActionStatus = 2;
       this.localloanobject.CropYield[rowindex]=obj;
     }
