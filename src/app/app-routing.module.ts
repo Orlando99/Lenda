@@ -16,6 +16,8 @@ import { NamingConventionComponent } from "./components/naming-convention/naming
 import { FarmComponent } from "./components/farm/farm.component";
 import { BudgetComponent } from "./components/budget/budget.component";
 import { InsuranceComponent } from "./components/insurance/insurance.component";
+import{ DistributerComponent } from "./components/budget/distributer/distributer.component"
+
 
 const appRoutes: Routes = [ 
 

@@ -221,6 +221,8 @@ export class borrower_model
         Email: string='';
         @JsonProperty("Amount", IntConverter,false)
         Amount: number=0;
+        @JsonProperty("Preferred_Contact_Ind", IntConverter,false)
+        Preferred_Contact_Ind: number=0;
         @JsonProperty("Assoc_Status", IntConverter,false)
         Assoc_Status: number=undefined;
         @JsonProperty("Status", IntConverter,false)
