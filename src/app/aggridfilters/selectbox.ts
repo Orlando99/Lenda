@@ -50,6 +50,12 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
 
     change(event:any){
         this.selectedValue=event;
+        try{
+            this.params.context.componentParent.valuechanged(event,this.params.column.colId,this.params.rowIndex)
+        }
+        catch{
+
+        }
     }
 
     onClick(happy: boolean) {

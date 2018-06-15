@@ -48,9 +48,10 @@ export function extractCropTypeValues(mappings) {
 
 export function lookupCropTypeValue(key) {
     debugger
+    key=key.trim();
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key != undefined && key != "") {
-            return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_;
+            return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_Name;
     }
 }
 

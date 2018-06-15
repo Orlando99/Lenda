@@ -13,6 +13,9 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { AlertifyService } from '../../../alertify/alertify.service';
+import { Loan_Crop_Unit } from '../../../models/cropmodel';
+import { JsonConvert } from 'json2typescript';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
 
 @Component({
   selector: 'app-price',
@@ -37,7 +40,8 @@ export class PriceComponent implements OnInit {
     public cropunitservice: CropapiService,
     private toaster: ToastsManager,
     public logging: LoggingService,
-    public alertify:AlertifyService
+    public alertify:AlertifyService,
+    public loanapi:LoanApiService
   ) { 
 
     //Aggrid Specific Code
@@ -66,15 +70,15 @@ export class PriceComponent implements OnInit {
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', width: 120, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 120, editable: false , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Crop Price', field: 'Z_Price', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
       { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
       { headerName: 'Adj Price', field: 'Z_Adj_Price', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Qty', field: 'value', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Price', field: 'value', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Contract Qty', field: '', width: 120, editable: false },
+      { headerName: 'Contract Price', field: '', width: 120, editable: false  },
       { headerName: '% Booked', field: 'Booking_Ind', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Ins UOM', field: 'Bu', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Ins UOM', field: 'Bu', width: 120, editable: false},
       { headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" },
 
     ];
@@ -86,7 +90,8 @@ export class PriceComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       this.localloanobject = res;
-        this.rowData=this.localloanobject.LoanCropUnits;
+      this.rowData=[];
+        this.rowData=this.localloanobject.LoanCropUnits.filter(p=>p.ActionStatus!=3);
     })
     this.getdataforgrid();
   }
@@ -95,62 +100,68 @@ export class PriceComponent implements OnInit {
     this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      this.rowData=this.localloanobject.LoanCropUnits;
+      this.rowData=[];
+      this.rowData=this.localloanobject.LoanCropUnits.filter(p=>p.ActionStatus!=3);
     }
   }
 
  
-  // valueupdate(value: any, key: string, lon_id: number) {
-  //   debugger
-  //   this.editarray[key] = false;
-  //   if(value==""){
-  //     value="0";
-  //   }
-  //   this.localloanobject.LoanCropUnits.find(p => p.Loan_CU_ID == lon_id)[key.substr(0, key.length - 1)] = parseFloat(value);
-  //   this.editedLoanCuids.push(lon_id);
-  //   this.logging.checkandcreatelog(3, 'CropPrice', "Field Edited -" + key);
-  //   this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  //   this.syncenabled = true;
-  // }
-
-  // synctoDb() {
-  //   debugger
-  //   var edits = this.editedLoanCuids.filter((value, index, self) => self.indexOf(value) === index);
-
-  //   edits.forEach(element => {
-  //     let obj = this.localloanobject.LoanCropUnits.find(p => p.Loan_CU_ID == element);
-  //     this.cropunitservice.saveupdateLoanCropUnit(obj).subscribe(res => {
-  //       this.logging.checkandcreatelog(3, 'CropPrice', "Code Synced to DB with ResCode " + res.ResCode);
-  //       if (res.ResCode == 1) {
-  //         this.toaster.success("Object Synced Successfully");
-  //       }
-  //       else {
-  //         this.toaster.error("Error Encountered while Syncing");
-  //       }
-  //     })
-  //   });
-  //   this.syncenabled = false;
-  // }
+ 
+  synctoDb() {
+    debugger
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+      if(res.ResCode==1){
+       this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+         
+         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+         if (res.ResCode == 1) {
+           this.toaster.success("Records Synced");
+           let jsonConvert: JsonConvert = new JsonConvert();
+           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+         }
+         else{
+           this.toaster.error("Could not fetch Loan Object from API")
+         }
+       });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    })
+  }
 
  //Grid Events
  addrow() {
   debugger
-  // var newItem = new Loan_Farm();
-  // newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
-  // var res = this.rowData.push(newItem);
-  // this.gridApi.setRowData(this.rowData);
-  // this.gridApi.startEditingCell({
-  //   rowIndex: this.rowData.length-1,
-  //   colKey: "Farm_State_ID"
-  // });
+  var newItem = new Loan_Crop_Unit();
+  newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+  newItem.Crop_Code="CRN";
+  var res = this.rowData.push(newItem);
+  this.gridApi.setRowData(this.rowData);
+  this.gridApi.startEditingCell({
+    rowIndex: this.rowData.length-1,
+    colKey: "Crop_Code" 
+  });
 }
 
+valuechanged(value:any,selectname:any,rowindex:any){
+  debugger
+  if(selectname=="Crop_Code"){
+    this.rowData[rowindex].Crop_Type_Code=this.refdata.CropList.find(p=>p.Crop_Code==value).Crop_Type_Code;
+  }
+  else{
+    if(this.rowData[rowindex].Z_Price==0)
+    this.rowData[rowindex].Z_Price=this.refdata.CropList.find(p=>p.Crop_Code==this.rowData[rowindex].Crop_Code && p.Crop_Type_Code==value).Price;
+  }
+  debugger
+}
 rowvaluechanged(value: any) {
+  debugger
   var obj = value.data;
   if (obj.Loan_CU_ID == undefined) {
     obj.ActionStatus = 1;
     obj.Loan_CU_ID=0;
-    this.localloanobject.LoanCropUnits[this.localloanobject.LoanCropUnits.length]=value.data;
+    this.localloanobject.LoanCropUnits[this.localloanobject.LoanCropUnits.length-1]=value.data;
   }
   else {
     var rowindex=this.localloanobject.LoanCropUnits.findIndex(p=>p.Loan_CU_ID==obj.Loan_CU_ID);
@@ -169,9 +180,9 @@ onGridReady(params) {
 DeleteClicked(rowIndex: any) {
   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
     if (res == true) {
-      var obj = this.localloanobject.Farms[rowIndex];
-      if (obj.Farm_ID == 0) {
-        this.localloanobject.Farms.splice(rowIndex, 1);
+      var obj = this.localloanobject.LoanCropUnits[rowIndex];
+      if (obj.Loan_CU_ID == 0) {
+        this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
       }
       else {
         obj.ActionStatus = 3;
