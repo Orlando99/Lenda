@@ -12,6 +12,8 @@ import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utilit
 import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping } from '../../../Workers/utility/aggrid/cropboxes';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
+import { AlertifyService } from '../../../alertify/alertify.service';
 
 @Component({
   selector: 'app-yield',
@@ -29,16 +31,19 @@ export class YieldComponent implements OnInit {
   private columnApi;
   public croppricesdetails:[any];
   context: any;
-  columnDefs: ({ headerName: string; field: string; width: number; valueFormatter: (params: any) => any; valueSetter: (params: any) => boolean; editable?: undefined; cellEditor?: undefined; cellEditorParams?: undefined; } | { headerName: string; field: string; width: number; editable: boolean; cellEditor: string; cellEditorParams: any; valueFormatter: (params: any) => any; valueSetter: any; } | { headerName: string; field: string; width: number; editable: boolean; cellEditor: string; valueSetter: any; valueFormatter?: undefined; cellEditorParams?: undefined; } | { headerName: string; field: string; width: number; editable: boolean; valueFormatter?: undefined; valueSetter?: undefined; cellEditor?: undefined; cellEditorParams?: undefined; })[];
+  columnDefs=[];
+  frameworkcomponents: { deletecolumn: typeof DeleteButtonRenderer; };
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
   public cropserviceapi:CropapiService,
   private toaster: ToastsManager,
   public logging:LoggingService,
-  public loanapi:LoanApiService
+  public loanapi:LoanApiService,
+  public alertify:AlertifyService
   ) { 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.components = { numericCellEditor: getNumericCellEditor() };
+    this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
     debugger
     for(let i=1;i<7;i++){
       this.years.push(new Date().getFullYear()-i);
@@ -68,6 +73,7 @@ export class YieldComponent implements OnInit {
     this.columnDefs.push({ headerName: 'CropYield', field: 'CropYield', width: 120,  editable: false});
     this.columnDefs.push({ headerName: 'APH', field: 'APH', width: 120,  editable: false});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu', width: 120,  editable: false});
+    this.columnDefs.push({  headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" });
     ///
     this.context = { componentParent: this };
   }
@@ -140,5 +146,21 @@ export class YieldComponent implements OnInit {
       //   this.toaster.error("Error in Sync");
       // }
     })
+  }
+
+  DeleteClicked(rowIndex: any) {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+      if (res == true) {
+        var obj = this.localloanobject.LoanCropUnits[rowIndex];
+        if (obj.Loan_CU_ID == 0) {
+          this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
+        }
+        else {
+          obj.ActionStatus = 3;
+        }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+      }
+    })
+  
   }
 }

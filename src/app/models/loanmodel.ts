@@ -250,6 +250,9 @@ export class borrower_model
         @JsonProperty("LoanQResponse", [])
         LoanQResponse:any=undefined;
 
+        @JsonProperty("LoanBudget",[])
+        LoanBudget:any=undefined;
+
         @JsonProperty("Loan_PK_ID", IntConverter)
         Loan_PK_ID:number=undefined;
 
@@ -259,7 +262,50 @@ export class borrower_model
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
     }
+     
 
+
+
+    export class Loan_Budget
+    {   
+        @JsonProperty("Loan_Budget_ID", IntConverter,false)
+        Loan_Budget_ID: number;
+        @JsonProperty("Loan_ID", IntConverter,false)
+        Loan_ID: number;
+        @JsonProperty("Z_Loan_Seq_num", StringConverter,false)
+        Z_Loan_Seq_num: string="";
+        @JsonProperty("Loan_Full_ID", StringConverter,false)
+        Loan_Full_ID: string="";
+        @JsonProperty("Z_Loan_CU_ID", IntConverter,false)
+        Z_Loan_CU_ID: number=0;
+        @JsonProperty("Z_Expense_Type_Code", IntConverter,false)
+        Z_Expense_Type_Code: number=0;
+        @JsonProperty("ARM_Budget_Acre", IntConverter,false)
+        ARM_Budget_Acre: number=0;
+        @JsonProperty("Distributor_Budget_Acre", IntConverter,false)
+        Distributor_Budget_Acre: number=0;
+        @JsonProperty("Third_Party_Budget_Acre", IntConverter,false)
+        Third_Party_Budget_Acre: number=0;
+        @JsonProperty("BudgetTotal_Acre", IntConverter,false)
+        BudgetTotal_Acre: number=0;
+        @JsonProperty("ARM_Budget_Crop", IntConverter,false)
+        ARM_Budget_Crop: number=0;
+        @JsonProperty("Distributor_Budget_Crop", IntConverter,false)
+        Distributor_Budget_Crop: number=0;
+        @JsonProperty("Third_Party_Budget_Crop", IntConverter,false)
+        Third_Party_Budget_Crop: number=0;
+        @JsonProperty("BudgetTotal_Crop", IntConverter,false)
+        BudgetTotal_Crop: number=0;
+        @JsonProperty("Notes", StringConverter,false)
+        Notes: string="";
+        @JsonProperty("Other_Description_Text", StringConverter,false)
+        Other_Description_Text: string="";
+        @JsonProperty("Status", IntConverter,false)
+        Status: number=0;
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=0;
+
+    }
 
 
     export class borrower_income_history_model
