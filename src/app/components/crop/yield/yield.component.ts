@@ -64,8 +64,8 @@ export class YieldComponent implements OnInit {
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'IrNI', width: 120, editable: false},
-      { headerName: 'Basis_Adj', field: 'Practice', width: 120,  editable: false}
+      { headerName: 'Crop Practice', field: 'IrNI', width: 120, editable: false},
+      { headerName: 'Practice', field: 'Practice', width: 120,  editable: false}
     ];
     this.years.forEach(element => {
      this.columnDefs.push({ headerName: element.toString(), field: element.toString(), width: 120,  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})

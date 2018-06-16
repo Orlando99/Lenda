@@ -102,6 +102,8 @@ import { BuyerAssociationComponent } from './components/borrower/buyer-associati
 import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
 import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
+import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 
 @NgModule({
   declarations: [
@@ -134,7 +136,7 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent, LoanviewerComponent
     
     
   ],
@@ -175,6 +177,7 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
+    NgxJsonViewerModule,
     AgGridModule.withComponents([NumericEditor,SelectEditor]),
     ToastModule.forRoot()
   ],
@@ -208,7 +211,8 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
     MatSidenavModule,
     MatPaginatorModule,
     MatButtonToggleModule,
-    FocusDirective
+    FocusDirective,
+    NgxJsonViewerModule
   ],
   providers: [
     LocalStorageService,
