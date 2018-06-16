@@ -7,32 +7,35 @@ export class Loan_Crop_Unit
     @JsonProperty("Loan_CU_ID", IntConverter,false)
     Loan_CU_ID: number=undefined;
     @JsonProperty("Loan_ID", IntConverter,false)
-    Loan_ID: number=undefined;
+    Loan_ID: number=0;
     @JsonProperty("Farm_ID", IntConverter,false)
-    Farm_ID: number=undefined;
+    Farm_ID: number=0;
     @JsonProperty("CU_Acres", IntConverter,false)
-    CU_Acres: number=undefined;
+    CU_Acres: number=0;
+    @JsonProperty("CU_APH", IntConverter,false)
+    CU_APH: number=0;
     @JsonProperty("Crop_Type_Code", StringConverter,false)
-    Crop_Type_Code: string=undefined;
+    Crop_Type_Code: string="";
     @JsonProperty("Crop_Code", StringConverter,false)
-    Crop_Code: string=undefined;
+    Crop_Code: string="";
     @JsonProperty("Crop_Practice_Type_Code", StringConverter,false)
-    Crop_Practice_Type_Code: string=undefined;
+    Crop_Practice_Type_Code: string="";
     @JsonProperty("Z_Price", IntConverter,false)
-    Z_Price: number=undefined;
+    Z_Price: number=0;
     @JsonProperty("Z_Basis_Adj", IntConverter,false)
-    Z_Basis_Adj: number =undefined;
+    Z_Basis_Adj: number =0;
     @JsonProperty("Z_Marketing_Adj", IntConverter,false)
-    Z_Marketing_Adj: number=undefined;
+    Z_Marketing_Adj: number=0;
     @JsonProperty("Z_Rebate_Adj", IntConverter,false)
-    Z_Rebate_Adj: number=undefined;
+    Z_Rebate_Adj: number=0;
     @JsonProperty("Z_Adj_Price", IntConverter,false)
-    Z_Adj_Price: number =undefined;
+    Z_Adj_Price: number =0;
     @JsonProperty("Booking_Ind", IntConverter,false)
-    Booking_Ind: number=undefined;
+    Booking_Ind: number=0;
     @JsonProperty("Status", IntConverter,false)
-    Status: number=undefined;
-
+    Status: number=0;
+    @JsonProperty("ActionStatus", IntConverter,false)
+    ActionStatus: number=0;
     FC_Revenue: number=0;
 }
 

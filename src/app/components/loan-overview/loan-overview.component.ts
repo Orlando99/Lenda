@@ -23,9 +23,9 @@ export class LoanOverviewComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private loanservice: LoanApiService,
-    private localstorageservice:LocalStorageService,
-    private loancalculationservice:LoancalculationWorker,
-    private logging:LoggingService
+    private localstorageservice: LocalStorageService,
+    private loancalculationservice: LoancalculationWorker,
+    private logging: LoggingService
   ) {
 
     let temp = this.route.params.subscribe(params => {
@@ -35,11 +35,11 @@ export class LoanOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    let obj=this.localstorageservice.retrieve(environment.loankey);
-    if((obj==null || obj==undefined))
-    this.getLoanBasicDetails();
-    else{
-      if(obj.Loan_PK_ID!=this.loanid){
+    let obj = this.localstorageservice.retrieve(environment.loankey);
+    if ((obj == null || obj == undefined))
+      this.getLoanBasicDetails();
+    else {
+      if (obj.Loan_PK_ID != this.loanid) {
         this.getLoanBasicDetails();
       }
     }
@@ -49,21 +49,21 @@ export class LoanOverviewComponent implements OnInit {
     console.log(this.loanid)
 
     if (this.loanid != null) {
-      let loaded=false;
+      let loaded = false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
         console.log(res)
-        this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+        this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
 
           let jsonConvert: JsonConvert = new JsonConvert();
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also
-          this.localstorageservice.store(environment.loankey_copy,res.Data);
+          this.localstorageservice.store(environment.loankey_copy, res.Data);
         }
-        else{
+        else {
           this.toaster.error("Could not fetch Loan Object from API")
         }
-        loaded=true;
+        loaded = true;
       });
 
     }
@@ -74,22 +74,22 @@ export class LoanOverviewComponent implements OnInit {
 
   // Navigational Methods
 
-  gotosummary(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/summary")
+  gotosummary() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/summary")
   }
-  gotoborrower(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/borrower")
+  gotoborrower() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/borrower")
   }
-  gotocrop(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/crop")
+  gotocrop() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/crop")
   }
-  gotofarm(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/farm")
+  gotofarm() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/farm")
   }
-  gotobudget(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/budget")
+  gotobudget() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/budget")
   }
-  gotoinsurance(){
-    this.router.navigateByUrl("/home/loanoverview/"+this.loanid+"/insurance")
+  gotoinsurance() {
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/insurance")
   }
 }

@@ -11,20 +11,20 @@ export class LoanApiService {
 
   constructor(private apiservice: ApiService) { }
 
-  getLoanList(pagesize:number,previndex:number) : Observable<ResponseModel>{
-    const route='/api/Loan/GetLoanList?pagesize='+pagesize+'&previndex='+previndex;
-    return this.apiservice.get(route).map(res=>res);
-   }
+  getLoanList(): Observable<ResponseModel> {
+    const route = "/api/Loans/GetAllLoans";
+    return this.apiservice.get(route).map(res => res);
+  }
 
-   getLoanById(loanid:number) : Observable<ResponseModel>{
-    const route='/api/Loans/GetLoanbyId?loanid='+loanid;
-   return this.apiservice.get(route).map(res=>res);
-   }
+  getLoanById(loanid: number): Observable<ResponseModel> {
+    const route = '/api/Loans/GetLoanbyId?loanid=' + loanid;
+    return this.apiservice.get(route).map(res => res);
+  }
 
-   syncloanobject(loanobj:loan_model) :Observable<ResponseModel>{
-    const route='/api/Loan/SyncLoanObject';
-    return this.apiservice.post(route,loanobj).map(res=>res);
-   }
-   
+  syncloanobject(loanobj: loan_model): Observable<ResponseModel> {
+    const route = '/api/Loan/SyncLoanObject';
+    return this.apiservice.post(route, loanobj).map(res => res);
+  }
+
 
 }

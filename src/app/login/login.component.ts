@@ -32,8 +32,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     public toastr: ToastsManager,
     public alertifyService: AlertifyService,
-    public localst:LocalStorageService,
-    public referencedataapi:ReferenceService
+    public localst: LocalStorageService,
+    public referencedataapi: ReferenceService
   ) {
 
     this.authForm = this.fb.group({
@@ -70,18 +70,18 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.username == 'admin' && this.password == 'admin') {
-      this.localst.store(environment.logpriority,Logpriority.Low);
+      this.localst.store(environment.logpriority, Logpriority.Low);
       this.getreferencedata();
-      this.router.navigateByUrl('/home/loanoverview/1/summary');
+      this.router.navigateByUrl("/home/loanoverview/1/summary");
     }
     else {
       this.toastr.error('Invalid username or password');
     }
   }
 
-  getreferencedata(){
-    this.referencedataapi.getreferencedata().subscribe(res=>{
-      this.localst.store(environment.referencedatakey,res.Data);
+  getreferencedata() {
+    this.referencedataapi.getreferencedata().subscribe(res => {
+      this.localst.store(environment.referencedatakey, res.Data);
     })
   }
 

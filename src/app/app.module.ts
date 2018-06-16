@@ -99,6 +99,8 @@ import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
 import { BuyerAssociationComponent } from './components/borrower/buyer-association/buyer-association.component';
+import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
+import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
 
