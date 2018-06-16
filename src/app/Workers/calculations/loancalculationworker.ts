@@ -32,6 +32,7 @@ export class LoancalculationWorker {
     localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
     localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
     localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
+    localloanobj.LoanMaster = localloanobj.LoanMaster;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");
 

@@ -99,6 +99,8 @@ import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
 import { BuyerAssociationComponent } from './components/borrower/buyer-association/buyer-association.component';
+import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
+import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
 
 @NgModule({
@@ -132,7 +134,8 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent
+    
     
   ],
   imports: [
