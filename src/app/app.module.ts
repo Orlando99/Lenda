@@ -138,7 +138,9 @@ import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.
     CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent,
      LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,
      HarvesterComponent,
-     LoanbudgetComponent
+     LoanbudgetComponent,
+     FarmerInfoComponent,
+     BorrowerInfoComponent
     
   ],
   imports: [
