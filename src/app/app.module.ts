@@ -103,6 +103,7 @@ import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-in
 import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
+import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +141,8 @@ import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.
      HarvesterComponent,
      LoanbudgetComponent,
      FarmerInfoComponent,
-     BorrowerInfoComponent
+     BorrowerInfoComponent,
+     LoanbudgetGroupComponent
     
   ],
   imports: [

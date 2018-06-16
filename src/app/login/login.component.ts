@@ -72,7 +72,8 @@ export class LoginComponent implements OnInit {
     if (this.username == 'admin' && this.password == 'admin') {
       this.localst.store(environment.logpriority, Logpriority.Low);
       this.getreferencedata();
-      this.router.navigateByUrl("/home/loans");
+      this.router.navigateByUrl("/home/loanoverview/1/summary");
+      //this.router.navigateByUrl("/home/loans");
     }
     else {
       this.toastr.error('Invalid username or password');

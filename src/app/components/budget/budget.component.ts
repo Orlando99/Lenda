@@ -33,7 +33,7 @@ export class BudgetComponent implements OnInit {
 
   //  }
   public refdata: any = {};
-  private localloanobject: loan_model = new loan_model();
+  public localloanobject: loan_model = new loan_model();
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public insuranceservice: InsuranceapiService,
@@ -42,7 +42,7 @@ export class BudgetComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi:LoanApiService
   ) {
-    
+
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     
   }

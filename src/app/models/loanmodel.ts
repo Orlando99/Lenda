@@ -303,6 +303,14 @@ export class borrower_model
         Notes: string="";
         @JsonProperty("Other_Description_Text", StringConverter,false)
         Other_Description_Text: string="";
+
+        @JsonProperty("Crop_Code", StringConverter,false)
+        Crop_Code: string="";
+        @JsonProperty("Crop_Practice_Type_Code", StringConverter,false)
+        Crop_Practice_Type_Code: string="";
+        @JsonProperty("Budget_Expense_Name", StringConverter,false)
+        Budget_Expense_Name: string="";
+
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
         @JsonProperty("ActionStatus", IntConverter,false)

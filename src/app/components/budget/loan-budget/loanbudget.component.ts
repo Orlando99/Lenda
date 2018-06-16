@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { loan_model, Loan_Association } from '../../../models/loanmodel';
+import { loan_model, Loan_Budget } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -24,7 +24,7 @@ import { JsonConvert } from 'json2typescript';
 export class LoanbudgetComponent implements OnInit {
 
    
-    @Input()  data : any[];
+    @Input() budgetobject : any;
 
   public refdata: any = {};
   indexsedit = [];
@@ -32,14 +32,15 @@ export class LoanbudgetComponent implements OnInit {
   private localloanobject: loan_model = new loan_model();
   public syncenabled = true;
   // Aggrid
-  public rowData = new Array<Loan_Association>();
+  public rowData = new Array<Loan_Budget>();
   public components;
   public context;
   public frameworkcomponents;
   public editType;
-  public pinnedBottomRowData = [];
+  public pinnedBottomRowData :any;
   private gridApi;
   private columnApi;
+  public getRowStyle;
   //region Ag grid Configuration
 
 
@@ -71,27 +72,39 @@ export class LoanbudgetComponent implements OnInit {
     //Coldef here
     
     this.columnDefs = [
-      
-      { headerName: 'Harvester', field: 'Assoc_Name',  editable: true },      
-      { headerName: 'Contact', field: 'Contact',  editable: true },
-      { headerName: 'Location', field: 'Location',  editable: true },
-      { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+        
+      { headerName: 'Expense', field: 'Budget_Expense_Name', width:220,  editable: false },   
+      { headerName: "Per Acre Budget",
+        children: [   
+      { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true },
+      { headerName: 'Total', field: 'BudgetTotal_Acre',width:120, editable: false},
+        ]},
+      { headerName: "Crop Budget",
+        children: [   
+      { headerName: 'ARM', field: 'ARM_Budget_Crop',width:120,  editable: false },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',width:120,  editable: false },
+      { headerName: 'Total', field: 'BudgetTotal_Crop',width:120, editable: false},
+       ]}
     ];
     ///
     this.context = { componentParent: this };
+    this.getRowStyle = function(params) {
+        if (params.node.rowPinned) {
+          return { "font-weight": "bold","background-color":"#F5F7F7" };
+        }
+      };
+    this.pinnedBottomRowData = FooterData(1, "Bottom");
   }
   ngOnInit() {  
-debugger
+
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
       
       //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code== "HAR");
-
+      this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
+      this.GetTotals();
     });
   
 
@@ -104,7 +117,9 @@ debugger
     //if (obj != null && obj != undefined) {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
+      
+      this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
+      this.GetTotals();
     }
   }
 
@@ -115,13 +130,13 @@ debugger
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;  
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="HAR").length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="HAR")[rowIndex]=value.data;
+      var rowIndex=this.localloanobject.LoanBudget.length;
+      this.localloanobject.LoanBudget[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 ).findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR")[rowindex]=obj;
+      this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 )[rowindex]=obj;
     }
     debugger
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -155,17 +170,15 @@ debugger
   //Grid Events
   addrow() {
     debugger    
-    var newItem = new Loan_Association();
-    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
-    newItem.Assoc_Type_Code="HAR";
-    newItem.Preferred_Contact_Ind=1;
+    var newItem = new Loan_Budget();
+    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;  
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
       colKey: "Assoc_Name"
     });
-    this.localloanobject.Association.push(newItem);
+    this.localloanobject.LoanBudget.push(newItem);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -173,10 +186,10 @@ debugger
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         debugger
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR")[rowIndex];
+        var obj = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 )[rowIndex];
         if (obj.Assoc_ID == 0) {
-            var data=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
-          this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR").splice(rowIndex, 1);
+            var data=this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 );
+          this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 ).splice(rowIndex, 1);
         }
         else {
           obj.ActionStatus = -1;
@@ -187,10 +200,35 @@ debugger
 
   }
 
-  
-  //
 
+  GetTotals()
+  {
+    this.pinnedBottomRowData[0].ARM_Budget_Acre=this.localloanobject.LoanBudget.map(c => c.ARM_Budget_Acre).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].Third_Party_Budget_Acre=this.localloanobject.LoanBudget.map(c => c.Third_Party_Budget_Acre).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].BudgetTotal_Acre=this.localloanobject.LoanBudget.map(c => c.BudgetTotal_Acre).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].ARM_Budget_Crop=this.localloanobject.LoanBudget.map(c => c.ARM_Budget_Crop).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].Third_Party_Budget_Crop=this.localloanobject.LoanBudget.map(c => c.Third_Party_Budget_Crop).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c => c.BudgetTotal_Crop).reduce((sum, current) => sum + current);
+
+  }
+  //
 }
 
+
+function FooterData(count, prefix) {
+  var result = [];
+  for (var i = 0; i < count; i++) {
+    result.push({
+      Budget_Expense_Name:'Total:',
+      ARM_Budget_Acre: 0,
+      Third_Party_Budget_Acre:  0,
+      BudgetTotal_Acre:  0  ,
+      ARM_Budget_Crop: 0,
+      Third_Party_Budget_Crop:  0,
+      BudgetTotal_Crop:  0  ,
+    });
+  }
+  return result;
+}
 
 

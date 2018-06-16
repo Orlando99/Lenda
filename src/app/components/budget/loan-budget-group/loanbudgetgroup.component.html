@@ -5,25 +5,25 @@
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-            Budget : {{budgetobject.Crop}} ( {{ budgetobject.CropYield||0 }} ac)
+            Budget : Total Expenses 
         </mat-panel-title>
       </mat-expansion-panel-header>  
         
             <div class="container bottom">
               <div class="row">
               <ag-grid-angular 
-              style="width: 75%; height: 250px;" 
+              style="width: 45%; height: 250px;" 
               class="ag-theme-balham"
               [context]="context"
               [frameworkComponents]="frameworkcomponents"
               [components]="components"
-              (rowEditingStopped)="rowvaluechanged($event)"
-              [rowData]="rowData" 
+              [rowData]="rowDataGroup" 
               [editType]="editType"
               (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs"
+              [columnDefs]="columnDefs"             
+              [pinnedBottomRowData]="pinnedBottomRowData"
               [getRowStyle]="getRowStyle"
-              [pinnedBottomRowData]="pinnedBottomRowData">
+              >
               </ag-grid-angular>
               </div>
             </div>
