@@ -4,5 +4,22 @@
     <app-distributer></app-distributer>
     <app-thirdparty></app-thirdparty>
     <app-harvester></app-harvester>
+
+    <br>
+    
+<ul>
+       {{localloanobject.CropYield}}
+    <!-- <li *ngFor="let item of rowData;">
+            {{item.Crop}}
+        <!-- <app-loanbudget></app-loanbudget> 
+    </li> -->
+
+    <li *ngFor=" let item of localloanobject.CropYield">
+            <app-loanbudget [data]="item" 
+                 ></app-loanbudget>
+          </li>
+</ul>
+
+   
     </div>
     
