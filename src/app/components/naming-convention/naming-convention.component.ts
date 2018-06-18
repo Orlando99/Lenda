@@ -144,7 +144,13 @@ export class NamingConventionComponent implements OnInit {
           headerName: 'Status',
           field: 'Status',
           autoHeight: true,
-          width: 100
+          width: 80
+        },
+        {
+          headerName: 'Role',
+          field: 'Role',
+          autoHeight: true,
+          width: 80
         }
       ];
       this.rowSelection = 'multiple';
