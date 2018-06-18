@@ -5,7 +5,7 @@
           Borrower
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <button (click)="synctoDb()" mat-icon-button *ngIf="borrowerInfoForm" [disabled]="!borrowerInfoForm.dirty">
+      <button (click)="synctoDb()" mat-icon-button *ngIf="borrowerInfoForm" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
         <mat-icon>publish</mat-icon>
       </button>
 

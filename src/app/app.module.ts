@@ -102,6 +102,8 @@ import { BuyerAssociationComponent } from './components/borrower/buyer-associati
 import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
 import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
+import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
+import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
 import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 
@@ -136,7 +138,7 @@ import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent,
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent, LoanviewerComponent,
      LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,
      HarvesterComponent,
      LoanbudgetComponent,
@@ -182,6 +184,7 @@ import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/
     MatPaginatorModule,
     MatButtonToggleModule,
     LoadingModule,
+    NgxJsonViewerModule,
     AgGridModule.withComponents([NumericEditor,SelectEditor]),
     ToastModule.forRoot()
   ],
@@ -215,7 +218,8 @@ import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/
     MatSidenavModule,
     MatPaginatorModule,
     MatButtonToggleModule,
-    FocusDirective
+    FocusDirective,
+    NgxJsonViewerModule
   ],
   providers: [
     LocalStorageService,
