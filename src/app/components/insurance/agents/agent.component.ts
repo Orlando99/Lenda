@@ -70,7 +70,7 @@ export class AgentComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Agent', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'Agent', field: 'Assoc_Name', editable: true,cellStyle: {color: 'blue'} },
       // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
       { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
       { headerName: 'Location', field: 'Location',  editable: true,cellStyle: {color: 'blue'} },

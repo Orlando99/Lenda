@@ -21,7 +21,7 @@ export class QuestionsComponent implements OnInit {
   ngOnInit() {
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-
+debugger
     this.RefQuestions = this.refdata.RefQuestions;
     this.LoanQResponse = this.localloanobject.LoanQResponse;
 
