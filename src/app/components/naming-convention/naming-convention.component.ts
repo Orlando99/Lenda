@@ -144,7 +144,14 @@ export class NamingConventionComponent implements OnInit {
           headerName: 'Status',
           field: 'Status',
           autoHeight: true,
-          width: 80
+          width: 80,
+          cellStyle: function(params) {
+            if (params.value == -5) {
+                return {color: 'red'};
+            } else if(params.value == 1) {
+              return {color: 'green'};
+            }
+          }
         },
         {
           headerName: 'Role',
