@@ -25,7 +25,8 @@ export class FarmerInfoComponent implements OnInit {
     public logging: LoggingService) {
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj) {
+
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
       this.createForm(this.localloanobj.LoanMaster[0]);
     }
 
@@ -47,7 +48,7 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_DOB: [formData.Farmer_DOB ? this.formatDate(formData.Farmer_DOB) : '', [Validators.required,Validators.pattern]],
       Year_Begin_Farming: [formData.Year_Begin_Farming || '', Validators.required],
       Year_Begin_Client: [formData.Year_Begin_Client || '', Validators.required],
-      
+
     })
 
     this.farmerInfoForm.valueChanges.forEach(

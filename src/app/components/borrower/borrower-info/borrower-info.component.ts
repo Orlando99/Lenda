@@ -22,7 +22,7 @@ export class BorrowerInfoComponent implements OnInit {
     public logging: LoggingService) {
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj) {
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
       this.createForm(this.localloanobj.LoanMaster[0]);
     }
 
@@ -48,7 +48,7 @@ export class BorrowerInfoComponent implements OnInit {
       Spouse_Last_name: [formData.Spouse_Last_name || '', Validators.required],
       Spouse_Phone: [formData.Spouse_Phone || ''],
       Spouse_Email: [formData.Spouse_Email || ''],
-     
+
     })
 
     this.borrowerInfoForm.valueChanges.forEach(
