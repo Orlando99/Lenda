@@ -68,12 +68,12 @@ export class HarvesterComponent implements OnInit {
     
     this.columnDefs = [
       
-      { headerName: 'Harvester', field: 'Assoc_Name',  editable: true },      
-      { headerName: 'Contact', field: 'Contact',  editable: true },
-      { headerName: 'Location', field: 'Location',  editable: true },
-      { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true },
+      { headerName: 'Harvester', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'Location', field: 'Location',  editable: true ,cellStyle: {color: 'blue'}},
+      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

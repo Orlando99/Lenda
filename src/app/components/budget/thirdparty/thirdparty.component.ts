@@ -68,13 +68,13 @@ export class ThirdpartyComponent implements OnInit {
     
     this.columnDefs = [
       
-      { headerName: '3rd Party', field: 'Assoc_Name',  editable: true },      
-      { headerName: 'Contact', field: 'Contact',  editable: true },
+      { headerName: '3rd Party', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
       { headerName: 'Location', field: 'Location',  editable: true },
-      { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true},
-      { headerName: 'Pref Contact', width: 50, field: 'Preferred_Contact_Ind',  editable: true },
-      { headerName: 'Amount', width: 80, field: 'Amount',  editable: true },
+      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Pref Contact', width: 50, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: 'Amount', width: 80, field: 'Amount',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
