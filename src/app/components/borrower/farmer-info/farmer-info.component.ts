@@ -5,7 +5,8 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment';
-import { loan_model } from '../../../models/loanmodel';
+import { loan_model, loan_farmer } from '../../../models/loanmodel';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
 
 @Component({
   selector: 'app-farmer-info',
@@ -18,15 +19,21 @@ export class FarmerInfoComponent implements OnInit {
   localloanobj: loan_model;
   testControl: FormControl = new FormControl();
   stateList : Array<any>;
+  loan_id : number;
+  isSubmitted : boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
 
 
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    public logging: LoggingService) {
+    public logging: LoggingService,
+    private loanApiService : LoanApiService,
+    private toaster: ToastsManager) {
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj) {
+
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
       this.createForm(this.localloanobj.LoanMaster[0]);
+      this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
     }
 
     this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
@@ -47,11 +54,12 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_DOB: [formData.Farmer_DOB ? this.formatDate(formData.Farmer_DOB) : '', [Validators.required,Validators.pattern]],
       Year_Begin_Farming: [formData.Year_Begin_Farming || '', Validators.required],
       Year_Begin_Client: [formData.Year_Begin_Client || '', Validators.required],
-      
+
     })
 
     this.farmerInfoForm.valueChanges.forEach(
       (value: any) => {
+        this.isSubmitted=false;
         this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
         this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
       }
@@ -67,6 +75,20 @@ export class FarmerInfoComponent implements OnInit {
     }
   }
   ngOnInit() {
+  }
+
+  synctoDb(){
+    if(this.farmerInfoForm.valid){
+      this.loanApiService.syncloanfarmer(this.loan_id, this.farmerInfoForm.value as loan_farmer).subscribe((successResponse)=>{
+        this.toaster.success("Farmer details saved successfully");
+        this.isSubmitted= true;
+      },(errorResponse)=>{
+        this.toaster.error("Error Occurered while saving Farmer details");
+        
+      });
+    }else{
+      this.toaster.error("Farmer details form doesn't seems to have data in correct format, please correct them before saving.");
+    }
   }
 
 }

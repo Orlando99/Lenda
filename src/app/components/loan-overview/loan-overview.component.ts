@@ -35,6 +35,8 @@ export class LoanOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getLoanBasicDetails();
+
     let obj = this.localstorageservice.retrieve(environment.loankey);
     if ((obj == null || obj == undefined))
       this.getLoanBasicDetails();

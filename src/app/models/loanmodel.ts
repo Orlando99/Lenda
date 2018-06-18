@@ -303,6 +303,14 @@ export class borrower_model
         Notes: string="";
         @JsonProperty("Other_Description_Text", StringConverter,false)
         Other_Description_Text: string="";
+
+        @JsonProperty("Crop_Code", StringConverter,false)
+        Crop_Code: string="";
+        @JsonProperty("Crop_Practice_Type_Code", StringConverter,false)
+        Crop_Practice_Type_Code: string="";
+        @JsonProperty("Budget_Expense_Name", StringConverter,false)
+        Budget_Expense_Name: string="";
+
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
         @JsonProperty("ActionStatus", IntConverter,false)
@@ -310,7 +318,41 @@ export class borrower_model
 
     }
 
+    export class loan_borrower{
+        Loan_ID  : number;
+        Borrower_Last_Name : string; 
+        Borrower_First_Name  : string;
+        Borrower_MI : string;
+        Borrower_Address : string;
+        Borrower_City : string;
+        Borrower_State_ID : string;
+        Borrower_Zip : number;
+        Borrower_Phone : string;
+        Borrower_email : string;
+        Borrower_DOB : Date;
+        Borrower_SSN_Hash : string;
+        Borrower_Entity_Type_Code : number;
+        Spouse_Last_name : string;
+        Spouse_First_Name : string;
+        Spouse__MI : string;
+        Spouse_Phone : string;
+        Spouse_Email : string;
+    }
 
+    export class loan_farmer{
+        Farmer_SSN_Hash : string;
+        Farmer_Last_Name : string;
+        Farmer_First_Name : string;
+        Farmer_MI : string;
+        Farmer__Address : string;
+        Farmer_City : string;
+        Farmer_State : string;
+        Farmer_Zip : number
+        Farmer_Phone : string;
+        Farmer_Email : string;
+        Year_Begin_Farming : number;
+        Year_Begin_Client :number;
+    }
     export class borrower_income_history_model
     {
         BIH_ID: number=undefined;

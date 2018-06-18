@@ -104,6 +104,8 @@ import { BorrowerInfoComponent } from './components/borrower/borrower-info/borro
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
 import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
+import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
+import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 
 @NgModule({
   declarations: [
@@ -136,8 +138,13 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
     FarmComponent,
     FocusDirective,
     BudgetComponent,
-    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent, LoanviewerComponent
-    
+    CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent, LoanviewerComponent,
+     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,
+     HarvesterComponent,
+     LoanbudgetComponent,
+     FarmerInfoComponent,
+     BorrowerInfoComponent,
+     LoanbudgetGroupComponent
     
   ],
   imports: [

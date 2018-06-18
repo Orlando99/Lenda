@@ -1,0 +1,34 @@
+
+<div class="basic-container">
+
+    <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Budget : Total Expenses 
+        </mat-panel-title>
+      </mat-expansion-panel-header>  
+        
+            <div class="container bottom">
+              <div class="row">
+              <ag-grid-angular 
+              style="width: 45%; height: 250px;" 
+              class="ag-theme-balham"
+              [context]="context"
+              [frameworkComponents]="frameworkcomponents"
+              [components]="components"
+              [rowData]="rowDataGroup" 
+              [editType]="editType"
+              (gridReady)="onGridReady($event)"
+              [columnDefs]="columnDefs"             
+              [pinnedBottomRowData]="pinnedBottomRowData"
+              [getRowStyle]="getRowStyle"
+              >
+              </ag-grid-angular>
+              </div>
+            </div>
+            <br>
+    </mat-expansion-panel>
+    </mat-accordion>
+   
+  </div>

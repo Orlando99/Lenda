@@ -5,7 +5,8 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment';
-import { loan_model } from '../../../models/loanmodel';
+import { loan_model, loan_borrower } from '../../../models/loanmodel';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -16,14 +17,19 @@ export class BorrowerInfoComponent implements OnInit {
   borrowerInfoForm: FormGroup;
   localloanobj: loan_model;
   stateList : Array<any>;
+  loan_id : number;
+  isSubmitted : boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
 
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    public logging: LoggingService) {
+    public logging: LoggingService,
+    private loanApiService : LoanApiService,
+    private toaster: ToastsManager) {
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj) {
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
       this.createForm(this.localloanobj.LoanMaster[0]);
+      this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
     }
 
     this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
@@ -48,11 +54,12 @@ export class BorrowerInfoComponent implements OnInit {
       Spouse_Last_name: [formData.Spouse_Last_name || '', Validators.required],
       Spouse_Phone: [formData.Spouse_Phone || ''],
       Spouse_Email: [formData.Spouse_Email || ''],
-     
+
     })
 
     this.borrowerInfoForm.valueChanges.forEach(
       (value: any) => {
+        this.isSubmitted=false;
         this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
         this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
       }
@@ -67,6 +74,20 @@ export class BorrowerInfoComponent implements OnInit {
       return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
     } else {
       return '';
+    }
+  }
+
+  synctoDb(){
+    if(this.borrowerInfoForm.valid){
+      this.loanApiService.syncloanborrower(this.loan_id, this.borrowerInfoForm.value as loan_borrower).subscribe((successResponse)=>{
+        this.toaster.success("Borrower details saved successfully");
+        this.isSubmitted= true;
+      },(errorResponse)=>{
+        this.toaster.error("Error Occurered while saving borrower details");
+        
+      });
+    }else{
+      this.toaster.error("Borrower details form doesn't seems to have data in correct format, please correct them before saving.");
     }
   }
 

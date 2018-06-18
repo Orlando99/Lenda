@@ -4,5 +4,15 @@
     <app-distributer></app-distributer>
     <app-thirdparty></app-thirdparty>
     <app-harvester></app-harvester>
-    </div>
+
+    <app-loanbudget-group></app-loanbudget-group>
+    
+     
+    
+            <app-loanbudget *ngFor=" let item of localloanobject.CropYield" [budgetobject]="item" 
+                 ></app-loanbudget>
+         
+
+
+ </div>
     

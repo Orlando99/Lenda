@@ -5,13 +5,13 @@
         Farmer
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <button (click)="synctoDb()" mat-icon-button *ngIf="farmerInfoForm" [disabled]="!farmerInfoForm.dirty">
+    <button (click)="synctoDb()" mat-icon-button *ngIf="farmerInfoForm" [disabled]="!farmerInfoForm.dirty || isSubmitted">
       <mat-icon>publish</mat-icon>
     </button>
 
 
     <div class="container bottom width-auto">
-      <div class="row">
+      <div *ngIf="farmerInfoForm" class="row">
         <form [formGroup]="farmerInfoForm">
           <div class="input-field col m3">
 
@@ -51,7 +51,7 @@
           </div>
 
           <div class="input-field col m2">
-           
+
             <mat-form-field id="forceStyle">
               <mat-select placeholder="State" formControlName="Farmer_State">
                 <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev" >
@@ -91,7 +91,7 @@
                 Please enter a valid date
               </mat-error>
             </mat-form-field>
-           
+
           </div>
           <div class="input-field col m2">
             <mat-form-field>
@@ -100,7 +100,7 @@
                 Please enter a valid year
               </mat-error>
             </mat-form-field>
-            
+
           </div>
           <div class="input-field col m2">
             <mat-form-field>
@@ -109,10 +109,8 @@
                 Please enter a valid year
               </mat-error>
             </mat-form-field>
-            
+
           </div>
-
-
 
         </form>
       </div>
