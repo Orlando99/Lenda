@@ -10,6 +10,9 @@ export class Loan_Crop_Unit
     Loan_ID: number=0;
     @JsonProperty("Farm_ID", IntConverter,false)
     Farm_ID: number=0;
+    @JsonProperty("Loan_Full_ID", IntConverter,false)
+    Loan_Full_ID: string='';
+    
     @JsonProperty("CU_Acres", IntConverter,false)
     CU_Acres: number=0;
     @JsonProperty("CU_APH", IntConverter,false)

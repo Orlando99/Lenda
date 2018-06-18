@@ -125,7 +125,7 @@ export class CropYieldInfoComponent implements OnInit {
   synctoDb() {
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode==1){
-        this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
 
           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
           if (res.ResCode == 1) {
@@ -149,7 +149,7 @@ export class CropYieldInfoComponent implements OnInit {
   //Grid Events
   addrow() {
     var newItem = new Loan_Association();
-    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+    newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="AGT";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });

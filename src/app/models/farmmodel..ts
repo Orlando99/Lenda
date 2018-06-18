@@ -5,8 +5,8 @@ export class Loan_Farm
 {
     @JsonProperty("Farm_ID", IntConverter,false)
     Farm_ID: number=undefined;
-    @JsonProperty("Loan_Full_ID", IntConverter,false)
-    Loan_Full_ID: number=0;
+    @JsonProperty("Loan_Full_ID", StringConverter,false)
+    Loan_Full_ID: string='';
     @JsonProperty("Farm_State_ID", IntConverter,false)
     Farm_State_ID: number=0;
     @JsonProperty("Farm_County_ID", IntConverter,false)

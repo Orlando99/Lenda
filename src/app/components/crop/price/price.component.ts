@@ -109,7 +109,7 @@ export class PriceComponent implements OnInit {
     debugger
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode==1){
-       this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
          
          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
          if (res.ResCode == 1) {
@@ -132,7 +132,7 @@ export class PriceComponent implements OnInit {
  addrow() {
   debugger
   var newItem = new Loan_Crop_Unit();
-  newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+  newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
   newItem.Crop_Code="CRN";
   var res = this.rowData.push(newItem);
   this.gridApi.setRowData(this.rowData);

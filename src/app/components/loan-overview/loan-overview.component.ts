@@ -17,7 +17,7 @@ import { LoggingService } from '../../services/Logs/logging.service';
   styleUrls: ['./loan-overview.component.scss']
 })
 export class LoanOverviewComponent implements OnInit {
-  loanid: number;
+  loanid: string;
   constructor(
     private toaster: ToastsManager,
     private router: Router,
@@ -30,7 +30,8 @@ export class LoanOverviewComponent implements OnInit {
 
     let temp = this.route.params.subscribe(params => {
       // Defaults to 0 if no query param provided.
-      this.loanid = +params["id"] || 0;
+      debugger
+      this.loanid = (params["loan"].toString())+"-"+ (params["seq"]);
     });
   }
 
@@ -77,21 +78,26 @@ export class LoanOverviewComponent implements OnInit {
   // Navigational Methods
 
   gotosummary() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/summary")
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/summary")
   }
   gotoborrower() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/borrower")
+    debugger
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/borrower")
   }
   gotocrop() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/crop")
+    debugger
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/crop")
   }
   gotofarm() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/farm")
+    debugger
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/farm")
   }
   gotobudget() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/budget")
+    debugger
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/budget")
   }
   gotoinsurance() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid + "/insurance")
+    debugger
+    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/insurance")
   }
 }

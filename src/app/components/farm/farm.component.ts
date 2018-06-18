@@ -143,7 +143,7 @@ export class FarmComponent implements OnInit {
     debugger
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
-      this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+      this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
 
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
@@ -166,7 +166,7 @@ export class FarmComponent implements OnInit {
   //Grid Events
   addrow() {
     var newItem = new Loan_Farm();
-    newItem.Loan_Full_ID=this.localloanobject.Loan_PK_ID;
+    newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     var res = this.rowData.push(newItem);
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({

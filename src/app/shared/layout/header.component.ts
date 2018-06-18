@@ -18,7 +18,7 @@ import { loan_model } from '../../models/loanmodel';
 
 export class HeaderComponent implements OnInit {
   _res: any = {}
- loanid=1;
+ loanid="000001-000";
  public value:number=1;
   constructor(
     private globalService: GlobalService,

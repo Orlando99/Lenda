@@ -130,7 +130,7 @@ export class YieldComponent implements OnInit {
       });
     });
    
-       this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
          
          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
          if (res.ResCode == 1) {

@@ -106,6 +106,7 @@ import { LoanviewerComponent } from './components/loanviewer/loanviewer.componen
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
 import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
+import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
 
 @NgModule({
   declarations: [
@@ -119,7 +120,7 @@ import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/
     DashboardComponent,
     MasterComponent,
     AlertComponent,
-    ConfirmComponent,
+    EmailEditor,
     FooterComponent,
     HeaderComponent,
     SummaryComponent,
@@ -242,7 +243,7 @@ import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/
     InsuranceapiService
     
   ],
-  entryComponents:[DeleteButtonRenderer,ConfirmComponent],
+  entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

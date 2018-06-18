@@ -37,7 +37,7 @@ const appRoutes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'loans', component: LoanListComponent },
       { path: 'Loanobjectpreview', component: LoanviewerComponent },
-      { path: 'loanoverview/:id', component: LoanOverviewComponent,children:[
+      { path: 'loanoverview/:loan/:seq', component: LoanOverviewComponent,children:[
         { path: 'summary', component: SummaryComponent },
         { path: 'borrower', component: BorrowerComponent },
         { path: 'crop', component: CropComponent },

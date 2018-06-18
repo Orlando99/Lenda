@@ -15,6 +15,7 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-agent',
@@ -23,6 +24,7 @@ import { JsonConvert } from 'json2typescript';
 })
 export class AgentComponent implements OnInit {
   public refdata: any = {};
+  public isgriddirty:boolean;
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -59,7 +61,7 @@ export class AgentComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi:LoanApiService
   ) {
-    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
+    this.frameworkcomponents = { emaileditor:EmailEditor,selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -73,7 +75,7 @@ export class AgentComponent implements OnInit {
       { headerName: 'Contact', field: 'Contact',  editable: true },
       { headerName: 'Location', field: 'Location',  editable: true },
       { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true},
+      { headerName: 'Email', field: 'Email', editable: true,cellEditor:"emaileditor"},
       { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
@@ -114,6 +116,7 @@ export class AgentComponent implements OnInit {
 
 
   rowvaluechanged(value: any) {
+    debugger
     var obj = value.data;
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
@@ -132,7 +135,7 @@ export class AgentComponent implements OnInit {
   synctoDb() {
   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
     if(res.ResCode==1){
-     this.loanapi.getLoanById(this.localloanobject.Loan_PK_ID).subscribe(res => {
+     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
 
        this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
        if (res.ResCode == 1) {
@@ -164,7 +167,7 @@ export class AgentComponent implements OnInit {
     //   colKey: "Assoc_ID"
     // });
     var newItem = new Loan_Association();
-    newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
+    newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="AGT";
     newItem.Preferred_Contact_Ind=1;
     var res = this.rowData.push(newItem);
