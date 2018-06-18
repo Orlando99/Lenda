@@ -70,13 +70,13 @@ export class AgentComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Agent', field: 'Assoc_Name',  editable: true },
+      { headerName: 'Agent', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },
       // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
-      { headerName: 'Contact', field: 'Contact',  editable: true },
-      { headerName: 'Location', field: 'Location',  editable: true },
-      { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true,cellEditor:"emaileditor"},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true },
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'Location', field: 'Location',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellStyle: {color: 'blue'} },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

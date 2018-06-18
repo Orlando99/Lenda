@@ -2,10 +2,23 @@
   <mat-card-title>Naming Conventions</mat-card-title>
 
   <button name="btndelete" mat-raised-button color="accent" (click)="Deleterow()">Delete</button>
-  <mat-form-field class="example-full-width">
-    <mat-icon matPrefix >search</mat-icon>
-    <input type="text" (click)="search($event)" (change)="search($event)" matInput placeholder="Search">
-</mat-form-field>
+  <mat-grid-list cols="2" rowHeight="2:.3">
+      <mat-grid-tile  >
+        <mat-form-field class="grid-list">
+          <mat-icon matPrefix >search</mat-icon>
+          <input type="text" (click)="search($event)" (change)="search($event)" matInput placeholder="Search">
+        </mat-form-field>
+      </mat-grid-tile>
+      <mat-grid-tile>
+        <mat-form-field class="grid-list">
+          <mat-select placeholder="New_LM_Table" [(ngModel)]="selectedValue">
+            <mat-option *ngFor="let table of tables" [value]="table">{{table}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button mat-raised-button color="accent" (click)="filterLM()">Go</button>
+      </mat-grid-tile>
+  </mat-grid-list>
+
   <div class="my-container">
     <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
 

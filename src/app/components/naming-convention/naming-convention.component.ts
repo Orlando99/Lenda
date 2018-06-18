@@ -11,13 +11,14 @@ import { NumericEditor } from '../../aggridfilters/numericaggrid';
 import { AggridTxtAreaComponent } from '../../aggridfilters/textarea';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { MAT_LABEL_GLOBAL_OPTIONS } from '@angular/material';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-naming-convention',
   templateUrl: './naming-convention.component.html',
   styleUrls: ['./naming-convention.component.scss'],
   providers: [
-    {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: {float: 'never'}}
+    {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: {float: 'auto'}}
   ]
 })
 
@@ -36,12 +37,16 @@ export class NamingConventionComponent implements OnInit {
   editing = {};
   rows = [];
   public allColumnIds = [];
+  private selectedValue = 'All';
+  private tables=[]
+  private unfilteredRow;
 
   constructor(
     private toaster: ToastsManager,
     private namingconventionservice: NamingConventionapiService,
     private localstorageservice: LocalStorageService) {
-
+        this.tables=['All']
+       
     }
 
     onGridReady(params) {
@@ -134,6 +139,25 @@ export class NamingConventionComponent implements OnInit {
           autoHeight: true,
           cellEditor: 'agLargeTextCellEditor',
           width: 250, editable:  true
+        },
+        {
+          headerName: 'Status',
+          field: 'Status',
+          autoHeight: true,
+          width: 80,
+          cellStyle: function(params) {
+            if (params.value == -5) {
+                return {color: 'red'};
+            } else if(params.value == 1) {
+              return {color: 'green'};
+            }
+          }
+        },
+        {
+          headerName: 'Role',
+          field: 'Role',
+          autoHeight: true,
+          width: 80
         }
       ];
       this.rowSelection = 'multiple';
@@ -162,15 +186,25 @@ export class NamingConventionComponent implements OnInit {
       this.loading = true;
       this.namingconventionservice.getNamingConventionList().subscribe(res => {
         if (res.ResCode === 1) {
+          this.unfilteredRow = res.Data
           this.rows = res.Data;
           if (res.Data === null) {
             this.rows = [];
           }
           this.rows.push({});
+
+          this.rows.forEach(val => {
+            if(this.tables.indexOf(val.New_LM_Table) === -1){
+              this.tables.push(val.New_LM_Table);     
+             } 
+          })
+
         }
+        
         this.loading = false;
       });
     }
+
     onSelectionChanged() {
       this.selectedrows = this.gridApi.getSelectedRows();
       if (this.selectedrows.length > 0) {
@@ -220,4 +254,18 @@ export class NamingConventionComponent implements OnInit {
           this.loading = false;
     });
   }
+
+  filterLM(){
+    if(this.selectedValue === 'All'){
+      this.rows = this.unfilteredRow;
+    }else{
+      this.rows = this.unfilteredRow;
+      let newRow = this.rows.filter(e =>{
+        if(e.New_LM_Table === this.selectedValue){
+          return e;}
+      });
+      this.rows = newRow;
+    }
+  }
+  
 }

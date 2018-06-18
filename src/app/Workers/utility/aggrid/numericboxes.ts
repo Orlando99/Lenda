@@ -3,10 +3,22 @@ import { isNumber } from "util";
 //Numeric cell editor config
 export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
-      if(parseFloat(charStr)!=NaN)
-      return true;
-      else
-      return false;
+      // if(parseFloat(charStr)!=NaN)
+      // return true;
+      // else
+      // return false;
+      return !!/\d/.test(charStr);
+     //if(charStr.indexOf('.') > -1 && parseFloat(charStr).toString().indexOf('.') <=-1)
+
+    //  if(/^[\d.]/.test(charStr)){
+    //   if(charCode== 46 && charStr.indexOf('.')!=-1 ){
+    //   return false;
+    //   } 
+    //   return true;
+    //  }
+    
+     //return !!/^[\d.]/.test(charStr);
+    
     }
     
     function isKeyPressedNumeric(event) {
@@ -25,22 +37,34 @@ export function getNumericCellEditor() {
       this.eInput = document.createElement("input");
       this.eInput.style.width = "100%";
       this.eInput.style.height = "100%";
-      this.eInput.value = params.value;
-      var that = this;
-      this.eInput.addEventListener("input", function (event) {
+
+
+      // this.eInput.value = params.value;
+      // var that = this;
+      // this.eInput.addEventListener("input", function (event) {
         
-        if (parseFloat(event.srcElement.value)!=NaN) {
-          if(event.srcElement.value.indexOf('.') > -1 && parseFloat(event.srcElement.value).toString().indexOf('.') <=-1)
-          event.srcElement.value=parseFloat(event.srcElement.value)+'.';
-          else{
-            event.srcElement.value=parseFloat(event.srcElement.value);
-          }
+      //   //if (parseFloat(event.srcElement.value)!=NaN) {
+      //     if (isCharNumeric(event.srcElement.value)) {
+      //     if(event.srcElement.value.indexOf('.') > -1 && parseFloat(event.srcElement.value).toString().indexOf('.') <=-1)
+      //     event.srcElement.value=parseFloat(event.srcElement.value)+'.';
+      //     else{
+      //       event.srcElement.value=parseFloat(event.srcElement.value);
+      //     }
+      //     that.eInput.focus();
+      //     if (event.preventDefault) event.preventDefault();
+      //   }
+      //   else{
+          
+      //    // event.srcElement.value=0;
+      //   }
+      // });
+     
+      this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
+      var that = this;
+      this.eInput.addEventListener("keypress", function(event) {
+        if (!isKeyPressedNumeric(event)) {
           that.eInput.focus();
           if (event.preventDefault) event.preventDefault();
-        }
-        else{
-          
-          event.srcElement.value=0;
         }
       });
     };
@@ -73,11 +97,12 @@ export function getNumericCellEditor() {
   }
   
 export function numberValueSetter(params) {
-    if(params.newValue==undefined || params.newValue==null)
-    params.newValue=0;
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
+    params.newValue=0;    
     var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;
     return true;
   }
+  
   
   //Numeric cell editor config Ends

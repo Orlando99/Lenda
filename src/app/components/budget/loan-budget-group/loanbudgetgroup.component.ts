@@ -114,9 +114,9 @@ export class LoanbudgetGroupComponent implements OnInit {
   }
    GetTotals()
   {
-    this.pinnedBottomRowData[0].ARM_Budget_Crop=this.localloanobject.LoanBudget.map(c => c.ARM_Budget_Crop).reduce((sum, current) => sum + current);
-    this.pinnedBottomRowData[0].Third_Party_Budget_Crop=this.localloanobject.LoanBudget.map(c => c.Third_Party_Budget_Crop).reduce((sum, current) => sum + current);
-    this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c => c.BudgetTotal_Crop).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].ARM_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.ARM_Budget_Crop||'0')).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].Third_Party_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.Third_Party_Budget_Crop||'0')).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c =>parseFloat( c.BudgetTotal_Crop||'0')).reduce((sum, current) => sum + current);
 
   }
   //

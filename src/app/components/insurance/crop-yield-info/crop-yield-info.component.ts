@@ -70,13 +70,13 @@ export class CropYieldInfoComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Crop', field: 'Crop',  editable: true },
+      { headerName: 'Crop', field: 'Crop',  editable: true,cellStyle: {color: 'blue'} },
       { headerName: '2012', field: '2012',  editable: false },
-      { headerName: '2013', field: '2013',  editable: true },
-      { headerName: '2014', field: '2014', editable: true},
-      { headerName: '2015', field: '2015', editable: true},
-      { headerName: '2016', field: '2016', editable: true},
-      { headerName: '2017', field: '2017', editable: true},
+      { headerName: '2013', field: '2013',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: '2014', field: '2014', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: '2015', field: '2015', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: '2016', field: '2016', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: '2017', field: '2017', editable: true,cellStyle: {color: 'blue'}},
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
