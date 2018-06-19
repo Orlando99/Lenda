@@ -15,11 +15,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr style="cursor:pointer" (click)="navigatetoloan(loan.Id)" *ngFor="let loan of loanlist">
+          <tr style="cursor:pointer" (click)="navigatetoloan(loan.Loan_Full_ID)" *ngFor="let loan of loanlist">
 
-            <th scope="row">{{loan.Loan_ID}}</th>
+            <th scope="row">{{loan.Loan_Full_ID}}</th>
             <td>
-              <a [routerLink]="['/home','loanoverview', loan.Loan_ID, 'summary']"> {{loan.Loan_Full_ID}} </a>
+               {{loan.Loan_Full_ID}}
             </td>
             <td>{{(loan.Borrower_First_Name ||'') +' '+ (loan.Borrower_Last_Name||'')}}</td>
             <td>{{loan.Application_Date | date:short}}</td>

@@ -27,7 +27,8 @@ export class LoanListComponent implements OnInit {
     });
   }
 
-  navigatetoloan(id: number) {
-    this.route.navigateByUrl("/master/loanoverview/"+id+"/summary");
+  navigatetoloan(id: string) {
+    debugger
+    this.route.navigateByUrl("/home/loanoverview/"+id.replace("-","/")+"/summary");
   }
 }
