@@ -1,0 +1,70 @@
+ <!-- Balance sheet-->
+ <div>
+    <div class="row table-row">
+      <div class="col s7 cell text-left">
+        <span class="font-weight-600 section-heading">Balance sheet</span>
+      </div>
+    </div>
+    <div class="row table-row" *ngFor="let row of balanceSheetConfig.data; let i=index" [class.background-hightlight]="balanceSheetConfig.highlightRowsIndex.indexOf(i) >= 0" >
+      <div class="col s2 cell text-left">{{row.col1}}</div>
+      <div class="col s4 cell text-right">
+        <span class="float-left">$</span> {{row.amount}}</div>
+      <div class="col s2 cell push-s1 text-left">{{row.col3}}</div>
+      <div class="col s4 cell text-right"> {{row.col4}}</div>
+
+    </div>
+   
+
+  </div>
+
+
+  <!-- Revenue-->
+  <div>
+    
+    <div class="row table-row">
+      <div class="col s3 cell text-left">
+        <span class="font-weight-600  section-heading"> Revenue </span>
+      </div>
+      <div class="col s3 cell text-right column-header">Acres</div>
+      <div class="col s2 cell text-right column-header"> Yield</div>
+      <div class="col s4 cell text-right column-header">
+        Revenue</div>
+    </div>
+    <div class="row table-row"  *ngFor="let row of revenueConfig.data; let i=index" [class.background-hightlight]="revenueConfig.highlightRowsIndex.indexOf(i) >= 0">
+      <div class="col s3 cell text-left">{{row.revenueType}}</div>
+      <div class="col s3 cell text-right">{{row.acers}}</div>
+      <div class="col s2 cell text-right"> {{row.yield}}</div>
+      <div class="col s4 cell text-right">
+        <span class="float-left">$</span> {{row.revenueAmount}}</div>
+    </div>
+    
+  </div>
+
+  <!-- Collateral-->
+  <div>
+      <div class="row table-row">
+        <div class="col s3 cell text-left">
+          <span class="font-weight-600 section-heading"> Collateral </span>
+        </div>
+        <div class="col s3 cell text-right column-header">Ins Value</div>
+        <div class="col s3 cell text-right column-header"> Disc Ins Value</div>
+        <div class="col s3 cell text-right column-header">
+          % Commit</div>
+      </div>
+      <div class="row table-row"  *ngFor="let row of collateralConfig.data; let i=index" [class.background-hightlight]="collateralConfig.highlightRowsIndex.indexOf(i) >= 0">
+          <div class="col s3 cell text-left">
+            {{row.collateralType}}
+          </div>
+          <div class="col s3 cell text-right">
+              <span class="float-left">$</span> {{row.insValue}}
+          </div>
+          <div class="col s3 cell text-right"> 
+              <span class="float-left">$</span> {{row.discInsValue}}
+          </div>
+          <div class="col s3 cell text-right">
+            {{row.commitPer}}</div>
+        </div>
+        
+      
+
+    </div>

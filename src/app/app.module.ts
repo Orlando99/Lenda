@@ -107,6 +107,10 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
 import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
+import { WorkInProgressComponent } from './components/work-in-progress/work-in-progress.component';
+import { FinanceStatsComponent } from './components/work-in-progress/finance-stats/finance-stats.component';
+import { ExceptionsComponent } from './components/work-in-progress/exceptions/exceptions.component';
+import { ConditionsComponent } from './components/work-in-progress/conditions/conditions.component';
 import {NotificationFeedsService} from './shared/notification-feeds/notification-feeds.service';
 import {NotificationFeedsComponent} from './shared/notification-feeds/notification-feeds.component';
 import {SidebarComponent} from './shared/layout/sidebar.component';
@@ -149,8 +153,12 @@ import {SidebarComponent} from './shared/layout/sidebar.component';
      FarmerInfoComponent,
      BorrowerInfoComponent,
      LoanbudgetGroupComponent,
-    NotificationFeedsComponent,
-    SidebarComponent
+     WorkInProgressComponent,
+     FinanceStatsComponent,
+     ExceptionsComponent,
+     ConditionsComponent,
+      NotificationFeedsComponent,
+      SidebarComponent
 
   ],
   imports: [

@@ -97,6 +97,7 @@ export class LoanOverviewComponent implements OnInit {
     debugger
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/budget")
   }
+
   gotoinsurance() {
     debugger
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/insurance")
