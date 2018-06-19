@@ -54,6 +54,7 @@ export class LoanbudgetComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
 
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -74,7 +75,7 @@ export class LoanbudgetComponent implements OnInit {
     
     this.columnDefs = [
         
-      { headerName: 'Expense', field: 'Budget_Expense_Name', width:220,  editable: false },   
+      { headerName: 'Expense', field: 'Budget_Expense_Name',  editable: false },   
       { headerName: "Per Acre Budget",
         children: [   
       { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: changeCellStyle,
@@ -86,10 +87,10 @@ export class LoanbudgetComponent implements OnInit {
         ]},
       { headerName: "Crop Budget",
         children: [   
-      { headerName: 'ARM', field: 'ARM_Budget_Crop',width:120,  editable: false },
-      { headerName: 'Distributer', field: 'Distributor_Budget_Crop', width:120,  editable: false },
-      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',width:120,  editable: false },
-      { headerName: 'Total', field: 'BudgetTotal_Crop',width:120, editable: false},
+      { headerName: 'ARM', field: 'ARM_Budget_Crop',  editable: false },
+      { headerName: 'Distributer', field: 'Distributor_Budget_Crop',   editable: false },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',  editable: false },
+      { headerName: 'Total', field: 'BudgetTotal_Crop', editable: false},
        ]}
     ];
     ///
@@ -152,7 +153,7 @@ export class LoanbudgetComponent implements OnInit {
   }
 
   synctoDb() {
-      debugger
+      
   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
     if(res.ResCode==1){
      this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -178,7 +179,7 @@ export class LoanbudgetComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    debugger    
+        
     var newItem = new Loan_Budget();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;  
     var res = this.rowData.push(newItem);
@@ -194,7 +195,7 @@ export class LoanbudgetComponent implements OnInit {
     
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        debugger
+        
         var obj = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 )[rowIndex];
         if (obj.Assoc_ID == 0) {
             var data=this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 );
@@ -212,7 +213,7 @@ export class LoanbudgetComponent implements OnInit {
 
   GetTotals()
   {
-    debugger
+    
     this.pinnedBottomRowData[0].ARM_Budget_Acre=this.localloanobject.LoanBudget.map(c => parseFloat(c.ARM_Budget_Acre||'0')).reduce((sum, current) => sum +current);
     this.pinnedBottomRowData[0].Third_Party_Budget_Acre=this.localloanobject.LoanBudget.map(c => parseFloat( c.Third_Party_Budget_Acre||'0')).reduce((sum, current) => sum + current);
     this.pinnedBottomRowData[0].BudgetTotal_Acre=this.localloanobject.LoanBudget.map(c => parseFloat( c.BudgetTotal_Acre||'0')).reduce((sum, current) => sum + current);

@@ -49,7 +49,7 @@ export class CropYieldInfoComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends

@@ -45,7 +45,7 @@ export class FarmComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -63,7 +63,7 @@ export class FarmComponent implements OnInit {
     //Coldef here
     this.columnDefs = [
       {
-        headerName: 'State', field: 'Farm_State_ID', width: 80, editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'State', field: 'Farm_State_ID',  editable: true, cellEditor: "agSelectCellEditor",
         cellEditorParams: {
           values: extractStateValues(this.refdata.StateList)
         },
@@ -73,28 +73,28 @@ export class FarmComponent implements OnInit {
         valueSetter: Statevaluesetter
       },
       {
-        headerName: 'County', field: 'Farm_County_ID', width: 80, editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'County', field: 'Farm_County_ID',  editable: true, cellEditor: "agSelectCellEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
           return lookupCountyValue(params.value);
         },
         valueSetter: Countyvaluesetter
       },
-      { headerName: '% Prod', field: 'Prod', width: 80, editable: false },
-      { headerName: 'Landlord', field: 'Landowner', editable: true, width: 80 },
-      { headerName: 'FSN', field: 'FSN', editable: true, width: 80 },
-      { headerName: 'Section', field: 'Section', width: 80, editable: true },
-      { headerName: 'Rated', field: 'Rated', width: 80, editable: true },
-      { headerName: 'Rent', field: 'Share_Rent', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Rent UoM', field: 'RentUoM', width: 80, editable: true },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', editable: true, width: 80 },
-      { headerName: 'Waived', field: 'Cash_Rent_Waived', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: '% Rent', field: 'Rentperc', width: 80, editable: true },
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', width: 80, editable: true },
-      { headerName: 'IR Acres', field: 'Irr_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'NI Acres', field: 'NI_Acres', width: 80, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres', width: 80 },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: '% Prod', field: 'Prod',  editable: false },
+      { headerName: 'Landlord', field: 'Landowner', editable: true },
+      { headerName: 'FSN', field: 'FSN', editable: true },
+      { headerName: 'Section', field: 'Section',  editable: true },
+      { headerName: 'Rated', field: 'Rated',  editable: true },
+      { headerName: 'Rent', field: 'Share_Rent',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Rent UoM', field: 'RentUoM',  editable: true },
+      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', editable: true },
+      { headerName: 'Waived', field: 'Cash_Rent_Waived',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: '% Rent', field: 'Rentperc',  editable: true },
+      { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  editable: true },
+      { headerName: 'IR Acres', field: 'Irr_Acres',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'NI Acres', field: 'NI_Acres',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Total Acres', field: 'FC_Total_Acres'},
+      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];
     ///

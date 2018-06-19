@@ -37,8 +37,8 @@ export class NamingConventionComponent implements OnInit {
   editing = {};
   rows = [];
   public allColumnIds = [];
-  private selectedValue = 'All';
-  private tables=[]
+  public selectedValue = 'All';
+  public tables=[]
   private unfilteredRow;
 
   constructor(

@@ -38,6 +38,7 @@ export class LoancropunitcalculationworkerService {
     this.input.LoanCropUnitFCvalues.FC_TotalCashFlow=this.input.LoanCropUnitFCvalues.FC_TotalRevenue- this.input.LoanCropUnitFCvalues.FC_TotalBudget-this.input.LoanCropUnitFCvalues.FC_EstimatedInterest
   }
   prepareLoancropunitmodel(input:loan_model):loan_model{
+    try{
     this.input=input;
     this.prepare_crops_revenue();
     this.prepare_crops_subtotalacres();
@@ -47,5 +48,9 @@ export class LoancropunitcalculationworkerService {
     this.prepare_crops_estimatedinterest();
     this.prepare_crops_totalcashflow();
     return this.input;
+    }
+    catch{
+      return input;
+    }
   }
 }

@@ -11,11 +11,13 @@ import { InsuranceapiService } from '../../../services/insurance/insuranceapi.se
 import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
+
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-agent',
@@ -49,7 +51,7 @@ export class AgentComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends

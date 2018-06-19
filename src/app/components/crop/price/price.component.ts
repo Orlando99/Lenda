@@ -34,6 +34,12 @@ export class PriceComponent implements OnInit {
   public editType;
   private gridApi;
   private columnApi;
+  style = {
+    marginTop: '10px',
+    width: '93%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -48,10 +54,11 @@ export class PriceComponent implements OnInit {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    
     //Coldef here
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop_Code', width: 120, editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop', field: 'Crop_Code',  editable: true, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
@@ -61,23 +68,23 @@ export class PriceComponent implements OnInit {
         valueSetter: Cropvaluesetter
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code', width: 120, editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop type', field: 'Crop_Type_Code',  editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredCropType,
         valueFormatter: function (params) {
           return lookupCropTypeValue(params.value);
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Qty', field: '', width: 120, editable: false },
-      { headerName: 'Contract Price', field: '', width: 120, editable: false  },
-      { headerName: '% Booked', field: 'Booking_Ind', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Ins UOM', field: 'Bu', width: 120, editable: false},
-      { headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" },
+      { headerName: 'Crop Price', field: 'Z_Price',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Adj Price', field: 'Z_Adj_Price',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Contract Qty', field: '',  editable: false },
+      { headerName: 'Contract Price', field: '',  editable: false  },
+      { headerName: '% Booked', field: 'Booking_Ind', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Ins UOM', field: 'Bu',  editable: false},
+      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];
     ///
@@ -90,8 +97,10 @@ export class PriceComponent implements OnInit {
       this.localloanobject = res;
       this.rowData=[];
         this.rowData=this.localloanobject.LoanCropUnits.filter(p=>p.ActionStatus!=3);
+        this.getgridheight();
     })
     this.getdataforgrid();
+    
   }
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
@@ -100,6 +109,7 @@ export class PriceComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCropUnits.filter(p=>p.ActionStatus!=3);
+     
     }
   }
 
@@ -140,6 +150,7 @@ export class PriceComponent implements OnInit {
     rowIndex: this.rowData.length-1,
     colKey: "Crop_Code" 
   });
+  this.getgridheight();
 }
 
 valuechanged(value:any,selectname:any,rowindex:any){
@@ -173,7 +184,7 @@ rowvaluechanged(value: any) {
 onGridReady(params) {
   this.gridApi = params.api;
   this.columnApi = params.columnApi;
-
+  this.getgridheight();
 }
 DeleteClicked(rowIndex: any) {
   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
@@ -181,6 +192,7 @@ DeleteClicked(rowIndex: any) {
       var obj = this.localloanobject.LoanCropUnits[rowIndex];
       if (obj.Loan_CU_ID == 0) {
         this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
+        
       }
       else {
         obj.ActionStatus = 3;
@@ -193,5 +205,10 @@ DeleteClicked(rowIndex: any) {
 
   syncenabled(){
    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
+  }
+
+  getgridheight(){
+    debugger
+   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 }
