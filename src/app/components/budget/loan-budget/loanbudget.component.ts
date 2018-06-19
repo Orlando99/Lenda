@@ -120,9 +120,10 @@ export class LoanbudgetComponent implements OnInit {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
       
-      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
+      if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
       this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
       this.GetTotals();
+      }
     });
   
 
@@ -130,14 +131,12 @@ export class LoanbudgetComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-   // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
-    //if (obj != null && obj != undefined) {
-    if (this.localloanobject != null && this.localloanobject != undefined) {
-      //this.localloanobject = obj;
-      
+    if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
+      if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
       this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
       this.GetTotals();
+      }
     }
   }
 
