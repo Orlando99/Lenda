@@ -62,7 +62,7 @@ export class Borrowercalculationworker {
 
   //ends here
   prepareborrowermodel(input:borrower_model):borrower_model{
-    
+    try{
     this.input=input;
     this.prepare_current_equity();
     this.prepare_intermediate_equity();
@@ -82,6 +82,10 @@ export class Borrowercalculationworker {
     this.prepare_total_DiscValue()
     this.prepare_total_Adjvalue()
     return this.input;
+  }
+  catch{
+    return input;
+  }
   }
 
 
