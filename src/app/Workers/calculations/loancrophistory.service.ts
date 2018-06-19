@@ -39,8 +39,13 @@ export class LoancrophistoryService {
   }
 
   prepareLoancrophistorymodel(input:loan_model):loan_model{
+    try{
     this.input=input;
     this.prepare_Crop_Yield();
     return this.input;
+  }
+  catch{
+    return input;
+  }
   }
 }
