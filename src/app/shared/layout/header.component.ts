@@ -8,6 +8,12 @@ import { NotificationFeedsComponent } from '../notification-feeds/notification-f
 import { SidebarComponent } from '../layout/sidebar.component';
 import { NotificationFeedsService } from '../notification-feeds/notification-feeds.service';
 import { SidebarService } from '../../shared/layout/sidebar.component.service';
+import { ReferenceService } from '../../services/reference/reference.service';
+import { ToastsManager } from 'ng2-toastr';
+import { LoanApiService } from '../../services/loan/loanapi.service';
+import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
+import { JsonConvert } from 'json2typescript';
+import { loan_model } from '../../models/loanmodel';
 
 @Component({
   selector: 'layout-header',
@@ -15,6 +21,7 @@ import { SidebarService } from '../../shared/layout/sidebar.component.service';
 })
 
 export class HeaderComponent implements OnInit {
+  public loanid:string=""
   _res: any = {};
   public value: number = 1;
   toggleActive: boolean = false;
@@ -29,7 +36,18 @@ export class HeaderComponent implements OnInit {
     public localst: LocalStorageService,
     private notificationFeedService: NotificationFeedsService,
     private sideBarService: SidebarService,
-  ) {}
+    public referencedataapi:ReferenceService,
+    public toaster:ToastsManager,
+    public loanservice:LoanApiService,
+    public loancalculation:LoancalculationWorker
+  ) {
+
+    this.localst.observe(environment.loankey).subscribe(res=>{
+      debugger
+            this.loanid=res.Loan_Full_ID.replace("-","/");
+    })
+        this.getloanid();
+  }
 
 
 
@@ -69,6 +87,55 @@ export class HeaderComponent implements OnInit {
       this.decideShow = 'hidden';
     }
     console.log('Clicked');
+  }
+
+  ClearLocalstorage(){
+    this.localst.clear();
+    this.getLoanBasicDetails();
+    this.getreferencedata();
+
+  }
+
+  getLoanBasicDetails() {
+    console.log(this.loanid)
+debugger
+    if (this.loanid != null) {
+      let loaded = false;
+      this.loanservice.getLoanById(this.loanid).subscribe(res => {
+        console.log(res)
+        //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+        if (res.ResCode == 1) {
+
+          let jsonConvert: JsonConvert = new JsonConvert();
+          this.loancalculation.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          //we are making a copy of it also
+          this.localst.store(environment.loankey_copy, res.Data);
+          this.toaster.success("Updated loan Object")
+        }
+        else {
+          this.toaster.error("Could not fetch Loan Object from API")
+        }
+        loaded = true;
+      });
+
+    }
+    else {
+      this.toaster.error("Something went wrong");
+    }
+  }
+  getreferencedata() {
+    this.referencedataapi.getreferencedata().subscribe(res => {
+      this.localst.store(environment.referencedatakey, res.Data);
+    })
+  }
+  getloanid(){
+
+    try{
+      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
+    }
+    catch{
+      
+    }
   }
 }
 

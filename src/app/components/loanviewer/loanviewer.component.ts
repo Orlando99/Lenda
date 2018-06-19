@@ -9,11 +9,12 @@ import { environment } from '../../../environments/environment';
 })
 export class LoanviewerComponent implements OnInit {
   loanobject: any;
-
+  refobject :any;
   constructor(
     public localstorage:LocalStorageService
   ) {
-this.loanobject=this.localstorage.retrieve(environment.loankey);
+    this.loanobject=this.localstorage.retrieve(environment.loankey);
+    this.refobject=this.localstorage.retrieve(environment.referencedatakey);
     
    }
 

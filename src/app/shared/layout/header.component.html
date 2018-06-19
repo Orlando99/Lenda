@@ -15,7 +15,7 @@
 
                 </span>
                 <span class="navLogo" [hidden]="!isExpanded" id="navlogo-main">
-                  <a href="" class="navIcons">
+                  <a href="/home/loans" class="navIcons">
                     <img src="assets/images/lendalogo.png" alt="Lenda Logo">
                   </a>
                   <button [hidden]="isExpanded" mat-icon-button (click)="toggleSideBar($event)">
@@ -66,15 +66,15 @@
               </span> -->
                 <!-- Leaf node buttons here -->
                 <span class="nav-item">
-                  <button mat-button [matMenuTriggerFor]="menu2" primary>Loan
+                  <button mat-button [matMenuTriggerFor]="menu2" primary>Tools
                     <mat-icon>arrow_drop_down</mat-icon>
                   </button>
                   <mat-menu #menu2="matMenu">
                     <button mat-menu-item>
-                      <a [routerLink]="['/home/loanoverview/1/summary']">Ag-Input</a>
+                      <a [routerLink]="['/home/Loanobjectpreview']">Preview Loan Object</a>
                     </button>
                     <button mat-menu-item>
-                      <a>All-In</a>
+                      <a (click)="ClearLocalstorage()">Clear Local Storage</a>
                     </button>
                     <button mat-menu-item>
                       <a>Ag-Pro</a>

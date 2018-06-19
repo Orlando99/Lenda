@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SidebarService } from '../layout/sidebar.component.service';
 import { MatSidenav } from '@angular/material';
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../../environments/environment';
 /**
  * @title Autosize sidenav
  */
@@ -18,12 +20,20 @@ export class SidebarComponent implements OnInit {
   private mainSideBar;
   private mainLogo;
   private minLogo;
-
+  public loanid:string="";
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private sidebarService: SidebarService
-  ) { }
+    private sidebarService: SidebarService,
+    private localstorage:LocalStorageService
+  ) { 
+this.localstorage.observe(environment.loankey).subscribe(res=>{
+  debugger
+        this.loanid=res.Loan_Full_ID.replace("-","/");
+})
+    this.getloanid();
+
+  }
 
   ngOnInit() {
     this.isExpanded = true;
@@ -48,4 +58,15 @@ export class SidebarComponent implements OnInit {
   onClose() {
     this.isExpanded = !this.isExpanded;
   }
-}
+
+  getloanid(){
+
+    try{
+      this.loanid=this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
+    }
+    catch{
+      
+    }
+  }
+  }
+
