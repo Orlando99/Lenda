@@ -47,7 +47,7 @@ export class BuyerAssociationComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -73,7 +73,7 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Location', field: 'Location',  editable: true },
       { headerName: 'Phone', field: 'Phone', editable: true},
       { headerName: 'Email', field: 'Email', editable: true},
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

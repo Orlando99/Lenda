@@ -48,7 +48,7 @@ export class FarmsInfoComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -81,7 +81,7 @@ export class FarmsInfoComponent implements OnInit {
       { headerName: 'Perm to Ins', field: 'Permission_To_Insure', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Waived', field: 'Cash_Rent_Waived', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Paid', field: 'Cash_Rent_Paid', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

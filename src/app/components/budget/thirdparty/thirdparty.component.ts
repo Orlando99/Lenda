@@ -47,7 +47,7 @@ export class ThirdpartyComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -73,9 +73,9 @@ export class ThirdpartyComponent implements OnInit {
       { headerName: 'Location', field: 'Location',  editable: true },
       { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Pref Contact', width: 50, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
-      { headerName: 'Amount', width: 80, field: 'Amount',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: 'Pref Contact',  field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: 'Amount',  field: 'Amount',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

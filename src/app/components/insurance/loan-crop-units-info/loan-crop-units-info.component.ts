@@ -50,7 +50,7 @@ export class LoanCropUnitsInfoComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -80,7 +80,7 @@ export class LoanCropUnitsInfoComponent implements OnInit {
       { headerName: 'Basis Adj', field: 'Z_Basis_Adj', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Adj Price', field: 'Z_Adj_Price', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Revenue', field: 'FC_Revenue', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

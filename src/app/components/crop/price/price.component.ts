@@ -51,7 +51,7 @@ export class PriceComponent implements OnInit {
     //Coldef here
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop_Code', width: 120, editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop', field: 'Crop_Code',  editable: true, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
@@ -61,23 +61,23 @@ export class PriceComponent implements OnInit {
         valueSetter: Cropvaluesetter
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code', width: 120, editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop type', field: 'Crop_Type_Code',  editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredCropType,
         valueFormatter: function (params) {
           return lookupCropTypeValue(params.value);
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', width: 120, editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Contract Qty', field: '', width: 120, editable: false },
-      { headerName: 'Contract Price', field: '', width: 120, editable: false  },
-      { headerName: '% Booked', field: 'Booking_Ind', editable: true, width: 120 , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-      { headerName: 'Ins UOM', field: 'Bu', width: 120, editable: false},
-      { headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" },
+      { headerName: 'Crop Price', field: 'Z_Price',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Adj Price', field: 'Z_Adj_Price',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+      { headerName: 'Contract Qty', field: '',  editable: false },
+      { headerName: 'Contract Price', field: '',  editable: false  },
+      { headerName: '% Booked', field: 'Booking_Ind', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+      { headerName: 'Ins UOM', field: 'Bu',  editable: false},
+      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];
     ///
@@ -173,7 +173,7 @@ rowvaluechanged(value: any) {
 onGridReady(params) {
   this.gridApi = params.api;
   this.columnApi = params.columnApi;
-
+  params.api.sizeColumnsToFit();
 }
 DeleteClicked(rowIndex: any) {
   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {

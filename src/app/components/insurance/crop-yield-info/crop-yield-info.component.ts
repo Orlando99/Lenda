@@ -49,7 +49,7 @@ export class CropYieldInfoComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -77,7 +77,7 @@ export class CropYieldInfoComponent implements OnInit {
       { headerName: '2015', field: '2015', editable: true,cellStyle: {color: 'blue'}},
       { headerName: '2016', field: '2016', editable: true,cellStyle: {color: 'blue'}},
       { headerName: '2017', field: '2017', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

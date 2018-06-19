@@ -53,7 +53,7 @@ export class LoanbudgetGroupComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -74,9 +74,9 @@ export class LoanbudgetGroupComponent implements OnInit {
     
     this.columnDefs = [        
       { headerName: 'Expense', field: 'Budget_Expense_Name',  editable: false },            
-      { headerName: 'ARM', field: 'ARM_Budget_Crop',width:120,  editable: false },
-      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',width:120,  editable: false },
-      { headerName: 'Total', field: 'BudgetTotal_Crop',width:120, editable: false},
+      { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',  editable: false },
+      { headerName: 'Total', field: 'BudgetTotal_Crop', editable: false},
     ];
     ///
     this.context = { componentParent: this };

@@ -49,7 +49,7 @@ export class AgentComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -76,8 +76,8 @@ export class AgentComponent implements OnInit {
       { headerName: 'Location', field: 'Location',  editable: true,cellStyle: {color: 'blue'} },
       { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      { headerName: 'Pref Contact',  field: 'Preferred_Contact_Ind',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };
