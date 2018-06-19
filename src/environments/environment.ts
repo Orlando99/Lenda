@@ -6,7 +6,7 @@
 export const environment = {
   production: false,
  //apiUrl: 'http://localhost:61002/',
-  apiUrl: 'http://lendav1api.azurewebsites.net/',
+  apiUrl: 'http://lendav1api.azurewebsites.net',
   loankey:"currentselectedloan",
   loankey_copy:"rawcurrentselectedloan",
   logpriority:"logpriority",

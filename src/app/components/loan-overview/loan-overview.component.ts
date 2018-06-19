@@ -42,7 +42,7 @@ export class LoanOverviewComponent implements OnInit {
     if ((obj == null || obj == undefined))
       this.getLoanBasicDetails();
     else {
-      if (obj.Loan_PK_ID != this.loanid) {
+      if (obj.Loan_Full_ID != this.loanid) {
         this.getLoanBasicDetails();
       }
     }
@@ -53,6 +53,7 @@ export class LoanOverviewComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
+      debugger
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
         console.log(res)
         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);

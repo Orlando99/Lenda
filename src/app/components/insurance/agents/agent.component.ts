@@ -11,11 +11,13 @@ import { InsuranceapiService } from '../../../services/insurance/insuranceapi.se
 import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
+
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-agent',
@@ -72,12 +74,12 @@ export class AgentComponent implements OnInit {
 
       { headerName: 'Agent', field: 'Assoc_Name', editable: true,cellStyle: {color: 'blue'} },
       // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'}},
       { headerName: 'Location', field: 'Location',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'},cellEditorFramework: NumericEditor,},
       { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Pref Contact',  field: 'Preferred_Contact_Ind',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
+      { headerName: 'Pref Contact', width: 110, field: 'Preferred_Contact_Ind',  editable: true,cellStyle: {color: 'blue'}},
+      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
     this.context = { componentParent: this };

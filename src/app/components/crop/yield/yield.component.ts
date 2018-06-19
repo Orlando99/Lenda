@@ -108,7 +108,7 @@ export class YieldComponent implements OnInit {
       debugger
       var obj = value.data;
       var rowindex=value.rowIndex;
-       obj.ActionStatus = 2;
+      obj.ActionStatus = 2;
       this.localloanobject.CropYield[rowindex]=obj;
       let edit=new Loan_Crop_Type_Practice_Type_Yield_EditModel();
       edit.CropId=value.data.Crop_ID;

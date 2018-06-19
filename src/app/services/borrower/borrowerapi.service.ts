@@ -9,7 +9,7 @@ export class BorrowerapiService {
   constructor(private apiservice: ApiService) { }
 
   saveupdateborrower(Object:any) : Observable<ResponseModel>{
-    const route='api/Borrower/EditBorrower';
+    const route='/api/Borrower/EditBorrower';
     return this.apiservice.post(route,Object).map(res=>res);
    }
 

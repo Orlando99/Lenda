@@ -253,7 +253,7 @@ export class borrower_model
         @JsonProperty("LoanBudget",[])
         LoanBudget:any=undefined;
 
-        @JsonProperty("Loan_Full_ID", IntConverter)
+        @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
 
         @JsonProperty("Association", [Loan_Association])

@@ -12,7 +12,7 @@ export class LoggingService {
   constructor(private apiservice: ApiService, public localst: LocalStorageService) { }
 
   createlog(Object: any): Observable<ResponseModel> {
-    const route = 'api/Logs/AddLog';
+    const route = '/api/Logs/AddLog';
     return this.apiservice.post(route, Object).map(res => res);
   }
   checkandcreatelog(level: Logpriority, section: string, message: string) {
