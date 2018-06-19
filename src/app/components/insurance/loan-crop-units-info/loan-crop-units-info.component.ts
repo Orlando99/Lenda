@@ -71,15 +71,15 @@ export class LoanCropUnitsInfoComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Crop', field: 'Crop_Code',  editable: true ,cellStyle: {color: 'blue'}},
-      { headerName: 'Acres', field: 'CU_Acres', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Status', field: 'Status', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Price', field: 'Z_Price', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Marketing Adj', field: 'Z_Marketing_Adj', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Revenue', field: 'FC_Revenue', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Crop', field: 'Crop_Code',  editable: true ,cellClass: ['editable']},
+      { headerName: 'Acres', field: 'CU_Acres', editable: true,cellClass: ['editable']},
+      { headerName: 'Status', field: 'Status', editable: true,cellClass: ['editable']},
+      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', editable: true,cellClass: ['editable']},
+      { headerName: 'Price', field: 'Z_Price', editable: true,cellClass: ['editable']},
+      { headerName: 'Marketing Adj', field: 'Z_Marketing_Adj', editable: true,cellClass: ['editable']},
+      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', editable: true,cellClass: ['editable']},
+      { headerName: 'Adj Price', field: 'Z_Adj_Price', editable: true,cellClass: ['editable']},
+      { headerName: 'Revenue', field: 'FC_Revenue', editable: true,cellClass: ['editable']},
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

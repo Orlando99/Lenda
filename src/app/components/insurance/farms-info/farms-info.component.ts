@@ -69,18 +69,18 @@ export class FarmsInfoComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'State | County', field: 'Farm_County_ID',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'State | County', field: 'Farm_County_ID',  editable: true,cellClass: ['editable'] },
       { headerName: 'FSN', field: 'FSN',  editable: false },
-      { headerName: 'Landlord', field: 'Landowner',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Owned', field: 'Owned', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Landlord', field: 'Landowner',  editable: true,cellClass: ['editable'] },
+      { headerName: 'Owned', field: 'Owned', editable: true,cellClass: ['editable']},
       // { headerName: 'AC-IR', field: 'Email', editable: true},
       // { headerName: 'AC-NI', field: 'Email', editable: true},
       // { headerName: 'Rent Type', field: 'Email', editable: true},
-      { headerName: 'Rent Amount', field: 'Cash_Rent_Waived_Amount', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Rent Due', field: 'Cash_Rent_Due_Date', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Waived', field: 'Cash_Rent_Waived', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Paid', field: 'Cash_Rent_Paid', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Rent Amount', field: 'Cash_Rent_Waived_Amount', editable: true,cellClass: ['editable']},
+      { headerName: 'Rent Due', field: 'Cash_Rent_Due_Date', editable: true,cellClass: ['editable']},
+      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', editable: true,cellClass: ['editable']},
+      { headerName: 'Waived', field: 'Cash_Rent_Waived', editable: true,cellClass: ['editable']},
+      { headerName: 'Paid', field: 'Cash_Rent_Paid', editable: true,cellClass: ['editable']},
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

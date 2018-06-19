@@ -68,12 +68,12 @@ export class DistributerComponent implements OnInit {
     
     this.columnDefs = [
       
-      { headerName: 'Distributor', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },      
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Location', field: 'Location',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: 'Distributor', field: 'Assoc_Name',  editable: true,cellClass: ['editable'] },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['editable'] },
+      { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable'] },
+      { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable']},
+      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable']},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

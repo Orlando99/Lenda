@@ -78,16 +78,10 @@ export class LoanbudgetComponent implements OnInit {
       { headerName: "Per Acre Budget",
         children: [   
       { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: changeCellStyle,
-      cellClassRules: {
-        'rag-green-outer': function(params) { 
-          debugger;
-          return params.value === 2008},
-        'rag-amber-outer': function(params) { return params.value === 2004},
-        'rag-red-outer': function(params) { return params.value === 2000}
-    },
+      
                     },
-      { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
-      { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
       { headerName: 'Total', field: 'BudgetTotal_Acre',width:120, editable: false},
         ]},
       { headerName: "Crop Budget",
@@ -141,7 +135,6 @@ export class LoanbudgetComponent implements OnInit {
 
 
   rowvaluechanged(value: any) {
-    
     var obj = value.data;
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
