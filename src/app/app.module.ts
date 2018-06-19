@@ -7,7 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'ng2-toastr';
 import "reflect-metadata";
 
-//START MATERIAL COMPONENTS 
+//START MATERIAL COMPONENTS
 import { MatButtonModule, MatCheckboxModule, MatNativeDateModule, MAT_DATE_LOCALE, MatProgressSpinner, MatProgressSpinnerModule, MatTooltipModule, MatChipsModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,17 +36,17 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 //ENDS MATERIAL COMPONENTS
 
-//START SERVICES 
+//START SERVICES
 import { LocalStorageService } from 'ngx-webstorage';
 import { GlobalService, ApiService } from './services';
 import { SharedModule } from './shared/shared.module';
 import { AlertifyService } from './alertify/alertify.service';
 import { LoanApiService } from './services/loan/loanapi.service';
-//END SERVICES 
+//END SERVICES
 
 
 
-//START COMPONENTS 
+//START COMPONENTS
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
 import { HeaderComponent } from './shared/layout/header.component';
@@ -107,6 +107,9 @@ import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
 import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
+import {NotificationFeedsService} from './shared/notification-feeds/notification-feeds.service';
+import {NotificationFeedsComponent} from './shared/notification-feeds/notification-feeds.component';
+import {SidebarComponent} from './shared/layout/sidebar.component';
 
 @NgModule({
   declarations: [
@@ -145,8 +148,10 @@ import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
      LoanbudgetComponent,
      FarmerInfoComponent,
      BorrowerInfoComponent,
-     LoanbudgetGroupComponent
-    
+     LoanbudgetGroupComponent,
+    NotificationFeedsComponent,
+    SidebarComponent
+
   ],
   imports: [
     BrowserModule,
@@ -240,8 +245,9 @@ import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
     NamingConventionapiService,
     CropapiService,
     ReferenceService,
-    InsuranceapiService
-    
+    InsuranceapiService,
+    NotificationFeedsService
+
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]
