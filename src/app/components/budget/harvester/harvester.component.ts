@@ -36,6 +36,12 @@ export class HarvesterComponent implements OnInit {
   public pinnedBottomRowData = [];
   private gridApi;
   private columnApi;
+  style = {
+    marginTop: '10px',
+    width: '96%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
 
 
@@ -47,7 +53,8 @@ export class HarvesterComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -68,12 +75,12 @@ export class HarvesterComponent implements OnInit {
     
     this.columnDefs = [
       
-      { headerName: 'Harvester', field: 'Assoc_Name',  editable: true,cellStyle: {color: 'blue'} },      
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Location', field: 'Location',  editable: true ,cellStyle: {color: 'blue'}},
-      { headerName: 'Phone', field: 'Phone', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Email', field: 'Email', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: {color: 'blue'} },
+      { headerName: 'Harvester', field: 'Assoc_Name',  editable: true, cellClass: ['lenda-editable-field'] },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
+      { headerName: 'Location', field: 'Location',  editable: true ,cellClass: ['lenda-editable-field']},
+      { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
@@ -183,7 +190,9 @@ debugger
 
   }
 
-  
+  getgridheight(){
+    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+   }
   //
 
 }

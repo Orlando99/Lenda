@@ -5,6 +5,7 @@ import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 //import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
+import {SidebarService} from './layout/sidebar.component.service';
 
 
 
@@ -20,6 +21,7 @@ import { AppRoutingModule } from '../app-routing.module';
     declarations: [
 
     ],
+    providers: [SidebarService],
     exports: [
         CommonModule,
         FormsModule,

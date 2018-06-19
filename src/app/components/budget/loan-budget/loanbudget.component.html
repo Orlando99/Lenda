@@ -12,18 +12,22 @@
             <div class="container bottom">
               <div class="row">
               <ag-grid-angular 
-              style="width: 93%; height: 250px;" 
+              [ngStyle]="style"
               class="ag-theme-balham"
+              [animateRows]="true"
+              [enableSorting]="true"
+              [enableFilter]="true"
               [context]="context"
               [frameworkComponents]="frameworkcomponents"
               [components]="components"
-              (rowEditingStopped)="rowvaluechanged($event)"
+              (cellEditingStopped)="rowvaluechanged($event)"             
               [rowData]="rowData" 
-              [editType]="editType"
               (gridReady)="onGridReady($event)"
               [columnDefs]="columnDefs"
               [getRowStyle]="getRowStyle"
-              [pinnedBottomRowData]="pinnedBottomRowData">
+              [pinnedBottomRowData]="pinnedBottomRowData"     
+                
+              >
               </ag-grid-angular>
               </div>
             </div>

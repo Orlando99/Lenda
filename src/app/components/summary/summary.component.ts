@@ -16,7 +16,7 @@ export class SummaryComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'Summary',"LocalStorage updated");
-      this.localborrowerobject=res.Borrower;
+      this.localborrowerobject=res.LoanMaster[0];
       this.allDataFetched=true;
     })
     this.getdataforgrid();
@@ -27,7 +27,8 @@ export class SummaryComponent implements OnInit {
     this.logging.checkandcreatelog(1,'Summary',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
-    this.localborrowerobject=obj.Borrower;
+      debugger
+    this.localborrowerobject=obj.LoanMaster[0];
     this.allDataFetched=true;
     }
   }

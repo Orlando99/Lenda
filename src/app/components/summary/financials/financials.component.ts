@@ -13,7 +13,7 @@ import { LoggingService } from '../../../services/Logs/logging.service';
   styleUrls: ['./financials.component.scss']
 })
 export class FinancialsComponent implements OnInit {
-  private localborrowerobject: borrower_model;
+  private localborrowerobject: any;
   public allDataFetched = false;
   public rowData = [];
   public pinnedBottomRowData=[];
@@ -58,7 +58,7 @@ export class FinancialsComponent implements OnInit {
       // log
       this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
       //
-      this.localborrowerobject = res.Borrower;
+      this.localborrowerobject = res.LoanMaster[0];
       this.allDataFetched = true;
     })
     this.getdataforgrid();
@@ -69,7 +69,7 @@ export class FinancialsComponent implements OnInit {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'financials', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
-      this.localborrowerobject = obj.Borrower;
+      this.localborrowerobject = obj.LoanMaster[0];
       this.allDataFetched = true;
       this.prepareviewmodel();
     }
@@ -77,19 +77,19 @@ export class FinancialsComponent implements OnInit {
   prepareviewmodel() {
     //prepare three rows here
       //1st Current Financial Row
-      var currentobj={Financials:'Current',Assets:this.localborrowerobject.Borrower_Current_Assets,Debt:this.localborrowerobject.Borrower_Current_Liabilities,
-      Equity:this.localborrowerobject.FC_Borrower_Current_Equity,Ratios:this.localborrowerobject.FC_Borrower_Current_Ratio,FICO:this.localborrowerobject.FC_Borrower_FICO,Rating:'-'}
+      var currentobj={Financials:'Current',Assets:'$ '+ this.localborrowerobject.Current_Assets ,Debt:'$ '+ this.localborrowerobject.Current_Liabilities ,
+      Equity:'$ '+ (this.localborrowerobject.Current_Assets - this.localborrowerobject.Current_Liabilities) ,Ratios:(this.localborrowerobject.Current_Assets / this.localborrowerobject.Current_Liabilities),FICO: this.localborrowerobject.Credit_Score ,Rating: this.localborrowerobject.Borrower_Rating }
       this.rowData.push(currentobj);
 
        //1st Intermediate Financial Row
-      var Intermediateobj={Financials:'Intermediate',Assets:this.localborrowerobject.Borrower_Intermediate_Assets,Debt:this.localborrowerobject.Borrower_Intermediate_Liabilities,
-      Equity:this.localborrowerobject.FC_Borrower_Intermediate_Equity,Ratios:"",FICO:"",Rating:'-'}
+      var Intermediateobj={Financials:'Intermediate',Assets:'$ '+ this.localborrowerobject.Intermediate_Assets,Debt:'$ '+ this.localborrowerobject.Intermediate_Liabilities ,
+      Equity:'$ '+ (this.localborrowerobject.Intermediate_Assets - this.localborrowerobject.Intermediate_Liabilities) ,Ratios:'',FICO:'',Rating:''}
       this.rowData.push(Intermediateobj)
 
 
        //1st LongTerm Financial Row
-       var LongTermobj={Financials:'Long Term',Assets:this.localborrowerobject.Borrower_Fixed_Assets,Debt:this.localborrowerobject.Borrower_Fixed_Liabilities,
-       Equity:this.localborrowerobject.FC_Borrower_Fixed_Equity,Ratios:"",FICO:"",Rating:'-'}
+       var LongTermobj={Financials:'Long Term',Assets:'$ '+this.localborrowerobject.Fixed_Assets,Debt:'$ '+this.localborrowerobject.Fixed_Liabilities,
+       Equity:'$ '+ (this.localborrowerobject.Fixed_Assets - this.localborrowerobject.Fixed_Liabilities) ,Ratios:'',FICO:'',Rating:''}
        this.rowData.push(LongTermobj)
 
        //Last Aggregate Row

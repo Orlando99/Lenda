@@ -18,6 +18,7 @@ import { BudgetComponent } from "./components/budget/budget.component";
 import { InsuranceComponent } from "./components/insurance/insurance.component";
 import{ DistributerComponent } from "./components/budget/distributer/distributer.component"
 import { LoanviewerComponent } from "./components/loanviewer/loanviewer.component";
+import { WorkInProgressComponent } from "./components/work-in-progress/work-in-progress.component";
 
 
 const appRoutes: Routes = [ 
@@ -36,14 +37,15 @@ const appRoutes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'loans', component: LoanListComponent },
-      { path: 'Loanobjectpreview', component: LoanviewerComponent },
+      { path: 'Loanobjectpreview', component: LoanviewerComponent},
       { path: 'loanoverview/:loan/:seq', component: LoanOverviewComponent,children:[
         { path: 'summary', component: SummaryComponent },
         { path: 'borrower', component: BorrowerComponent },
         { path: 'crop', component: CropComponent },
         { path: 'farm', component: FarmComponent },
         { path: 'insurance', component: InsuranceComponent },
-        { path: 'budget', component: BudgetComponent }
+        { path: 'budget', component: BudgetComponent },
+        { path: 'work-in-progress', component: WorkInProgressComponent },
       ] },
     ]
   },

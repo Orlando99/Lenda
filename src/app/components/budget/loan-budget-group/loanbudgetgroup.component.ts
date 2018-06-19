@@ -42,6 +42,12 @@ export class LoanbudgetGroupComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   private pinnedTopRowData;  
+  style = {
+    marginTop: '10px',
+    width: '96%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
 
 
@@ -53,7 +59,8 @@ export class LoanbudgetGroupComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -74,9 +81,9 @@ export class LoanbudgetGroupComponent implements OnInit {
     
     this.columnDefs = [        
       { headerName: 'Expense', field: 'Budget_Expense_Name',  editable: false },            
-      { headerName: 'ARM', field: 'ARM_Budget_Crop',width:120,  editable: false },
-      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',width:120,  editable: false },
-      { headerName: 'Total', field: 'BudgetTotal_Crop',width:120, editable: false},
+      { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',  editable: false },
+      { headerName: 'Total', field: 'BudgetTotal_Crop', editable: false},
     ];
     ///
     this.context = { componentParent: this };
@@ -119,6 +126,9 @@ export class LoanbudgetGroupComponent implements OnInit {
     this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c =>parseFloat( c.BudgetTotal_Crop||'0')).reduce((sum, current) => sum + current);
 
   }
+  getgridheight(){
+    this.style.height=(29*(this.rowDataGroup.length+2)).toString()+"px";
+   }
   //
 }
 

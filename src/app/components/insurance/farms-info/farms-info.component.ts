@@ -48,7 +48,7 @@ export class FarmsInfoComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -69,18 +69,18 @@ export class FarmsInfoComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'State | County', field: 'Farm_County_ID',  editable: true,cellStyle: {color: 'blue'} },
+      { headerName: 'State | County', field: 'Farm_County_ID',  editable: true,cellClass: ['lenda-editable-field'] },
       { headerName: 'FSN', field: 'FSN',  editable: false },
-      { headerName: 'Landlord', field: 'Landowner',  editable: true,cellStyle: {color: 'blue'} },
-      { headerName: 'Owned', field: 'Owned', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Landlord', field: 'Landowner',  editable: true,cellClass: ['lenda-editable-field'] },
+      { headerName: 'Owned', field: 'Owned', editable: true,cellClass: ['lenda-editable-field']},
       // { headerName: 'AC-IR', field: 'Email', editable: true},
       // { headerName: 'AC-NI', field: 'Email', editable: true},
       // { headerName: 'Rent Type', field: 'Email', editable: true},
-      { headerName: 'Rent Amount', field: 'Cash_Rent_Waived_Amount', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Rent Due', field: 'Cash_Rent_Due_Date', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Waived', field: 'Cash_Rent_Waived', editable: true,cellStyle: {color: 'blue'}},
-      { headerName: 'Paid', field: 'Cash_Rent_Paid', editable: true,cellStyle: {color: 'blue'}},
+      { headerName: 'Rent Amount', field: 'Cash_Rent_Waived_Amount', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Rent Due', field: 'Cash_Rent_Due_Date', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Perm to Ins', field: 'Permission_To_Insure', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Waived', field: 'Cash_Rent_Waived', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Paid', field: 'Cash_Rent_Paid', editable: true,cellClass: ['lenda-editable-field']},
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///

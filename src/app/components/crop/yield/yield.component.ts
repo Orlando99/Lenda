@@ -50,7 +50,7 @@ export class YieldComponent implements OnInit {
     };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'CropType', width: 120,
+        headerName: 'Crop', field: 'CropType', 
         valueFormatter: function (params) {
           debugger
           return lookupCropValuewithoutmapping( params.value);
@@ -58,22 +58,22 @@ export class YieldComponent implements OnInit {
         valueSetter: Cropvaluesetter
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code', width: 120,
+        headerName: 'Crop type', field: 'Crop_Type_Code', 
         valueFormatter: function (params) {
           return lookupCropTypeValue(params.value);
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Practice', field: 'IrNI', width: 120, editable: false},
-      { headerName: 'Practice', field: 'Practice', width: 120,  editable: false}
+      { headerName: 'Crop Practice', field: 'IrNI',  editable: false},
+      { headerName: 'Practice', field: 'Practice',   editable: false}
     ];
     this.years.forEach(element => {
-     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), width: 120,  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})
+     this.columnDefs.push({ headerName: element.toString(), field: element.toString(),   editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})
     });
-    this.columnDefs.push({ headerName: 'CropYield', field: 'CropYield', width: 120,  editable: false});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH', width: 120,  editable: false});
-    this.columnDefs.push({ headerName: 'Units', field: 'Bu', width: 120,  editable: false});
-    this.columnDefs.push({  headerName: '', field: 'value', width: 120, cellRenderer: "deletecolumn" });
+    this.columnDefs.push({ headerName: 'CropYield', field: 'CropYield',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn" });
     ///
     this.context = { componentParent: this };
   }
@@ -101,7 +101,7 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-  
+    params.api.sizeColumnsToFit();
   }
 
   rowvaluechanged(value:any){
