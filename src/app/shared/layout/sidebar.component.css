@@ -1,0 +1,64 @@
+.arm-sidenav {
+  visibility: visible !important
+}
+.arm-sidenav-main{
+  padding-top: 0;
+}
+
+.arm-sidenav-main .navLogo{
+  height: 80px;
+  background: #2471b3;
+  /*border-shadow: 1px solid;*/
+}
+
+.arm-sidenav-main p.mat-line{
+  color: #fff;
+  /* text-transform: uppercase; */
+  font-weight: bold;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+  font-size:90%;
+}
+
+.arm-sidenav-main .arm-recent-record p.mat-line{
+  font-weight: normal;
+  text-transform: none;
+}
+
+.arm-recent-record-nav p.mat-line{
+  color: #fff;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+}
+
+.arm-recent-record-nav .mat-list-item{
+  height: 40px;
+  padding: 20px;
+}
+
+#arm-sidenav{
+  background: #164c7b;
+  overflow-y: auto;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 68px;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+
+.mat-nav-list .mat-list-item:not(.navLogo):hover{
+  background: #2cbb9c;
+}
+
+.arm-recent-record:nth-child(1){
+  margin-top: 20px;
+
+}
+
+.arm-recent-record{
+  padding-left: 30px;
+}

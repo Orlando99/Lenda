@@ -1,128 +1,204 @@
 <!-- Start Top Nav Bar -->
-<nav class="top_NavBar is_fixed">
-  <div class="navbar-wrapper">
-
-    <!-- Company Brand -->
-    <div class="navLogo">
-      <a href="" class="navIcons">
-        <img src="../../../assets/images/logo.svg" alt="FirstPath Logo"> Lenda APP
-      </a>
-    </div>
-
-    <!-- Select Center -->
-    <!-- <div class="webApp_selectCenter">
-      <button mat-button [matMenuTriggerFor]="menu">
-        <span>All Centers</span>
-        <i class="material-icons">arrow_drop_down</i>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item>Item 1</button>
-        <button mat-menu-item>Item 2</button>
-      </mat-menu>
-    </div> -->
-
-    <!-- Main Navigation -->
-
-
-    <!-- Quick Add Global -->
-
-
-    <!-- <button mat-button class="quickAdd"  >
-      <span class="quickAdd_btn btn green lighten-1 modal-trigger">
-        <i class="material-icons left">add</i> Quick Add</span>
-    </button> -->
-
-    <!-- System Navigation -->
-    <ul class="SystemNavigation">
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/home/loanoverview/1/summary']">Summary Page</a>
-      </li>
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/home/loanoverview/1/borrower']">Borrower Page</a>
-      </li>
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/home/admin']">Admin Page</a>
-      </li>
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/home/Loanobjectpreview']">Preview Loan Object</a>
-      </li>
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a (click)="ClearLocalstorage()">Clear local Storage</a>
-      </li>
-      <!-- <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/admin/getloanstatus']">LoanStatus</a>
-      </li>sss
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/loanpreview']">Preview Current Loan Object</a>
-      </li>
-      <li class="headerNavigation_item" routerLinkActive="active">
-        <a [routerLink]="['/admin/namingconventions']">Naming Conventions</a>
-      </li> -->
-    </ul>
-
-  </div>
-</nav>
-<!-- End Nav Bar -->
-
 <!-- Start Application Header -->
-<header class="webApp_header">
-  <div class="header_Content plum-purple white-text">
+<header class="webApp_header top_NavBar" id="arm-main-header">
+    
+ 
+  <nav>
+    <div class="navbar-wrapper">
+      <nav class="header-nav">
+        <div class="nav-wrapper">
+          <mat-toolbar class="arm-menu-bar">
+              <span class="navLogo min-logo" id="navlogo-min"  [hidden]="isExpanded" (mouseover)="toggleSideBar($event)">
+                  <a href="" class="navIcons">
+                    <img src="assets/images/lendalogomin.png" alt="Lenda Logo">
+                  </a>
 
-    <div class="contentTitle">
-      <h1> </h1>
-    </div>
+                </span>
+                <span class="navLogo" [hidden]="!isExpanded" id="navlogo-main">
+                  <a href="" class="navIcons">
+                    <img src="assets/images/lendalogo.png" alt="Lenda Logo">
+                  </a>
+                  <button [hidden]="isExpanded" mat-icon-button (click)="toggleSideBar($event)">
+                    <mat-icon >chevron_left</mat-icon>
+                  </button>
+                </span>
 
-    <div class="WebAppHeader_search">
-      <div class="WebApp_globalSearch is_empty">
-        <div class="searchForm">
-          <div class="input-field">
-            <mat-form-field>
-              <mat-select [value]="value" (change)="changepriority($event)" placeholder="Select Log Priority">
-                <mat-option value="1">Low</mat-option>
-                <mat-option value="2">High</mat-option>
-                <mat-option value="3">VeryHigh</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+            <span>
+              <div class="search">
+                <mat-icon>search</mat-icon>
+                <input type="text" placeholder="Search">
+              </div>
+            </span>
+            <div class="nav-parent">
+              <span>
+                <!-- Handle branch node buttons here -->
+                <!-- <span *ngIf="item.children && item.children.length > 0">
+                <button mat-button [matMenuTriggerFor]="menu.childMenu"
+                [disabled]="item.disabled">
+                  {{item.displayName}}
+                </button>
+                <app-menu-item #menu [items]="item.children"></app-menu-item>
+              </span> -->
+                <!-- Leaf node buttons here -->
 
-        </div>
-      </div>
-    </div>
-    <span></span>
+                <span class="nav-item">
+                  <button mat-button [matMenuTriggerFor]="menu" primary>List
+                    <mat-icon>arrow_drop_down</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <a [routerLink]="['/home/loanoverview/1/summary']">Summary</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a [routerLink]="['/home/admin']">Admin</a>
+                    </button>
+                  </mat-menu>
+                </span>
+              </span>
+              <span>
+                <!-- Handle branch node buttons here -->
+                <!-- <span *ngIf="item.children && item.children.length > 0">
+                <button mat-button [matMenuTriggerFor]="menu.childMenu"
+                [disabled]="item.disabled">
+                  {{item.displayName}}
+                </button>
+                <app-menu-item #menu [items]="item.children"></app-menu-item>
+              </span> -->
+                <!-- Leaf node buttons here -->
+                <span class="nav-item">
+                  <button mat-button [matMenuTriggerFor]="menu2" primary>Loan
+                    <mat-icon>arrow_drop_down</mat-icon>
+                  </button>
+                  <mat-menu #menu2="matMenu">
+                    <button mat-menu-item>
+                      <a [routerLink]="['/home/loanoverview/1/summary']">Ag-Input</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a>All-In</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a>Ag-Pro</a>
+                    </button>
+                  </mat-menu>
+                </span>
+              </span>
+              <span>
+                <!-- Leaf node buttons here -->
+                <span class="nav-item">
+                  <button mat-button [matMenuTriggerFor]="menu3">Admin
+                    <mat-icon>arrow_drop_down</mat-icon>
+                  </button>
+                  <mat-menu #menu3="matMenu">
+                    <button mat-menu-item>
+                      <a>Users</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a>Support</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a>Logs</a>
+                    </button>
+                    <button mat-menu-item>
+                      <a>System Notification</a>
+                    </button>
+                  </mat-menu>
+                </span>
+              </span>
 
+              &nbsp;
 
-    <div class="user_menu">
-      <div class="user_menu_contents" id="user_menu_contents">
-        <div class="user_menu_avatar dropdown" [matMenuTriggerFor]="LoginMenu">
-          <div class="avatar circle orange has_image">
-            <div class="initials">
-              <span class="initial_text">T</span>
+              <span class="nav-item">
+                <button mat-button [matMenuTriggerFor]="menu4" class="btnT">T</button>
+                <mat-icon [matMenuTriggerFor]="menu4">arrow_drop_down</mat-icon>
+                <mat-menu #menu4="matMenu">
+                  <button mat-menu-item>
+                    <a>Users</a>
+                  </button>
+                  <button mat-menu-item>
+                    <a>Support</a>
+                  </button>
+                  <button mat-menu-item>
+                    <a>Logs</a>
+                  </button>
+                  <button mat-menu-item>
+                    <a>System Notification</a>
+                  </button>
+                </mat-menu>
+
+              </span>
             </div>
-            <img src="../assets/images/noPhoto.png">
-          </div>
-          <i class="material-icons md-18">arrow_drop_down</i>
-          <mat-menu #LoginMenu="matMenu" id="LoginMenu">
-            <button mat-menu-item class="loginProfileMenu">
-              <i class="material-icons left">settings</i>
-              <span>Profile Setting</span>
-            </button>
-            <button id="user_menu_logout" mat-menu-item class="loginProfileMenu" title="Logout left">
-              <i class="material-icons">power_settings_new</i>
-              <span>Sign Out</span>
-            </button>
-          </mat-menu>
+          </mat-toolbar>
+
+
+          <!-- System Navigation -->
+          <!--  <ul class="SystemNavigation">
+            <li class="headerNavigation_item" routerLinkActive="active">
+              <a [routerLink]="['/admin/getloanstatus']">List</a>
+            </li>
+            <li class="headerNavigation_item" routerLinkActive="active">
+              <a [routerLink]="['/loanpreview']">Loan</a>
+            </li>
+            <li class="headerNavigation_item" routerLinkActive="active">
+              <a [routerLink]="['/admin/namingconventions']">Admin</a>
+
+              <mat-menu #appMenu="matMenu">
+                <button mat-menu-item>Settings</button>
+                <button mat-menu-item>Help</button>
+              </mat-menu>
+
+              <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </li>
+          </ul> -->
         </div>
+      </nav>
+
+    </div>
+  </nav>
+
+  <!-- <div class="WebAppHeader_search">
+    <div class="WebApp_globalSearch is_empty">
+      <div class="searchForm">
+        <div class="input-field">
+          <mat-form-field>
+            <mat-select [value]="value" (change)="changepriority($event)" placeholder="Select Log Priority">
+              <mat-option value="1">Low</mat-option>
+              <mat-option value="2">High</mat-option>
+              <mat-option value="3">VeryHigh</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
       </div>
     </div>
-
-
-
-
-
-
-
-
-
   </div>
+  <span></span> -->
+  <!--  <div class="user_menu">
+    <div class="user_menu_contents" id="user_menu_contents">
+      <div class="user_menu_avatar dropdown" [matMenuTriggerFor]="LoginMenu">
+        <div class="avatar circle orange has_image">
+          <div class="initials">
+            <span class="initial_text">T</span>
+          </div>
+          <img src="../assets/images/noPhoto.png">
+        </div>
+        <i class="material-icons md-18">arrow_drop_down</i>
+        <mat-menu #LoginMenu="matMenu" id="LoginMenu">
+          <button mat-menu-item class="loginProfileMenu">
+            <i class="material-icons left">settings</i>
+            <span>Profile Setting</span>
+          </button>
+          <button id="user_menu_logout" mat-menu-item class="loginProfileMenu" title="Logout left">
+            <i class="material-icons">power_settings_new</i>
+            <span>Sign Out</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+  </div> -->
+  <i [style.visibility]="decideShow" id="decide" class="fa-lightbulb"><mat-icon>lightbulb_outline</mat-icon> &nbsp; &nbsp;Decide</i> &nbsp; 
+  <mat-icon (click)="toggleRightSidenav()" class="pre-arrow">{{icon}}</mat-icon>
 </header>
+
 <!-- End Application Header -->

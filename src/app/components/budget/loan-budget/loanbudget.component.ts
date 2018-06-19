@@ -88,8 +88,8 @@ export class LoanbudgetComponent implements OnInit {
       { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: changeCellStyle,
       
                     },
-      { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
-      { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
+      { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
+      { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: 'Total', field: 'BudgetTotal_Acre',width:120, editable: false},
         ]},
       { headerName: "Crop Budget",

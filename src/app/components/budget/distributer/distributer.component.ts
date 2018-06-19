@@ -75,12 +75,12 @@ export class DistributerComponent implements OnInit {
     
     this.columnDefs = [
       
-      { headerName: 'Distributor', field: 'Assoc_Name',  editable: true,cellClass: ['editable'] },      
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['editable'] },
-      { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable'] },
-      { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable']},
-      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable']},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable'] },
+      { headerName: 'Distributor', field: 'Assoc_Name',  editable: true,cellClass: ['lenda-editable-field'] },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
+      { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['lenda-editable-field'] },
+      { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
