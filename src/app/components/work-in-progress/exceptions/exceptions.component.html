@@ -1,0 +1,10 @@
+<div class="content-section">
+  <span class="font-weight-600 section-heading">Exceptions</span>
+
+  <p *ngFor="let exception of exceptionList">
+    <span [class.high-severity-text]="exception.severity==='high'" [class.low-severity-text]="exception.severity==='low'">
+      {{exception.message}}
+    </span>
+  </p>
+
+</div>

@@ -1,0 +1,25 @@
+.section-heading{
+    font-size: 16px;
+  }
+
+  .font-weight-600{
+    font-weight: 600;
+  }
+
+  .content-section{
+    margin: 5px 0 10px 0;
+  }
+  .high-severity-text{
+      color: red;
+  }
+  .high-severity-text::before{
+    content: '!!'
+}
+
+  .low-severity-text{
+    color: orange;
+}
+.low-severity-text::before{
+    content: '!'
+}
+  
