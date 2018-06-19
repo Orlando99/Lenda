@@ -42,6 +42,12 @@ export class LoanbudgetGroupComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   private pinnedTopRowData;  
+  style = {
+    marginTop: '10px',
+    width: '96%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
 
 
@@ -54,6 +60,7 @@ export class LoanbudgetGroupComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -119,6 +126,9 @@ export class LoanbudgetGroupComponent implements OnInit {
     this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c =>parseFloat( c.BudgetTotal_Crop||'0')).reduce((sum, current) => sum + current);
 
   }
+  getgridheight(){
+    this.style.height=(29*(this.rowDataGroup.length+2)).toString()+"px";
+   }
   //
 }
 

@@ -18,8 +18,11 @@
             <div class="container bottom">
               <div class="row">
               <ag-grid-angular 
-              style="width: 96%; height: 250px;" 
+              [ngStyle]="style"
               class="ag-theme-balham"
+              [animateRows]="true"
+              [enableSorting]="true"
+              [enableFilter]="true"
               [context]="context"
               [frameworkComponents]="frameworkcomponents"
               [components]="components"

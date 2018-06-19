@@ -42,6 +42,12 @@ export class LoanbudgetComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   public cellStyle;
+  style = {
+    marginTop: '10px',
+    width: '96%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
 
 
@@ -53,8 +59,9 @@ export class LoanbudgetComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
+    
     params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -227,6 +234,9 @@ export class LoanbudgetComponent implements OnInit {
     
   }
   //
+  getgridheight(){
+   this.style.height=(29*(this.rowData.length+3)).toString()+"px";
+  }
 }
 
 
@@ -245,6 +255,7 @@ function FooterData(count, prefix) {
   }
   return result;
 }
+
 
  function changeCellStyle(params) {
  //alert(params.api.valueCache.cacheVersion);

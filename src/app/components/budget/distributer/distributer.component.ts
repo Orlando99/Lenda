@@ -36,6 +36,12 @@ export class DistributerComponent implements OnInit {
   public pinnedBottomRowData = [];
   private gridApi;
   private columnApi;
+  style = {
+    marginTop: '10px',
+    width: '96%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   //region Ag grid Configuration
 
 
@@ -48,6 +54,7 @@ export class DistributerComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -182,7 +189,9 @@ debugger
 
   }
 
-  
+  getgridheight(){
+    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+   }
   //
 
 }

@@ -21,29 +21,29 @@
         <div class="col s3">
           <div class="section">
             <h4>Co-Applicant</h4>
-            <p>{{localborrowerobject.Spouse_First_Name}} {{localborrowerobject.Spouse_Last_Name}} </p>
-            <p>{{localborrowerobject.Spouse_Address}} {{localborrowerobject.Spouse_City}}  {{localborrowerobject.Spouse_State}} {{localborrowerobject.Spouse_Zip}}<br>
-            {{localborrowerobject.Spouse_Phone}} {{localborrowerobject.Spouse_Email}} </p>
+            <p>{{localborrowerobject.Co_Borrower_First_Name }} {{localborrowerobject.Co_Borrower_Last_Name }} </p>
+            <p>{{localborrowerobject.Co_Borrower_Address }} {{localborrowerobject.Co_Borrower_City }}  {{localborrowerobject.Co_Borrower_State }} {{localborrowerobject.Co_Borrower_Zip }}<br>
+            {{localborrowerobject.Co_Borrower_Phone }} {{localborrowerobject.Co_Borrower_email }} </p>
           </div>
 
         </div>
         <div class="col s2">
           <div class="section">
             <h4>Originating Officer</h4>
-            <p>Suresh Lingineni</p>
+            <p>--</p>
             <h4>Application Date </h4>
-            <p>5/2/2018 </p>
+            <p>{{localborrowerobject.Application_Date | date:'MM/dd/yyyy' }}</p>
             <h4>ARM Location </h4>
-            <p>Newyork </p>
+            <p>--</p>
           </div>
         </div>
         <div class="col s2">
           <div class="section">
             <h4>Arm Commitment</h4>
-            <p> $188,635
+            <p> $ {{localborrowerobject.ARM_Commitment}}
             </p>
             <h4>Dist Commitment </h4>
-            <p> $188,635
+            <p> $ {{localborrowerobject.Dist_Commitment}}
             </p>
           </div>
         </div>
@@ -51,19 +51,19 @@
           <div class="section">
             <h4>Interest Rate
             </h4>
-            <p> 9.0%
+            <p> {{localborrowerobject.Rate_Percent}} %
             </p>
             <h4>Loan Orig. Fee
             </h4>
-            <p> 0.5%
+            <p> {{localborrowerobject.Orgination_Fee_Percent}} %
             </p>
             <h4>Loan Srvc. Fee
             </h4>
-            <p> 2.0%
+            <p> {{localborrowerobject.Service_Fee_Percent}} %
             </p>
             <h4>Maturity Date
             </h4>
-            <p> 12/15/18
+            <p> {{localborrowerobject.Maturity_Date  | date:'MM/dd/yyyy'}}
             </p>
           </div>
         </div>
