@@ -85,9 +85,7 @@ export class LoanbudgetComponent implements OnInit {
       { headerName: 'Expense', field: 'Budget_Expense_Name',  editable: false },   
       { headerName: "Per Acre Budget",
         children: [   
-      { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: changeCellStyle,
-      
-                    },
+      { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'] },
       { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: 'Total', field: 'BudgetTotal_Acre',width:120, editable: false},
@@ -139,9 +137,12 @@ export class LoanbudgetComponent implements OnInit {
       }
     }
   }
-
+  cellvaluechanged(value: any) {
+    debugger
+  }
 
   rowvaluechanged(value: any) {
+    
     var obj = value.data;
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;

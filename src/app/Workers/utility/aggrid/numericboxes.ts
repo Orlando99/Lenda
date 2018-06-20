@@ -62,6 +62,9 @@ export function getNumericCellEditor() {
       this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
       var that = this;
       this.eInput.addEventListener("keypress", function(event) {
+        debugger
+        //this.eInput
+        //this.eInput.addClass('lenda-cellEdit-color')
         if (!isKeyPressedNumeric(event)) {
           that.eInput.focus();
           if (event.preventDefault) event.preventDefault();
@@ -97,6 +100,7 @@ export function getNumericCellEditor() {
   }
   
 export function numberValueSetter(params) {
+  
     if(params.newValue==undefined || params.newValue==null||params.newValue=="")
     params.newValue=0;    
     var data=parseFloat(params.newValue);
