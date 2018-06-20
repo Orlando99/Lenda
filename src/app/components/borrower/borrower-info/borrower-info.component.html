@@ -1,11 +1,5 @@
-<mat-accordion>
-    <mat-expansion-panel [expanded]="false">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Borrower
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <button (click)="synctoDb()" mat-icon-button *ngIf="borrowerInfoForm" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
+
+      <button (click)="synctoDb()" mat-icon-button *ngIf="allowIndividualSave" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
         <mat-icon>publish</mat-icon>
       </button>
 
@@ -138,5 +132,3 @@
         </div>
       </div>
 
-    </mat-expansion-panel>
-  </mat-accordion>

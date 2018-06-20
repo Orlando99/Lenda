@@ -19,6 +19,7 @@ import { InsuranceComponent } from "./components/insurance/insurance.component";
 import{ DistributerComponent } from "./components/budget/distributer/distributer.component"
 import { LoanviewerComponent } from "./components/loanviewer/loanviewer.component";
 import { WorkInProgressComponent } from "./components/work-in-progress/work-in-progress.component";
+import { CreateLoanComponent } from "./components/create-loan/create-loan.component";
 
 
 const appRoutes: Routes = [ 
@@ -38,6 +39,7 @@ const appRoutes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'loans', component: LoanListComponent },
       { path: 'Loanobjectpreview', component: LoanviewerComponent},
+      { path: 'createloan', component: CreateLoanComponent},
       { path: 'loanoverview/:loan/:seq', component: LoanOverviewComponent,children:[
         { path: 'summary', component: SummaryComponent },
         { path: 'borrower', component: BorrowerComponent },

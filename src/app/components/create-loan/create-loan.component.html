@@ -1,0 +1,13 @@
+<div class="basic-container">
+  <h1> Create Loan</h1>
+  <button (click)="onSave($event)" mat-icon-button [disabled]="!(farmerInfo.valid && borrowerInfo.valid)">
+      <mat-icon>publish</mat-icon>
+    </button>
+  
+
+  <h3>Farmmer</h3>
+  <app-farmer-info [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onFarmerFormValueChange($event)"></app-farmer-info>
+
+  <h3>Borrower</h3>
+  <app-borrower-info [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info>
+</div>

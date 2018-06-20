@@ -1,6 +1,27 @@
 <div class="basic-container">
-  <app-farmer-info></app-farmer-info>
-  <app-borrower-info></app-borrower-info>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Farmer
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-farmer-info></app-farmer-info>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borrower
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-borrower-info></app-borrower-info>
+    </mat-expansion-panel>
+  </mat-accordion>
+
   <app-balancesheet></app-balancesheet>
   <app-questions></app-questions>
   <app-buyer-association></app-buyer-association>

@@ -35,4 +35,9 @@ export class LoanApiService {
     return this.apiservice.put(route, loanfarmerObject).map(res => res);
   }
 
+  createLoan(loanObj){
+    const route = '/api/Loan/CreateLoan';
+    return this.apiservice.post(route, loanObj).map(res => res);
+  }
+
 }
