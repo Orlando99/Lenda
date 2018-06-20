@@ -77,7 +77,7 @@ export class ThirdpartyComponent implements OnInit {
       
       { headerName: '3rd Party', field: 'Assoc_Name',  editable: true,cellClass: ['lenda-editable-field'] },      
       { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
-      { headerName: 'Location', field: 'Location',  editable: true },
+      { headerName: 'Location', field: 'Location',  editable: true ,cellClass: ['lenda-editable-field']},
       { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
       { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
       { headerName: 'Pref Contact', width: 50, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
@@ -92,10 +92,9 @@ debugger
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-      
-      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
-
+      if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
+        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
+      }
     });
   
 
@@ -103,11 +102,8 @@ debugger
     this.editType = "fullRow";
   }
   getdataforgrid() {
-   // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
-    //if (obj != null && obj != undefined) {
-    if (this.localloanobject != null && this.localloanobject != undefined) {
-      //this.localloanobject = obj;
+    if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
     }
   }
