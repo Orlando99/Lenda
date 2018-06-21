@@ -25,7 +25,7 @@ export class CreateLoanComponent implements OnInit {
     this.borrowerInfo = Object.assign(new borrower_info(), data);
 
   }
-  onSave() {
+  onSave(event:any) {
 
 
     let loanObj = Object.assign({}, this.farmerInfo.value, this.borrowerInfo.value);

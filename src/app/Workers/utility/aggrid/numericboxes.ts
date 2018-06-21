@@ -62,7 +62,7 @@ export function getNumericCellEditor() {
       this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
       var that = this;
       this.eInput.addEventListener("keypress", function(event) {
-        debugger
+        
         //this.eInput
         //this.eInput.addClass('lenda-cellEdit-color')
         if (!isKeyPressedNumeric(event)) {

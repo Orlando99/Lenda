@@ -86,12 +86,12 @@ export class LoanCropUnitsInfoComponent implements OnInit {
     this.context = { componentParent: this };
   }
   ngOnInit() {
-    // debugger
+    // 
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     // this.logging.checkandcreatelog(1, 'LoanInsuranceAgent', "LocalStorage retrieved");
     // if (obj != null && obj != undefined) {
     //   this.localloanobject = obj;
-    //   debugger
+    //   
     //   this.rowData = obj.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
     // }
 

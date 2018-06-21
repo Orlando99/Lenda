@@ -87,7 +87,7 @@ export class DistributerComponent implements OnInit {
     this.context = { componentParent: this };
   }
   ngOnInit() {  
-debugger
+
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -110,7 +110,7 @@ debugger
 
 
   rowvaluechanged(value: any) {
-    debugger
+    
     var obj = value.data;
     if (obj.ActionStatus == undefined) {
       obj.ActionStatus = 1;
@@ -123,12 +123,12 @@ debugger
       obj.ActionStatus = 2;
       this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="DIS")[rowindex]=obj;
     }
-    debugger
+    
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   synctoDb() {
-      debugger
+      
   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
     if(res.ResCode==1){
      this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -154,7 +154,7 @@ debugger
 
   //Grid Events
   addrow() {
-    debugger    
+        
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="DIS";
@@ -169,10 +169,10 @@ debugger
   }
 
   DeleteClicked(rowIndex: any) {
-    debugger
+    
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        debugger
+        
         var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="DIS")[rowIndex];
         if (obj.Assoc_ID == 0) {
           this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="DIS").splice(rowIndex, 1);

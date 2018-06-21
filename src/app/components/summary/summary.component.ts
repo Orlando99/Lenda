@@ -27,7 +27,7 @@ export class SummaryComponent implements OnInit {
     this.logging.checkandcreatelog(1,'Summary',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
-      debugger
+      
     this.localborrowerobject=obj.LoanMaster[0];
     this.allDataFetched=true;
     }

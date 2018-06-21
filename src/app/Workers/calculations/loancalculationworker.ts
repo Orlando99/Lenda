@@ -26,7 +26,7 @@ export class LoancalculationWorker {
 
   performcalculationonloanobject(localloanobj: loan_model) {
     console.log(new Date().getMilliseconds());
-      debugger
+      
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
     localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);

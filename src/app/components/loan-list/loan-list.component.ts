@@ -28,7 +28,7 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: string) {
-    debugger
+    
     this.route.navigateByUrl("/home/loanoverview/"+id.replace("-","/")+"/summary");
   }
 }

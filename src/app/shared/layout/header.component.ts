@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
   ) {
 
     this.localst.observe(environment.loankey).subscribe(res=>{
-      debugger
+      
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
         this.getloanid();
@@ -98,7 +98,7 @@ export class HeaderComponent implements OnInit {
 
   getLoanBasicDetails() {
     console.log(this.loanid)
-debugger
+
     if (this.loanid != null) {
       let loaded = false;
       this.loanservice.getLoanById(this.loanid).subscribe(res => {

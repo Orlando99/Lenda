@@ -103,7 +103,7 @@ export class FarmComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
-      debugger
+      
       this.localloanobject = res;
       this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
       this.gridApi.setRowData(this.rowData);
@@ -140,7 +140,7 @@ export class FarmComponent implements OnInit {
   }
 
   synctoDb() {
-    debugger
+    
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {

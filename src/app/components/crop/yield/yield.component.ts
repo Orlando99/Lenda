@@ -50,7 +50,7 @@ export class YieldComponent implements OnInit {
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
-    debugger
+    
     for(let i=1;i<7;i++){
       this.years.push(new Date().getFullYear()-i);
     };
@@ -58,7 +58,6 @@ export class YieldComponent implements OnInit {
       {
         headerName: 'Crop', field: 'CropType',
         valueFormatter: function (params) {
-          debugger
           return lookupCropValuewithoutmapping( params.value);
         },
         valueSetter: Cropvaluesetter
@@ -118,7 +117,7 @@ export class YieldComponent implements OnInit {
   }
 
   rowvaluechanged(value:any){
-      debugger
+      
       var obj = value.data;
       var rowindex=value.rowIndex;
       obj.ActionStatus = 2;
@@ -178,7 +177,7 @@ export class YieldComponent implements OnInit {
   }
 
   getgridheight(){
-    debugger
+    
    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 }
