@@ -90,6 +90,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ClearLocalstorage(){
+    this.getloanid();
     this.localst.clear();
     this.getLoanBasicDetails();
     this.getreferencedata();

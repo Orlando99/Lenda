@@ -26,12 +26,12 @@ export class YieldComponent implements OnInit {
   public years=[];
   public edits=[];
   public rowData=[];
-  private columnDefs=[];
+  public columnDefs=[];
   public croppricesdetails:[any];
-  private localloanobject:loan_model=new loan_model();
+  public localloanobject:loan_model=new loan_model();
   public components;
-  private gridApi;
-  private columnApi;
+  public gridApi;
+  public columnApi;
   
   context: any;
   
@@ -152,7 +152,6 @@ export class YieldComponent implements OnInit {
   synctoDb() {
     this.edits.forEach(element => {
       this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>{
-
       });
     });
    

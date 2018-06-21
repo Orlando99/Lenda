@@ -83,7 +83,7 @@ export class BuyerAssociationComponent implements OnInit {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
 
-      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
+      if(this.localloanobject.Association!=null)
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY");
 
     });
