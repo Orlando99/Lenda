@@ -14,6 +14,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-yield',
@@ -50,13 +51,16 @@ export class YieldComponent implements OnInit {
   public loanapi:LoanApiService,
   public alertify:AlertifyService
   ) { 
+
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    let cropYear = this.localstorageservice.retrieve(environment.loankey).LoanMaster[0].Crop_Year;
+    console.log(cropYear);
+    for(let i=1; i<7;i++){
+      this.years.push(cropYear-i);
+    };
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
     
-    for(let i=1;i<7;i++){
-      this.years.push(new Date().getFullYear()-i);
-    };
     this.columnDefs = [
       {
         headerName: 'Crop', field: 'CropType',
@@ -97,7 +101,12 @@ export class YieldComponent implements OnInit {
       //   })
       //   cy.CropYield = cy.CropYield/this.years.length;
       // })
+
+     
+      
       this.rowData=res.CropYield;
+      
+      console.log(this.years);
     })
     this.croppricesdetails= this.localstorageservice.retrieve(environment.referencedatakey);
     this.getdataforgrid();
@@ -169,6 +178,7 @@ export class YieldComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.localloanobject.LoanCropUnits[rowIndex];
+        console.log('DELETE', obj);
         if (obj.Loan_CU_ID == 0) {
           this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
         }
