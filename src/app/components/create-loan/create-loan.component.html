@@ -3,11 +3,12 @@
   <button (click)="onSave($event)" mat-icon-button >
       <mat-icon>publish</mat-icon>
     </button>
-  
+
 
   <h3>Farmmer</h3>
   <app-farmer-info [allowIndividualSave]="false" [mode]="'create'"  (onFormValueChange)="onFarmerFormValueChange($event)"></app-farmer-info>
 
   <h3>Borrower</h3>
-  <app-borrower-info [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info>
+  <mat-checkbox [(ngModel)]="useFarmer" (ngModelChange)="useFarmerChange($event)">Use Farmer Information</mat-checkbox>
+  <app-borrower-info [borrowerInfo]="farmerInfoCopy" [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info>
 </div>

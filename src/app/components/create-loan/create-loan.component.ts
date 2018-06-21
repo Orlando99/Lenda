@@ -12,6 +12,7 @@ export class CreateLoanComponent implements OnInit {
 
   farmerInfo: farmer_params = new farmer_params();
   farmerSuccessCallback;
+  useFarmer;
   borrowerInfo: borrower_params = new borrower_params();
   constructor(private loanApiService: LoanApiService, private toaster: ToastsManager) { }
 
@@ -24,18 +25,29 @@ export class CreateLoanComponent implements OnInit {
 
   onBorrowerFormValueChange(data) {
     this.borrowerInfo = Object.assign(new borrower_params(), data);
-
   }
+
+  farmerInfoCopy;
+
+  useFarmerChange(e) {
+    console.log(e)
+    if (e) {
+      this.farmerInfoCopy = this.farmerInfo;
+      console.log(this.borrowerInfo)
+
+    }
+  }
+
   onSave(event:any) {
 
-    
+
     let loanObj = Object.assign({}, this.farmerInfo.value, this.borrowerInfo.value);
 
     if (this.farmerInfo.valid && this.borrowerInfo.valid) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
         this.toaster.success("Farmer details saved successfully");
         this.farmerInfo.successCallback && this.farmerInfo.successCallback();
-        this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();    
+        this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();
       }, (errorResponse) => {
         this.toaster.error("Error Occurered while saving Farmer details");
 
