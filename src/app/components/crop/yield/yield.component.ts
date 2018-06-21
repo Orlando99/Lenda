@@ -33,6 +33,12 @@ export class YieldComponent implements OnInit {
   context: any;
   columnDefs=[];
   frameworkcomponents: { deletecolumn: typeof DeleteButtonRenderer; };
+  style = {
+    marginTop: '10px',
+    width: '93%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
   public cropserviceapi:CropapiService,
@@ -50,7 +56,7 @@ export class YieldComponent implements OnInit {
     };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'CropType', 
+        headerName: 'Crop', field: 'CropType',
         valueFormatter: function (params) {
           debugger
           return lookupCropValuewithoutmapping( params.value);
@@ -58,7 +64,7 @@ export class YieldComponent implements OnInit {
         valueSetter: Cropvaluesetter
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code', 
+        headerName: 'Crop type', field: 'Crop_Type_Code',
         valueFormatter: function (params) {
           return lookupCropTypeValue(params.value);
         },
@@ -70,10 +76,10 @@ export class YieldComponent implements OnInit {
     this.years.forEach(element => {
      this.columnDefs.push({ headerName: element.toString(), field: element.toString(),   editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})
     });
-    this.columnDefs.push({ headerName: 'CropYield', field: 'CropYield',   editable: false});
+    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false});
     this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
-    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn" });
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
     ///
     this.context = { componentParent: this };
   }
@@ -81,6 +87,13 @@ export class YieldComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       this.localloanobject=res;
+      // res.CropYield.forEach(cy =>{
+      //   this.years.forEach(y=>{
+      //     console.log(y, cy[y]);
+      //     cy.CropYield += cy[y];
+      //   })
+      //   cy.CropYield = cy.CropYield/this.years.length;
+      // })
       this.rowData=res.CropYield;
     })
     this.croppricesdetails= this.localstorageservice.retrieve(environment.referencedatakey);
@@ -101,7 +114,7 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    params.api.sizeColumnsToFit();
+    this.getgridheight();
   }
 
   rowvaluechanged(value:any){
@@ -162,5 +175,10 @@ export class YieldComponent implements OnInit {
       }
     })
   
+  }
+
+  getgridheight(){
+    debugger
+   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 }
