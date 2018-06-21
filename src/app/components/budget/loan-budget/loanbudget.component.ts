@@ -138,7 +138,7 @@ export class LoanbudgetComponent implements OnInit {
     }
   }
   cellvaluechanged(value: any) {
-    debugger
+    
   }
 
   rowvaluechanged(value: any) {

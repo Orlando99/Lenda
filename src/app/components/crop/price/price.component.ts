@@ -116,7 +116,7 @@ export class PriceComponent implements OnInit {
  
  
   synctoDb() {
-    debugger
+    
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode==1){
        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -140,7 +140,7 @@ export class PriceComponent implements OnInit {
 
  //Grid Events
  addrow() {
-  debugger
+  
   var newItem = new Loan_Crop_Unit();
   newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
   newItem.Crop_Code="CRN";
@@ -154,7 +154,7 @@ export class PriceComponent implements OnInit {
 }
 
 valuechanged(value:any,selectname:any,rowindex:any){
-  debugger
+  
   if(selectname=="Crop_Code"){
     this.rowData[rowindex].Crop_Type_Code=this.refdata.CropList.find(p=>p.Crop_Code==value).Crop_Type_Code;
   }
@@ -162,10 +162,10 @@ valuechanged(value:any,selectname:any,rowindex:any){
     if(this.rowData[rowindex].Z_Price==0)
     this.rowData[rowindex].Z_Price=this.refdata.CropList.find(p=>p.Crop_Code==this.rowData[rowindex].Crop_Code && p.Crop_Type_Code==value).Price;
   }
-  debugger
+  
 }
 rowvaluechanged(value: any) {
-  debugger
+  
   var obj = value.data;
   if (obj.Loan_CU_ID == undefined) {
     obj.ActionStatus = 1;
@@ -208,7 +208,7 @@ DeleteClicked(rowIndex: any) {
   }
 
   getgridheight(){
-    debugger
+    
    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 }
