@@ -164,6 +164,7 @@ export class Loan_Crop_Type_Practice_Type_Yield_EditModel
         PropertyName: string;
         PropertyValue: string;
         CropYear: number | null;
+        YieldLine: number | null;
         IsPropertyYear: boolean;
     }
 

@@ -58,6 +58,7 @@ export class YieldComponent implements OnInit {
       {
         headerName: 'Crop', field: 'CropType',
         valueFormatter: function (params) {
+          
           return lookupCropValuewithoutmapping( params.value);
         },
         valueSetter: Cropvaluesetter
@@ -117,25 +118,26 @@ export class YieldComponent implements OnInit {
   }
 
   rowvaluechanged(value:any){
-      
       var obj = value.data;
       var rowindex=value.rowIndex;
       obj.ActionStatus = 2;
       this.localloanobject.CropYield[rowindex]=obj;
       let edit=new Loan_Crop_Type_Practice_Type_Yield_EditModel();
       edit.CropId=value.data.Crop_ID;
-      edit.CropYear=value.colDef.field;
+      edit.YieldLine=value.colDef.field;
       edit.IsPropertyYear=true;
       edit.LoanID=value.data.Loan_ID;
       edit.PropertyName=value.colDef.field;
       edit.PropertyValue=value.value;
       this.edits.push(edit);
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  }
+      this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+      }
+
   syncenabled(){
     return this.edits.length>0
-   }
-   synctoDb() {
+  }
+
+  synctoDb() {
     this.edits.forEach(element => {
       this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>{
 
@@ -177,7 +179,6 @@ export class YieldComponent implements OnInit {
   }
 
   getgridheight(){
-    
    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 }

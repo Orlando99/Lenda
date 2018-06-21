@@ -10,29 +10,32 @@ import { ToastsManager } from 'ng2-toastr';
 })
 export class CreateLoanComponent implements OnInit {
 
-  farmerInfo: farmer_info = new farmer_info();
-  borrowerInfo: borrower_info= new borrower_info();
+  farmerInfo: farmer_params = new farmer_params();
+  farmerSuccessCallback;
+  borrowerInfo: borrower_params = new borrower_params();
   constructor(private loanApiService: LoanApiService, private toaster: ToastsManager) { }
 
   ngOnInit() {
   }
   onFarmerFormValueChange(data) {
-    this.farmerInfo = Object.assign(new farmer_info(), data);
+    this.farmerInfo = Object.assign(new farmer_params(), data);
 
   }
 
   onBorrowerFormValueChange(data) {
-    this.borrowerInfo = Object.assign(new borrower_info(), data);
+    this.borrowerInfo = Object.assign(new borrower_params(), data);
 
   }
   onSave(event:any) {
 
-
+    
     let loanObj = Object.assign({}, this.farmerInfo.value, this.borrowerInfo.value);
 
     if (this.farmerInfo.valid && this.borrowerInfo.valid) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
         this.toaster.success("Farmer details saved successfully");
+        this.farmerInfo.successCallback && this.farmerInfo.successCallback();
+        this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();    
       }, (errorResponse) => {
         this.toaster.error("Error Occurered while saving Farmer details");
 
@@ -45,12 +48,14 @@ export class CreateLoanComponent implements OnInit {
 
 }
 
-class farmer_info {
+class farmer_params {
   valid: boolean = false;
   value: loan_farmer = new loan_farmer();
+  successCallback: Function;
 }
 
-class borrower_info {
+class borrower_params {
   valid: boolean = false;
   value: loan_borrower = new loan_borrower();
+  successCallback: Function;
 }

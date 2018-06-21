@@ -9,7 +9,7 @@
     <!-- <button (click)="synctoDb()"  mat-icon-button>
       <mat-icon >publish</mat-icon>
     </button> -->
-    <div class="container bottom">
+    <div *ngIf="RefQuestions && LoanQResponse && LoanQResponse.length && RefQuestions.length" class="container bottom">
       <div class="q-row" *ngFor="let q of RefQuestions; let i = index;">
         <mat-radio-group [(ngModel)]="LoanQResponse[i].Response_Ind" (ngModelChange)="change()">
           <mat-radio-button value="1">Agree</mat-radio-button>
