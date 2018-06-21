@@ -76,13 +76,18 @@ export class BorrowerInfoComponent implements OnInit {
       (value: any) => {
         this.isSubmitted = false;
         if (this.mode === 'create') {
-          this.onFormValueChange.emit({value : value,valid : this.borrowerInfoForm.valid});
+          this.onFormValueChange.emit({ value: value, valid: this.borrowerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
         }
       }
     );
+  }
+
+
+  savedByparentSuccessssCallback = () => {
+    this.createForm({});
   }
 
   formatDate(strDate) {
