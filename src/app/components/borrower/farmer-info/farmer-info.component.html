@@ -1,11 +1,5 @@
-<mat-accordion>
-  <mat-expansion-panel [expanded]="false">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Farmer
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <button (click)="synctoDb()" mat-icon-button *ngIf="farmerInfoForm" [disabled]="!farmerInfoForm.dirty || isSubmitted">
+
+    <button (click)="synctoDb()" mat-icon-button *ngIf="allowIndividualSave" [disabled]="!farmerInfoForm.dirty || isSubmitted">
       <mat-icon>publish</mat-icon>
     </button>
 
@@ -115,6 +109,3 @@
         </form>
       </div>
     </div>
-
-  </mat-expansion-panel>
-</mat-accordion>

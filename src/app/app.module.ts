@@ -111,6 +111,7 @@ import { ConditionsComponent } from './components/work-in-progress/conditions/co
 import {NotificationFeedsService} from './shared/notification-feeds/notification-feeds.service';
 import {NotificationFeedsComponent} from './shared/notification-feeds/notification-feeds.component';
 import {SidebarComponent} from './shared/layout/sidebar.component';
+import { CreateLoanComponent } from './components/create-loan/create-loan.component';
 
 //CROP
 import { CropapiService } from './services/crop/cropapi.service';
@@ -164,7 +165,8 @@ import { RebatorComponent } from './components/crop/rebator/rebator.component';
      ExceptionsComponent,
      ConditionsComponent,
       NotificationFeedsComponent,
-      SidebarComponent
+      SidebarComponent,
+      CreateLoanComponent
 
   ],
   imports: [
