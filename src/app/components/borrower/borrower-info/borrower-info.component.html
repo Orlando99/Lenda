@@ -33,8 +33,13 @@
             </div>
 
             <div class="input-field col m2">
+
                 <mat-form-field>
-                  <input matInput placeholder="Entity Type" formControlName="Borrower_Entity_Type_Code">
+                  <mat-select placeholder="Entity Type" formControlName="Borrower_Entity_Type_Code">
+                    <mat-option *ngFor="let type of entityType" [value]="type" >
+                      {{ type }}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
             </div>
 
@@ -126,7 +131,26 @@
                 </mat-form-field>
               </div>
 
-
+            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="Spouse">
+              </mat-form-field>
+            </div>
+            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="Spouse SSN">
+              </mat-form-field>
+            </div>
+            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="Spouse Phone">
+              </mat-form-field>
+            </div>
+            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="Spouse Email">
+              </mat-form-field>
+            </div>
 
           </form>
         </div>

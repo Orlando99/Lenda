@@ -71,10 +71,14 @@ export class FinancialsComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localborrowerobject = obj.LoanMaster[0];
       this.allDataFetched = true;
+      if(this.localborrowerobject!=null)
       this.prepareviewmodel();
+      else
+      this.rowData=[];
     }
   }
   prepareviewmodel() {
+    try{
     //prepare three rows here
       //1st Current Financial Row
       var currentobj={Financials:'Current',Assets:'$ '+ this.localborrowerobject.Current_Assets ,Debt:'$ '+ this.localborrowerobject.Current_Liabilities ,
@@ -96,6 +100,10 @@ export class FinancialsComponent implements OnInit {
        var Aggregateobj={Financials:'Total Financials',Assets:this.localborrowerobject.FC_Borrower_TotalAssets,Debt:this.localborrowerobject.FC_Borrower_TotalDebt,
        Equity:this.localborrowerobject.FC_Borrower_TotalEquity,Ratios:this.localborrowerobject.FC_Borrower_NetRatio.toString() +' % Debt/Equity',FICO:"Financials as of",Rating:new Date(this.localborrowerobject.Borrower_Financials_Date).toLocaleDateString()}
        this.pinnedBottomRowData.push(Aggregateobj);
+      }
+      catch{
+
+      }
 
   }
 
