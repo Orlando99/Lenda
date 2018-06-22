@@ -189,9 +189,8 @@ export class Loan_Crop_Type_Practice_Type_Yield_EditModel
         Loan_ID: number;
         IrNI: string | null;
         Practice: number | null;
-        Crop_Year: number;
-        Yield_Line: string | null;
         CropYield: number | null;
         APH: number;
         InsUOM: string;
+
     }

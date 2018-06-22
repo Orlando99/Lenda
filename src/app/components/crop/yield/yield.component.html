@@ -15,6 +15,7 @@
     <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
       
           <div class="container bottom">
+            
             <div class="row">
             <ag-grid-angular 
             [ngStyle]="style"
@@ -28,7 +29,8 @@
             (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
             (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs">
+            [columnDefs]="columnDefs"
+            [overlayLoadingTemplate]="overlayLoadingTemplate">
             </ag-grid-angular>
             </div>
           </div>
