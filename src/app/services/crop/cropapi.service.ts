@@ -23,4 +23,20 @@ export class CropapiService {
     return this.apiservice.post(route,Object).map(res=>res);
    }
 
+   // POST: api/Association/AddLoanAssociation
+   addLoanAssociation(Object:any) : Observable<ResponseModel>{
+    const route='/api/Association/AddLoanAssociation';
+    return this.apiservice.post(route,Object).map(res=>res);
+   }
+
+   // POST: api/Association/EditLoanAssociation
+   updateLoanAssociation(Object:any) : Observable<ResponseModel>{
+    const route='/api/Association/EditLoanAssociation';
+    return this.apiservice.post(route,Object).map(res=>res);
+   }
+   // POST: api/Farm/DeleteLoanAssociation
+   deleteLoanAssociation(Object:any) : Observable<ResponseModel>{
+    const route='/api/Farm/DeleteLoanAssociation';
+    return this.apiservice.post(route,Object).map(res=>res);
+   }
 }

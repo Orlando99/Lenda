@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment';
-import { loan_model } from '../../../models/loanmodel';
+import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -13,7 +13,6 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { AlertifyService } from '../../../alertify/alertify.service';
-import { Loan_Crop_Unit } from '../../../models/cropmodel';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 
@@ -56,11 +55,11 @@ export class RebatorComponent implements OnInit {
       
       //Coldef here
       this.columnDefs = [
-        { headerName: 'Rebator', field: 'Assoc_Name',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-        { headerName: 'Contact', field: 'Contact',  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-        { headerName: 'Location', field: 'Location', editable: false,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
+        { headerName: 'Rebator', field: 'Assoc_Name',  editable: true },
+        { headerName: 'Contact', field: 'Contact',  editable: true},
+        { headerName: 'Location', field: 'Location', editable: true},
         { headerName: 'Phone', field: 'Phone', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-        { headerName: 'Email', field: 'Email',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
+        { headerName: 'Email', field: 'Email',  editable: true},
         { headerName: 'Pref Contact', field: 'Preferred_Contact_Ind',  editable: false },
         { headerName: 'Exp Rebate', field: '',  editable: false  },
         { headerName: 'Ins UOM', field: '',  editable: false},
@@ -96,38 +95,38 @@ export class RebatorComponent implements OnInit {
   }
  
   synctoDb() {
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-      if(res.ResCode==1){
-       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-         
-         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-         if (res.ResCode == 1) {
-           this.toaster.success("Records Synced");
-           let jsonConvert: JsonConvert = new JsonConvert();
-           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-         }
-         else{
-           this.toaster.error("Could not fetch Loan Object from API")
-         }
-       });
-      }
-      else{
-        this.toaster.error("Error in Sync");
-      }
+    this.cropunitservice.addLoanAssociation(this.localloanobject).subscribe(res=>{
+    //   if(res.ResCode==1){
+    //     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+
+    //       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+    //       if (res.ResCode == 1) {
+    //         this.toaster.success("Records Synced");
+    //         let jsonConvert: JsonConvert = new JsonConvert();
+    //         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+    //       }
+    //       else{
+    //         this.toaster.error("Could not fetch Loan Object from API")
+    //       }
+    //     });
+    //   }
+    //   else{
+    //     this.toaster.error("Error in Sync");
+    //   }
     })
   }
 
   //Grid Events
   addrow() {
-    var newItem = new Loan_Crop_Unit();
+    var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
-    newItem.Crop_Code="CRN";
     var res = this.rowData.push(newItem);
-    this.gridApi.setRowData(this.rowData);
+    this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
-      colKey: "Crop_Code" 
+      colKey: "Assoc_Name"
     });
+    this.localloanobject.Association.push(newItem);
     this.getgridheight();
   }
 
@@ -143,17 +142,20 @@ export class RebatorComponent implements OnInit {
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    if (obj.Loan_CU_ID == undefined) {
-      obj.ActionStatus = 1;
-      obj.Loan_CU_ID=0;
-      this.localloanobject.LoanCropUnits[this.localloanobject.LoanCropUnits.length-1]=value.data;
-    }
-    else {
-      var rowindex=this.localloanobject.LoanCropUnits.findIndex(p=>p.Loan_CU_ID==obj.Loan_CU_ID);
-      if(obj.ActionStatus!=1)
-      obj.ActionStatus = 2;
-      this.localloanobject.LoanCropUnits[rowindex]=obj;
-    }
+    var rowindex = value.rowIndex;
+    console.log('OBJECT',obj)
+    console.log('INDEX',rowindex)
+    // if (obj.ActionStatus == undefined) {
+    //   obj.ActionStatus = 1;
+    //   obj.Assoc_ID=0;
+    //   var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY").length;
+    //   this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY")[rowIndex]=value.data;
+    // }
+    // else {
+    //   var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+    //   obj.ActionStatus = 2;
+    //   this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[rowindex]=obj;
+    // }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
 
   }
@@ -167,9 +169,9 @@ export class RebatorComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.LoanCropUnits[rowIndex];
-        if (obj.Loan_CU_ID == 0) {
-          this.localloanobject.LoanCropUnits.splice(rowIndex, 1);
+        var obj = this.localloanobject.Association[rowIndex];
+        if (obj.Assoc_ID == 0) {
+          this.localloanobject.Association.splice(rowIndex, 1);
           
         }
         else {
