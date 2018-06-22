@@ -1,5 +1,13 @@
 import { isNumber } from "util";
-
+export function lookupCountyValue(key) {
+  var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
+  if (key != undefined && key != "") {
+    if (isNumber(key))
+      return refdata.CountyList.find(p => p.County_ID == key).County_Name;
+    else {
+    }
+  }
+}
 // States
 
 
@@ -40,16 +48,7 @@ export function extractCountyValues(mappings) {
     return obj;
 }
 
-export function lookupCountyValue(key) {
-    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
-    if (key != undefined && key != "") {
-        if (isNumber(key))
-            return refdata.CountyList.find(p => p.County_ID == key).County_Name;
-        else {
 
-        }
-    }
-}
 
 
 export function Countyvaluesetter(params) {
