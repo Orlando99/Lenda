@@ -94,7 +94,7 @@ export class YieldComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       this.localloanobject=res;
-      this.rowData=res.CropYield;
+      this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
     })
     this.croppricesdetails= this.localstorageservice.retrieve(environment.referencedatakey);
     this.getdataforgrid();
@@ -106,7 +106,7 @@ export class YieldComponent implements OnInit {
     if(obj!=null && obj!=undefined)
     {
       this.localloanobject=obj;
-      this.rowData=obj.CropYield;
+      this.rowData=obj.CropYield.filter(cy=>{return cy.ActionStatus != 3});
     }
   }
 
@@ -194,18 +194,17 @@ export class YieldComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.localloanobject.CropYield[rowIndex];
-        console.log(obj);
         if (obj.Loan_ID == 0) {
           this.localloanobject.CropYield.splice(rowIndex, 1);
         }
         else {
-          console.log("test");
-          this.localloanobject.CropYield.splice(rowIndex, 1);
-          this.rowData = this.localloanobject.CropYield;
-          console.log(this.rowData);
           obj.ActionStatus = 3;
+          this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+            console.log(res);
+          })
         }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject)
       }
     })
   
