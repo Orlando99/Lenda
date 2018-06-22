@@ -7,8 +7,8 @@
         LOAN INFORMATION
       </mat-panel-title>
     </mat-expansion-panel-header>
-
-    <div *ngIf="allDataFetched" class="container">
+    <app-spiner *ngIf="loading"></app-spiner>
+    <div *ngIf="allDataFetched && !loading" class="container">
       <div class="row">
         <div class="col s3">
           <div class="section">
@@ -87,7 +87,7 @@
     </div>
   </mat-expansion-panel>
   </mat-accordion>
- 
+
   <!-- Financials here -->
 
   <app-financials></app-financials>

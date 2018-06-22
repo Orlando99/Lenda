@@ -103,9 +103,12 @@ export class FarmComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
-      
+
       this.localloanobject = res;
-      this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
+      if(res.Farms)
+        this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
+      else
+        this.rowData = [];
       this.gridApi.setRowData(this.rowData);
 
     });
@@ -118,12 +121,18 @@ export class FarmComponent implements OnInit {
     this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      this.rowData = obj.Farms.filter(p => p.ActionStatus != 3);
+      if(obj.Farms)
+        this.rowData = obj.Farms.filter(p => p.ActionStatus != 3);
+      else
+        this.rowData = [];
     }
   }
 
 
   rowvaluechanged(value: any) {
+    if(!this.localloanobject.Farms){
+      this.localloanobject.Farms = [];
+    }
     var obj = value.data;
     if (obj.Farm_ID == undefined) {
       obj.ActionStatus = 1;
@@ -140,7 +149,7 @@ export class FarmComponent implements OnInit {
   }
 
   synctoDb() {
-    
+
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -165,6 +174,9 @@ export class FarmComponent implements OnInit {
 
   //Grid Events
   addrow() {
+    if(!this.rowData){
+      this.rowData = [];
+    }
     var newItem = new Loan_Farm();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     var res = this.rowData.push(newItem);
@@ -193,11 +205,12 @@ export class FarmComponent implements OnInit {
 
 
   syncenabled(){
-
+    if(this.rowData)
    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
   }
 
   //
+
 
 }
 

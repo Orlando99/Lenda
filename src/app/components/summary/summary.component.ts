@@ -11,23 +11,26 @@ import { LoggingService } from '../../services/Logs/logging.service';
 })
 export class SummaryComponent implements OnInit {
   private localborrowerobject:borrower_model=new borrower_model();
-  public allDataFetched=false;  
+  public allDataFetched=false;
+  loading;
   constructor(public localstorageservice:LocalStorageService,public logging:LoggingService) { }
   ngOnInit() {
+    this.loading = true;
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'Summary',"LocalStorage updated");
+      this.loading = false;
       this.localborrowerobject=res.LoanMaster[0];
       this.allDataFetched=true;
     })
     this.getdataforgrid();
   }
   getdataforgrid(){
-    
+
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1,'Summary',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
-      
+
     this.localborrowerobject=obj.LoanMaster[0];
     this.allDataFetched=true;
     }
