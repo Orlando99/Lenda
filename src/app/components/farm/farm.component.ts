@@ -35,7 +35,12 @@ export class FarmComponent implements OnInit {
   private gridApi;
   private columnApi;
   //region Ag grid Configuration
-
+  style = {
+    marginTop: '10px',
+    width: '93%',
+    height: '240px',
+    boxSizing: 'border-box'
+  };
 
   returncountylist() {
     return this.refdata.CountyList;

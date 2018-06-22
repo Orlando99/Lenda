@@ -1,6 +1,5 @@
 
-<div class=".
-6basic-container">
+<div class="basic-container">
 
   <mat-accordion>
   <mat-expansion-panel [expanded]="true">
@@ -19,7 +18,7 @@
           <div class="container bottom">
             <div class="row">
             <ag-grid-angular
-            style="width: 96%; height: 250px;"
+            [ngStyle]="style"
             class="ag-theme-balham"
             [animateRows]="true"
             [enableSorting]="true"
