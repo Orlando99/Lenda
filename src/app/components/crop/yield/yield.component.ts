@@ -9,12 +9,13 @@ import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Crop_Type_Practice_Type_Yield_EditModel, Loan_Crop_Type_Practice_Type_Yield_AddModel } from '../../../models/cropmodel';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
-import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping } from '../../../Workers/utility/aggrid/cropboxes';
+import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping, cropNameValueSetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { tick } from '@angular/core/testing';
+import { SelectEditor } from '../../../aggridfilters/selectbox';
 
 @Component({
   selector: 'app-yield',
@@ -35,7 +36,7 @@ export class YieldComponent implements OnInit {
   public deleteAction = false;
   context: any;
   
-  frameworkcomponents: { deletecolumn: typeof DeleteButtonRenderer; };
+  frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
     marginTop: '10px',
     width: '93%',
@@ -60,23 +61,37 @@ export class YieldComponent implements OnInit {
       this.years.push(cropYear-i);
     };
 
+
     this.components = { numericCellEditor: getNumericCellEditor() };
-    this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer};
+    this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer};
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'CropType',
-        valueFormatter: function (params) { return lookupCropValuewithoutmapping( params.value);},
-        valueSetter: Cropvaluesetter,
+        headerName: 'Crop', field: 'Crop', editable: true, cellEditor: "selectEditor",
+        cellEditorParams: {
+          values: extractCropValues(this.refdata.CropList)
+        },
+        valueFormatter: function (params) {
+          return params.value;
+        },
+        valueSetter: cropNameValueSetter,
         width: 80
       },
       {
         headerName: 'Crop type', field: 'CropType',
-        valueFormatter: function (params) {return lookupCropTypeValue(params.value);},
+        valueFormatter: function (params) {return params.value;},
         valueSetter: CropTypevaluesetter,
         width: 100
       },
-      { headerName: 'Crop Practice', field: 'IrNI',  editable: false,width: 120},
-      { headerName: 'Practice', field: 'Practice',   editable: false,width: 100}
+      { headerName: 'Crop Practice', field: 'IrNI',  editable: true,width: 120, cellEditor: "selectEditor",
+        cellEditorParams: {
+          values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
+        },
+      },
+      { headerName: 'Practice', field: 'Practice',   editable: true,width: 100, cellEditor: "selectEditor",
+        cellEditorParams: {
+          values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
+        },
+      }
     ];
 
     this.years.forEach(element => {
@@ -190,8 +205,8 @@ export class YieldComponent implements OnInit {
 
     var newItem = {
       Crop_ID:0,
-      Crop:0,
-      CropType:"CRN",
+      Crop:"",
+      CropType:"",
       Loan_ID:"",
       IrNi:"",
       Practice:"",
@@ -206,7 +221,7 @@ export class YieldComponent implements OnInit {
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length,
-      colKey: "CropType" 
+      colKey: "Crop" 
     });
     this.getgridheight();
   }
