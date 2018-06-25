@@ -28,7 +28,7 @@ export class SidebarComponent implements OnInit {
     private localstorage:LocalStorageService
   ) { 
 this.localstorage.observe(environment.loankey).subscribe(res=>{
-  debugger
+  
         this.loanid=res.Loan_Full_ID.replace("-","/");
 })
     this.getloanid();

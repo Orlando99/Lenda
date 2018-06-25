@@ -17,6 +17,14 @@ export class BorrowerInfoComponent implements OnInit {
   borrowerInfoForm: FormGroup;
   localloanobj: loan_model;
   stateList: Array<any>;
+  entityType = [
+    'Individual',
+    'Individual w/ Spouse',
+    'Partner',
+    'Joint',
+    'Corporation',
+    'LLC',
+  ];
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
   @Input('allowIndividualSave')
@@ -25,7 +33,23 @@ export class BorrowerInfoComponent implements OnInit {
   mode: string;
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
-
+  @Input() set borrowerInfo(borrowerInfo) {
+    if(borrowerInfo){
+      let borrower = new loan_borrower();
+      borrower.Borrower_First_Name = borrowerInfo.value.Farmer_First_Name ? borrowerInfo.value.Farmer_First_Name.slice() : "";
+      borrower.Borrower_Last_Name = borrowerInfo.value.Farmer_Last_Name ? borrowerInfo.value.Farmer_Last_Name.slice() : "";
+      borrower.Borrower_Address = borrowerInfo.value.Farmer__Address ? borrowerInfo.value.Farmer__Address.slice() : "";
+      borrower.Borrower_City = borrowerInfo.value.Farmer_City ? borrowerInfo.value.Farmer_City.slice() : "";
+      borrower.Borrower_DOB = borrowerInfo.value.Farmer_DOB ? borrowerInfo.value.Farmer_DOB.slice() : "";
+      borrower.Borrower_Phone = borrowerInfo.value.Farmer_Phone ? borrowerInfo.value.Farmer_Phone.slice() : "";
+      borrower.Borrower_Zip = borrowerInfo.value.Farmer_Zip ? borrowerInfo.value.Farmer_Zip.slice() : "";
+      borrower.Borrower_email = borrowerInfo.value.Farmer_Email ? borrowerInfo.value.Farmer_Email.slice() : "";
+      borrower.Borrower_MI = borrowerInfo.value.Farmer_MI ? borrowerInfo.value.Farmer_MI.slice() : "";
+      borrower.Borrower_SSN_Hash = borrowerInfo.value.Farmer_SSN_Hash ? borrowerInfo.value.Farmer_SSN_Hash.slice() : "";
+      borrower.Borrower_State_ID = borrowerInfo.value.Farmer_State ? borrowerInfo.value.Farmer_State.slice() : "";
+      this.createForm(borrower);
+    }
+  }
 
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -51,6 +75,7 @@ export class BorrowerInfoComponent implements OnInit {
 
 
   createForm(formData) {
+    console.log(formData)
     this.borrowerInfoForm = this.fb.group({
       Borrower_First_Name: [formData.Borrower_First_Name || '', Validators.required],
       Borrower_MI: [formData.Borrower_MI || '', Validators.required],
@@ -76,13 +101,18 @@ export class BorrowerInfoComponent implements OnInit {
       (value: any) => {
         this.isSubmitted = false;
         if (this.mode === 'create') {
-          this.onFormValueChange.emit({value : value,valid : this.borrowerInfoForm.valid});
+          this.onFormValueChange.emit({ value: value, valid: this.borrowerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
         }
       }
     );
+  }
+
+
+  savedByparentSuccessssCallback = () => {
+    this.createForm({});
   }
 
   formatDate(strDate) {

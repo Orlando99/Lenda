@@ -30,7 +30,7 @@ export class LoanOverviewComponent implements OnInit {
 
     let temp = this.route.params.subscribe(params => {
       // Defaults to 0 if no query param provided.
-      debugger
+      
       this.loanid = (params["loan"].toString())+"-"+ (params["seq"]);
     });
   }
@@ -53,7 +53,7 @@ export class LoanOverviewComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      debugger
+      
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
         console.log(res)
         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
@@ -82,24 +82,24 @@ export class LoanOverviewComponent implements OnInit {
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/summary")
   }
   gotoborrower() {
-    debugger
+    
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/borrower")
   }
   gotocrop() {
-    debugger
+    
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/crop")
   }
   gotofarm() {
-    debugger
+    
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/farm")
   }
   gotobudget() {
-    debugger
+    
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/budget")
   }
 
   gotoinsurance() {
-    debugger
+    
     this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/insurance")
   }
 }

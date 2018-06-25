@@ -69,16 +69,13 @@ import { BorrowerapiService } from './services/borrower/borrowerapi.service';
 import { LoggingService } from './services/Logs/logging.service';
 import { ProjectedincomeComponent } from './components/summary/projectedincome/projectedincome.component';
 import { LoancropunitcalculationworkerService } from './Workers/calculations/loancropunitcalculationworker.service';
-import { CropComponent } from './components/crop/crop.component';
-import { PriceComponent } from './components/crop/price/price.component';
 
 import { NamingConventionapiService } from './services/admin/namingconventionapi.service';
 import { AgGridModule } from 'ag-grid-angular';
 import { NumericEditor } from "../app/aggridfilters/numericaggrid";
 import { AggridTxtAreaComponent } from './aggridfilters/textarea';
 import { LoadingModule } from 'ngx-loading';
-import { CropapiService } from './services/crop/cropapi.service';
-import { YieldComponent } from './components/crop/yield/yield.component';
+
 import { LoancrophistoryService } from './Workers/calculations/loancrophistory.service';
 import { FarmComponent } from './components/farm/farm.component';
 import { FarmcalculationworkerService } from './Workers/calculations/farmcalculationworker.service';
@@ -116,11 +113,24 @@ import {NotificationFeedsComponent} from './shared/notification-feeds/notificati
 import {SidebarComponent} from './shared/layout/sidebar.component';
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
 
+//CROP
+import { CropapiService } from './services/crop/cropapi.service';
+
+import { CropComponent } from './components/crop/crop.component';
+import { PriceComponent } from './components/crop/price/price.component';
+import { YieldComponent } from './components/crop/yield/yield.component';
+import { RebatorComponent } from './components/crop/rebator/rebator.component';
+import {SpinerComponent} from './shared/spiner/spiner.component';
+
+
+
+
 @NgModule({
   declarations: [
     NumericEditor,
     SelectEditor,
     AppComponent,
+    SpinerComponent,
     DeleteButtonRenderer,
     ConfirmComponent,
     LoginComponent,
@@ -138,12 +148,10 @@ import { CreateLoanComponent } from './components/create-loan/create-loan.compon
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent,
-    PriceComponent,
+    CropComponent,RebatorComponent,PriceComponent,YieldComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
-    YieldComponent,
     FarmComponent,
     FocusDirective,
     BudgetComponent,

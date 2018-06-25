@@ -76,7 +76,7 @@ export class FarmerInfoComponent implements OnInit {
       (value: any) => {
         this.isSubmitted = false;
         if (this.mode === 'create') {
-          this.onFormValueChange.emit({value : value, valid : this.farmerInfoForm.valid});
+          this.onFormValueChange.emit({ value: value, valid: this.farmerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
@@ -84,6 +84,10 @@ export class FarmerInfoComponent implements OnInit {
 
       }
     );
+  }
+
+  savedByparentSuccessssCallback = () => {
+    this.createForm({});
   }
 
   formatDate(strDate) {

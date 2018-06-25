@@ -8,7 +8,7 @@ export class LoancropunitcalculationworkerService {
   public input:loan_model;
   constructor() { }
   prepare_crops_revenue(){
-    debugger
+    
     for(let entry of this.input.LoanCropUnits){
       entry.FC_Revenue=entry.CU_Acres * 200 * .95 *(entry.Z_Price+entry.Z_Basis_Adj+entry.Z_Marketing_Adj+entry.Z_Rebate_Adj);
     }

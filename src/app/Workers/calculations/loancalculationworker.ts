@@ -26,13 +26,19 @@ export class LoancalculationWorker {
 
   performcalculationonloanobject(localloanobj: loan_model) {
     console.log(new Date().getMilliseconds());
-      debugger
+      
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
+    if(localloanobj.Borrower!=null)
     localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
+    if(localloanobj.LoanCropUnits!=null)
     localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
+    if(localloanobj.CropYield!=null)
     localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
+    if(localloanobj.Farms!=null)
     localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
+    
     localloanobj.LoanMaster = localloanobj.LoanMaster;
+    
     localloanobj.LoanBudget=localloanobj.LoanBudget;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");

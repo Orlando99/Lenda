@@ -10,7 +10,7 @@ export class Loan_Farm
     @JsonProperty("Farm_State_ID", IntConverter,false)
     Farm_State_ID: number=0;
     @JsonProperty("Farm_County_ID", IntConverter,false)
-    Farm_County_ID: number=0;
+    Farm_County_ID: number=1;
     @JsonProperty("FSN", StringConverter,false)
     FSN: string='';
     @JsonProperty("Section", StringConverter,false)
@@ -49,5 +49,5 @@ export class Loan_Farm
     @JsonProperty("ActionStatus", IntConverter,false)
     ActionStatus: number=undefined;
     FC_Total_Acres:number;
-    
+
 }

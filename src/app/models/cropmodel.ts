@@ -164,6 +164,33 @@ export class Loan_Crop_Type_Practice_Type_Yield_EditModel
         PropertyName: string;
         PropertyValue: string;
         CropYear: number | null;
+        YieldLine: number | null;
         IsPropertyYear: boolean;
     }
 
+
+    export class Loan_Crop_Type_Practice_Type_Yield_AddModel
+    {
+        // Crop_ID: number;
+        // Loan_ID: number;
+        // Z_Crop_Name: string;
+        // Loan_Seq_Num: number;
+        // Z_Crop_Type_Code: string | null;
+        // Z_Practice_Type_Code: number | null;
+        // Crop_Year: number;
+        // Yield_Line: string | null;
+        // Crop_Yield: number | null;
+        // Status: number;
+        // Loan_Full_ID: string;
+
+        Crop: number;
+        CropType: number;
+        Crop_ID: string;
+        Loan_ID: number;
+        IrNI: string | null;
+        Practice: number | null;
+        CropYield: number | null;
+        APH: number;
+        InsUOM: string;
+
+    }
