@@ -4,7 +4,6 @@ import { isNumber } from "util";
 
 
 export function extractCropValues(mappings) {
-
     var obj = [];
     mappings.forEach((element,index) => {
 
@@ -15,8 +14,8 @@ export function extractCropValues(mappings) {
 }
 
 export function lookupCropValue(mappings, key) {
-
-    return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
+    let test = mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
+    return test
 }
 
 export function lookupCropValuewithoutmapping(key) {
@@ -26,13 +25,24 @@ export function lookupCropValuewithoutmapping(key) {
 }
 
 export function Cropvaluesetter(params) {
-
     var crop = params.newValue;
     var values = params.colDef.cellEditorParams.values;
     for (let object of values) {
         var value = object.key;
         if (value == params.newValue) {
             params.data[params.colDef.field] = crop;
+        }
+    }
+    return true;
+}
+
+export function cropNameValueSetter(params) {
+    var crop = params.newValue;
+    var values = params.colDef.cellEditorParams.values;
+    for (let object of values) {
+        var value = object.key;
+        if (value == params.newValue) {
+            params.data[params.colDef.field] = object.value;
         }
     }
     return true;
@@ -87,3 +97,8 @@ export function getfilteredCropType(params) {
     return { values: extractCropTypeValues(allowedcroptypes) };
 }
  // Ends Here
+
+ export function lookupCropType(mappings, key) {
+    let test = mappings.find(p=>p.value.toLowerCase()==key.toLowerCase()).key;
+    return test
+}
