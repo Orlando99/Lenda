@@ -32,6 +32,7 @@ export class YieldComponent implements OnInit {
   public components;
   public gridApi;
   public columnApi;
+  public deleteAction = false;
   context: any;
   
   frameworkcomponents: { deletecolumn: typeof DeleteButtonRenderer; };
@@ -69,7 +70,7 @@ export class YieldComponent implements OnInit {
         width: 80
       },
       {
-        headerName: 'Crop type', field: 'Crop_Type_Code',
+        headerName: 'Crop type', field: 'CropType',
         valueFormatter: function (params) {return lookupCropTypeValue(params.value);},
         valueSetter: CropTypevaluesetter,
         width: 100
@@ -133,18 +134,22 @@ export class YieldComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.edits.length>0
+    return this.edits.length>0 || this.deleteAction
   }
 
   synctoDb() {
-    this.edits.forEach(element => {
-      this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>res);
-    });
+    if(this.deleteAction){
+      this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>res)
+    }else{
+      this.edits.forEach(element => {
+        this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>res);
+      });
+    }
    
     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-      
       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
       if (res.ResCode == 1) {
+        this.deleteAction = false;
         this.toaster.success("Records Synced");
         let jsonConvert: JsonConvert = new JsonConvert();
         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
@@ -172,7 +177,7 @@ export class YieldComponent implements OnInit {
         }
         else {
           obj.ActionStatus = 3;
-          this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>res)
+          this.deleteAction = true;
         }
 
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject)
