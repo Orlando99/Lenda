@@ -78,6 +78,7 @@ export class HeaderComponent implements OnInit {
 
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
+    debugger
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {
       this.icon = 'arrow_forward_ios';
