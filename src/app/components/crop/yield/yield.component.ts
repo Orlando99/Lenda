@@ -34,6 +34,7 @@ export class YieldComponent implements OnInit {
   public gridApi;
   public columnApi;
   public deleteAction = false;
+  public addAction = false;
   context: any;
   
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
@@ -77,9 +78,9 @@ export class YieldComponent implements OnInit {
         width: 80
       },
       {
-        headerName: 'Crop type', field: 'CropType',
-        valueFormatter: function (params) {return params.value;},
-        valueSetter: CropTypevaluesetter,
+        headerName: 'Crop type', field: 'CropType',  editable: true,
+        // valueFormatter: function (params) {return params.value;},
+        // valueSetter: CropTypevaluesetter,
         width: 100
       },
       { headerName: 'Crop Practice', field: 'IrNI',  editable: true,width: 120, cellEditor: "selectEditor",
@@ -135,25 +136,38 @@ export class YieldComponent implements OnInit {
   rowvaluechanged(value:any){
     var obj = value.data;
     var rowindex = value.rowIndex;
-    obj.ActionStatus = 2;
-    this.localloanobject.CropYield[rowindex]=obj;
-    let edit = new Loan_Crop_Type_Practice_Type_Yield_EditModel();
-        edit.CropId = value.data.Crop_ID;
-        edit.YieldLine = value.colDef.field;
-        edit.IsPropertyYear = true;
-        edit.LoanID = value.data.Loan_ID;
-        edit.PropertyName = value.colDef.field;
-        edit.PropertyValue = value.value;
-    this.edits.push(edit);
+
+    if(obj.Crop_ID === 0){
+      obj.ActionStatus = 1;
+      this.localloanobject.CropYield[rowindex]=obj;
+      if(obj.Crop && obj.CropType && obj.Practice){
+        this.addAction = true;
+      }else{
+        this.addAction = false;
+      }
+    }else{
+      // obj.ActionStatus = 2;
+      this.localloanobject.CropYield[rowindex]=obj;
+      let edit = new Loan_Crop_Type_Practice_Type_Yield_EditModel();
+          edit.CropId = value.data.Crop_ID;
+          edit.YieldLine = value.colDef.field;
+          edit.IsPropertyYear = true;
+          edit.LoanID = value.data.Loan_ID;
+          edit.PropertyName = value.colDef.field;
+          edit.PropertyValue = value.value;
+      this.edits.push(edit);
+      console.log('EDITS',this.edits);
+    }
+    
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   syncenabled(){
-    return this.edits.length>0 || this.deleteAction
+    return this.edits.length>0 || this.deleteAction || this.addAction
   }
 
   synctoDb() {
-    if(this.deleteAction){
+    if(this.deleteAction || this.addAction){
       this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>res)
     }else{
       this.edits.forEach(element => {
