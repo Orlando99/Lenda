@@ -82,7 +82,7 @@ export class YieldComponent implements OnInit {
         valueSetter: CropTypevaluesetter,
         width: 100
       },
-      { headerName: 'Crop Practice', field: 'IrNI',  editable: true,width: 120, cellEditor: "selectEditor",
+      { headerName: 'Crop Practice', field: 'IrNI', editable: true,width: 120, cellEditor: "selectEditor",
         cellEditorParams: {
           values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
         },
@@ -133,6 +133,7 @@ export class YieldComponent implements OnInit {
   }
 
   rowvaluechanged(value:any){
+    debugger
     var obj = value.data;
     var rowindex = value.rowIndex;
     obj.ActionStatus = 2;
@@ -159,6 +160,7 @@ export class YieldComponent implements OnInit {
       this.edits.forEach(element => {
         this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>res);
       });
+      this.edits=[];
     }
    
     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {

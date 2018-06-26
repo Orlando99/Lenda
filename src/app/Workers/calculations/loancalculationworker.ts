@@ -9,6 +9,7 @@ import { LoancropunitcalculationworkerService } from './loancropunitcalculationw
 import { LoancrophistoryService } from './loancrophistory.service';
 import { FarmcalculationworkerService } from './farmcalculationworker.service';
 import { AssociationcalculationworkerService } from './associationcalculationworker.service';
+import { MAT_MENU_DEFAULT_OPTIONS } from '@angular/material';
 
 
 
@@ -24,9 +25,15 @@ export class LoancalculationWorker {
     public logging:LoggingService
 ) {}
 
-  performcalculationonloanobject(localloanobj: loan_model) {
-    console.log(new Date().getMilliseconds());
-      
+  performcalculationonloanobject(localloanobj: loan_model,recalculate?:boolean) {
+    if(recalculate==undefined)
+    {
+      recalculate=true; // by default we are taking that it needs calculation
+    }
+    if(recalculate)
+    {
+    console.log("Calculation Started"); 
+    console.log(new Date().getMilliseconds());    
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     if(localloanobj.Borrower!=null)
     localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
@@ -36,18 +43,23 @@ export class LoancalculationWorker {
     localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
     if(localloanobj.Farms!=null)
     localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
-    
     localloanobj.LoanMaster = localloanobj.LoanMaster;
-    
     localloanobj.LoanBudget=localloanobj.LoanBudget;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
+    console.log("Calculation Ended"); 
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");
-
+    }
       // At End push the new obj with new caluclated values into localstorage and emit value changes
-      this.localst.store(environment.loankey,localloanobj);
-      this.logging.checkandcreatelog(3,'Calculationforloan',"Local Storage updated");
+    this.localst.store(environment.loankey,localloanobj);
+    if(recalculate)
+    {
+    this.logging.checkandcreatelog(3,'Calculationforloan',"Local Storage updated");
     console.log("object updated");
     console.log(new Date().getMilliseconds());
+    }
+    else
+    console.log("object updated without calculations");
+    
   }
 
 }

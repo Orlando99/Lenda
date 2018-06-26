@@ -23,6 +23,8 @@ import { loan_model } from '../../models/loanmodel';
 export class HeaderComponent implements OnInit {
   public loanid:string=""
   _res: any = {};
+  public apiurl=environment.apiUrl;
+  public Databasename:string="";
   public value: number = 1;
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
@@ -128,12 +130,15 @@ export class HeaderComponent implements OnInit {
   getreferencedata() {
     this.referencedataapi.getreferencedata().subscribe(res => {
       this.localst.store(environment.referencedatakey, res.Data);
+      this.Databasename=res.Data.Databasename;
     })
   }
   getloanid(){
 
     try{
-      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
+      debugger
+      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");
+      this.Databasename=this.localst.retrieve(environment.referencedatakey).Databasename;
     }
     catch{
       

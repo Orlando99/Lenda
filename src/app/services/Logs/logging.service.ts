@@ -21,7 +21,7 @@ export class LoggingService {
       if (level <= res) {
         
         let obj = new Logs();
-        obj.Log_Id = 0; ``
+        obj.Log_Id = 0;
         obj.Log_Message = message;
         obj.Log_Section = section;
         this.createlog(obj).subscribe(res=>{
