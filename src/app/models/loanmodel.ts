@@ -259,6 +259,9 @@ export class borrower_model
         @JsonProperty("Association", [Loan_Association])
         Association: Loan_Association[]=undefined;
 
+        @JsonProperty("LoanCollateral", [])
+        LoanCollateral:any=undefined;
+
         @JsonProperty("LoanMaster", [])
         LoanMaster: any = undefined;
         

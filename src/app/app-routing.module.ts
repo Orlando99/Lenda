@@ -20,6 +20,7 @@ import{ DistributerComponent } from "./components/budget/distributer/distributer
 import { LoanviewerComponent } from "./components/loanviewer/loanviewer.component";
 import { WorkInProgressComponent } from "./components/work-in-progress/work-in-progress.component";
 import { CreateLoanComponent } from "./components/create-loan/create-loan.component";
+import { CollateralComponent } from "./components/collateral/collateral.component";
 
 
 const appRoutes: Routes = [ 
@@ -47,6 +48,7 @@ const appRoutes: Routes = [
         { path: 'farm', component: FarmComponent },
         { path: 'insurance', component: InsuranceComponent },
         { path: 'budget', component: BudgetComponent },
+        { path: 'collateral', component: CollateralComponent },
         { path: 'work-in-progress', component: WorkInProgressComponent },
       ] },
     ]
