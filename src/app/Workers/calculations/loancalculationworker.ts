@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { observeOn } from 'rxjs/operators';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { loan_model } from '../../models/loanmodel';
 import { Borrowercalculationworker } from './borrowercalculationworker.service';
 import { LoggingService } from '../../services/Logs/logging.service';
@@ -33,7 +33,8 @@ export class LoancalculationWorker {
     if(recalculate)
     {
     console.log("Calculation Started"); 
-    console.log(new Date().getMilliseconds());    
+    let starttime=new Date().getMilliseconds();
+    console.log(starttime);    
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     if(localloanobj.Borrower!=null)
     localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
@@ -47,15 +48,18 @@ export class LoancalculationWorker {
     localloanobj.LoanBudget=localloanobj.LoanBudget;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     console.log("Calculation Ended"); 
-    this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Ended");
+    let endtime=new Date().getMilliseconds();
+    this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
+    
+    
+    console.log("Time taken :" + (starttime-endtime).toString() + " ms");
     }
       // At End push the new obj with new caluclated values into localstorage and emit value changes
     this.localst.store(environment.loankey,localloanobj);
     if(recalculate)
     {
-    this.logging.checkandcreatelog(3,'Calculationforloan',"Local Storage updated");
     console.log("object updated");
-    console.log(new Date().getMilliseconds());
+    this.logging.checkandcreatelog(3,'Calculationforloan',"Local Storage updated");
     }
     else
     console.log("object updated without calculations");

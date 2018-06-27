@@ -18,7 +18,7 @@ export class LoggingService {
   checkandcreatelog(level: Logpriority, section: string, message: string) {
     let res=this.localst.retrieve(environment.logpriority);
       
-      if (level <= res) {
+      // if (level <= res) {
         
         let obj = new Logs();
         obj.Log_Id = 0;
@@ -27,7 +27,7 @@ export class LoggingService {
         this.createlog(obj).subscribe(res=>{
           
         })
-      }
+      
       //ignore else
    
 

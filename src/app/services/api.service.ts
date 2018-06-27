@@ -6,7 +6,7 @@ import { ToastsManager } from 'ng2-toastr';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { LocalStorageService } from 'ngx-webstorage';
 
 @Injectable()

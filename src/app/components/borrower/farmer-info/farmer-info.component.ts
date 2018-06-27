@@ -4,7 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { loan_model, loan_farmer } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 
@@ -57,7 +57,7 @@ export class FarmerInfoComponent implements OnInit {
   createForm(formData) {
     this.farmerInfoForm = this.fb.group({
       Farmer_First_Name: [formData.Farmer_First_Name || '', Validators.required],
-      Farmer_MI: [formData.Farmer_MI || '', Validators.required],
+      Farmer_MI: [formData.Farmer_MI || ''],
       Farmer_Last_Name: [formData.Farmer_Last_Name || '', Validators.required],
       Farmer_SSN_Hash: [formData.Farmer_SSN_Hash || '', Validators.required],
       Farmer__Address: [formData.Farmer__Address || '', Validators.required],
