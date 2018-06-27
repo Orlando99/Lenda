@@ -260,7 +260,7 @@ export class borrower_model
         Association: Loan_Association[]=undefined;
 
         @JsonProperty("LoanCollateral", [])
-        LoanCollateral:any=undefined;
+        LoanCollateral: Loan_Collateral[]=undefined;
 
         @JsonProperty("LoanMaster", [])
         LoanMaster: any = undefined;
@@ -316,6 +316,61 @@ export class borrower_model
 
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=0;
+
+    }
+    @JsonObject
+    export class Loan_Collateral
+    {
+        @JsonProperty("Collateral_ID", IntConverter,false)
+        Collateral_ID: number=0;
+        @JsonProperty("Loan_ID", IntConverter,false)
+        Loan_ID: number=0;
+        @JsonProperty("Loan_Seq_Num", IntConverter,false)
+        Loan_Seq_Num: number=0;
+        @JsonProperty("Loan_Full_ID", StringConverter,false)
+        Loan_Full_ID: string='';
+        @JsonProperty("Collateral_Category_Code", StringConverter,false)
+        Collateral_Category_Code: string='';
+        @JsonProperty("Collateral_Type_Code", IntConverter,false)
+        Collateral_Type_Code: number=0;
+        @JsonProperty("Collateral_Sub_Type_Code", IntConverter,false)
+        Collateral_Sub_Type_Code: number=0;
+        @JsonProperty("Collateral_Description", StringConverter,false)
+        Collateral_Description: string='';
+        @JsonProperty("Insurance_Category_Code", IntConverter,false)
+        Insurance_Category_Code: number=0;
+        @JsonProperty("Insurance_Type_Code", IntConverter,false)
+        Insurance_Type_Code: number=0;
+        @JsonProperty("Insurance_Sub_Type_Code", IntConverter,false)
+        Insurance_Sub_Type_Code: number=0;
+        @JsonProperty("Market_Value", IntConverter,false)
+        Market_Value: number=0;
+        @JsonProperty("Prior_Lien_Amount", IntConverter,false)
+        Prior_Lien_Amount: number=0;
+        @JsonProperty("Net_Market_Value", IntConverter,false)
+        Net_Market_Value: number=0;
+        @JsonProperty("Disc_Value", IntConverter,false)
+        Disc_Value: number=0;
+        @JsonProperty("Insurance_Value", IntConverter,false)
+        Insurance_Value: number=0;
+        @JsonProperty("Insurance_Disc_Value", IntConverter,false)
+        Insurance_Disc_Value: number=0;
+        @JsonProperty("Disc_CEI_Value", IntConverter,false)
+        Disc_CEI_Value: number=0;
+        @JsonProperty("Lien_Holder", StringConverter,false)
+        Lien_Holder: string='';
+        @JsonProperty("Status", IntConverter,false)
+        Status: number=0;
+        @JsonProperty("IsDelete", IntConverter,false)
+        IsDelete: number=0;
+        @JsonProperty("Insured_Flag", IntConverter,false)
+        Insured_Flag: number=0;
+        @JsonProperty("Qty", IntConverter,false)
+        Qty: number=0;
+        @JsonProperty("Price", IntConverter,false)
+        Price: number=0;
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=0;
 

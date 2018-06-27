@@ -9,6 +9,7 @@ import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericbox
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { setNetMktValue, setDiscValue, currencyFormatter, insuredFormatter, setMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
 
 @Component({
   selector: 'app-livestock',
@@ -51,14 +52,27 @@ export class LivestockComponent implements OnInit {
         { headerName: 'Description', field: 'Collateral_Description',  editable: true },
         { headerName: 'Qty', field: 'Qty',  editable: true },
         { headerName: 'Price', field: 'Price',  editable: true },
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true },
-        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true },
+        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", 
+          valueGetter: function (params) {
+            return setMktValue(params);
+          },valueFormatter: currencyFormatter},
+        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
         { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true },
-        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: true },
+        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",
+          valueGetter: function (params) {
+            return setNetMktValue(params);
+          }},
         { headerName: 'Discount %', field: 'Disc_CEI_Value',  editable: true },
-        { headerName: 'Disc Value', field: 'Disc_Value',  editable: true },
-        { headerName: 'Insured', field: 'Net_Market_Value',  editable: true },
-        { headerName: 'Net Mkt Value', field: 'Insured_Flag',  editable: true },
+        { headerName: 'Disc Value', field: 'Disc_Value',  editable: false, cellEditor: "numericCellEditor",
+          valueGetter: function (params) {
+            return setDiscValue(params);
+          },
+          valueFormatter: currencyFormatter},
+        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",
+          cellEditorParams:{
+            values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
+          },
+          valueFormatter: insuredFormatter},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
       ];
  
