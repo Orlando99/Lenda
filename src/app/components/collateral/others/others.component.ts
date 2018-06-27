@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { loan_model} from '../../../models/loanmodel';
+import { loan_model, Loan_Collateral} from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { setNetMktValue, setDiscValue, currencyFormatter, insuredFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { setNetMktValue, setDiscValue, currencyFormatter, insuredFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
+import { ToastsManager } from 'ng2-toastr';
+import { JsonConvert } from 'json2typescript';
+import { SelectEditor } from '../../../aggridfilters/selectbox';
 
 @Component({
   selector: 'app-others',
@@ -28,6 +31,7 @@ export class OthersComponent implements OnInit {
   public editType;
   public gridApi;
   public columnApi;
+  public deleteAction = false;
 
   style = {
     marginTop: '10px',
@@ -37,6 +41,7 @@ export class OthersComponent implements OnInit {
   };
   
   constructor(public localstorageservice: LocalStorageService,
+    private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
@@ -45,7 +50,7 @@ export class OthersComponent implements OnInit {
 
       this.components = { numericCellEditor: getNumericCellEditor() };
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-      this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
+      this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
       
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: true },
@@ -73,13 +78,12 @@ export class OthersComponent implements OnInit {
  
       this.context = { componentParent: this }; 
   }
-  
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
-      this.localloanobject = res;
+      this.localloanobject = res
       this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "OTR"})
+      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !== 3});
         this.getgridheight();
     });
     this.getdataforgrid();
@@ -91,7 +95,7 @@ export class OthersComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "OTR"})
+      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !== 3});
     }
   }
 
@@ -101,28 +105,77 @@ export class OthersComponent implements OnInit {
     this.getgridheight();
   }
  
-  synctoDb() {
+  syncenabled(){
+    return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
+  }
+
+  synctoDb(){
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+      if(res.ResCode == 1){
+        this.deleteAction = false;
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    });
   }
 
   //Grid Events
   addrow() {
-  }
-
-  valuechanged(value:any,selectname:any,rowindex:any){
+    var newItem = new Loan_Collateral();
+    newItem.Collateral_Category_Code = "OTR";
+    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.ActionStatus = 1;
+    var res = this.rowData.push(newItem);
+    this.localloanobject.LoanCollateral.push(newItem);
+    this.gridApi.setRowData(this.rowData);
+    this.gridApi.startEditingCell({
+      rowIndex: this.rowData.length-1,
+      colKey: "Collateral_Description" 
+    });
+    this.getgridheight();
   }
 
   rowvaluechanged(value: any) {
-
+    var obj = value.data;
+    if (obj.Collateral_ID  == 0) {
+      obj.ActionStatus = 1;
+      this.localloanobject.LoanCropUnits[this.localloanobject.LoanCollateral.length-1]=value.data;
+    }
+    else {
+      var rowindex=this.localloanobject.LoanCollateral.findIndex(lc=>lc.Collateral_ID==obj.Collateral_ID);
+      if(obj.ActionStatus!=1)
+        obj.ActionStatus = 2;
+      this.localloanobject.LoanCollateral[rowindex]=obj;
+    }
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
-
-  
 
   DeleteClicked(rowIndex: any) {
-
-  }
-
-  syncenabled(){
-   
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+      if (res == true) {
+        var obj = this.rowData[rowIndex];
+        if (obj.Collateral_ID == 0) {
+          this.rowData.splice(rowIndex, 1);
+          this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
+        }else {
+          this.deleteAction = true;
+          obj.ActionStatus = 3;
+        }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+      }
+    })
   }
 
   getgridheight(){

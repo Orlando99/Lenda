@@ -16,7 +16,7 @@ export function currencyFormatter (params) {
 
 export function insuredFormatter (params) {
     if(params.cellEditorparams){
-        return params.cellEditorparams.values[params].value;
+        return params.cellEditorparams.values[1].value;
     }else{
         if(params.value === 1){
             return 'Yes';
