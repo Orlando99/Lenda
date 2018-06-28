@@ -59,14 +59,14 @@ export class FSAComponent implements OnInit {
         { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
         { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true},
         { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",
-          valueGetter: function (params) {
-            return setNetMktValue(params);
-          }},
+          // valueGetter: function (params) {
+          //   return setNetMktValue(params);}
+        },
         { headerName: 'Discount %', field: 'Disc_CEI_Value',  editable: true,cellEditor: "numericCellEditor" },
         { headerName: 'Disc Value', field: 'Disc_Value',  editable: false, cellEditor: "numericCellEditor",
-          valueGetter: function (params) {
-            return setDiscValue(params);
-          },
+          // valueGetter: function (params) {
+          //   return setDiscValue(params);
+          // },
           valueFormatter: currencyFormatter},
         { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",
           cellEditorParams:{

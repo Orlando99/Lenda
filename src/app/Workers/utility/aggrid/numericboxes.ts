@@ -7,7 +7,10 @@ export function getNumericCellEditor() {
       // return true;
       // else
       // return false;
-      return !!/\d/.test(charStr);
+
+      // return !!/\d/.test(charStr);
+      return /^\d*\.?\d*$/.test(charStr);
+      
      //if(charStr.indexOf('.') > -1 && parseFloat(charStr).toString().indexOf('.') <=-1)
 
     //  if(/^[\d.]/.test(charStr)){

@@ -131,6 +131,7 @@ import { StoredCropComponent } from './components/collateral/storedcrop/storedcr
 import { EquipmentComponent } from './components/collateral/equipment/equipment.component';
 import { RealEstateComponent } from './components/collateral/realestate/realestate.component';
 import { OthersComponent } from './components/collateral/others/others.component';
+import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service'
 
 @NgModule({
   declarations: [
@@ -262,6 +263,7 @@ import { OthersComponent } from './components/collateral/others/others.component
     LoanApiService,
     ApiService,
     Borrowercalculationworker,
+    Collateralcalculationworker,
     LoancalculationWorker,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
@@ -274,7 +276,6 @@ import { OthersComponent } from './components/collateral/others/others.component
     ReferenceService,
     InsuranceapiService,
     NotificationFeedsService
-
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]
