@@ -176,7 +176,8 @@ import { OthersComponent } from './components/collateral/others/others.component
     NotificationFeedsComponent,
     SidebarComponent,
     CreateLoanComponent,
-    CollateralComponent,FSAComponent,LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent
+    CollateralComponent,FSAComponent,LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent,
+    FlowchartComponent
 
   ],
   imports: [
