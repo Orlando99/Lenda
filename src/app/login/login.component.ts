@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr';
 import { AlertifyService } from '../alertify/alertify.service'
 import { LocalStorageService } from 'ngx-webstorage';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { Logpriority } from '../models/loanmodel';
 import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';

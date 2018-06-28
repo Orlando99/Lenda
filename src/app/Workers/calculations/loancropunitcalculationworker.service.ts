@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { loan_model } from '../../models/loanmodel';
 import { Loan_Crop_Unit } from '../../models/cropmodel';
 import { forEach } from '@angular/router/src/utils/collection';
+import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class LoancropunitcalculationworkerService {
   public input:loan_model;
-  constructor() { }
+  constructor(private logging:LoggingService) { }
   prepare_crops_revenue(){
     
     for(let entry of this.input.LoanCropUnits){
@@ -40,6 +41,7 @@ export class LoancropunitcalculationworkerService {
   prepareLoancropunitmodel(input:loan_model):loan_model{
     try{
     this.input=input;
+    let starttime=new Date().getMilliseconds();
     this.prepare_crops_revenue();
     this.prepare_crops_subtotalacres();
     this.prepare_crops_subtotalrevenue();
@@ -47,6 +49,8 @@ export class LoancropunitcalculationworkerService {
     this.prepare_crops_totalbudget();
     this.prepare_crops_estimatedinterest();
     this.prepare_crops_totalcashflow();
+    let endtime=new Date().getMilliseconds();
+    this.logging.checkandcreatelog(3,'CalculationforCropunit',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
     return this.input;
     }
     catch{

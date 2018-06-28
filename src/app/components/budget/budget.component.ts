@@ -4,7 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../services/Logs/logging.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { modelparserfordb } from '../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../models/farmmodel.';
 import { InsuranceapiService } from '../../services/insurance/insuranceapi.service';

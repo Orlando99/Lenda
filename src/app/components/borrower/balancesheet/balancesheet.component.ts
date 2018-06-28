@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { borrower_model, loan_model } from '../../../models/loanmodel';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';

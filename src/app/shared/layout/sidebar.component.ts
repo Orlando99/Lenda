@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SidebarService } from '../layout/sidebar.component.service';
 import { MatSidenav } from '@angular/material';
 import { LocalStorageService } from 'ngx-webstorage';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 /**
  * @title Autosize sidenav
  */

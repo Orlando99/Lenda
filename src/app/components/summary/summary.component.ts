@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { loan_model, borrower_model } from '../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoggingService } from '../../services/Logs/logging.service';
