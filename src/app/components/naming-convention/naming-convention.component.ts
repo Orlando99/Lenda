@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastsManager } from 'ng2-toastr';
 import { NamingConventionapiService } from '../../services/admin/namingconventionapi.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { deserialize, serialize } from 'serializer.ts/Serializer';
 import { loan_model } from '../../models/loanmodel';
 import { JsonConvert } from 'json2typescript';

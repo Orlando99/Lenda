@@ -14,6 +14,7 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { JsonConvert } from 'json2typescript';
 import { loan_model } from '../../models/loanmodel';
+import { versions } from '../../versions';
 
 @Component({
   selector: 'layout-header',
@@ -24,6 +25,7 @@ export class HeaderComponent implements OnInit {
   public loanid:string=""
   _res: any = {};
   public apiurl=environment.apiUrl;
+  public Git=versions.revision;
   public Databasename:string="";
   public value: number = 1;
   toggleActive: boolean = false;

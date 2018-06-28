@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';

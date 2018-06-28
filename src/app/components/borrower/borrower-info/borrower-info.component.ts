@@ -4,7 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { loan_model, loan_borrower } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 @Component({
@@ -78,7 +78,7 @@ export class BorrowerInfoComponent implements OnInit {
     console.log(formData)
     this.borrowerInfoForm = this.fb.group({
       Borrower_First_Name: [formData.Borrower_First_Name || '', Validators.required],
-      Borrower_MI: [formData.Borrower_MI || '', Validators.required],
+      Borrower_MI: [formData.Borrower_MI || ''],
       Borrower_Last_Name: [formData.Borrower_Last_Name || '', Validators.required],
       Borrower_SSN_Hash: [formData.Borrower_SSN_Hash || '', Validators.required],
       Borrower_Entity_Type_Code: [formData.Borrower_Entity_Type_Code || '', Validators.required],
