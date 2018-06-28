@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  public isExpanded: boolean;
+  public isExpanded: boolean=true;
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
@@ -50,6 +50,7 @@ export class HeaderComponent implements OnInit {
       
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
+  
         this.getloanid();
   }
 
@@ -61,7 +62,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isExpanded = false;
+    this.isExpanded = true;
+    //default open
     this.value = this.localst.retrieve(environment.logpriority);
   }
 
@@ -76,13 +78,15 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSideBar(event) {
-    this.isExpanded = !this.isExpanded;
+    //this.isExpanded = !this.isExpanded;
     this.sideBarService.toggle(this.isExpanded);
   }
 
+  ngAfterViewInit() {
+    this.sideBarService.toggle(true);
+  }
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
-    debugger
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {
       this.icon = 'arrow_forward_ios';

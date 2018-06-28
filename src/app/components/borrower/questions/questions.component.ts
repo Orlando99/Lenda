@@ -35,5 +35,5 @@ export class QuestionsComponent implements OnInit {
   change() {
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
-
+  
 }

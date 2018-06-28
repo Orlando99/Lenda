@@ -182,7 +182,7 @@ export class FlowchartComponent implements OnInit {
   buildChart(data) {
 
     console.log(data.length);
-    for (var i = 0; i < data.length; i++) {
+    for (var i = 0; i < data.length; i++) {0
       document.querySelector('#' + data[i].type + '> #number > text').textContent = data[i].number;
       (document.querySelector('#' + data[i].type + '> #icon') as any).style.fill = data[i].color;
     }
