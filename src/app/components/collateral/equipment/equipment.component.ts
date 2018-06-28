@@ -152,7 +152,7 @@ export class EquipmentComponent implements OnInit {
     var obj = value.data;
     if (obj.Collateral_ID  == 0) {
       obj.ActionStatus = 1;
-      this.localloanobject.LoanCropUnits[this.localloanobject.LoanCollateral.length-1]=value.data;
+      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length-1]=value.data;
     }
     else {
       var rowindex=this.localloanobject.LoanCollateral.findIndex(lc=>lc.Collateral_ID==obj.Collateral_ID);
