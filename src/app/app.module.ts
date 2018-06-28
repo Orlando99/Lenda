@@ -121,6 +121,7 @@ import { PriceComponent } from './components/crop/price/price.component';
 import { YieldComponent } from './components/crop/yield/yield.component';
 import { RebatorComponent } from './components/crop/rebator/rebator.component';
 import {SpinerComponent} from './shared/spiner/spiner.component';
+import { FlowchartComponent } from './components/flowchart/flowchart.component';
 
 
 
@@ -168,7 +169,8 @@ import {SpinerComponent} from './shared/spiner/spiner.component';
      ConditionsComponent,
       NotificationFeedsComponent,
       SidebarComponent,
-      CreateLoanComponent
+      CreateLoanComponent,
+      FlowchartComponent
 
   ],
   imports: [
