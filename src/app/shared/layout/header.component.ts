@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit {
   ) {
 
     this.localst.observe(environment.loankey).subscribe(res=>{
-      
+      if(res!=undefined && res!=null)
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
   
@@ -83,7 +83,19 @@ export class HeaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.sideBarService.toggle(true);
+   this.initialtoggle();
+  }
+
+  initialtoggle(){
+    try{
+      this.sideBarService.toggle(true);
+    }
+  catch{
+    setTimeout(() => {
+      this.initialtoggle();
+    }, 1000);
+    
+  }
   }
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
@@ -111,7 +123,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      this.loanservice.getLoanById(this.loanid).subscribe(res => {
+      this.loanservice.getLoanById(this.loanid.replace("/","-")).subscribe(res => {
         console.log(res)
         //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
@@ -125,6 +137,7 @@ export class HeaderComponent implements OnInit {
         else {
           this.toaster.error("Could not fetch Loan Object from API")
         }
+        
         loaded = true;
       });
 

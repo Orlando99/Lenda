@@ -58,6 +58,7 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     change(event:any){
         this.selectedValue=event;
         try{
+            this.params.eGridCell.className=this.params.eGridCell.className.replace("editable-color","edited-color")
             this.params.context.componentParent.valuechanged(event,this.params.column.colId,this.params.rowIndex)
         }
         catch{

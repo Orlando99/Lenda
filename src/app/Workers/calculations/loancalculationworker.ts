@@ -46,6 +46,9 @@ export class LoancalculationWorker {
     localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
     localloanobj.LoanMaster = localloanobj.LoanMaster;
     localloanobj.LoanBudget=localloanobj.LoanBudget;
+    localloanobj.DashboardStats=localloanobj.DashboardStats;
+    localloanobj.lasteditrowindex=localloanobj.lasteditrowindex;
+    localloanobj.srccomponentedit=localloanobj.srccomponentedit;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     console.log("Calculation Ended"); 
     let endtime=new Date().getMilliseconds();

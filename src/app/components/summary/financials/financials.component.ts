@@ -55,11 +55,14 @@ export class FinancialsComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      if(res!=undefined && res!=null)
+      {
       // log
       this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
       //
       this.localborrowerobject = res.LoanMaster[0];
       this.allDataFetched = true;
+      }
     })
     this.getdataforgrid();
   }
