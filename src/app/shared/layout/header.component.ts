@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  public isExpanded: boolean;
+  public isExpanded: boolean=true;
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
@@ -47,9 +47,10 @@ export class HeaderComponent implements OnInit {
   ) {
 
     this.localst.observe(environment.loankey).subscribe(res=>{
-      
+      if(res!=undefined && res!=null)
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
+  
         this.getloanid();
   }
 
@@ -61,7 +62,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isExpanded = false;
+    this.isExpanded = true;
+    //default open
     this.value = this.localst.retrieve(environment.logpriority);
   }
 
@@ -76,13 +78,27 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSideBar(event) {
-    this.isExpanded = !this.isExpanded;
+    //this.isExpanded = !this.isExpanded;
     this.sideBarService.toggle(this.isExpanded);
   }
 
+  ngAfterViewInit() {
+   this.initialtoggle();
+  }
+
+  initialtoggle(){
+    try{
+      this.sideBarService.toggle(true);
+    }
+  catch{
+    setTimeout(() => {
+      this.initialtoggle();
+    }, 1000);
+    
+  }
+  }
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
-    debugger
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {
       this.icon = 'arrow_forward_ios';
@@ -107,7 +123,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      this.loanservice.getLoanById(this.loanid).subscribe(res => {
+      this.loanservice.getLoanById(this.loanid.replace("/","-")).subscribe(res => {
         console.log(res)
         //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
@@ -121,6 +137,7 @@ export class HeaderComponent implements OnInit {
         else {
           this.toaster.error("Could not fetch Loan Object from API")
         }
+        
         loaded = true;
       });
 

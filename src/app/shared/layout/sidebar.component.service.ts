@@ -35,6 +35,7 @@ export class SidebarService {
     }
 
     public toggle(isExpanded: boolean): void {
+        debugger
        // this.mainHeader.style.marginLeft = isExpanded ? '215px' : '68px';
         this.mainContent.style.marginLeft = isExpanded ? '215px' : '68px';
         this.mainSideBar.style.width = isExpanded ? '215px' : '68px';

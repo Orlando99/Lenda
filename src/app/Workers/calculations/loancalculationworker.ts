@@ -50,6 +50,9 @@ export class LoancalculationWorker {
       localloanobj = this.collateralcalculation.preparecollateralmodel(localloanobj);
     localloanobj.LoanMaster = localloanobj.LoanMaster;
     localloanobj.LoanBudget=localloanobj.LoanBudget;
+    localloanobj.DashboardStats=localloanobj.DashboardStats;
+    localloanobj.lasteditrowindex=localloanobj.lasteditrowindex;
+    localloanobj.srccomponentedit=localloanobj.srccomponentedit;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     console.log("Calculation Ended"); 
     let endtime=new Date().getMilliseconds();

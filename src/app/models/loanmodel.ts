@@ -264,8 +264,14 @@ export class borrower_model
 
         @JsonProperty("LoanMaster", [])
         LoanMaster: any = undefined;
+
+        @JsonProperty("DashboardStats",[])
+        DashboardStats:any=undefined;
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
+
+        lasteditrowindex:number;
+        srccomponentedit:string;
 
     }
      
