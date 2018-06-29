@@ -1,0 +1,37 @@
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          FSA
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+        <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+        <!-- <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon> -->
+        <mat-icon >publish</mat-icon>
+      </button>
+  
+      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
+        
+            <div class="container bottom">
+              <div class="row">
+              <ag-grid-angular  [ngStyle]="style"
+              class="ag-theme-balham"
+              [animateRows]="true"
+              [enableSorting]="true"
+              [enableFilter]="true"
+              [context]="context"
+              [frameworkComponents]="frameworkcomponents"
+              [components]="components"
+              (cellEditingStopped)="rowvaluechanged($event)"
+              [rowData]="rowData" 
+              (gridReady)="onGridReady($event)"
+              [pinnedBottomRowData]="pinnedBottomRowData"
+              [columnDefs]="columnDefs">
+              </ag-grid-angular>
+              </div>
+            </div>
+            <br>
+    </mat-expansion-panel>
+    </mat-accordion>

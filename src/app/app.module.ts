@@ -123,8 +123,15 @@ import { RebatorComponent } from './components/crop/rebator/rebator.component';
 import {SpinerComponent} from './shared/spiner/spiner.component';
 import { FlowchartComponent } from './components/flowchart/flowchart.component';
 
-
-
+//Collateral
+import { CollateralComponent } from './components/collateral/collateral.component';
+import { FSAComponent } from './components/collateral/fsa/fsa.component';
+import { LivestockComponent } from './components/collateral/livestock/livestock.component';
+import { StoredCropComponent } from './components/collateral/storedcrop/storedcrop.component';
+import { EquipmentComponent } from './components/collateral/equipment/equipment.component';
+import { RealEstateComponent } from './components/collateral/realestate/realestate.component';
+import { OthersComponent } from './components/collateral/others/others.component';
+import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service'
 
 @NgModule({
   declarations: [
@@ -157,20 +164,21 @@ import { FlowchartComponent } from './components/flowchart/flowchart.component';
     FocusDirective,
     BudgetComponent,
     CropbasedbudgetComponent,InsuranceComponent ,AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent,QuestionsComponent,DistributerComponent,ThirdpartyComponent,HarvesterComponent, LoanviewerComponent,
-     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,
-     HarvesterComponent,
-     LoanbudgetComponent,
-     FarmerInfoComponent,
-     BorrowerInfoComponent,
-     LoanbudgetGroupComponent,
-     WorkInProgressComponent,
-     FinanceStatsComponent,
-     ExceptionsComponent,
-     ConditionsComponent,
-      NotificationFeedsComponent,
-      SidebarComponent,
-      CreateLoanComponent,
-      FlowchartComponent
+    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,DistributerComponent,ThirdpartyComponent,
+    HarvesterComponent,
+    LoanbudgetComponent,
+    FarmerInfoComponent,
+    BorrowerInfoComponent,
+    LoanbudgetGroupComponent,
+    WorkInProgressComponent,
+    FinanceStatsComponent,
+    ExceptionsComponent,
+    ConditionsComponent,
+    NotificationFeedsComponent,
+    SidebarComponent,
+    CreateLoanComponent,
+    CollateralComponent,FSAComponent,LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent,
+    FlowchartComponent
 
   ],
   imports: [
@@ -255,6 +263,7 @@ import { FlowchartComponent } from './components/flowchart/flowchart.component';
     LoanApiService,
     ApiService,
     Borrowercalculationworker,
+    Collateralcalculationworker,
     LoancalculationWorker,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
@@ -267,7 +276,6 @@ import { FlowchartComponent } from './components/flowchart/flowchart.component';
     ReferenceService,
     InsuranceapiService,
     NotificationFeedsService
-
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]
