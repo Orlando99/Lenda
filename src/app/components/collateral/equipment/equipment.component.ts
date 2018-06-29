@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral} from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
