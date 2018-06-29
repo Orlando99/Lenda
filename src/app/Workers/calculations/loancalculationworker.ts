@@ -10,6 +10,7 @@ import { LoancrophistoryService } from './loancrophistory.service';
 import { FarmcalculationworkerService } from './farmcalculationworker.service';
 import { AssociationcalculationworkerService } from './associationcalculationworker.service';
 import { MAT_MENU_DEFAULT_OPTIONS } from '@angular/material';
+import { Collateralcalculationworker } from './collateralcalculationworker.service';
 
 
 
@@ -21,6 +22,7 @@ export class LoancalculationWorker {
     private loancropunitworker:LoancropunitcalculationworkerService,
     private loanyieldhistoryworker:LoancrophistoryService,
     private farmcalculation:FarmcalculationworkerService,
+    private collateralcalculation: Collateralcalculationworker,
    // private associationcalculation:AssociationcalculationworkerService,
     public logging:LoggingService
 ) {}
@@ -37,15 +39,20 @@ export class LoancalculationWorker {
     console.log(starttime);    
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     if(localloanobj.Borrower!=null)
-    localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
+      localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
     if(localloanobj.LoanCropUnits!=null)
-    localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
+      localloanobj=this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
     if(localloanobj.CropYield!=null)
-    localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
+      localloanobj=this.loanyieldhistoryworker.prepareLoancrophistorymodel(localloanobj);
     if(localloanobj.Farms!=null)
-    localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
+      localloanobj=this.farmcalculation.prepareLoanfarmmodel(localloanobj);
+    if(localloanobj.LoanCollateral !=null)
+      localloanobj = this.collateralcalculation.preparecollateralmodel(localloanobj);
     localloanobj.LoanMaster = localloanobj.LoanMaster;
     localloanobj.LoanBudget=localloanobj.LoanBudget;
+    localloanobj.DashboardStats=localloanobj.DashboardStats;
+    localloanobj.lasteditrowindex=localloanobj.lasteditrowindex;
+    localloanobj.srccomponentedit=localloanobj.srccomponentedit;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     console.log("Calculation Ended"); 
     let endtime=new Date().getMilliseconds();

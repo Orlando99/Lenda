@@ -15,9 +15,12 @@ export class ProjectedincomeComponent implements OnInit {
   constructor(public localstorageservice:LocalStorageService,public logging:LoggingService) { }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+      if(res!=undefined && res!=null)
+      {
       this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage updated");
       this.localloanobject=res;
       this.allDataFetched=true;
+      }
     })
     this.getdataforgrid();
   }

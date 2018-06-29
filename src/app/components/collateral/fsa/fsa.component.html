@@ -3,12 +3,13 @@
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          PRICES
+          FSA
         </mat-panel-title>
       </mat-expansion-panel-header>
   
         <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-        <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
+        <!-- <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon> -->
+        <mat-icon >publish</mat-icon>
       </button>
   
       <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
@@ -20,14 +21,13 @@
               [animateRows]="true"
               [enableSorting]="true"
               [enableFilter]="true"
-              [singleClickEdit]="true"
-              (gridSizeChanged)="onGridSizeChanged($event)"
               [context]="context"
               [frameworkComponents]="frameworkcomponents"
               [components]="components"
               (cellEditingStopped)="rowvaluechanged($event)"
               [rowData]="rowData" 
               (gridReady)="onGridReady($event)"
+              [pinnedBottomRowData]="pinnedBottomRowData"
               [columnDefs]="columnDefs">
               </ag-grid-angular>
               </div>
