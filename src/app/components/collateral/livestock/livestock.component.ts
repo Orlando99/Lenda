@@ -6,10 +6,10 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue, numberFormatter, totalQty, totalPrice} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { setNetMktValue, setDiscValue, currencyFormatter, insuredFormatter, setMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -32,66 +32,67 @@ export class LivestockComponent implements OnInit {
   public gridApi;
   public columnApi;
   public deleteAction = false;
-
+  public pinnedBottomRowData;
+  
   style = {
     marginTop: '10px',
     width: '93%',
-    height: '100px',
+    height: '110px',
     boxSizing: 'border-box'
   };
   
   constructor(public localstorageservice: LocalStorageService,
+    private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    private toaster: ToastsManager,
     public loanapi:LoanApiService){ 
 
-      this.components = { numericCellEditor: getNumericCellEditor() };
+      this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-      
+    
+
       this.columnDefs = [
-        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: true },
-        { headerName: 'Description', field: 'Collateral_Description',  editable: true },
-        { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" },
-        { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor"},
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: false, cellEditor: "numericCellEditor", 
+        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
+        { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
+        { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellStyle: { textAlign: "right" }, width:90 },
+        { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:110},
+        
+        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:130},
+        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, width:130},
+        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true,width:120},
+        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
           // valueGetter: function (params) {
-          //   return setMktValue(params);
-          // },
-          valueFormatter: currencyFormatter},
-        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
-        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true },
-        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",
-          // valueGetter: function (params) {
-          //   return setNetMktValue(params);
-          // }
+          //   return setNetMktValue(params);}
         },
-        { headerName: 'Discount %', field: 'Disc_CEI_Value',  editable: true },
-        { headerName: 'Disc Value', field: 'Disc_Value',  editable: false, cellEditor: "numericCellEditor",
+        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:110,
+          pinnedRowCellRenderer: function(){ return ' ';}},
+        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
           // valueGetter: function (params) {
           //   return setDiscValue(params);
           // },
           valueFormatter: currencyFormatter},
-        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",
+        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,
           cellEditorParams:{
             values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
-          },
+          },pinnedRowCellRenderer: function(){ return ' ';},
           valueFormatter: insuredFormatter},
-        { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
+        { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
- 
+
+
       this.context = { componentParent: this }; 
   }
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
-      this.localloanobject = res;
+      this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
+      this.pinnedBottomRowData = this.computeTotal(this.rowData);
         this.getgridheight();
     });
     this.getdataforgrid();
@@ -104,6 +105,7 @@ export class LivestockComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
+      this.pinnedBottomRowData = this.computeTotal(this.rowData);
     }
   }
 
@@ -112,6 +114,7 @@ export class LivestockComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
   }
+ 
   syncenabled(){
     return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
   }
@@ -186,6 +189,23 @@ export class LivestockComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+  }
+
+
+  computeTotal(rowData) {
+    var total = []
+    var footer = new Loan_Collateral();
+    footer.Collateral_Category_Code = 'Total';
+    footer.Market_Value = totalMarketValue(rowData);
+    footer.Prior_Lien_Amount = totalPriorLien(rowData);
+    footer.Lien_Holder = '';
+    footer.Net_Market_Value = totalNetMktValue(rowData);
+    footer.Disc_Value = 0;
+    footer.Disc_CEI_Value = totalDiscValue(rowData);;
+    footer.Qty = totalQty(rowData);
+    footer.Price = totalPrice(rowData);
+    total.push(footer);
+    return total;
   }
 }

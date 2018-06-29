@@ -3,10 +3,10 @@ import {ICellRendererAngularComp} from "ag-grid-angular";
 
 @Component({
     selector: 'child-cell',
-    template: `<span><button style="height: 20px" (click)="invokeParentMethod()" class="btn btn-info">{{btntext}}</button></span>`,
+    template: `<span><button style="height: 16.5px" (click)="invokeParentMethod()" class="btn btn-info">{{btntext}}</button></span>`,
     styles: [
         `.btn {
-            line-height: 0.5
+            line-height: 0.1
         }`
     ]
 })

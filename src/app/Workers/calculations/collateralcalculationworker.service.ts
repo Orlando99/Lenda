@@ -12,7 +12,8 @@ export class Collateralcalculationworker {
     }
 
     preparediscvalue(params){
-        params.Disc_Value=Number(params.Market_Value) - (Number(params.Market_Value) * (Number(params.Disc_CEI_Value)/100));
+        // params.Disc_Value=Number(params.Market_Value) - (Number(params.Market_Value) * (Number(params.Disc_CEI_Value)/100));
+        params.Disc_CEI_Value = Math.max((Number(params.Market_Value)*(Number(params.Disc_Value)/100))-Number(params.Prior_Lien_Amount),0)
     }
 
     preparemktvalue(params){

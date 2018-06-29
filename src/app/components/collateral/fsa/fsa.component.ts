@@ -6,7 +6,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { setNetMktValue, setDiscValue, currencyFormatter, insuredFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
+import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -32,11 +32,12 @@ export class FSAComponent implements OnInit {
   public gridApi;
   public columnApi;
   public deleteAction = false;
-
+  public pinnedBottomRowData;
+  
   style = {
     marginTop: '10px',
     width: '93%',
-    height: '100px',
+    height: '110px',
     boxSizing: 'border-box'
   };
   
@@ -48,32 +49,33 @@ export class FSAComponent implements OnInit {
     public alertify:AlertifyService,
     public loanapi:LoanApiService){ 
 
-      this.components = { numericCellEditor: getNumericCellEditor() };
+      this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
       
       this.columnDefs = [
-        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false },
-        { headerName: 'Description', field: 'Collateral_Description',  editable: true },
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
-        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
-        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true},
-        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",
+        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
+        { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
+        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
+        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
+        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true, width:130},
+        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
           // valueGetter: function (params) {
           //   return setNetMktValue(params);}
         },
-        { headerName: 'Discount %', field: 'Disc_CEI_Value',  editable: true,cellEditor: "numericCellEditor" },
-        { headerName: 'Disc Value', field: 'Disc_Value',  editable: false, cellEditor: "numericCellEditor",
+        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:130,
+          pinnedRowCellRenderer: function(){ return '-';}},
+        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
           // valueGetter: function (params) {
           //   return setDiscValue(params);
           // },
           valueFormatter: currencyFormatter},
-        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",
+        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,
           cellEditorParams:{
             values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
-          },
+          },pinnedRowCellRenderer: function(){ return ' ';},
           valueFormatter: insuredFormatter},
-        { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
+        { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
  
       this.context = { componentParent: this }; 
@@ -85,6 +87,7 @@ export class FSAComponent implements OnInit {
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
+      this.pinnedBottomRowData = this.computeTotal(this.rowData);
         this.getgridheight();
     });
     this.getdataforgrid();
@@ -97,6 +100,7 @@ export class FSAComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
+      this.pinnedBottomRowData = this.computeTotal(this.rowData);
     }
   }
 
@@ -180,6 +184,22 @@ export class FSAComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+  }
+
+
+  computeTotal(rowData) {
+    var total = []
+    var footer = new Loan_Collateral();
+    footer.Collateral_Category_Code = 'Total';
+    footer.Market_Value = totalMarketValue(rowData);
+    footer.Prior_Lien_Amount = totalPriorLien(rowData);
+    footer.Lien_Holder = '';
+    footer.Net_Market_Value = totalNetMktValue(rowData);
+    footer.Disc_Value = 0;
+    footer.Disc_CEI_Value = totalDiscValue(rowData);;
+
+    total.push(footer);
+    return total;
   }
 }
