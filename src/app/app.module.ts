@@ -133,7 +133,8 @@ import { StoredCropComponent } from './components/collateral/storedcrop/storedcr
 import { EquipmentComponent } from './components/collateral/equipment/equipment.component';
 import { RealEstateComponent } from './components/collateral/realestate/realestate.component';
 import { OthersComponent } from './components/collateral/others/others.component';
-import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service'
+import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service';
+import { RatingComponent } from './borrower/rating/rating.component'
 
 @NgModule({
   declarations: [
@@ -180,7 +181,8 @@ import { Collateralcalculationworker } from './Workers/calculations/collateralca
     SidebarComponent,
     CreateLoanComponent,
     CollateralComponent,FSAComponent,LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent,
-    FlowchartComponent
+    FlowchartComponent,
+    RatingComponent
 
   ],
   imports: [
