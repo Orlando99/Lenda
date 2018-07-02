@@ -22,7 +22,7 @@ export class Collateralcalculationworker {
         
     preparecollateralmodel(input:loan_model):loan_model{
         try{
-            let starttime=new Date().getMilliseconds();
+            let starttime=new Date().getTime();
             for(let i =0;i<input.LoanCollateral.length;i++){
                 
                 if((input.LoanCollateral[i].Qty !== 0 && input.LoanCollateral[i].Qty !== null) || (input.LoanCollateral[i].Price !== 0 && input.LoanCollateral[i].Price !== null)){
@@ -32,8 +32,8 @@ export class Collateralcalculationworker {
                 this.preparediscvalue(input.LoanCollateral[i]);
             }
             
-            let endtime=new Date().getMilliseconds();
-            this.logging.checkandcreatelog(3,'CalculationforCollateral',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
+            let endtime=new Date().getTime();
+            this.logging.checkandcreatelog(3,'Calc_Coll_1',"LoanCalculation timetaken :" + (endtime-starttime).toString() + " ms");
             return input;
         }catch{
             return input;

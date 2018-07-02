@@ -87,7 +87,7 @@ export class FarmComponent implements OnInit {
         },
         valueSetter: Countyvaluesetter
       },
-      { headerName: '% Prod', field: 'Prod',  editable: false },
+      { headerName: '% Prod', field: 'Prod',  editable: true },
       { headerName: 'Landlord', field: 'Landowner', editable: true ,calculationinvoke:false},
       { headerName: 'FSN', field: 'FSN', editable: true ,calculationinvoke:false},
       { headerName: 'Section', field: 'Section',  editable: true ,calculationinvoke:false},
