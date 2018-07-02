@@ -15,6 +15,7 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import { textValueSetter, getTextCellEditor } from '../../../Workers/utility/aggrid/textboxes';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-loanbudget',
@@ -42,6 +43,8 @@ export class LoanbudgetComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   public cellStyle;
+
+  public cellPrevValue;
   style = {
     marginTop: '10px',
     width: '96%',
@@ -74,7 +77,7 @@ export class LoanbudgetComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(),textCellEditor:getTextCellEditor() };
     
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -85,7 +88,7 @@ export class LoanbudgetComponent implements OnInit {
       { headerName: 'Expense', field: 'Budget_Expense_Name',  editable: false },   
       { headerName: "Per Acre Budget",
         children: [   
-      { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true , cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'] },
+      { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true , cellEditor: "textCellEditor",cellClass: changeCellStyle  },
       { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: 'Total', field: 'BudgetTotal_Acre',width:120, editable: false},
@@ -258,15 +261,24 @@ function FooterData(count, prefix) {
 
 
  function changeCellStyle(params) {
+   
  //alert(params.api.valueCache.cacheVersion);
-if(params.api.valueCache.cacheVersion>1){
-  return {
-      backgroundColor: 'yellow'
-  }
-}else{
-  return {
-  color:'blue'
-  }
+// if(params.api.valueCache.cacheVersion>1){
+//   return {
+//       backgroundColor: 'yellow'
+//   }
+// }else{
+//   return {
+//   color:'blue'
+//   }
+// }
+
+
+if(params.newValue==undefined || params.newValue==null||params.newValue=="") { 
+  return params.value === "" ? "error" : "lenda-editable-field";
+ }
+
 }
-}
+
+
 

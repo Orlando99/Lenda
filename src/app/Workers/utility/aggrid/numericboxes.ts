@@ -1,5 +1,6 @@
 import { isNumber } from "util";
 
+
 //Numeric cell editor config
 export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
@@ -37,6 +38,7 @@ export function getNumericCellEditor() {
       this.eInput = document.createElement("input");
       this.eInput.style.width = "100%";
       this.eInput.style.height = "100%";
+      
 
 
       // this.eInput.value = params.value;
@@ -70,6 +72,17 @@ export function getNumericCellEditor() {
           if (event.preventDefault) event.preventDefault();
         }
       });
+      this.eInput.addEventListener("blur", function(event) {
+       debugger
+        if(params.newValue==undefined || params.newValue==null||params.newValue=="") {          
+          
+         return this.classList.add("error");
+         
+        }
+        //this.eInput
+        //this.eInput.addClass('lenda-cellEdit-color')
+        
+      });
     };
     NumericCellEditor.prototype.getGui = function () {
       return this.eInput;
@@ -100,8 +113,8 @@ export function getNumericCellEditor() {
   }
   
 export function numberValueSetter(params) {
-  
-    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
+  debugger
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
     params.newValue=0;    
     var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;
