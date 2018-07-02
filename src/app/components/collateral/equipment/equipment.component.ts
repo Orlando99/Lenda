@@ -83,7 +83,7 @@ export class EquipmentComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'LoanCollateral', "LS - Collateral EQP updated");
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3});
@@ -95,7 +95,7 @@ export class EquipmentComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral', "LS - Collateral EQP Retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
@@ -131,7 +131,7 @@ export class EquipmentComponent implements OnInit {
         });
       }
       else{
-        this.toaster.error("Error in Sync");
+        this.toaster.error("Error in Sync - Collateral - EQP");
       }
     });
   }
