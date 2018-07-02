@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-finance-stats',

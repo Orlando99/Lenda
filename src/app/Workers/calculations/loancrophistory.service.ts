@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { loan_model } from '../../models/loanmodel';
 import { Loan_Crop_History_FC } from '../../models/cropmodel';
 import { count } from 'rxjs/operators';
+import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class LoancrophistoryService {
@@ -9,7 +10,7 @@ export class LoancrophistoryService {
 
   public returnables=new Array<Loan_Crop_History_FC>();
   public years=[];
-  constructor() {
+  constructor(private logging:LoggingService) {
     for(let i=1;i<7;i++){
       this.years.push(new Date().getFullYear()-i);
    }
@@ -41,7 +42,10 @@ export class LoancrophistoryService {
   prepareLoancrophistorymodel(input:loan_model):loan_model{
     try{
     this.input=input;
+    let starttime=new Date().getMilliseconds();
     this.prepare_Crop_Yield();
+    let endtime=new Date().getMilliseconds();
+    this.logging.checkandcreatelog(3,'CalculationforCrophistory',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
     return this.input;
   }
   catch{

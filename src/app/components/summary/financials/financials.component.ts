@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { loan_model, borrower_model } from '../../../models/loanmodel';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 import { deserialize } from 'serializer.ts/Serializer';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -55,11 +55,14 @@ export class FinancialsComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      if(res!=undefined && res!=null)
+      {
       // log
       this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
       //
       this.localborrowerobject = res.LoanMaster[0];
       this.allDataFetched = true;
+      }
     })
     this.getdataforgrid();
   }

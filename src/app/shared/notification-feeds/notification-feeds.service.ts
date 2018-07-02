@@ -4,6 +4,12 @@ import { NotificationFeedsComponent } from './notification-feeds.component';
 
 @Injectable()
 export class NotificationFeedsService {
+
+    /**
+     *
+     */
+    NotificationFeedsService() { 
+    }
     private sidenav: MatSidenav;
 
     public setSidenav(sidenav: MatSidenav) {
@@ -20,6 +26,7 @@ export class NotificationFeedsService {
     }
 
     public toggle(): void {
+        debugger
         this.sidenav.toggle();
     }
 }

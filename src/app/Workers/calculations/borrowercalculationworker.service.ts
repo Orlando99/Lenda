@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { borrower_model } from '../../models/loanmodel';
+import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class Borrowercalculationworker {
   private input:borrower_model
-  constructor() { }
+  constructor(public logging:LoggingService) { }
 
   preparetotalassets(){
    this.input.FC_Borrower_TotalAssets=Math.round(this.input.Borrower_Fixed_Assets+this.input.Borrower_Intermediate_Assets+this.input.Borrower_Current_Assets);
@@ -64,6 +65,7 @@ export class Borrowercalculationworker {
   prepareborrowermodel(input:borrower_model):borrower_model{
     try{
     this.input=input;
+    let starttime=new Date().getMilliseconds();
     this.prepare_current_equity();
     this.prepare_intermediate_equity();
     this.prepare_fixed_equity();
@@ -81,6 +83,8 @@ export class Borrowercalculationworker {
     this.prepare_Fixed_DiscValue()
     this.prepare_total_DiscValue()
     this.prepare_total_Adjvalue()
+    let endtime=new Date().getMilliseconds();
+    this.logging.checkandcreatelog(3,'CalculationforBorrower',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
     return this.input;
   }
   catch{

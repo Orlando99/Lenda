@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoggingService } from '../../../services/Logs/logging.service';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.prod';
 
 @Component({
   selector: 'app-projectedincome',
@@ -15,9 +15,12 @@ export class ProjectedincomeComponent implements OnInit {
   constructor(public localstorageservice:LocalStorageService,public logging:LoggingService) { }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+      if(res!=undefined && res!=null)
+      {
       this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage updated");
       this.localloanobject=res;
       this.allDataFetched=true;
+      }
     })
     this.getdataforgrid();
   }

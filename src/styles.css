@@ -357,7 +357,31 @@ mat-list-item {
   width: 100% !important;
 }
 
+<<<<<<< HEAD
 .rag-green{
   background-color: red;
  
 }
+=======
+
+.showdetails{
+ color:white;
+ font-size: 11px;
+}
+
+/* Aggrid Css  */
+.ag-cell {
+background-color:white
+}
+
+.ag-header-row{
+  background-color: #23C8AB;
+  color: white;
+}
+.editable-color{
+  background-color: #dcf0f4 !important
+}
+.edited-color{
+  background-color: #f28f35 !important
+}
+>>>>>>> 3323063e34a4c01de34c02b5e832f4fa10e9b40a

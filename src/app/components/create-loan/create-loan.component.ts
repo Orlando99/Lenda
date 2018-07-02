@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { loan_farmer, loan_borrower, loan_model } from '../../models/loanmodel';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-loan',
@@ -14,7 +15,7 @@ export class CreateLoanComponent implements OnInit {
   farmerSuccessCallback;
   useFarmer;
   borrowerInfo: borrower_params = new borrower_params();
-  constructor(private loanApiService: LoanApiService, private toaster: ToastsManager) { }
+  constructor(private loanApiService: LoanApiService, private toaster: ToastsManager, private route : Router) { }
 
   ngOnInit() {
   }
@@ -48,6 +49,7 @@ export class CreateLoanComponent implements OnInit {
         this.toaster.success("Farmer details saved successfully");
         this.farmerInfo.successCallback && this.farmerInfo.successCallback();
         this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();
+        this.route.navigateByUrl("/home/loanoverview/"+successResponse.Data.replace("-","/")+"/farm");
       }, (errorResponse) => {
         this.toaster.error("Error Occurered while saving Farmer details");
 

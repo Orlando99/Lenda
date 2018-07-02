@@ -29,6 +29,11 @@
                 <input type="text" placeholder="Search">
               </div>
             </span>
+            <span class="showdetails">
+             DB : {{Databasename}} <br>
+             API : {{apiurl}} <br>
+             Git Version : {{Git}}
+            </span>
             <div class="nav-parent">
               <span>
                 <!-- Handle branch node buttons here -->
@@ -200,6 +205,7 @@
       </div>
     </div>
   </div> -->
+ 
   <i [style.visibility]="decideShow" id="decide" class="fa-lightbulb"><mat-icon>lightbulb_outline</mat-icon> &nbsp; &nbsp;Decide</i> &nbsp; 
   <mat-icon (click)="toggleRightSidenav()" class="pre-arrow">{{icon}}</mat-icon>
 </header>

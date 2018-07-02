@@ -14,6 +14,7 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { JsonConvert } from 'json2typescript';
 import { loan_model } from '../../models/loanmodel';
+import { versions } from '../../versions';
 
 @Component({
   selector: 'layout-header',
@@ -23,11 +24,14 @@ import { loan_model } from '../../models/loanmodel';
 export class HeaderComponent implements OnInit {
   public loanid:string=""
   _res: any = {};
+  public apiurl=environment.apiUrl;
+  public Git=versions.revision;
+  public Databasename:string="";
   public value: number = 1;
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  public isExpanded: boolean;
+  public isExpanded: boolean=true;
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
@@ -43,9 +47,10 @@ export class HeaderComponent implements OnInit {
   ) {
 
     this.localst.observe(environment.loankey).subscribe(res=>{
-      
+      if(res!=undefined && res!=null)
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
+  
         this.getloanid();
   }
 
@@ -57,7 +62,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isExpanded = false;
+    this.isExpanded = true;
+    //default open
     this.value = this.localst.retrieve(environment.logpriority);
   }
 
@@ -72,10 +78,25 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSideBar(event) {
-    this.isExpanded = !this.isExpanded;
+    //this.isExpanded = !this.isExpanded;
     this.sideBarService.toggle(this.isExpanded);
   }
 
+  ngAfterViewInit() {
+   this.initialtoggle();
+  }
+
+  initialtoggle(){
+    try{
+      this.sideBarService.toggle(true);
+    }
+  catch{
+    setTimeout(() => {
+      this.initialtoggle();
+    }, 1000);
+    
+  }
+  }
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();
@@ -102,7 +123,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      this.loanservice.getLoanById(this.loanid).subscribe(res => {
+      this.loanservice.getLoanById(this.loanid.replace("/","-")).subscribe(res => {
         console.log(res)
         //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
@@ -116,6 +137,7 @@ export class HeaderComponent implements OnInit {
         else {
           this.toaster.error("Could not fetch Loan Object from API")
         }
+        
         loaded = true;
       });
 
@@ -127,12 +149,15 @@ export class HeaderComponent implements OnInit {
   getreferencedata() {
     this.referencedataapi.getreferencedata().subscribe(res => {
       this.localst.store(environment.referencedatakey, res.Data);
+      this.Databasename=res.Data.Databasename;
     })
   }
   getloanid(){
 
     try{
-      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
+      debugger
+      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");
+      this.Databasename=this.localst.retrieve(environment.referencedatakey).Databasename;
     }
     catch{
       

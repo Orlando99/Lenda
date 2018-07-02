@@ -27,6 +27,7 @@
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
             (cellEditingStopped)="rowvaluechanged($event)"
+            (cellEditingStarted)="cellEditingStarted($event)"
             [rowData]="rowData"
             (gridReady)="onGridReady($event)"
             [columnDefs]="columnDefs">

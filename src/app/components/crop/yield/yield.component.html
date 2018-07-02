@@ -8,14 +8,13 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-      <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-      <mat-icon >publish</mat-icon>
+      <button (click)="synctoDb()" [disabled]="!syncenabled()"  mat-icon-button>
+      <mat-icon [style.color] = "!syncenabled()">publish</mat-icon>
     </button>
 
     <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
       
           <div class="container bottom">
-            
             <div class="row">
             <ag-grid-angular 
             [ngStyle]="style"
@@ -29,8 +28,7 @@
             (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
             (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs"
-            [overlayLoadingTemplate]="overlayLoadingTemplate">
+            [columnDefs]="columnDefs">
             </ag-grid-angular>
             </div>
           </div>

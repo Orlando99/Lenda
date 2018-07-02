@@ -8,7 +8,7 @@
       </mat-expansion-panel-header>
   
         <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-        <mat-icon >publish</mat-icon>
+        <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon>
       </button>
   
       <button (click)="addrow()" mat-raised-button color="primary" >Add </button>

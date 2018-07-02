@@ -4,21 +4,8 @@ import { isNumber } from "util";
 //Numeric cell editor config
 export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
-      // if(parseFloat(charStr)!=NaN)
-      // return true;
-      // else
-      // return false;
+      
       return !!/\d/.test(charStr);
-     //if(charStr.indexOf('.') > -1 && parseFloat(charStr).toString().indexOf('.') <=-1)
-
-    //  if(/^[\d.]/.test(charStr)){
-    //   if(charCode== 46 && charStr.indexOf('.')!=-1 ){
-    //   return false;
-    //   } 
-    //   return true;
-    //  }
-    
-     //return !!/^[\d.]/.test(charStr);
     
     }
     
@@ -34,13 +21,21 @@ export function getNumericCellEditor() {
     }
     function NumericCellEditor() { }
     NumericCellEditor.prototype.init = function (params) {
+      debugger
       this.focusAfterAttached = params.cellStartedEdit;
       this.eInput = document.createElement("input");
       this.eInput.style.width = "100%";
       this.eInput.style.height = "100%";
+<<<<<<< HEAD
       
 
 
+=======
+      this.eInput.addEventListener("change", function(event) {
+        debugger
+        event.srcElement.parentElement.className=event.srcElement.parentElement.className.replace("editable-color","edited-color")
+      });
+>>>>>>> 3323063e34a4c01de34c02b5e832f4fa10e9b40a
       // this.eInput.value = params.value;
       // var that = this;
       // this.eInput.addEventListener("input", function (event) {
@@ -114,7 +109,11 @@ export function getNumericCellEditor() {
   
 export function numberValueSetter(params) {
   debugger
+<<<<<<< HEAD
     if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
+=======
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
+>>>>>>> 3323063e34a4c01de34c02b5e832f4fa10e9b40a
     params.newValue=0;    
     var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;

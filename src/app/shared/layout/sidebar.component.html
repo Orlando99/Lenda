@@ -1,5 +1,5 @@
 
-    
+
     <mat-sidenav #leftSidenav class="arm-sidenav"  id="arm-sidenav" [mode]="'over'"  opened="true" (open)="onOpen()" (close)="onClose()" >
       <mat-nav-list class="arm-sidenav-main">
         <!-- <mat-list-item class="navLogo min-logo" *ngIf="!isExpanded" (mouseover)="toggleSideBar($event)">
@@ -59,6 +59,10 @@
          <mat-icon mat-list-icon>star</mat-icon>
            <p matLine>Favorites</p>
         </mat-list-item>
+        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/flowchart']">
+          <mat-icon mat-list-icon>map</mat-icon>
+          <p matLine>Flowchart</p>
+        </mat-list-item>
         <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/work-in-progress']">
           <mat-icon mat-list-icon>star</mat-icon>
             <p matLine>Work In Progress</p>
@@ -82,6 +86,6 @@
         <mat-list-item class="arm-recent-record">
           <p matLine *ngIf = "isExpanded">SharePoint</p>
         </mat-list-item>
-        
+
       </mat-nav-list>
     </mat-sidenav>

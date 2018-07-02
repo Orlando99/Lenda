@@ -4,7 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../services/Logs/logging.service';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { modelparserfordb } from '../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../models/farmmodel.';
 import { FarmapiService } from '../../services/farm/farmapi.service';
@@ -28,6 +28,8 @@ export class FarmComponent implements OnInit {
   private localloanobject: loan_model = new loan_model();
   // Aggrid
   public rowData = [];
+  public currenteditedfield:string=null;
+  public currenteditrowindex:number=-1;
   public components;
   public context;
   public frameworkcomponents;
@@ -86,10 +88,10 @@ export class FarmComponent implements OnInit {
         valueSetter: Countyvaluesetter
       },
       { headerName: '% Prod', field: 'Prod',  editable: false },
-      { headerName: 'Landlord', field: 'Landowner', editable: true },
-      { headerName: 'FSN', field: 'FSN', editable: true },
-      { headerName: 'Section', field: 'Section',  editable: true },
-      { headerName: 'Rated', field: 'Rated',  editable: true },
+      { headerName: 'Landlord', field: 'Landowner', editable: true ,calculationinvoke:false},
+      { headerName: 'FSN', field: 'FSN', editable: true ,calculationinvoke:false},
+      { headerName: 'Section', field: 'Section',  editable: true ,calculationinvoke:false},
+      { headerName: 'Rated', field: 'Rated',  editable: true,calculationinvoke:false},
       { headerName: 'Rent', field: 'Share_Rent',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
       { headerName: 'Rent UoM', field: 'RentUoM',  editable: true },
       { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', editable: true },
@@ -108,14 +110,19 @@ export class FarmComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
-
       this.localloanobject = res;
       if(res.Farms)
         this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
       else
         this.rowData = [];
-      this.gridApi.setRowData(this.rowData);
-
+       this.gridApi.setRowData(this.rowData);
+       if(this.currenteditedfield!=null){
+         debugger
+        this.gridApi.startEditingCell({
+          rowIndex: this.currenteditrowindex,
+          colKey: this.currenteditedfield
+        });
+       }
     });
 
     this.getdataforgrid();
@@ -133,8 +140,19 @@ export class FarmComponent implements OnInit {
     }
   }
 
-
+  cellEditingStarted(value:any){
+    debugger
+    this.currenteditedfield=value.colDef.field;
+    this.currenteditrowindex=value.rowIndex;
+    this.gridApi.startEditingCell({
+      rowIndex: this.currenteditrowindex,
+      colKey: this.currenteditedfield
+    });
+  }
   rowvaluechanged(value: any) {
+    debugger
+    this.currenteditedfield=null;
+    this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
       this.localloanobject.Farms = [];
     }
@@ -150,7 +168,8 @@ export class FarmComponent implements OnInit {
        obj.ActionStatus = 2;
       this.localloanobject.Farms[rowindex]=obj;
     }
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject,value.colDef.calculationinvoke);
   }
 
   synctoDb() {
