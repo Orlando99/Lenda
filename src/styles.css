@@ -382,3 +382,11 @@ background-color:white
 .edited-color{
   background-color: #f28f35 !important
 }
+
+body .mat-dialog-container {
+  width: 100%;
+  height: 100%;
+  padding: 10px 10px 10px 10px;
+  overflow: hidden;
+  box-shadow: none;
+}
