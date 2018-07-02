@@ -357,12 +357,10 @@ mat-list-item {
   width: 100% !important;
 }
 
-<<<<<<< HEAD
-.rag-green{
+/* .rag-green{
   background-color: red;
  
-}
-=======
+} */
 
 .showdetails{
  color:white;
@@ -384,4 +382,3 @@ background-color:white
 .edited-color{
   background-color: #f28f35 !important
 }
->>>>>>> 3323063e34a4c01de34c02b5e832f4fa10e9b40a
