@@ -133,6 +133,7 @@ import { RealEstateComponent } from './components/collateral/realestate/realesta
 import { OthersComponent } from './components/collateral/others/others.component';
 import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service';
 import { RatingComponent } from './borrower/rating/rating.component'
+import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
 
 @NgModule({
   declarations: [
@@ -277,7 +278,8 @@ import { RatingComponent } from './borrower/rating/rating.component'
     CropapiService,
     ReferenceService,
     InsuranceapiService,
-    NotificationFeedsService
+    NotificationFeedsService,
+    QuestionscalculationworkerService
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]

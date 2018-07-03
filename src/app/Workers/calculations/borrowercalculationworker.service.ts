@@ -65,7 +65,7 @@ export class Borrowercalculationworker {
   prepareborrowermodel(input:borrower_model):borrower_model{
     try{
     this.input=input;
-    let starttime=new Date().getTime();
+      let starttime=new Date().getTime();
     this.prepare_current_equity();
     this.prepare_intermediate_equity();
     this.prepare_fixed_equity();
