@@ -1,0 +1,50 @@
+.ag-theme-blue .ag-header {
+  background-color: green !important
+}
+
+.ag-theme-blue .ag-row-odd {
+  background-color: white;
+}
+
+.ag-theme-balham .ag-cell-inline-editing select {
+  height: 100%;
+}
+
+.ag-cell {
+  background-color:white
+}
+
+.ag-header-row{
+  background-color: #23C8AB;
+  color: white;
+}
+
+.editable-color{
+  background-color: #dcf0f4 !important
+}
+
+.edited-color{
+  background-color: #f28f35 !important
+}
+
+
+.ag-floating-bottom-container > .ag-row{
+  color:white
+}
+
+.ag-floating-bottom-container > .ag-row >.ag-cell{
+  background-color: darkslateblue;
+}
+
+.ag-theme-balham .ag-header-cell-label .ag-header-cell-text{
+  text-overflow: initial !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  line-height: 15px !important;
+  text-align: center !important;
+}
+
+.ag-header-cell-label{
+  padding-top: 8px;
+}

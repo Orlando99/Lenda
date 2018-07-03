@@ -1,0 +1,48 @@
+@import "./../../../sass/theme/variables";
+
+mat-sidenav  {
+  padding-top: 80px;
+  mat-icon {
+    color: $icon-color;
+    font-size: 18px;
+  }
+
+  .unfeatured {
+    p {
+      color: $sidebar-unfeatured-item-color;
+      font-size: $base-font-size;
+    }
+  }
+
+  .mat-list-item:not(.unfeatured):not(.normalize) p.mat-line {
+    margin-top: -1px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 500;
+    -webkit-transition: width 0.25s;
+    transition: width 0.25s;
+    font-size: $base-font-size;
+  }
+
+  .normalize {
+    color: $white-90;
+    font-size: $base-font-size;
+  }
+}
+
+#arm-sidenav{
+  background: $sidebar-bg-color;
+  overflow-y: auto;
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 68px;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
+.arm-sidenav {
+  visibility: visible !important
+}

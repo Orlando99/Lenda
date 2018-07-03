@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment.prod';
 @Component({
   selector: 'layout-sidebar',
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css'],
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
   public isExpanded: boolean;
@@ -26,7 +26,7 @@ export class SidebarComponent implements OnInit {
     private route: ActivatedRoute,
     private sidebarService: SidebarService,
     private localstorage:LocalStorageService
-  ) { 
+  ) {
 this.localstorage.observe(environment.loankey).subscribe(res=>{
   if(res!=undefined && res!=null)
         this.loanid=res.Loan_Full_ID.replace("-","/");
@@ -65,7 +65,7 @@ this.localstorage.observe(environment.loankey).subscribe(res=>{
       this.loanid=this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
     }
     catch{
-      
+
     }
   }
   }

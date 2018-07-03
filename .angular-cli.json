@@ -21,9 +21,10 @@
       "styles": [
         "sass/materialize.scss",
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css",
+        "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
         "../node_modules/ag-grid/dist/styles/ag-grid.css",
-        "../node_modules/ag-grid/dist/styles/ag-theme-blue.css",
-        "styles.css"
+        "../node_modules/ag-grid/dist/styles/ag-theme-balham.css",
+        "styles.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
