@@ -34,7 +34,7 @@ export class LoancrophistoryService {
           let max=Math.max.apply(null,cropyielditems);
           let min=Math.min.apply(null,cropyielditems);
           let coutie=(cropyielditems.length-2);
-          this.input.CropYield[i].CropYield=((sum) - max -min)/coutie;
+          this.input.CropYield[i].CropYield=Math.round(((sum) - max -min)/coutie);
       }
     }
   }

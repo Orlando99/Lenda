@@ -20,14 +20,15 @@
             [ngStyle]="style"
             class="ag-theme-balham"
             [animateRows]="true"
-            [enableSorting]="true"
-            [enableFilter]="true"
+            [enableSorting]="false"
+            [enableFilter]="false"
             [context]="context"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
             (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
             (gridReady)="onGridReady($event)"
+            (gridSizeChanged)="onGridSizeChanged($event)"
             [columnDefs]="columnDefs">
             </ag-grid-angular>
             </div>
