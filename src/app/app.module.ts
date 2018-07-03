@@ -283,7 +283,8 @@ import { CellValueComponent } from './components/borrower/shared/cell-value/cell
     CropapiService,
     ReferenceService,
     InsuranceapiService,
-    NotificationFeedsService
+    NotificationFeedsService,
+    QuestionscalculationworkerService
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]

@@ -14,7 +14,6 @@ export class FlowchartComponent implements OnInit {
       if(res!=undefined && res!=null)
       {
         var data=this.localstorage.retrieve(environment.loankey).DashboardStats;
-
         this.buildChart(data);
       }
     })
@@ -192,7 +191,6 @@ export class FlowchartComponent implements OnInit {
   }
 
   buildChart(data) {
-
     console.log(data.length);
     for (var i = 0; i < data.length; i++) {
       document.querySelector('#' + data[i].title + '> #number > text').textContent = data[i].number;
