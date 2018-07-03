@@ -5,7 +5,7 @@
         <span class="font-weight-600 section-heading">Balance sheet</span>
       </div>
     </div>
-    <div class="row table-row" *ngFor="let row of balanceSheetConfig.data; let i=index" [class.background-hightlight]="balanceSheetConfig.highlightRowsIndex.indexOf(i) >= 0" >
+    <div class="row table-row" *ngFor="let row of balanceSheetConfig.data; let i=index" [class.background-highlight]="balanceSheetConfig.highlightRowsIndex.indexOf(i) >= 0" >
       <div class="col s2 cell text-left">{{row.col1}}</div>
       <div class="col s4 cell text-right">
         <span class="float-left">$</span> {{row.amount}}</div>
@@ -30,7 +30,7 @@
       <div class="col s4 cell text-right column-header">
         Revenue</div>
     </div>
-    <div class="row table-row"  *ngFor="let row of revenueConfig.data; let i=index" [class.background-hightlight]="revenueConfig.highlightRowsIndex.indexOf(i) >= 0">
+    <div class="row table-row"  *ngFor="let row of revenueConfig.data; let i=index" [class.background-highlight]="revenueConfig.highlightRowsIndex.indexOf(i) >= 0">
       <div class="col s3 cell text-left">{{row.revenueType}}</div>
       <div class="col s3 cell text-right">{{row.acers}}</div>
       <div class="col s2 cell text-right"> {{row.yield}}</div>
@@ -51,7 +51,7 @@
         <div class="col s3 cell text-right column-header">
           % Commit</div>
       </div>
-      <div class="row table-row"  *ngFor="let row of collateralConfig.data; let i=index" [class.background-hightlight]="collateralConfig.highlightRowsIndex.indexOf(i) >= 0">
+      <div class="row table-row"  *ngFor="let row of collateralConfig.data; let i=index" [class.background-highlight]="collateralConfig.highlightRowsIndex.indexOf(i) >= 0">
           <div class="col s3 cell text-left">
             {{row.collateralType}}
           </div>

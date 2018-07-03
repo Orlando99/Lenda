@@ -22,7 +22,7 @@
     <div class="row table-row">
       <ng-container *ngFor="let row of data.partTwo, let rowInd = index">
         <div class="col m3">
-          <div class="cell text-left" [class.background-hightlight]="row.hightlightRow">{{row.text}}</div>
+          <div class="cell text-left" [class.background-highlight]="row.hightlightRow">{{row.text}}</div>
         </div>
         <div class="col m9">
           <app-cell-value [bolderFont]=true [borderRight]=true [isAmount]="row.isAmount" [isPercentage]="row.isPercentage" [value]="row.value"
@@ -44,7 +44,7 @@
     <div class="row table-row">
       <ng-container *ngFor="let row of data.partThree, let rowInd= index">
         <div class="col m3">
-          <div class="cell text-left" [class.background-hightlight]="row.hightlightRow">{{row.text}}</div>
+          <div class="cell text-left" [class.background-highlight]="row.hightlightRow">{{row.text}}</div>
         </div>
         <div class="col m9">
 
