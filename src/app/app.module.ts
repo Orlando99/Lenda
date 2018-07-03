@@ -134,6 +134,7 @@ import { OthersComponent } from './components/collateral/others/others.component
 import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service';
 import { RatingComponent } from './components/borrower/rating/rating.component';
 import { FarmFinancialComponent } from './components/borrower/farm-financial/farm-financial.component'
+import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 
 @NgModule({
   declarations: [
@@ -269,6 +270,7 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
     Borrowercalculationworker,
     Collateralcalculationworker,
     LoancalculationWorker,
+    LoanMasterCalculationWorkerService,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
     LoancrophistoryService,
