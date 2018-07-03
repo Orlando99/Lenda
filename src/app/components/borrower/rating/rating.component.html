@@ -7,10 +7,14 @@
         <div class="col cell text-left" [class.font-weight-600]="rowInd===0">{{row.text}}</div>
       </div>
       <div class="col m9">
-          <div class="col m2 cell text-right font-weight-600 border-right" >
+          <div class="col m2 cell text-right font-weight-600 border-right" 
+          [class.background-green]="rowInd === data.partOne.length-1"
+          >
             {{row.value || '&nbsp;'}}    
           </div>
-          <div class="col m2 cell text-right" *ngFor="let val of row.staticValues, let i = index">
+          <div class="col m2 cell text-right" *ngFor="let val of row.staticValues, let i = index"
+          [class.color-red]="rowInd === 1"
+          >
           {{val || '&nbsp;'}}
           </div>
       
