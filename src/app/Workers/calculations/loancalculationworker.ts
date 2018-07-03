@@ -35,7 +35,7 @@ export class LoancalculationWorker {
     if(recalculate)
     {
     console.log("Calculation Started"); 
-    let starttime=new Date().getMilliseconds();
+    let starttime=new Date().getTime();
     console.log(starttime);    
     this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation Started");
     if(localloanobj.Borrower!=null)
@@ -55,8 +55,8 @@ export class LoancalculationWorker {
     localloanobj.srccomponentedit=localloanobj.srccomponentedit;
     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
     console.log("Calculation Ended"); 
-    let endtime=new Date().getMilliseconds();
-    this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
+    let endtime=new Date().getTime();
+    this.logging.checkandcreatelog(3,'Calculationforloan',"LoanCalculation timetaken :" + (endtime-starttime).toString() + " ms");
     
     
     console.log("Time taken :" + (starttime-endtime).toString() + " ms");

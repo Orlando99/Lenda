@@ -65,7 +65,7 @@ export class FSAComponent implements OnInit {
         },
         { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },
           pinnedRowCellRenderer: function(){ return '-';}},
-        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
+        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },width:100,
           // valueGetter: function (params) {
           //   return setDiscValue(params);
           // },
@@ -83,7 +83,7 @@ export class FSAComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
@@ -98,7 +98,7 @@ export class FSAComponent implements OnInit {
   getdataforgrid() {
     debugger
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
