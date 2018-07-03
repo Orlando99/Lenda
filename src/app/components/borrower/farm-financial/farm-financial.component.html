@@ -1,0 +1,22 @@
+<div class="container bottom width-auto">
+
+  <div class="bottom">
+    <div class="row">
+      <ng-container *ngFor="let row of data.partOne, let rowInd = index">
+      <div class="col m3">
+        <div class="col cell text-left" [class.font-weight-600]="rowInd===0">{{row.text}}</div>
+      </div>
+      <div class="col m9">
+        <div class="col m2 cell text-right" *ngFor="let val of row.value, let i = index"
+        [class.border-right]="i===0"
+        [class.font-weight-600]="i===0"
+        >
+        {{val || '&nbsp;'}}
+        </div>
+      
+      </div>
+    </ng-container>
+
+
+    </div>
+</div>
