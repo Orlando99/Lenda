@@ -33,13 +33,13 @@ export class RatingComponent implements OnInit {
         partOne: [
           {
             text: 'Borrower Ratting',
-            value: "*".repeat(borrower.Borrower_Rating || 0),
+            value: "*".repeat(loanMaster.Borrower_Rating || 0),
             staticValues: ['*****', '****', '***', '**', '*']
 
           },
           {
             text: 'FICO Score',
-            value: borrower.Borrower_Credit_Score || '',
+            value: loanMaster.Credit_Score || '',
             staticValues: [720, 700, 700, 650, 0]
           },
           {
@@ -55,12 +55,12 @@ export class RatingComponent implements OnInit {
           },
           {
             text: 'Bankruptcy',
-            value: borrower.Borrower_Banruptcy_status ? 'Yes' : 'No',
+            value: loanMaster.Bankruptcy_Status ? 'Yes' : 'No',
             staticValues: ['No', 'No', 'No', '', '']
           },
           {
             text: 'Judgement',
-            value: borrower.Borrower_Judgement_Ind ? 'Yes' : 'No',
+            value: loanMaster.Judgement ? 'Yes' : 'No',
             staticValues: ['No', 'No', 'No', '', '']
           },
           {
