@@ -36,7 +36,7 @@ export class FSAComponent implements OnInit {
   
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
@@ -54,28 +54,28 @@ export class FSAComponent implements OnInit {
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
       
       this.columnDefs = [
-        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
-        { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
+        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false},
+        { headerName: 'Description', field: 'Collateral_Description',  editable: true},
         { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
         { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
-        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true, width:130},
+        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true,},
         { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
           // valueGetter: function (params) {
           //   return setNetMktValue(params);}
         },
-        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:130,
+        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },
           pinnedRowCellRenderer: function(){ return '-';}},
-        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
+        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },width:100,
           // valueGetter: function (params) {
           //   return setDiscValue(params);
           // },
           valueFormatter: currencyFormatter},
-        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,
+        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",
           cellEditorParams:{
             values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
           },pinnedRowCellRenderer: function(){ return ' ';},
           valueFormatter: insuredFormatter},
-        { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
+        { headerName: '', field: 'value',  cellRenderer: "deletecolumn",pinnedRowCellRenderer: function(){ return ' ';}}
       ];
  
       this.context = { componentParent: this }; 
@@ -83,24 +83,40 @@ export class FSAComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
       this.pinnedBottomRowData = this.computeTotal(this.rowData);
         this.getgridheight();
+        this.adjustgrid();
     });
+   
     this.getdataforgrid();
   }
 
   getdataforgrid() {
+    debugger
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
       this.pinnedBottomRowData = this.computeTotal(this.rowData);
+    }
+    this.getgridheight();
+    this.adjustgrid();
+  }
+  onGridSizeChanged(Event: any) {
+    debugger
+    this.adjustgrid();
+  }
+  private adjustgrid() {
+    try {
+      this.gridApi.sizeColumnsToFit();
+    }
+    catch {
     }
   }
 
@@ -108,6 +124,7 @@ export class FSAComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
+    this.adjustgrid();
   }
  
   syncenabled(){
@@ -184,7 +201,7 @@ export class FSAComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(29*(this.rowData.length+2)-2).toString()+"px";
   }
 
 
