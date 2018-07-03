@@ -136,6 +136,7 @@ import { RatingComponent } from './components/borrower/rating/rating.component';
 import { FarmFinancialComponent } from './components/borrower/farm-financial/farm-financial.component'
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
+import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
 
 @NgModule({
   declarations: [
