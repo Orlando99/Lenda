@@ -378,3 +378,21 @@ background-color:white
 .edited-color{
   background-color: #f28f35 !important
 }
+.ag-floating-bottom-container > .ag-row{
+color:white
+}
+.ag-floating-bottom-container > .ag-row >.ag-cell{
+  background-color: darkslateblue;
+  }
+  .ag-theme-balham .ag-header-cell-label .ag-header-cell-text{
+    text-overflow: initial !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    line-height: 15px !important;
+    text-align: center !important;
+  }
+
+  .ag-header-cell-label{
+    padding-top: 8px;
+  }
