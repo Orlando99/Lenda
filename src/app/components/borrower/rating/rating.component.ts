@@ -3,6 +3,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { loan_model } from '../../../models/loanmodel';
 import { environment } from '../../../../environments/environment.prod';
 import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
+import { ValueType } from '../shared/cell-value/cell-value.component';
 
 @Component({
   selector: 'app-rating',
@@ -79,26 +80,26 @@ export class RatingComponent implements OnInit {
             text: 'Income Constant %',
             value: '',
             staticValues: this.loanMasterCaculationWorker.incomeConstant,
-            isPercentage: true,
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Revanue Threshold',
             value: this.loanMasterCaculationWorker.getRevanueThresholdValue(),
             staticValues: this.loanMasterCaculationWorker.getRevanueThresholdStaticValues(),
-            isAmount: true
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Insurance Constant %',
             value: '',
             staticValues:  this.loanMasterCaculationWorker.insuranceConstant,
-            isPercentage: true,
+            valueType : ValueType.PERCENTAGE,
 
           },
           {
             text: 'Max Crop Loan',
             value: this.loanMasterCaculationWorker.getMaxCropLoanValue(),
             staticValues: this.loanMasterCaculationWorker.getMaxCropLoanStaticValues(),
-            isAmount: true,
+            valueType : ValueType.AMOUNT,
             hightlightRow: true
           },
 
@@ -108,25 +109,25 @@ export class RatingComponent implements OnInit {
             text: 'Max Amount Constant',
             value: '',
             staticValues: [1000000, 500000, '-', '-', '-'],
-            isAmount: true
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Disc Net Worth Constant %',
             value: '',
             staticValues:  this.loanMasterCaculationWorker.discNetWorthConstant,
-            isPercentage : true
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Disc Net Worth',
             value: this.loanMasterCaculationWorker.getDiscNetWorthValue(),
             staticValues: this.loanMasterCaculationWorker.getDiscWorthStaticValue(),
-            isAmount: true
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Ag-Pro Max Addition',
             value: '',
             staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(),
-            isAmount: true,
+            valueType : ValueType.AMOUNT,
             hightlightRow: true
           }
         ]

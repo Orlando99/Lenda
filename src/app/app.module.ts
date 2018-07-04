@@ -137,6 +137,8 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+import { CurrencyDirective } from './components/borrower/shared/currency.directive';
+import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 
 @NgModule({
   declarations: [
@@ -186,7 +188,9 @@ import { QuestionscalculationworkerService } from './Workers/calculations/questi
     FlowchartComponent,
     RatingComponent,
     FarmFinancialComponent,
-    CellValueComponent
+    CellValueComponent,
+    CurrencyDirective,
+    PercentageDirective
 
   ],
   imports: [
