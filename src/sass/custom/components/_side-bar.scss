@@ -60,14 +60,6 @@
   font-size: 12px;
 }
 
-
-
-mat-sidenav,
-.mat-sidenav,
-.mat-sidenav-backdrop.mat-sidenav-shown {
-  background-color: transparent;
-}
-
 #notificationFeeds{
   top:80px !important
 }
@@ -110,11 +102,6 @@ notification-feeds {
   text-align: right;
 }
 
-.mat-menu-item {
-  font-family: Roboto,"Helvetica Neue",sans-serif;
-  font-size: 90%;
-  font-weight: 400;
-}
 .fa-lightbulb {
   top: 25px;
   position: fixed;

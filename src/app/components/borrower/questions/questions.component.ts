@@ -21,7 +21,7 @@ export class QuestionsComponent implements OnInit {
   ngOnInit() {
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-     debugger
+
      this.RefQuestions=[];
     this.LoanQResponse=this.localloanobject.LoanQResponse;
     //temporary fix for unmatched length of questions and response rows
@@ -35,5 +35,5 @@ export class QuestionsComponent implements OnInit {
   change() {
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
-  
+
 }

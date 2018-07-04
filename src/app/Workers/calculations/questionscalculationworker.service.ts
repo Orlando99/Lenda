@@ -7,7 +7,7 @@ import { LoanQResponse, RefQuestions } from '../../models/loan-response.model';
 export class QuestionscalculationworkerService {
 
   constructor(public logging:LoggingService){
-    
+
   }
 
   performcalculationforquestionsupdated(input:loan_model):loan_model{
@@ -16,7 +16,7 @@ export class QuestionscalculationworkerService {
      // we are going to update according to question id .. thats the only way as if now.. suggestions welcomed
       switch (element.Question_ID) {
         case 2: // judgement question
-        debugger
+
         input.LoanMaster[0].Judgement=(parseInt(element.Response_Ind)==1)?0:1;
           break;
         case 3: // bankruptcy question

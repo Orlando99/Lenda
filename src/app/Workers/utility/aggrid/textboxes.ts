@@ -2,12 +2,12 @@ import { isNumber } from "util";
 
 //Numeric cell editor config
 export function getTextCellEditor() {
-    function isCharNumeric(charStr) {      
-      return !!/\d/.test(charStr);     
+    function isCharNumeric(charStr) {
+      return !!/\d/.test(charStr);
     }
-    
+
     function isKeyPressedNumeric(event) {
-      
+
       var charCode = getCharCodeFromEvent(event);
       var charStr = String.fromCharCode(charCode);
       return isCharNumeric(charStr);
@@ -22,10 +22,10 @@ export function getTextCellEditor() {
       this.eInput = document.createElement("input");
       this.eInput.style.width = "100%";
       this.eInput.style.height = "100%";
-      
+
       this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
       var that = this;
-      this.eInput.addEventListener("keypress", function(event) {        
+      this.eInput.addEventListener("keypress", function(event) {
         //this.eInput
         //this.eInput.addClass('lenda-cellEdit-color')
         this.classList.remove("error");
@@ -36,13 +36,13 @@ export function getTextCellEditor() {
       });
 
     this.eInput.addEventListener("blur", function(event) {
-        
-         if(params.newValue==undefined || params.newValue==null||params.newValue=="") { 
+
+         if(params.newValue==undefined || params.newValue==null||params.newValue=="") {
           //return          this.classList.add("error");
          }
          //this.eInput
          //this.eInput.addClass('lenda-cellEdit-color')
-         
+
        });
     };
     TextCellEditor.prototype.getGui = function () {
@@ -72,17 +72,17 @@ export function getTextCellEditor() {
     };
     return TextCellEditor;
   }
-  
+
 export function textValueSetter(params) {
-  debugger
+
     //this.localStorage.setItem('oldcolValue', params.oldValue);
-    if(params.newValue==undefined || params.newValue==null||params.newValue=="")      
-    
-    params.newValue=0;    
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
+
+    params.newValue=0;
     var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;
     return true;
   }
-  
-  
+
+
   //Numeric cell editor config Ends

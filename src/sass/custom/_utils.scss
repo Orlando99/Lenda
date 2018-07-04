@@ -1,4 +1,32 @@
+// Margins and Paddings
+.ml-40 {
+  margin-left: 40px;
+}
 
+// Custom style for flat style input
+.input-group-flat {
+  position: relative;
+  mat-icon {
+    position: absolute;
+    top: 10px;
+    font-size: $font-size-lg;
+    left: 10px;
+  }
+  .input-flat-form-control {
+    border-radius: 0.25em;
+    font-size: $base-font-size;
+    color: $white-90;
+    background: $white-30;
+    border: none;
+    font-size: $font-size-md;
+    font-weight: 300;
+    padding: 10px 40px;
+    min-width: 480px;
+  }
+}
+
+// TODO: Check following where these are used
+// ========
 .error{
     background-color: red;
 }
@@ -36,10 +64,6 @@
   padding: 5px;
 }
 
-.navLogo img {
-  width: 100% !important;
-}
-
 .rag-green{
   background-color: red;
 
@@ -49,3 +73,4 @@
  color:white;
  font-size: 11px;
 }
+// ===========

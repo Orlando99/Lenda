@@ -1,0 +1,62 @@
+@import "./../../../sass/theme/variables";
+
+#arm-main-header {
+  z-index: 999;
+  width: 100%;
+  height: 80px;
+  background: rgba(36, 112, 179, 1);
+  background: -moz-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(36, 112, 179, 1)), color-stop(100%, rgba(35, 209, 171, 1)));
+  background: -webkit-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -o-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: linear-gradient(to right, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2470b3', endColorstr='#23d1ab', GradientType=1);
+  position: fixed;
+  top: 0;
+  -webkit-transition: margin 0.25s;
+  transition: margin 0.25s;
+
+  nav {
+    background: none; // Overrides default navigation color
+  }
+
+  .arm-menu-bar {
+    background: none;
+    height: 80px;
+    padding: 0;
+  }
+
+  .navLogo {
+    width: 225px;
+    text-align: center;
+    display: flex;
+    height: 100%;
+    padding-top: 20px;
+    box-shadow: 3px 0px 6px -2px #444;
+    .navIcons {
+      flex: 5;
+      margin-top: 3px;
+    }
+    .close-menu {
+      flex: 1;
+      color: $secondary-color;
+      mat-icon {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .navbar-wrapper .navIcons .logo {
+    width: 125px;
+  }
+
+  .logged-in-menu {
+    margin-right: 25px;
+
+    .mat-button {
+      padding: 0 10px;
+      font-size: $font-size-lg;
+    }
+  }
+}

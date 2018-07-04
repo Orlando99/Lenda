@@ -1,4 +1,4 @@
-<mat-sidenav #leftSidenav class="arm-sidenav" id="arm-sidenav" [mode]="'over'" opened="true" (open)="onOpen()" (close)="onClose()">
+<mat-sidenav #leftSidenav class="arm-sidenav expanded" id="arm-sidenav" [mode]="'over'">
   <mat-nav-list class="arm-sidenav-main">
     <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/summary']">
       <mat-icon mat-list-icon>dehaze</mat-icon>
@@ -53,23 +53,23 @@
       <p matLine>Work In Progress</p>
     </mat-list-item>
     <br>
-    <mat-list-item class="arm-recent-record normalize">
-      <p matLine *ngIf="isExpanded">Walter Kluwer</p>
+    <mat-list-item class="arm-recent-record normalize" *ngIf="isExpanded">
+      <p matLine>Walter Kluwer</p>
     </mat-list-item>
-    <mat-list-item class="arm-recent-record unfeatured">
-      <p matLine *ngIf="isExpanded">Knowledge Lake</p>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Knowledge Lake</p>
     </mat-list-item>
-    <mat-list-item class="arm-recent-record unfeatured">
-      <p matLine *ngIf="isExpanded">Nortridge</p>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Nortridge</p>
     </mat-list-item>
-    <mat-list-item class="arm-recent-record unfeatured">
-      <p matLine *ngIf="isExpanded">Net Suite</p>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Net Suite</p>
     </mat-list-item>
-    <mat-list-item class="arm-recent-record unfeatured">
-      <p matLine *ngIf="isExpanded">Domo</p>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Domo</p>
     </mat-list-item>
-    <mat-list-item class="arm-recent-record unfeatured">
-      <p matLine *ngIf="isExpanded">SharePoint</p>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>SharePoint</p>
     </mat-list-item>
 
   </mat-nav-list>

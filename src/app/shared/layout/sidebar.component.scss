@@ -52,10 +52,13 @@ mat-sidenav  {
   height: 100%;
   top: 0;
   left: 0;
-  width: 68px;
+  width: 70px;
   -webkit-transition: width 0.25s;
   transition: width 0.25s;
   -ms-overflow-style: -ms-autohiding-scrollbar;
+  &.expanded {
+    width: 215px;
+  }
 }
 
 .arm-sidenav {

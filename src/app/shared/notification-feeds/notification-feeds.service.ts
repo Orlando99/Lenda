@@ -8,7 +8,7 @@ export class NotificationFeedsService {
     /**
      *
      */
-    NotificationFeedsService() { 
+    NotificationFeedsService() {
     }
     private sidenav: MatSidenav;
 
@@ -26,7 +26,7 @@ export class NotificationFeedsService {
     }
 
     public toggle(): void {
-        debugger
+
         this.sidenav.toggle();
     }
 }

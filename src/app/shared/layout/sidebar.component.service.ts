@@ -35,15 +35,14 @@ export class SidebarService {
     }
 
     public toggle(isExpanded: boolean): void {
-        debugger
        // this.mainHeader.style.marginLeft = isExpanded ? '215px' : '68px';
-        this.mainContent.style.marginLeft = isExpanded ? '215px' : '68px';
-        this.mainSideBar.style.width = isExpanded ? '215px' : '68px';
-        if (isExpanded) {
-            this.mainLogo.style.width = '215px';
-        } else {
-            this.minLogo.style.width = '68px';
-        }
-        this.sidenav.toggle();
+        // this.mainContent.style.marginLeft = isExpanded ? '215px' : '68px';
+        // this.mainSideBar.style.width = isExpanded ? '215px' : '68px';
+        // if (isExpanded) {
+        //     this.mainLogo.style.width = '215px';
+        // } else {
+        //     this.minLogo.style.width = '68px';
+        // }
+        // this.sidenav.toggle();
     }
 }

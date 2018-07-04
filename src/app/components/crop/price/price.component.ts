@@ -134,7 +134,7 @@ export class PriceComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       if (res.srccomponentedit == "PriceComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
       }
@@ -212,8 +212,8 @@ export class PriceComponent implements OnInit {
 
   }
   rowvaluechanged(value: any) {
-    //Change class here for editing 
-    debugger
+    //Change class here for editing
+
     var obj = value.data;
     if (obj.Loan_CU_ID == undefined) {
       obj.ActionStatus = 1;
@@ -226,8 +226,8 @@ export class PriceComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCropUnits[rowindex] = obj;
     }
-    debugger
-    //this shall have the last edit 
+
+    //this shall have the last edit
     this.localloanobject.srccomponentedit = "PriceComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -264,7 +264,7 @@ export class PriceComponent implements OnInit {
     this.style.height = (29 * (this.rowData.length + 1)+9).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
     this.gridApi.sizeColumnsToFit();
   }
@@ -274,6 +274,6 @@ export class PriceComponent implements OnInit {
   }
 }
 function adjustheader(): void {
-  debugger
+
   document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
 }

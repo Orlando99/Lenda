@@ -23,7 +23,7 @@ export class FSAComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
- 
+
   public rowData = [];
   public components;
   public context;
@@ -33,26 +33,26 @@ export class FSAComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public pinnedBottomRowData;
-  
+
   style = {
     marginTop: '10px',
     width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
-  
+
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){ 
+    public loanapi:LoanApiService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-      
+
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false},
         { headerName: 'Description', field: 'Collateral_Description',  editable: true},
@@ -77,10 +77,10 @@ export class FSAComponent implements OnInit {
           valueFormatter: insuredFormatter},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn",pinnedRowCellRenderer: function(){ return ' ';}}
       ];
- 
-      this.context = { componentParent: this }; 
+
+      this.context = { componentParent: this };
   }
-  
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
@@ -91,12 +91,12 @@ export class FSAComponent implements OnInit {
         this.getgridheight();
         this.adjustgrid();
     });
-   
+
     this.getdataforgrid();
   }
 
   getdataforgrid() {
-    debugger
+
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
@@ -109,7 +109,7 @@ export class FSAComponent implements OnInit {
     this.adjustgrid();
   }
   onGridSizeChanged(Event: any) {
-    debugger
+
     this.adjustgrid();
   }
   private adjustgrid() {
@@ -126,7 +126,7 @@ export class FSAComponent implements OnInit {
     this.getgridheight();
     this.adjustgrid();
   }
- 
+
   syncenabled(){
     return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
   }
@@ -164,7 +164,7 @@ export class FSAComponent implements OnInit {
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
-      colKey: "Collateral_Description" 
+      colKey: "Collateral_Description"
     });
     this.getgridheight();
   }

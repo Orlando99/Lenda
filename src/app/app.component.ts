@@ -8,9 +8,9 @@ import { ToastsManager } from 'ng2-toastr';
 })
 export class AppComponent {
   title = 'LendaPlus';
-  
+
   constructor(private toaster: ToastsManager, vcf: ViewContainerRef) {
-    debugger
+
     this.toaster.setRootViewContainerRef(vcf);
   }
 }

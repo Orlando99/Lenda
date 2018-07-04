@@ -36,7 +36,7 @@ export class YieldComponent implements OnInit {
   public deleteAction = false;
   public addAction = false;
   context: any;
-  
+
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
     marginTop: '10px',
@@ -52,7 +52,7 @@ export class YieldComponent implements OnInit {
   public logging:LoggingService,
   public loanapi:LoanApiService,
   public alertify:AlertifyService
-  ) { 
+  ) {
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -103,7 +103,7 @@ export class YieldComponent implements OnInit {
     this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false,width: 80});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false,width: 80});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn",width: 100});
-   
+
     this.context = { componentParent: this };
   }
 
@@ -134,7 +134,7 @@ export class YieldComponent implements OnInit {
   }
 
   rowvaluechanged(value:any){
-    debugger
+
     var obj = value.data;
     var rowindex = value.rowIndex;
 
@@ -159,7 +159,7 @@ export class YieldComponent implements OnInit {
       this.edits.push(edit);
       console.log('EDITS',this.edits);
     }
-    
+
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -176,7 +176,7 @@ export class YieldComponent implements OnInit {
       });
       this.edits=[];
     }
-   
+
     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
       if (res.ResCode == 1) {
@@ -214,7 +214,7 @@ export class YieldComponent implements OnInit {
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject)
       }
     })
-  
+
   }
 
   addrow() {
@@ -237,7 +237,7 @@ export class YieldComponent implements OnInit {
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length,
-      colKey: "Crop" 
+      colKey: "Crop"
     });
     this.getgridheight();
   }

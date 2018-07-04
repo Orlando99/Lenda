@@ -13,24 +13,24 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  public isExpanded: boolean;
+  public isExpanded: boolean = true;
   @ViewChild('leftSidenav') public sideNav: MatSidenav;
   private mainHeader;
   private mainContent;
   private mainSideBar;
   private mainLogo;
   private minLogo;
-  public loanid:string="";
+  public loanid: string = "";
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private sidebarService: SidebarService,
-    private localstorage:LocalStorageService
+    private localstorage: LocalStorageService
   ) {
-this.localstorage.observe(environment.loankey).subscribe(res=>{
-  if(res!=undefined && res!=null)
-        this.loanid=res.Loan_Full_ID.replace("-","/");
-})
+    this.localstorage.observe(environment.loankey).subscribe(res => {
+      if (res != undefined && res != null)
+        this.loanid = res.Loan_Full_ID.replace("-", "/");
+    })
     this.getloanid();
 
   }
@@ -43,8 +43,8 @@ this.localstorage.observe(environment.loankey).subscribe(res=>{
     this.mainSideBar = document.getElementById('arm-sidenav');
     this.mainLogo = document.getElementById('navlogo-main');
     this.minLogo = document.getElementById('navlogo-min');
-    console.log(this.mainHeader, this.mainContent, this.mainSideBar, this.mainLogo, this. minLogo)
-    this.sidebarService.setHtmlElement(this.mainHeader, this.mainContent, this.mainSideBar, this.mainLogo, this. minLogo);
+    console.log(this.mainHeader, this.mainContent, this.mainSideBar, this.mainLogo, this.minLogo)
+    this.sidebarService.setHtmlElement(this.mainHeader, this.mainContent, this.mainSideBar, this.mainLogo, this.minLogo);
   }
 
   gotoborrower(event) {
@@ -59,14 +59,14 @@ this.localstorage.observe(environment.loankey).subscribe(res=>{
     this.isExpanded = !this.isExpanded;
   }
 
-  getloanid(){
+  getloanid() {
 
-    try{
-      this.loanid=this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");;
+    try {
+      this.loanid = this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-", "/");;
     }
-    catch{
+    catch (ex) {
 
     }
   }
-  }
+}
 
