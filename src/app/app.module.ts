@@ -137,10 +137,10 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
-<<<<<<< HEAD
 import { CustomentryComponent } from './components/customentry/customentry.component';
-=======
->>>>>>> 38375437e14e1034d93e72c72cd08d7199e65dd6
+import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
+import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
+import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 
 @NgModule({
   declarations: [
@@ -290,7 +290,10 @@ import { CustomentryComponent } from './components/customentry/customentry.compo
     ReferenceService,
     InsuranceapiService,
     NotificationFeedsService,
-    QuestionscalculationworkerService
+    QuestionscalculationworkerService,
+    LoancroppracticeworkerService,
+    InsurancecalculationworkerService,
+    AssociationcalculationworkerService
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]
