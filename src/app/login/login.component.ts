@@ -9,6 +9,7 @@ import { Logpriority } from '../models/loanmodel';
 import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';
 import { ReferenceService } from '../services/reference/reference.service';
+import { Users } from '../models/commonmodels';
 
 @Component({
   selector: 'auth-page',
@@ -69,8 +70,12 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.username == 'admin' && this.password == 'admin') {
+    debugger
+    let userfound=Users[this.username];
+    if(userfound!=undefined && this.username==this.password)
+     {
       this.localst.store(environment.logpriority, Logpriority.Low);
+      this.localst.store(environment.uid, userfound);
       this.getreferencedata();
       //this.router.navigateByUrl("/home/loanoverview/000001/000/summary");
       this.router.navigateByUrl("/home/loans");

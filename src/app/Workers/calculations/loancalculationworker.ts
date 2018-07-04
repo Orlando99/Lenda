@@ -129,7 +129,6 @@ export class LoancalculationWorker {
 
       // OTHER UNSORTED 
           localloanobj.DashboardStats = localloanobj.DashboardStats;
-
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;
           localloanobj.srccomponentedit = localloanobj.srccomponentedit;
           console.log("Calculation Ended");
@@ -146,6 +145,6 @@ export class LoancalculationWorker {
      }
      else
        console.log("object updated without calculations");
-
+     
   }
 }
