@@ -139,6 +139,8 @@ import { CellValueComponent } from './components/borrower/shared/cell-value/cell
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
 import { CurrencyDirective } from './components/borrower/shared/currency.directive';
 import { PercentageDirective } from './components/borrower/shared/percentage.directive';
+import { CustomentryComponent } from './components/customentry/customentry.component';
+
 
 @NgModule({
   declarations: [
@@ -190,7 +192,8 @@ import { PercentageDirective } from './components/borrower/shared/percentage.dir
     FarmFinancialComponent,
     CellValueComponent,
     CurrencyDirective,
-    PercentageDirective
+    PercentageDirective,
+    CustomentryComponent
 
   ],
   imports: [

@@ -1,4 +1,3 @@
-
 <mat-accordion>
   <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
@@ -11,15 +10,21 @@
     </button> -->
     <div *ngIf="RefQuestions && LoanQResponse && LoanQResponse.length && RefQuestions.length" class="container bottom">
       <div class="q-row" *ngFor="let q of RefQuestions; let i = index;">
-        <mat-radio-group [(ngModel)]="LoanQResponse[i].Response_Ind" (ngModelChange)="change()">
-          <mat-radio-button value="1">Agree</mat-radio-button>
-          <mat-radio-button value="0">Disagree</mat-radio-button>
-        </mat-radio-group>
-        <div class="right-side">
-          <span>{{q.Question_ID_Text}}</span>
-          <mat-form-field *ngIf="LoanQResponse[i].Response_Ind.toString() === '0'">
-            <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (blur)="change()" matInput placeholder="Answer"></textarea>
-          </mat-form-field>
+        <div class="row">
+          <div class="col s3">
+            <mat-radio-group [(ngModel)]="LoanQResponse[i].Response_Ind" (ngModelChange)="change()">
+              <mat-radio-button value="1">Agree</mat-radio-button>
+              <mat-radio-button value="0">Disagree</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="col s9">
+            <div class="right-side container">
+              <span>{{q.Question_ID_Text}}</span>
+              <mat-form-field *ngIf="LoanQResponse[i].Response_Ind.toString() === '0'">
+                <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (blur)="change()" matInput placeholder="Answer"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
         </div>
       </div>
     </div>

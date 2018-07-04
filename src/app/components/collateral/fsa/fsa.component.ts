@@ -6,7 +6,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
+import { currencyFormatter, insuredFormatter,discFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -87,7 +87,7 @@ export class FSAComponent implements OnInit {
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
+      this.pinnedBottomRowData = this.computeTotal(this.localloanobject);
         this.getgridheight();
         this.adjustgrid();
     });
@@ -205,18 +205,18 @@ export class FSAComponent implements OnInit {
   }
 
 
-  computeTotal(rowData) {
+  computeTotal(loanobject) {
     var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = totalMarketValue(rowData);
-    footer.Prior_Lien_Amount = totalPriorLien(rowData);
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = totalNetMktValue(rowData);
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = totalDiscValue(rowData);;
+    // var footer = new Loan_Collateral();
+    // footer.Collateral_Category_Code = 'Total';
+    // footer.Market_Value = totalMarketValue(rowData);
+    // footer.Prior_Lien_Amount = totalPriorLien(rowData);
+    // footer.Lien_Holder = '';
+    // footer.Net_Market_Value = totalNetMktValue(rowData);
+    // footer.Disc_Value = 0;
+    // footer.Disc_CEI_Value = totalDiscValue(rowData);;
 
-    total.push(footer);
+    // total.push(footer);
     return total;
   }
 }

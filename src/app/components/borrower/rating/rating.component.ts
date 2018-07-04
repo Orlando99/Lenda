@@ -18,25 +18,30 @@ export class RatingComponent implements OnInit {
     private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+    this.localloanobj = res;
+    this.binddata();
+    })
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
+    this.binddata();
 
+  }
+
+
+  private binddata() {
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
       let loanMaster = { ...this.localloanobj.LoanMaster[0] };
       let borrower = { ...this.localloanobj.Borrower };
-
       loanMaster.Borrower_Farm_Financial_Rating = '145.8%';
-
       borrower.Borrower_Rating = 4;
       borrower.Borrower_Credit_Score = 700;
-
       this.data = {
         partOne: [
           {
             text: 'Borrower Ratting',
             value: "*".repeat(loanMaster.Borrower_Rating || 0),
             staticValues: ['*****', '****', '***', '**', '*']
-
           },
           {
             text: 'FICO Score',
@@ -47,21 +52,20 @@ export class RatingComponent implements OnInit {
             text: 'CPA Financials',
             value: borrower.Borrower_CPA_financials ? 'Yes' : 'No',
             staticValues: ['Yes', 'Yes', '', '', '']
-
           },
           {
             text: '3yrs Tax Returns',
-            value: borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No',
+            value: borrower.Borrower_3yr_Tax_Returns==1 ? 'Yes' : 'No',
             staticValues: ['Yes', 'Yes', '', '', '']
           },
           {
             text: 'Bankruptcy',
-            value: loanMaster.Bankruptcy_Status ? 'Yes' : 'No',
+            value: loanMaster.Bankruptcy_Status==1 ? 'Yes' : 'No',
             staticValues: ['No', 'No', 'No', '', '']
           },
           {
             text: 'Judgement',
-            value: loanMaster.Judgement ? 'Yes' : 'No',
+            value: loanMaster.Judgement==1 ? 'Yes' : 'No',
             staticValues: ['No', 'No', 'No', '', '']
           },
           {
@@ -102,7 +106,6 @@ export class RatingComponent implements OnInit {
             valueType : ValueType.AMOUNT,
             hightlightRow: true
           },
-
         ],
         partThree: [
           {
@@ -131,9 +134,7 @@ export class RatingComponent implements OnInit {
             hightlightRow: true
           }
         ]
-      }
+      };
     }
-
   }
-
 }

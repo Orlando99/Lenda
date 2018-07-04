@@ -20,11 +20,14 @@ export class QuestionscalculationworkerService {
         input.LoanMaster[0].Judgement=(parseInt(element.Response_Ind)==1)?0:1;
           break;
         case 3: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1
+        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
+          break;
+        case 4: // bankruptcy question
+        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
           break;
         case 21: // 3 year tax return question
-        //input.LoanMaster.Bankruptcy_Status=parseInt(element.Response_Ind)
-            break;
+        input.Borrower.Borrower_3yr_Tax_Returns=parseInt(element.Response_Ind)
+          break;
         default:
           break;
       }
