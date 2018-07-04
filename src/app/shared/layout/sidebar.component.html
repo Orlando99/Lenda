@@ -67,6 +67,10 @@
           <mat-icon mat-list-icon>star</mat-icon>
             <p matLine>Work In Progress</p>
          </mat-list-item>
+         <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/custom-entry']">
+          <mat-icon mat-list-icon>star</mat-icon>
+            <p matLine>Custom Entry</p>
+         </mat-list-item>
         <br>
         <mat-list-item class="arm-recent-record">
           <p matLine *ngIf = "isExpanded">Walter Kluwer</p>
