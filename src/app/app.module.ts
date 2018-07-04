@@ -137,7 +137,10 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+<<<<<<< HEAD
 import { CustomentryComponent } from './components/customentry/customentry.component';
+=======
+>>>>>>> 38375437e14e1034d93e72c72cd08d7199e65dd6
 
 @NgModule({
   declarations: [
