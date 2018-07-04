@@ -12,6 +12,7 @@ import { AssociationcalculationworkerService } from './associationcalculationwor
 import { MAT_MENU_DEFAULT_OPTIONS } from '@angular/material';
 import { Collateralcalculationworker } from './collateralcalculationworker.service';
 import { QuestionscalculationworkerService } from './questionscalculationworker.service';
+import { LoanMasterCalculationWorkerService } from './loan-master-calculation-worker.service';
 
 
 
@@ -25,6 +26,7 @@ export class LoancalculationWorker {
     private farmcalculation: FarmcalculationworkerService,
     private collateralcalculation: Collateralcalculationworker,
     private questionscalculations:QuestionscalculationworkerService,
+    private loanMasterCalcualtions : LoanMasterCalculationWorkerService,
     // private associationcalculation:AssociationcalculationworkerService,
     public logging: LoggingService
   ) { }
@@ -50,7 +52,11 @@ export class LoancalculationWorker {
         localloanobj = this.collateralcalculation.preparecollateralmodel(localloanobj);
       if(localloanobj.LoanQResponse!=null)
         localloanobj=this.questionscalculations.performcalculationforquestionsupdated(localloanobj);
-      localloanobj.LoanMaster = localloanobj.LoanMaster;
+
+      if(localloanobj.LoanMaster !==null){
+        localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+      }
+      
       localloanobj.LoanBudget = localloanobj.LoanBudget;
       localloanobj.DashboardStats = localloanobj.DashboardStats;
       localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;
