@@ -1,37 +1,58 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        PRICES
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          PRICES
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-  
-        <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-        <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
-      </button>
-  
-      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-        
-            <div class="container bottom">
-              <div class="row">
-              <ag-grid-angular  [ngStyle]="style"
-              class="ag-theme-balham"
-              [animateRows]="true"
-              [defaultColDef]="defaultColDef"
-              [singleClickEdit]="true"
-              (gridSizeChanged)="onGridSizeChanged($event)"
-              [context]="context"
-              [headerHeight]="45"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
-              (cellEditingStopped)="rowvaluechanged($event)"
-              [rowData]="rowData" 
-              (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs">
+    <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+      <mat-icon [style.color]="!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
+    </button>
+
+    <button (click)="addrow()" mat-raised-button color="primary">Add </button>
+
+    <div class="container bottom">
+      <div class="row">
+          <ng-sidebar-container showBackdrop="false" animate="true" [ngStyle]="stylesidebar">
+              <ng-sidebar mode="over" position="right" style="background-color: cornsilk" closeOnClickOutside="true" #pricesidebar>
+                  <div class="row">
+                      <button class="vertical" (click)="pricesidebar.close()"  color="primary">
+                          <mat-icon aria-label="Columns">grid_on</mat-icon>
+                        </button>
+                    <p class="sidebarspaced" *ngFor="let col of columnDefs">
+                      <label *ngIf="col.headerName!=''">
+                        <input type="checkbox" class="sidebarchecks" checked (change)="onColumnhiderequested($event,col.field)"/>
+                        <span class="sidebartext">{{col.headerName}}</span>
+                      </label>
+                    </p>
+                    
+                  </div>
+                </ng-sidebar>
+          <div ng-sidebar-content style="overflow: hidden;">
+
+            <div style="width:97%;float:left">
+              <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
+                (gridSizeChanged)="onGridSizeChanged($event)" [context]="context" [headerHeight]="45" [frameworkComponents]="frameworkcomponents"
+                [components]="components" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)"
+                [columnDefs]="columnDefs">
               </ag-grid-angular>
+            </div>
+            <div style="width:3%;float:left">
+              <div class="row">
+                <button class="vertical" (click)="pricesidebar.open()"  color="primary">
+                  <mat-icon aria-label="Columns">grid_on</mat-icon>
+                </button>
+
               </div>
             </div>
-            <br>
-    </mat-expansion-panel>
-    </mat-accordion>
+          </div>
+          
+        </ng-sidebar-container>
+      </div>
+    </div>
+    <br>
+
+
+  </mat-expansion-panel>
+</mat-accordion>

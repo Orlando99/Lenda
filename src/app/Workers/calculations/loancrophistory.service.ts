@@ -11,7 +11,7 @@ export class LoancrophistoryService {
   public returnables = new Array<Loan_Crop_History_FC>();
   public years = [];
   constructor(private logging: LoggingService) {
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i < 8; i++) {
       this.years.push(new Date().getFullYear() - i);
     }
   }
@@ -26,14 +26,14 @@ export class LoancrophistoryService {
       if (cropyielditems.length <= 2) {
         this.input.CropYield[i].CropYield == this.input.CropYield[i].APH;
       }
-      else {
-        let sum = cropyielditems.reduce((p, n) => {
-          return p + n;
-        });
-        let max = Math.max.apply(null, cropyielditems);
-        let min = Math.min.apply(null, cropyielditems);
-        let coutie = (cropyielditems.length - 2);
-        this.input.CropYield[i].CropYield = ((sum) - max - min) / coutie;
+      else{
+        let sum=cropyielditems.reduce((p,n)=>{
+          return p+n;
+          });
+          let max=Math.max.apply(null,cropyielditems);
+          let min=Math.min.apply(null,cropyielditems);
+          let coutie=(cropyielditems.length-2);
+          this.input.CropYield[i].CropYield=Math.round(((sum) - max -min)/coutie);
       }
     }
   }
