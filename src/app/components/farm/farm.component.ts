@@ -156,8 +156,10 @@ export class FarmComponent implements OnInit {
     this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      if(obj.Farms)
+      if(obj.Farms){
+        this.rowData = [];
         this.rowData = obj.Farms.filter(p => p.ActionStatus != 3);
+      }
       else
         this.rowData = [];
     }
