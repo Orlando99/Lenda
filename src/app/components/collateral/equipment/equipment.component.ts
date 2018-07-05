@@ -6,7 +6,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
+import { currencyFormatter, insuredFormatter,discFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -36,7 +36,7 @@ export class EquipmentComponent implements OnInit {
   
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
@@ -83,13 +83,21 @@ export class EquipmentComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral', "LS - Collateral EQP updated");
-      this.localloanobject = res
-      this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
-        this.getgridheight();
+      this.logging.checkandcreatelog(1, 'LoanCollateral - Equipment', "LocalStorage updated");
+      if (res.srccomponentedit == "EquipmentComponent") {
+        //if the same table invoked the change .. change only the edited row 
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3 });
+        this.pinnedBottomRowData = this.computeTotal(res);
+      }
+      this.getgridheight();
+      // this.adjustgrid();
     });
+
     this.getdataforgrid();
   }
 
@@ -100,7 +108,7 @@ export class EquipmentComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
+      this.pinnedBottomRowData = this.computeTotal(obj);
     }
   }
 
@@ -164,6 +172,9 @@ export class EquipmentComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex]=obj;
     }
+    //this shall have the last edit 
+    this.localloanobject.srccomponentedit = "EquipmentComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -187,19 +198,33 @@ export class EquipmentComponent implements OnInit {
     this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
 
+  onGridSizeChanged(Event: any) {
+    debugger
+    try{
+    this.gridApi.sizeColumnsToFit();
+  }
+  catch{
 
-  computeTotal(rowData) {
+  }
+  }
+  computeTotal(loanobject) {
+    debugger
     var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = totalMarketValue(rowData);
-    footer.Prior_Lien_Amount = totalPriorLien(rowData);
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = totalNetMktValue(rowData);
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = totalDiscValue(rowData);;
-
-    total.push(footer);
-    return total;
+    try {
+      var footer = new Loan_Collateral();
+      footer.Collateral_Category_Code = 'Total';
+      footer.Market_Value = loanobject.LoanMaster[0].FC_Market_Value_Equip
+      footer.Prior_Lien_Amount = loanobject.LoanMaster[0].FC_Equip_Prior_Lien_Amount
+      footer.Lien_Holder = '';
+      footer.Net_Market_Value = loanobject.LoanMaster[0].Net_Market_Value_Equipment
+      footer.Disc_Value = 0;
+      footer.Disc_CEI_Value = loanobject.LoanMaster[0].Disc_value_Equipment
+      total.push(footer);
+      return total;
+    }
+    catch
+    {  // Means that Calculations have not Ended
+      return total;
+    }
   }
 }

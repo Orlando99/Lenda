@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  public isExpanded: boolean = true;
+  public isExpanded = true;
   @ViewChild('leftSidenav') public sideNav: MatSidenav;
   private mainHeader;
   private mainContent;
@@ -36,7 +36,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isExpanded = true;
+    //this.isExpanded = true;
     this.sidebarService.setSidenav(this.sideNav);
     this.mainHeader = document.getElementById('arm-main-header');
     this.mainContent = document.getElementById('arm-main-content');
@@ -60,7 +60,6 @@ export class SidebarComponent implements OnInit {
   }
 
   getloanid() {
-
     try {
       this.loanid = this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-", "/");;
     }

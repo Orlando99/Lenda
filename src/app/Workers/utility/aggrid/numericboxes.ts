@@ -4,13 +4,14 @@ import { isNumber } from "util";
 //Numeric cell editor config
 export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
-
-      return !!/\d/.test(charStr);
-
+      // return !!/\d/.test(charStr);
+      //for decimals
+      return /^\d*\.?\d*$/.test(charStr);
+    
     }
-
+    
     function isKeyPressedNumeric(event) {
-
+      
       var charCode = getCharCodeFromEvent(event);
       var charStr = String.fromCharCode(charCode);
       return isCharNumeric(charStr);
@@ -21,19 +22,19 @@ export function getNumericCellEditor() {
     }
     function NumericCellEditor() { }
     NumericCellEditor.prototype.init = function (params) {
-
+      debugger
       this.focusAfterAttached = params.cellStartedEdit;
       this.eInput = document.createElement("input");
       this.eInput.style.width = "100%";
       this.eInput.style.height = "100%";
       this.eInput.addEventListener("change", function(event) {
-
+        debugger
         event.srcElement.parentElement.className=event.srcElement.parentElement.className.replace("editable-color","edited-color")
       });
       // this.eInput.value = params.value;
       // var that = this;
       // this.eInput.addEventListener("input", function (event) {
-
+        
       //   //if (parseFloat(event.srcElement.value)!=NaN) {
       //     if (isCharNumeric(event.srcElement.value)) {
       //     if(event.srcElement.value.indexOf('.') > -1 && parseFloat(event.srcElement.value).toString().indexOf('.') <=-1)
@@ -45,15 +46,15 @@ export function getNumericCellEditor() {
       //     if (event.preventDefault) event.preventDefault();
       //   }
       //   else{
-
+          
       //    // event.srcElement.value=0;
       //   }
       // });
-
+     
       this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
       var that = this;
       this.eInput.addEventListener("keypress", function(event) {
-
+        
         //this.eInput
         //this.eInput.addClass('lenda-cellEdit-color')
         if (!isKeyPressedNumeric(event)) {
@@ -62,15 +63,15 @@ export function getNumericCellEditor() {
         }
       });
       this.eInput.addEventListener("blur", function(event) {
-
-        if(params.newValue==undefined || params.newValue==null||params.newValue=="") {
-
+       debugger
+        if(params.newValue==undefined || params.newValue==null||params.newValue=="") {          
+          
          return this.classList.add("error");
-
+         
         }
         //this.eInput
         //this.eInput.addClass('lenda-cellEdit-color')
-
+        
       });
     };
     NumericCellEditor.prototype.getGui = function () {
@@ -100,15 +101,15 @@ export function getNumericCellEditor() {
     };
     return NumericCellEditor;
   }
-
+  
 export function numberValueSetter(params) {
-
-    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
-    params.newValue=0;
+  debugger
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
+    params.newValue=0;    
     var data=parseFloat(params.newValue);
     params.data[params.colDef.field]=data;
     return true;
   }
-
-
+  
+  
   //Numeric cell editor config Ends

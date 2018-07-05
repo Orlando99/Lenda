@@ -52,56 +52,9 @@ export function insuredFormatter (params) {
     
 }
 
-export function totalMarketValue(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Market_Value);
-    });
 
-    return total;
-}
 
-export function totalDiscValue(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Disc_CEI_Value);
-    });
 
-    return total;
-}
-
-export function totalPriorLien(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Prior_Lien_Amount);
-    });
-
-    return total;
-}
-
-export function totalNetMktValue(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Net_Market_Value);
-    });
-    return total;
-}
-
-export function totalQty(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Qty);
-    });
-    return total;
-}
-
-export function totalPrice(loanCollateral) {
-    var total = 0;
-    loanCollateral.forEach(lc => {
-        total += Number(lc.Price);
-    });
-    return total;
-}
 
 function formatNumber(number) {
     // this puts commas into the number eg 1000 goes to 1,000,

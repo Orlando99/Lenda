@@ -1,4 +1,4 @@
-<mat-sidenav #leftSidenav class="arm-sidenav expanded" id="arm-sidenav" [mode]="'over'">
+<mat-sidenav #leftSidenav class="arm-sidenav" id="arm-sidenav" [mode]="'over'" opened="true" (open)="onOpen()" (close)="onClose()">
   <mat-nav-list class="arm-sidenav-main">
     <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/summary']">
       <mat-icon mat-list-icon>dehaze</mat-icon>
@@ -51,6 +51,10 @@
     <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/work-in-progress']">
       <mat-icon mat-list-icon>star</mat-icon>
       <p matLine>Work In Progress</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/custom-entry']">
+      <mat-icon mat-list-icon>star</mat-icon>
+      <p matLine>Custom Entry</p>
     </mat-list-item>
     <br>
     <mat-list-item class="arm-recent-record normalize" *ngIf="isExpanded">

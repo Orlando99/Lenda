@@ -48,3 +48,38 @@
 .ag-header-cell-label{
   padding-top: 8px;
 }
+
+.vertical{
+  background: #23C8AB !important;
+  border:0px !important;
+}
+
+.vertical span{
+  writing-mode: tb-rl;
+  margin: 20px 0 5px;
+  word-spacing: 5px;
+}
+
+.ng-sidebar{
+  background-color: #23C8AB !important;
+  width: 12%;
+  overflow:auto;
+  border-width: 0px 0px 0px 2px !important;
+  border-color: ghostwhite;
+  border-style: solid;
+
+}
+
+.sidebarchecks{
+  width: 28px !important;
+}
+
+.sidebarspaced{
+  margin:0pc !important;
+  padding: 2px !important;
+}
+
+.sidebartext{
+  color:white !important;
+  font-size: 10px !important;
+}
