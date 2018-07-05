@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-   //this.initialtoggle();
+   this.initialtoggle();
   }
 
   initialtoggle(){

@@ -377,10 +377,10 @@ background-color:white
   color: white;
 }
 .editable-color{
-  background-color: #dcf0f4 !important
+  color:blue !important
 }
 .edited-color{
-  background-color: #f28f35 !important
+  background-color: #eecaa9 !important
 }
 .ag-floating-bottom-container > .ag-row{
 color:white

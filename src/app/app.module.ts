@@ -142,6 +142,7 @@ import { CustomentryComponent } from './components/customentry/customentry.compo
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
+import { OptimizerComponent } from './components/optimizer/optimizer.component';
 
 @NgModule({
   declarations: [
@@ -192,7 +193,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     RatingComponent,
     FarmFinancialComponent,
     CellValueComponent,
-    CustomentryComponent
+    CustomentryComponent,
+    OptimizerComponent
 
   ],
   imports: [
