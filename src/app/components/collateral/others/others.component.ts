@@ -36,7 +36,7 @@ export class OthersComponent implements OnInit {
   
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
@@ -187,6 +187,15 @@ export class OthersComponent implements OnInit {
     this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
 
+  onGridSizeChanged(Event: any) {
+    debugger
+    try{
+    this.gridApi.sizeColumnsToFit();
+  }
+  catch{
+
+  }
+  }
 
   computeTotal(input) {
     var total = []

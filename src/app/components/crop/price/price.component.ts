@@ -37,7 +37,7 @@ export class PriceComponent implements OnInit {
   private columnApi;
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '240px',
     boxSizing: 'border-box'
   };

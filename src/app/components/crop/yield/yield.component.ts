@@ -48,7 +48,7 @@ export class YieldComponent implements OnInit {
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '240px',
     boxSizing: 'border-box'
   };
