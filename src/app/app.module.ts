@@ -138,6 +138,8 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+import { CurrencyDirective } from './components/borrower/shared/currency.directive';
+import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 import { CustomentryComponent } from './components/customentry/customentry.component';
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
@@ -192,6 +194,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     RatingComponent,
     FarmFinancialComponent,
     CellValueComponent,
+    CurrencyDirective,
+    PercentageDirective,
     CustomentryComponent
 
   ],
