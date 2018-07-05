@@ -1,37 +1,54 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        PRICES
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          PRICES
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-  
-        <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-        <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
-      </button>
-  
-      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-        
-            <div class="container bottom">
-              <div class="row">
-              <ag-grid-angular  [ngStyle]="style"
-              class="ag-theme-balham"
-              [animateRows]="true"
-              [defaultColDef]="defaultColDef"
-              [singleClickEdit]="true"
-              (gridSizeChanged)="onGridSizeChanged($event)"
-              [context]="context"
-              [headerHeight]="45"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
-              (cellEditingStopped)="rowvaluechanged($event)"
-              [rowData]="rowData" 
-              (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs">
+    <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+      <mat-icon [style.color]="!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
+    </button>
+
+    <button (click)="addrow()" mat-raised-button color="primary">Add </button>
+
+    <div class="container bottom">
+      <div class="row">
+        <mat-drawer-container style="width:96%">
+          <mat-drawer-content>
+
+            <div style="width:97%;float:left">
+              <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
+                (gridSizeChanged)="onGridSizeChanged($event)" [context]="context" [headerHeight]="45" [frameworkComponents]="frameworkcomponents"
+                [components]="components" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)"
+                [columnDefs]="columnDefs">
               </ag-grid-angular>
+            </div>
+            <div style="width:3%;float:left">
+              <div class="row">
+                <button (click)="drawer.toggle()" mat-icon-button color="primary">
+                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                </button>
+
               </div>
             </div>
-            <br>
-    </mat-expansion-panel>
-    </mat-accordion>
+          </mat-drawer-content>
+          <mat-drawer align="end" #drawer mode="over">
+            <div class="row">
+              <p *ngFor="let col of columnDefs">
+                <label>
+                  <input type="checkbox" (change)="onColumnhiderequested($event,col.headerName)"/>
+                  <span>{{col.headerName}}</span>
+                </label>
+              </p>
+              
+            </div>
+          </mat-drawer>
+        </mat-drawer-container>
+      </div>
+    </div>
+    <br>
+
+
+  </mat-expansion-panel>
+</mat-accordion>
