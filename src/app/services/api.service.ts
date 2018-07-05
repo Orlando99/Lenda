@@ -34,7 +34,8 @@ export class ApiService {
         if (this.localStorageService.retrieve("token")) {
             headersConfig['Authorization'] = this.localStorageService.retrieve("token");
         }
-        headersConfig['tokenid']="token1234";
+        headersConfig['batchid']="token1234";
+        headersConfig['userid']="2";
         return new Headers(headersConfig);
     };
     private formatErrors(error: any) {

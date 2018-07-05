@@ -36,8 +36,7 @@ export class PriceComponent implements OnInit {
   private gridApi;
   private columnApi;
   style = {
-    marginTop: '10px',
-    width: '93%',
+    width: '100%',
     height: '240px',
     boxSizing: 'border-box'
   };
@@ -271,6 +270,11 @@ export class PriceComponent implements OnInit {
   catch{
 
   }
+  }
+
+  onColumnhiderequested(event,header:string){
+    let checked=event.srcElement.checked;
+    this.columnApi.setColumnVisible(header, checked);
   }
 }
 function adjustheader(): void {
