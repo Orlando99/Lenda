@@ -174,7 +174,7 @@ export class RebatorComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+    return this.rowData.filter(p => p.ActionStatus != 0).length > 0 || this.deleteAction
   }
 
   getgridheight(){

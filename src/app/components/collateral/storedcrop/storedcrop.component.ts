@@ -86,13 +86,21 @@ export class StoredCropComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - SCRP', "LocalStorage updated");
-      this.localloanobject = res
-      this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(res);
-        this.getgridheight();
+      this.logging.checkandcreatelog(1, 'LoanCollateral - Stored Crop', "LocalStorage updated");
+      if (res.srccomponentedit == "StoredCropComponent") {
+        //if the same table invoked the change .. change only the edited row 
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3 });
+        this.pinnedBottomRowData = this.computeTotal(res);
+      }
+      this.getgridheight();
+      // this.adjustgrid();
     });
+
     this.getdataforgrid();
   }
 
@@ -167,6 +175,9 @@ export class StoredCropComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex]=obj;
     }
+    //this shall have the last edit 
+    this.localloanobject.srccomponentedit = "StoredCropComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
