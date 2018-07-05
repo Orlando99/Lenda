@@ -16,19 +16,19 @@
       
           <div class="container bottom">
             <div class="row">
-            <ag-grid-angular 
-            [ngStyle]="style"
+            <ag-grid-angular  [ngStyle]="style"
             class="ag-theme-balham"
             [animateRows]="true"
-            [enableSorting]="false"
-            [enableFilter]="false"
+            [defaultColDef]="defaultColDef"
+            [singleClickEdit]="true"
+            (gridSizeChanged)="onGridSizeChanged($event)"
             [context]="context"
+            [headerHeight]="45"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
             (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
             (gridReady)="onGridReady($event)"
-            (gridSizeChanged)="onGridSizeChanged($event)"
             [columnDefs]="columnDefs">
             </ag-grid-angular>
             </div>

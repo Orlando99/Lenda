@@ -33,6 +33,7 @@ export class RebatorComponent implements OnInit {
   public editType;
   private gridApi;
   private columnApi;
+  public deleteAction=false;
   style = {
     marginTop: '10px',
     width: '93%',
@@ -95,31 +96,32 @@ export class RebatorComponent implements OnInit {
   }
  
   synctoDb() {
-    this.cropunitservice.addLoanAssociation(this.localloanobject).subscribe(res=>{
-    //   if(res.ResCode==1){
-    //     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-
-    //       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-    //       if (res.ResCode == 1) {
-    //         this.toaster.success("Records Synced");
-    //         let jsonConvert: JsonConvert = new JsonConvert();
-    //         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-    //       }
-    //       else{
-    //         this.toaster.error("Could not fetch Loan Object from API")
-    //       }
-    //     });
-    //   }
-    //   else{
-    //     this.toaster.error("Error in Sync");
-    //   }
-    })
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
+        this.deleteAction = false;
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else {
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else {
+        this.toaster.error("Error in Sync");
+      }
+    });
   }
 
   //Grid Events
   addrow() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
+    newItem.ActionStatus = 1;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -130,32 +132,19 @@ export class RebatorComponent implements OnInit {
     this.getgridheight();
   }
 
-  valuechanged(value:any,selectname:any,rowindex:any){
-    if(selectname=="Crop_Code"){
-      this.rowData[rowindex].Crop_Type_Code=this.refdata.CropList.find(p=>p.Crop_Code==value).Crop_Type_Code;
-    }
-    else{
-      if(this.rowData[rowindex].Z_Price==0)
-      this.rowData[rowindex].Z_Price=this.refdata.CropList.find(p=>p.Crop_Code==this.rowData[rowindex].Crop_Code && p.Crop_Type_Code==value).Price;
-    }
-  }
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    var rowindex = value.rowIndex;
-    console.log('OBJECT',obj)
-    console.log('INDEX',rowindex)
-    // if (obj.ActionStatus == undefined) {
-    //   obj.ActionStatus = 1;
-    //   obj.Assoc_ID=0;
-    //   var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY").length;
-    //   this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY")[rowIndex]=value.data;
-    // }
-    // else {
-    //   var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
-    //   obj.ActionStatus = 2;
-    //   this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[rowindex]=obj;
-    // }
+    if (obj.Assoc_ID == 0) {
+      obj.ActionStatus = 1;
+      this.localloanobject.Association[this.localloanobject.Association.length - 1] = value.data;
+    }
+    else {
+      var rowindex = this.localloanobject.Association.findIndex(as => as.Assoc_ID == obj.Assoc_ID);
+      if (obj.ActionStatus != 1)
+        obj.ActionStatus = 2;
+      this.localloanobject.Association[rowindex] = obj;
+    }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
 
   }
@@ -175,6 +164,7 @@ export class RebatorComponent implements OnInit {
           
         }
         else {
+          this.deleteAction = true;
           obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -184,7 +174,7 @@ export class RebatorComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.rowData.filter(p=>p.ActionStatus!=0).length>0
+    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
   }
 
   getgridheight(){

@@ -52,7 +52,7 @@ export class YieldComponent implements OnInit {
     height: '240px',
     boxSizing: 'border-box'
   };
-
+  defaultColDef: { headerComponentParams: { template: string; }; };
 
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
@@ -74,17 +74,33 @@ export class YieldComponent implements OnInit {
 
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer};
+
+    this.defaultColDef = {
+      headerComponentParams : {
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order" ></span>' +
+          '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon" ></span>' +
+          '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon" ></span>' +
+          '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon" ></span>' +
+          '    <div ref="eText" class="ag-header-cell-text" role="columnheader"> </div>' +
+          '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+          '  </div>' +
+          '</div>'
+      }
+    };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",
+        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",width:140,
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
         valueFormatter: function (params) {
           return params.value;
         },
-        valueSetter: cropNameValueSetter,
-        width: 100
+        valueSetter: cropNameValueSetter
       },
       // {
       //   headerName: 'Crop type', field: 'CropType',  editable: false,
@@ -92,7 +108,7 @@ export class YieldComponent implements OnInit {
       //   // valueSetter: CropTypevaluesetter,
       //   width: 100
       // },
-      { headerName: 'Crop Practice', field: 'Practice', editable: false,width: 120, cellEditor: "selectEditor",
+      { headerName: 'Crop Practice', field: 'Practice', editable: false, cellEditor: "selectEditor",
         cellEditorParams: {
           values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
         },
@@ -105,13 +121,13 @@ export class YieldComponent implements OnInit {
     ];
 
     this.years.forEach(element => {
-     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,width: 100})
+     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})
     });
 
-    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,width: 150});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false,width: 100});
-    this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false,width: 100});
-    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn",width: 100});
+    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
    
     this.context = { componentParent: this };
   }
@@ -119,11 +135,18 @@ export class YieldComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
-      this.localloanobject=res;
-      this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
-      
-    })
-    this.croppricesdetails= this.localstorageservice.retrieve(environment.referencedatakey);
+      if (res.srccomponentedit == "YieldComponent") {
+        //if the same table invoked the change .. change only the edited row 
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+      }
+      else {
+        this.localloanobject = res;
+        this.rowData = [];
+        this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
+      }
+      this.getgridheight();
+    });
     this.getdataforgrid();
   }
 
@@ -147,7 +170,6 @@ export class YieldComponent implements OnInit {
     var obj = value.data;
     var rowindex = value.rowIndex;
     
-    var currentValue = this.localloanobject.CropYield[rowindex];
     if(obj.ActionStatus === 0){
       this.localloanobject.CropYield[rowindex]=obj;
       if(obj.Crop && obj.CropType && obj.Practice){
@@ -166,8 +188,10 @@ export class YieldComponent implements OnInit {
             edit.PropertyName = value.colDef.field;
             edit.PropertyValue = value.value;
         this.edits.push(edit);
+        console.log('edits',this.edits);
       }
-    
+    this.localloanobject.srccomponentedit = "YieldComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -176,6 +200,7 @@ export class YieldComponent implements OnInit {
   }
 
   synctoDb() {
+    console.log('edits',this.edits);
     if(this.deleteAction){
       this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -190,9 +215,6 @@ export class YieldComponent implements OnInit {
             this.toaster.error("Could not fetch Loan Object from API")
           }
           this.edits=[];
-          // else{
-          //   this.toaster.error("Error in Sync");
-          // }
         })
       })
     }else if(this.addAction){
@@ -231,9 +253,6 @@ export class YieldComponent implements OnInit {
               this.toaster.error("Could not fetch Loan Object from API")
             }
             this.edits=[];
-            // else{
-            //   this.toaster.error("Error in Sync");
-            // }
           })
         })
         this.addAction = false;
@@ -252,16 +271,11 @@ export class YieldComponent implements OnInit {
               this.toaster.error("Could not fetch Loan Object from API")
             }
             this.edits=[];
-            // else{
-            //   this.toaster.error("Error in Sync");
-            // }
           })
         });
       });
       this.edits=[];
     }
-   
-    
   }
 
   DeleteClicked(rowIndex: any) {
@@ -329,13 +343,22 @@ export class YieldComponent implements OnInit {
 
   getgridheight() {
 
-    this.style.height = (28 * (this.rowData.length + 1) + 5).toString() + "px";
+    this.style.height = (30 * (this.rowData.length + 1)+9).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
+    debugger
+    try{
     this.gridApi.sizeColumnsToFit();
   }
-}
+  catch{
 
+  }
+  }
+}
+function adjustheader(): void {
+  debugger
+  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
+}
 
 
 @Component({

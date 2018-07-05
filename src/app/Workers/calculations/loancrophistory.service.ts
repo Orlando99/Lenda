@@ -26,7 +26,6 @@ export class LoancrophistoryService {
       if (cropyielditems.length <= 2) {
         this.input.CropYield[i].CropYield == this.input.CropYield[i].APH;
       }
-<<<<<<< HEAD
       else{
         let sum=cropyielditems.reduce((p,n)=>{
           return p+n;
@@ -35,16 +34,6 @@ export class LoancrophistoryService {
           let min=Math.min.apply(null,cropyielditems);
           let coutie=(cropyielditems.length-2);
           this.input.CropYield[i].CropYield=Math.round(((sum) - max -min)/coutie);
-=======
-      else {
-        let sum = cropyielditems.reduce((p, n) => {
-          return p + n;
-        });
-        let max = Math.max.apply(null, cropyielditems);
-        let min = Math.min.apply(null, cropyielditems);
-        let coutie = (cropyielditems.length - 2);
-        this.input.CropYield[i].CropYield = ((sum) - max - min) / coutie;
->>>>>>> 7f12bb3a9d2952dedb0af04c7825a52a9b83fd15
       }
     }
   }
