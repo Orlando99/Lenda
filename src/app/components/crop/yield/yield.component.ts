@@ -278,7 +278,6 @@ export class YieldComponent implements OnInit {
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
-  
   }
 
   addrow() {

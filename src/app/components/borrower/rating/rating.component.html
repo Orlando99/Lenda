@@ -1,0 +1,66 @@
+<div class="container bottom width-auto">
+
+  <div class="bottom">
+    <div class="row">
+      <ng-container *ngFor="let row of data.partOne, let rowInd = index">
+        <div class="col m3">
+          <div class="col cell text-left" [class.font-weight-600]="rowInd===0">{{row.text}}</div>
+        </div>
+        <div class="col m9">
+          <app-cell-value [bolderFont]=true [borderRight]=true [isAmount]="row.isAmount" [isPercentage]="row.isPercentage" [value]="row.value"
+            [backgroundGreen]="rowInd === data.partOne.length-1"></app-cell-value>
+
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [colorRed]="rowInd===1"></app-cell-value>
+
+        </div>
+      </ng-container>
+
+
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="row table-row">
+      <ng-container *ngFor="let row of data.partTwo, let rowInd = index">
+        <div class="col m3">
+          <div class="cell text-left" [class.background-highlight]="row.hightlightRow">{{row.text}}</div>
+        </div>
+        <div class="col m9">
+          <app-cell-value [bolderFont]=true [borderRight]=true [isAmount]="row.isAmount" [isPercentage]="row.isPercentage" [value]="row.value"
+            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [isAmount]="row.isAmount" [isPercentage]="row.isPercentage"
+            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+
+        </div>
+      </ng-container>
+
+
+    </div>
+
+
+  </div>
+
+  <div class="bottom">
+    <div class="row table-row">
+      <ng-container *ngFor="let row of data.partThree, let rowInd= index">
+        <div class="col m3">
+          <div class="cell text-left" [class.background-highlight]="row.hightlightRow">{{row.text}}</div>
+        </div>
+        <div class="col m9">
+
+          <app-cell-value [bolderFont]=true [borderRight]=true [isAmount]="row.isAmount" [isPercentage]="row.isPercentage" [value]="row.value"
+            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [isAmount]="row.isAmount" [isPercentage]="row.isPercentage"
+            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+
+        </div>
+      </ng-container>
+
+
+    </div>
+
+
+  </div>
+
+</div>

@@ -22,6 +22,7 @@ import { WorkInProgressComponent } from "./components/work-in-progress/work-in-p
 import { CreateLoanComponent } from "./components/create-loan/create-loan.component";
 import { CollateralComponent } from "./components/collateral/collateral.component";
 import {FlowchartComponent} from './components/flowchart/flowchart.component';
+import { CustomentryComponent } from "./components/customentry/customentry.component";
 
 
 const appRoutes: Routes = [
@@ -51,6 +52,7 @@ const appRoutes: Routes = [
         { path: 'budget', component: BudgetComponent },
         { path: 'collateral', component: CollateralComponent },
         { path: 'work-in-progress', component: WorkInProgressComponent },
+        { path: 'custom-entry', component: CustomentryComponent },
         { path: 'flowchart', component: FlowchartComponent },
       ] },
     ]

@@ -1,6 +1,6 @@
 <div class="basic-container">
   <mat-accordion>
-    <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Farmer
@@ -12,7 +12,7 @@
   </mat-accordion>
 
   <mat-accordion>
-    <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Borrower
@@ -34,6 +34,17 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <app-rating></app-rating>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Farm Financial
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-farm-financial></app-farm-financial>
     </mat-expansion-panel>
   </mat-accordion>
 

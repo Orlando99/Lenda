@@ -134,7 +134,15 @@ import { EquipmentComponent } from './components/collateral/equipment/equipment.
 import { RealEstateComponent } from './components/collateral/realestate/realestate.component';
 import { OthersComponent } from './components/collateral/others/others.component';
 import { Collateralcalculationworker } from './Workers/calculations/collateralcalculationworker.service';
-import { RatingComponent } from './borrower/rating/rating.component'
+import { RatingComponent } from './components/borrower/rating/rating.component';
+import { FarmFinancialComponent } from './components/borrower/farm-financial/farm-financial.component'
+import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
+import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
+import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+import { CustomentryComponent } from './components/customentry/customentry.component';
+import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
+import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
+import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 
 @NgModule({
   declarations: [
@@ -182,7 +190,10 @@ import { RatingComponent } from './borrower/rating/rating.component'
     CreateLoanComponent,
     CollateralComponent,FSAComponent,LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent,
     FlowchartComponent,
-    RatingComponent
+    RatingComponent,
+    FarmFinancialComponent,
+    CellValueComponent,
+    CustomentryComponent
 
   ],
   imports: [
@@ -270,6 +281,7 @@ import { RatingComponent } from './borrower/rating/rating.component'
     Borrowercalculationworker,
     Collateralcalculationworker,
     LoancalculationWorker,
+    LoanMasterCalculationWorkerService,
     BorrowerapiService,
     LoancropunitcalculationworkerService,
     LoancrophistoryService,
@@ -280,7 +292,11 @@ import { RatingComponent } from './borrower/rating/rating.component'
     CropapiService,
     ReferenceService,
     InsuranceapiService,
-    NotificationFeedsService
+    NotificationFeedsService,
+    QuestionscalculationworkerService,
+    LoancroppracticeworkerService,
+    InsurancecalculationworkerService,
+    AssociationcalculationworkerService
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

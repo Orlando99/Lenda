@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-rating',
-  templateUrl: './rating.component.html',
-  styleUrls: ['./rating.component.scss']
+  selector: 'app-farm-financial',
+  templateUrl: './farm-financial.component.html',
+  styleUrls: ['./farm-financial.component.scss']
 })
-export class RatingComponent implements OnInit {
+export class FarmFinancialComponent implements OnInit {
 
-  data: any;
+  data : any;
   constructor() { }
 
   ngOnInit() {

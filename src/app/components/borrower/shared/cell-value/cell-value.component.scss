@@ -1,7 +1,6 @@
 
-  .cell{
+.cell{
     padding: 5px 5px;
-
 }
 
 
@@ -12,9 +11,7 @@
 .text-left{
   text-align: left;
 }
-.table-row{
-  margin-bottom: 0;
-}
+
 .float-left{
   float: left;
 }
@@ -31,12 +28,12 @@
   font-weight: 600;
 }
 
-
-.column-header{
-  font-size: 11px;
-  text-decoration: underline;
+.border-right{
+    border-right: 1px solid;
 }
-
-.section-heading{
-  font-size: 16px;
+.background-green{
+  background-color: lightgreen;
+}
+.color-red{
+  color: red;
 }

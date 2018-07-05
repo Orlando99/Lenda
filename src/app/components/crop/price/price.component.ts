@@ -41,6 +41,7 @@ export class PriceComponent implements OnInit {
     height: '240px',
     boxSizing: 'border-box'
   };
+  defaultColDef: { headerComponentParams: { template: string; }; };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -56,6 +57,22 @@ export class PriceComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
 
+    this.defaultColDef = {
+      headerComponentParams : {
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order" ></span>' +
+          '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon" ></span>' +
+          '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon" ></span>' +
+          '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon" ></span>' +
+          '    <div ref="eText" class="ag-header-cell-text" role="columnheader"> </div>' +
+          '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+          '  </div>' +
+          '</div>'
+      }
+  };
     //Coldef here
     this.columnDefs = [
       {
@@ -80,15 +97,15 @@ export class PriceComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Basis_Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Marketing_Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       } },
-      { headerName: 'Rebate_Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
@@ -120,15 +137,13 @@ export class PriceComponent implements OnInit {
         //if the same table invoked the change .. change only the edited row 
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
-        this.getgridheight();
       }
       else {
         this.localloanobject = res;
         this.rowData = [];
         this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
-        this.getgridheight();
       }
-
+      this.getgridheight();
 
     })
     this.getdataforgrid();
@@ -222,7 +237,6 @@ export class PriceComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
     //auto width and no scroll
-    params.api.sizeColumnsToFit();
   }
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
@@ -247,9 +261,19 @@ export class PriceComponent implements OnInit {
 
   getgridheight() {
 
-    this.style.height = (28 * (this.rowData.length + 1) + 5).toString() + "px";
+    this.style.height = (29 * (this.rowData.length + 1)+9).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
+    debugger
+    try{
     this.gridApi.sizeColumnsToFit();
   }
+  catch{
+
+  }
+  }
+}
+function adjustheader(): void {
+  debugger
+  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
 }

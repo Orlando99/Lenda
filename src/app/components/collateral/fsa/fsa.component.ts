@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
-import { loan_model, Loan_Collateral} from '../../../models/loanmodel';
+import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue} from '../../../Workers/utility/aggrid/collateralboxes';
+import { currencyFormatter, insuredFormatter, discFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -23,7 +23,7 @@ export class FSAComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
- 
+
   public rowData = [];
   public components;
   public context;
@@ -33,14 +33,14 @@ export class FSAComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public pinnedBottomRowData;
-  
+
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
-  
+
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
@@ -80,27 +80,43 @@ export class FSAComponent implements OnInit {
  
       this.context = { componentParent: this }; 
   }
-  
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
       this.localloanobject = res
-      this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
-        this.getgridheight();
+      this.rowData = [];
+      this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 });
+      this.pinnedBottomRowData = this.computeTotal(res);
+      this.getgridheight();
+      this.adjustgrid();
     });
+
     this.getdataforgrid();
   }
 
   getdataforgrid() {
+    debugger
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
+      this.rowData = [];
+      this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 });
+      this.pinnedBottomRowData = this.computeTotal(obj);
+    }
+    this.getgridheight();
+    this.adjustgrid();
+  }
+  onGridSizeChanged(Event: any) {
+    debugger
+    this.adjustgrid();
+  }
+  private adjustgrid() {
+    try {
+      this.gridApi.sizeColumnsToFit();
+    }
+    catch {
     }
   }
 
@@ -108,29 +124,30 @@ export class FSAComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-  }
- 
-  syncenabled(){
-    return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
+    this.adjustgrid();
   }
 
-  synctoDb(){
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-      if(res.ResCode == 1){
+  syncenabled() {
+    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  }
+
+  synctoDb() {
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
         this.deleteAction = false;
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
           if (res.ResCode == 1) {
             this.toaster.success("Records Synced");
             let jsonConvert: JsonConvert = new JsonConvert();
             this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           }
-          else{
+          else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
         });
       }
-      else{
+      else {
         this.toaster.error("Error in Sync");
       }
     });
@@ -146,23 +163,23 @@ export class FSAComponent implements OnInit {
     this.localloanobject.LoanCollateral.push(newItem);
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length-1,
-      colKey: "Collateral_Description" 
+      rowIndex: this.rowData.length - 1,
+      colKey: "Collateral_Description"
     });
     this.getgridheight();
   }
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    if (obj.Collateral_ID  == 0) {
+    if (obj.Collateral_ID == 0) {
       obj.ActionStatus = 1;
-      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length-1]=value.data;
+      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
     }
     else {
-      var rowindex=this.localloanobject.LoanCollateral.findIndex(lc=>lc.Collateral_ID==obj.Collateral_ID);
-      if(obj.ActionStatus!=1)
+      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+      if (obj.ActionStatus != 1)
         obj.ActionStatus = 2;
-      this.localloanobject.LoanCollateral[rowindex]=obj;
+      this.localloanobject.LoanCollateral[rowindex] = obj;
     }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
@@ -174,7 +191,7 @@ export class FSAComponent implements OnInit {
         if (obj.Collateral_ID == 0) {
           this.rowData.splice(rowIndex, 1);
           this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-        }else {
+        } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
         }
@@ -183,23 +200,28 @@ export class FSAComponent implements OnInit {
     })
   }
 
-  getgridheight(){
-    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+  getgridheight() {
+    this.style.height = (29 * (this.rowData.length + 2) - 2).toString() + "px";
   }
 
 
-  computeTotal(rowData) {
+  computeTotal(loanobject) {
     var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = totalMarketValue(rowData);
-    footer.Prior_Lien_Amount = totalPriorLien(rowData);
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = totalNetMktValue(rowData);
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = totalDiscValue(rowData);;
-
-    total.push(footer);
-    return total;
+    try {
+      var footer = new Loan_Collateral();
+      footer.Collateral_Category_Code = 'Total';
+      footer.Market_Value = loanobject.LoanMaster[0].FC_Market_Value_FSA
+      footer.Prior_Lien_Amount = loanobject.LoanMaster[0].FC_FSA_Prior_Lien_Amount
+      footer.Lien_Holder = '';
+      footer.Net_Market_Value = loanobject.LoanMaster[0].Net_Market_Value_FSA
+      footer.Disc_Value = 0;
+      footer.Disc_CEI_Value = loanobject.LoanMaster[0].Disc_value_FSA
+      total.push(footer);
+      return total;
+    }
+    catch
+    {  // Means that Calculations have not Ended
+      return total;
+    }
   }
 }

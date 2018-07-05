@@ -6,27 +6,27 @@ import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class LoancrophistoryService {
-  public input:loan_model;
+  public input: loan_model;
 
-  public returnables=new Array<Loan_Crop_History_FC>();
-  public years=[];
-  constructor(private logging:LoggingService) {
-    for(let i=1;i<7;i++){
-      this.years.push(new Date().getFullYear()-i);
-   }
-   }
-  prepare_Crop_Yield(){
-    for(let i =0;i<this.input.CropYield.length;i++)
-    {
-      let cropyielditems=[];
+  public returnables = new Array<Loan_Crop_History_FC>();
+  public years = [];
+  constructor(private logging: LoggingService) {
+    for (let i = 1; i < 7; i++) {
+      this.years.push(new Date().getFullYear() - i);
+    }
+  }
+  prepare_Crop_Yield() {
+    for (let i = 0; i < this.input.CropYield.length; i++) {
+      let cropyielditems = [];
       this.years.forEach(year => {
-       if(this.input.CropYield[i][year]!=null){
-        cropyielditems.push(this.input.CropYield[i][year])
-       }
+        if (this.input.CropYield[i][year] != null) {
+          cropyielditems.push(this.input.CropYield[i][year])
+        }
       });
-      if(cropyielditems.length<=2){
-        this.input.CropYield[i].CropYield==this.input.CropYield[i].APH;
+      if (cropyielditems.length <= 2) {
+        this.input.CropYield[i].CropYield == this.input.CropYield[i].APH;
       }
+<<<<<<< HEAD
       else{
         let sum=cropyielditems.reduce((p,n)=>{
           return p+n;
@@ -35,21 +35,31 @@ export class LoancrophistoryService {
           let min=Math.min.apply(null,cropyielditems);
           let coutie=(cropyielditems.length-2);
           this.input.CropYield[i].CropYield=Math.round(((sum) - max -min)/coutie);
+=======
+      else {
+        let sum = cropyielditems.reduce((p, n) => {
+          return p + n;
+        });
+        let max = Math.max.apply(null, cropyielditems);
+        let min = Math.min.apply(null, cropyielditems);
+        let coutie = (cropyielditems.length - 2);
+        this.input.CropYield[i].CropYield = ((sum) - max - min) / coutie;
+>>>>>>> 7f12bb3a9d2952dedb0af04c7825a52a9b83fd15
       }
     }
   }
 
-  prepareLoancrophistorymodel(input:loan_model):loan_model{
-    try{
-    this.input=input;
-    let starttime=new Date().getMilliseconds();
-    this.prepare_Crop_Yield();
-    let endtime=new Date().getMilliseconds();
-    this.logging.checkandcreatelog(3,'CalculationforCrophistory',"LoanCalculation timetaken :" + (starttime-endtime).toString() + " ms");
-    return this.input;
-  }
-  catch{
-    return input;
-  }
+  prepareLoancrophistorymodel(input: loan_model): loan_model {
+    try {
+      this.input = input;
+      let starttime = new Date().getMilliseconds();
+      this.prepare_Crop_Yield();
+      let endtime = new Date().getMilliseconds();
+      this.logging.checkandcreatelog(3, 'CalculationforCrophistory', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
+      return this.input;
+    }
+    catch{
+      return input;
+    }
   }
 }
