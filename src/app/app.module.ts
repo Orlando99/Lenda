@@ -21,7 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -113,6 +113,8 @@ import {NotificationFeedsService} from './shared/notification-feeds/notification
 import {NotificationFeedsComponent} from './shared/notification-feeds/notification-feeds.component';
 import {SidebarComponent} from './shared/layout/sidebar.component';
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
+import {SpinerComponent} from './shared/spiner/spiner.component';
+import { FlowchartComponent } from './components/flowchart/flowchart.component';
 
 //CROP
 import { CropapiService } from './services/crop/cropapi.service';
@@ -120,9 +122,9 @@ import { CropapiService } from './services/crop/cropapi.service';
 import { CropComponent } from './components/crop/crop.component';
 import { PriceComponent } from './components/crop/price/price.component';
 import { YieldComponent } from './components/crop/yield/yield.component';
+import { YieldDialogComponent } from './components/crop/yield/yield.component';
 import { RebatorComponent } from './components/crop/rebator/rebator.component';
-import {SpinerComponent} from './shared/spiner/spiner.component';
-import { FlowchartComponent } from './components/flowchart/flowchart.component';
+
 
 //Collateral
 import { CollateralComponent } from './components/collateral/collateral.component';
@@ -169,7 +171,7 @@ import { OptimizerComponent } from './components/optimizer/optimizer.component';
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent,RebatorComponent,PriceComponent,YieldComponent,
+    CropComponent,RebatorComponent,PriceComponent,YieldComponent,YieldDialogComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
@@ -275,7 +277,8 @@ import { OptimizerComponent } from './components/optimizer/optimizer.component';
     MatPaginatorModule,
     MatButtonToggleModule,
     FocusDirective,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    MatDialogModule
   ],
   providers: [
     LocalStorageService,
@@ -304,7 +307,7 @@ import { OptimizerComponent } from './components/optimizer/optimizer.component';
     InsurancecalculationworkerService,
     AssociationcalculationworkerService
   ],
-  entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
+  entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
