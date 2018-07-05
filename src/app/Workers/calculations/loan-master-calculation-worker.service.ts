@@ -121,6 +121,8 @@ export class LoanMasterCalculationWorkerService {
     return [Math.min(maxCropStaticValues[0], discNetWorthStaticValue[0]), Math.min(maxCropStaticValues[1], discNetWorthStaticValue[1]), '-', '-', '-']
   }
 
+
+
 }
 
 

@@ -140,7 +140,9 @@ import { QuestionscalculationworkerService } from './Workers/calculations/questi
 import { CurrencyDirective } from './components/borrower/shared/currency.directive';
 import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 import { CustomentryComponent } from './components/customentry/customentry.component';
-
+import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
+import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
+import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 
 @NgModule({
   declarations: [
@@ -292,7 +294,10 @@ import { CustomentryComponent } from './components/customentry/customentry.compo
     ReferenceService,
     InsuranceapiService,
     NotificationFeedsService,
-    QuestionscalculationworkerService
+    QuestionscalculationworkerService,
+    LoancroppracticeworkerService,
+    InsurancecalculationworkerService,
+    AssociationcalculationworkerService
   ],
   entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
   bootstrap: [AppComponent]

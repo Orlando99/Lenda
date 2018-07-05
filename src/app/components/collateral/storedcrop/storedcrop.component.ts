@@ -6,7 +6,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter,discFormatter, totalMarketValue, totalDiscValue, totalPriorLien, totalNetMktValue, totalQty, totalPrice, numberFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
+import { currencyFormatter, insuredFormatter,discFormatter, numberFormatter} from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -90,7 +90,7 @@ export class StoredCropComponent implements OnInit {
       this.localloanobject = res
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
+      this.pinnedBottomRowData = this.computeTotal(res);
         this.getgridheight();
     });
     this.getdataforgrid();
@@ -103,7 +103,7 @@ export class StoredCropComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(this.rowData);
+      this.pinnedBottomRowData = this.computeTotal(obj);
     }
   }
 
@@ -191,18 +191,18 @@ export class StoredCropComponent implements OnInit {
   }
 
 
-  computeTotal(rowData) {
+  computeTotal(input) {
     var total = []
     var footer = new Loan_Collateral();
     footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = totalMarketValue(rowData);
-    footer.Prior_Lien_Amount = totalPriorLien(rowData);
+    footer.Market_Value = input.LoanMaster[0].FC_Market_Value_storedcrop
+    footer.Prior_Lien_Amount = input.LoanMaster[0].FC_storedcrop_Prior_Lien_Amount ;
     footer.Lien_Holder = '';
-    footer.Net_Market_Value = totalNetMktValue(rowData);
+    footer.Net_Market_Value =input.LoanMaster[0].Net_Market_Value_Stored_Crops
     footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = totalDiscValue(rowData);;
-    footer.Qty = totalQty(rowData);
-    footer.Price = totalPrice(rowData);
+    input.LoanMaster[0].Disc_value_Stored_Crops
+    footer.Qty = input.LoanMaster[0].FC_total_Qty_storedcrop 
+    footer.Price =input.LoanMaster[0].FC_total_Price_storedcrop
     
     total.push(footer);
     return total;
