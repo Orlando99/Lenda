@@ -53,6 +53,7 @@ export class FarmComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
+    this.getgridheight();
     params.api.sizeColumnsToFit();
   }
   //End here
@@ -148,6 +149,7 @@ export class FarmComponent implements OnInit {
        }
     });
 
+    this.getgridheight();
     this.getdataforgrid();
     //this.editType = "fullRow";
   }
@@ -235,6 +237,7 @@ export class FarmComponent implements OnInit {
       rowIndex: this.rowData.length-1,
       colKey: "Farm_State_ID"
     });
+    this.getgridheight();
   }
 
   DeleteClicked(rowIndex: any) {
@@ -253,6 +256,10 @@ export class FarmComponent implements OnInit {
 
   }
 
+  getgridheight() {
+
+    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+  }
 
   syncenabled(){
     if(this.rowData)
