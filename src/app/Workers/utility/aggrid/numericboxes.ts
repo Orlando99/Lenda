@@ -4,8 +4,9 @@ import { isNumber } from "util";
 //Numeric cell editor config
 export function getNumericCellEditor() {
     function isCharNumeric(charStr) {
-      
-      return !!/\d/.test(charStr);
+      // return !!/\d/.test(charStr);
+      //for decimals
+      return /^\d*\.?\d*$/.test(charStr);
     
     }
     function isCharDot(charStr) {

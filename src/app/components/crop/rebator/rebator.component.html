@@ -7,29 +7,32 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
   
-        <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-        <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon>
+      <button (click)="synctoDb()" [disabled]="!syncenabled()"  mat-icon-button>
+        <mat-icon [style.color] = "!syncenabled()">publish</mat-icon>
       </button>
   
       <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
         
-            <div class="container bottom">
-              <div class="row">
-              <ag-grid-angular  [ngStyle]="style"
-              class="ag-theme-balham"
-              [animateRows]="true"
-              [enableSorting]="true"
-              [enableFilter]="true"
-              [context]="context"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
-              (cellEditingStopped)="rowvaluechanged($event)"
-              [rowData]="rowData" 
-              (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs">
-              </ag-grid-angular>
-              </div>
-            </div>
+      <div class="container bottom">
+        <div class="row">
+        <ag-grid-angular  [ngStyle]="style"
+        class="ag-theme-balham"
+        [animateRows]="true"
+        [enableSorting]="true"
+        [enableFilter]="true"
+        [context]="context"
+        (gridSizeChanged)="onGridSizeChanged($event)"
+        [frameworkComponents]="frameworkcomponents"
+        [components]="components"
+        [singleClickEdit]="true"
+        (cellEditingStopped)="rowvaluechanged($event)"
+        [rowData]="rowData" 
+        (gridReady)="onGridReady($event)"
+        [headerHeight]="45"
+        [columnDefs]="columnDefs">
+        </ag-grid-angular>
+        </div>
+      </div>
             <br>
     </mat-expansion-panel>
     </mat-accordion>

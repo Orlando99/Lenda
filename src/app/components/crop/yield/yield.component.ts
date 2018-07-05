@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -16,6 +16,13 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { tick } from '@angular/core/testing';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { empty } from 'rxjs/observable/empty';
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-yield',
@@ -35,15 +42,17 @@ export class YieldComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public addAction = false;
+  public cropYear;
   context: any;
   
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '240px',
     boxSizing: 'border-box'
   };
+  defaultColDef: { headerComponentParams: { template: string; }; };
 
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
@@ -51,58 +60,74 @@ export class YieldComponent implements OnInit {
   private toaster: ToastsManager,
   public logging:LoggingService,
   public loanapi:LoanApiService,
-  public alertify:AlertifyService
+  public alertify:AlertifyService,
+  public dialog: MatDialog
   ) { 
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    let cropYear = this.localstorageservice.retrieve(environment.loankey).LoanMaster[0].Crop_Year;
+    this.cropYear = this.localstorageservice.retrieve(environment.loankey).LoanMaster[0].Crop_Year;
 
-    for(let i=1; i<7;i++){
-      this.years.push(cropYear-i);
+    for(let i=1; i<8;i++){
+      this.years.push(this.cropYear-i);
     };
-
 
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer};
+
+    this.defaultColDef = {
+      headerComponentParams : {
+      template:
+          '<div class="ag-cell-label-container" role="presentation">' +
+          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
+          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
+          '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order" ></span>' +
+          '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon" ></span>' +
+          '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon" ></span>' +
+          '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon" ></span>' +
+          '    <div ref="eText" class="ag-header-cell-text" role="columnheader"> </div>' +
+          '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
+          '  </div>' +
+          '</div>'
+      }
+    };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop', editable: true, cellEditor: "selectEditor",
+        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",width:140,
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
         valueFormatter: function (params) {
           return params.value;
         },
-        valueSetter: cropNameValueSetter,
-        width: 80
+        valueSetter: cropNameValueSetter
       },
-      {
-        headerName: 'Crop type', field: 'CropType',  editable: true,
-        // valueFormatter: function (params) {return params.value;},
-        // valueSetter: CropTypevaluesetter,
-        width: 100
-      },
-      { headerName: 'Crop Practice', field: 'IrNI', editable: true,width: 120, cellEditor: "selectEditor",
+      // {
+      //   headerName: 'Crop type', field: 'CropType',  editable: false,
+      //   // valueFormatter: function (params) {return params.value;},
+      //   // valueSetter: CropTypevaluesetter,
+      //   width: 100
+      // },
+      { headerName: 'Crop Practice', field: 'Practice', editable: false, cellEditor: "selectEditor",
         cellEditorParams: {
           values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
         },
       },
-      { headerName: 'Practice', field: 'Practice',   editable: true,width: 100, cellEditor: "selectEditor",
-        cellEditorParams: {
-          values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
-        },
-      }
+      // { headerName: 'Practice', field: 'Practice',   editable: false,width: 100, cellEditor: "selectEditor",
+      //   cellEditorParams: {
+      //     values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
+      //   },
+      // }
     ];
 
     this.years.forEach(element => {
-     this.columnDefs.push({ headerName: element.toString(), field: element.toString(),   editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,width: 80})
+     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter})
     });
 
-    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,width: 120});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false,width: 80});
-    this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false,width: 80});
-    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn",width: 100});
+    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
    
     this.context = { componentParent: this };
   }
@@ -110,10 +135,18 @@ export class YieldComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
-      this.localloanobject=res;
-      this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
-    })
-    this.croppricesdetails= this.localstorageservice.retrieve(environment.referencedatakey);
+      if (res.srccomponentedit == "YieldComponent") {
+        //if the same table invoked the change .. change only the edited row 
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+      }
+      else {
+        this.localloanobject = res;
+        this.rowData = [];
+        this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
+      }
+      this.getgridheight();
+    });
     this.getdataforgrid();
   }
 
@@ -134,12 +167,10 @@ export class YieldComponent implements OnInit {
   }
 
   rowvaluechanged(value:any){
-    debugger
     var obj = value.data;
     var rowindex = value.rowIndex;
-
-    if(obj.Crop_ID === 0){
-      obj.ActionStatus = 1;
+    
+    if(obj.ActionStatus === 0){
       this.localloanobject.CropYield[rowindex]=obj;
       if(obj.Crop && obj.CropType && obj.Practice){
         this.addAction = true;
@@ -147,19 +178,20 @@ export class YieldComponent implements OnInit {
         this.addAction = false;
       }
     }else{
-      // obj.ActionStatus = 2;
-      this.localloanobject.CropYield[rowindex]=obj;
-      let edit = new Loan_Crop_Type_Practice_Type_Yield_EditModel();
-          edit.CropId = value.data.Crop_ID;
-          edit.YieldLine = value.colDef.field;
-          edit.IsPropertyYear = true;
-          edit.LoanID = value.data.Loan_ID;
-          edit.PropertyName = value.colDef.field;
-          edit.PropertyValue = value.value;
-      this.edits.push(edit);
-      console.log('EDITS',this.edits);
-    }
-    
+        // obj.ActionStatus = 2;
+        this.localloanobject.CropYield[rowindex]=obj;
+        let edit = new Loan_Crop_Type_Practice_Type_Yield_EditModel();
+            edit.CropId = value.data.Crop_ID;
+            edit.YieldLine = value.colDef.field;
+            edit.IsPropertyYear = true;
+            edit.LoanFullID = value.data.Loan_Full_ID;
+            edit.PropertyName = value.colDef.field;
+            edit.PropertyValue = value.value;
+        this.edits.push(edit);
+        console.log('edits',this.edits);
+      }
+    this.localloanobject.srccomponentedit = "YieldComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -168,77 +200,182 @@ export class YieldComponent implements OnInit {
   }
 
   synctoDb() {
-    if(this.deleteAction || this.addAction){
-      this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>res)
-    }else{
+    console.log('edits',this.edits);
+    if(this.deleteAction){
+      this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.deleteAction = false;
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+          this.edits=[];
+        })
+      })
+    }else if(this.addAction){
+        let newYield = this.localloanobject.CropYield.filter(cy =>{ return cy.ActionStatus==0});
+        newYield.forEach(ay => {
+          this.years.forEach(y=>{
+            if(ay[y] !== "" && ay[y] !== null){
+              var params = {
+                Loan_ID : 0,
+                Loan_Full_ID: ay.Loan_Full_ID,
+                Crop_ID : ay.Crop_ID,
+                Z_Crop_Name: ay.Crop,
+                Loan_Seq_Num: 0,
+                Z_Crop_Type_Code: 'NA',
+                Z_Practice_Type_Code: ay.Practice,
+                Crop_Year: this.cropYear,
+                Yield_Line: y,
+                Crop_Yield: ay[y],
+                Status:0,
+                ActionStatus: 1
+              }
+              this.localloanobject.CropYield.push(params);
+            }
+          });
+        });
+        this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+          this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+            this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+            if (res.ResCode == 1) {
+              this.deleteAction = false;
+              this.toaster.success("Records Synced");
+              let jsonConvert: JsonConvert = new JsonConvert();
+              this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+            }
+            else{
+              this.toaster.error("Could not fetch Loan Object from API")
+            }
+            this.edits=[];
+          })
+        })
+        this.addAction = false;
+  }else{
       this.edits.forEach(element => {
-        this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>res);
+        this.cropserviceapi.saveupdateLoanCropYield(element).subscribe(res=>{
+          this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+            this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+            if (res.ResCode == 1) {
+              this.deleteAction = false;
+              this.toaster.success("Records Synced");
+              let jsonConvert: JsonConvert = new JsonConvert();
+              this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+            }
+            else{
+              this.toaster.error("Could not fetch Loan Object from API")
+            }
+            this.edits=[];
+          })
+        });
       });
       this.edits=[];
     }
-   
-    this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-      this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-      if (res.ResCode == 1) {
-        this.deleteAction = false;
-        this.toaster.success("Records Synced");
-        let jsonConvert: JsonConvert = new JsonConvert();
-        this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-      }
-      else{
-        this.toaster.error("Could not fetch Loan Object from API")
-      }
-      this.edits=[];
-      // else{
-      //   this.toaster.error("Error in Sync");
-      // }
-    })
-  }
-
-  getgridheight(){
-   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
   }
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.CropYield[rowIndex];
-        if (obj.Loan_ID == 0) {
-          this.localloanobject.CropYield.splice(rowIndex, 1);
-        }
-        else {
-          obj.ActionStatus = 3;
+        var obj = this.rowData[rowIndex];
+        if (obj.ActionStatus == 1) {
+          this.rowData.splice(rowIndex, 1);
+          this.localloanobject.CropYield.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
+        }else {
           this.deleteAction = true;
+          obj.ActionStatus = 3;
         }
-
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject)
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
-  
   }
 
   addrow() {
+    let distinctCrops = [];
+    let cropLists = []
 
-    var newItem = {
-      Crop_ID:0,
-      Crop:"",
-      CropType:"",
-      Loan_ID:"",
-      IrNi:"",
-      Practice:"",
-      CropYield:"",
-      APH:"",
-      InsUOM:""
-    }
-    this.years.forEach(y=>{
-      newItem[y]="";
-    })
-    this.rowData.push(newItem);
-    this.gridApi.setRowData(this.rowData);
-    this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length,
-      colKey: "Crop" 
+    this.rowData.forEach(rd =>{
+      if(distinctCrops.indexOf(rd.Crop)== -1)
+      distinctCrops.push(rd.Crop_ID);
     });
-    this.getgridheight();
+
+    this.refdata.CropList.forEach(cl => {
+      if(distinctCrops.indexOf(cl.Crop_And_Practice_ID) == -1){
+        distinctCrops.push(cl.Crop_And_Practice_ID);
+        cropLists.push(cl);
+      }
+    });
+
+    const dialogRef = this.dialog.open(YieldDialogComponent, {
+      width: '250px',
+      data: {crops:cropLists,
+             selected:{crop:'', practice:''}}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      cropLists = []
+      if(result != undefined){
+        var newItem = { Crop_ID:result.crop.Crop_And_Practice_ID,
+                        Crop:result.crop.Crop_Name,
+                        CropType: result.crop.Crop_Code,
+                        Loan_ID:"",
+                        Loan_Full_ID: this.localloanobject.Loan_Full_ID,
+                        IrNI:result.crop.Practice_type_code,
+                        Practice:result.crop.Practice_type_code,
+                        CropYield:"",
+                        APH:"",
+                        InsUOM:"",
+                        ActionStatus: 0 }
+        this.years.forEach(y=>{ newItem[y]=""; })
+        this.rowData.push(newItem);
+        this.localloanobject.CropYield.push(newItem);
+        this.gridApi.setRowData(this.rowData);
+
+        this.getgridheight();
+        }
+    });
+    
+  }
+
+  getgridheight() {
+
+    this.style.height = (30 * (this.rowData.length + 1)+9).toString() + "px";
+  }
+  onGridSizeChanged(Event: any) {
+    debugger
+    try{
+    this.gridApi.sizeColumnsToFit();
+  }
+  catch{
+
+  }
   }
 }
+function adjustheader(): void {
+  debugger
+  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
+}
+
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: 'yield.dialog.component.html',
+})
+export class YieldDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<YieldDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+
+    }
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+

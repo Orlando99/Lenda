@@ -160,7 +160,7 @@ export class V_Crop_Price_Details
 export class Loan_Crop_Type_Practice_Type_Yield_EditModel
     {
         CropId: number | null;
-        LoanID: number | null;
+        LoanFullID: string | null;
         PropertyName: string;
         PropertyValue: string;
         CropYear: number | null;

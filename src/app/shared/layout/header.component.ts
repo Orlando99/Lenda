@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -31,7 +31,7 @@ export class HeaderComponent implements OnInit {
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  public isExpanded: boolean=true;
+  public isExpanded;
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
@@ -52,6 +52,15 @@ export class HeaderComponent implements OnInit {
     })
   
         this.getloanid();
+
+        // router.events.subscribe(res=>{
+        //   if(res instanceof NavigationEnd)
+        //   {
+        //     debugger
+        //     this.initialtoggle();
+        //   }
+        
+        // })
   }
 
 
@@ -62,8 +71,8 @@ export class HeaderComponent implements OnInit {
 
 
   ngOnInit() {
-    this.isExpanded = true;
-    //default open
+    this.isExpanded = false;
+    
     this.value = this.localst.retrieve(environment.logpriority);
   }
 
@@ -78,7 +87,7 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSideBar(event) {
-    //this.isExpanded = !this.isExpanded;
+    this.isExpanded = !this.isExpanded;
     this.sideBarService.toggle(this.isExpanded);
   }
 
@@ -88,7 +97,8 @@ export class HeaderComponent implements OnInit {
 
   initialtoggle(){
     try{
-      this.sideBarService.toggle(true);
+      this.isExpanded=false;
+      this.toggleSideBar(null);
     }
   catch{
     setTimeout(() => {
@@ -98,6 +108,7 @@ export class HeaderComponent implements OnInit {
   }
   }
   toggleRightSidenav() {
+    debugger
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {

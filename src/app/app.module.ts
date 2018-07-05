@@ -21,7 +21,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -47,6 +47,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 
 
 //START COMPONENTS
+import { SidebarModule } from 'ng-sidebar';
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
 import { HeaderComponent } from './shared/layout/header.component';
@@ -112,6 +113,8 @@ import {NotificationFeedsService} from './shared/notification-feeds/notification
 import {NotificationFeedsComponent} from './shared/notification-feeds/notification-feeds.component';
 import {SidebarComponent} from './shared/layout/sidebar.component';
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
+import {SpinerComponent} from './shared/spiner/spiner.component';
+import { FlowchartComponent } from './components/flowchart/flowchart.component';
 
 //CROP
 import { CropapiService } from './services/crop/cropapi.service';
@@ -119,9 +122,9 @@ import { CropapiService } from './services/crop/cropapi.service';
 import { CropComponent } from './components/crop/crop.component';
 import { PriceComponent } from './components/crop/price/price.component';
 import { YieldComponent } from './components/crop/yield/yield.component';
+import { YieldDialogComponent } from './components/crop/yield/yield.component';
 import { RebatorComponent } from './components/crop/rebator/rebator.component';
-import {SpinerComponent} from './shared/spiner/spiner.component';
-import { FlowchartComponent } from './components/flowchart/flowchart.component';
+
 
 //Collateral
 import { CollateralComponent } from './components/collateral/collateral.component';
@@ -143,6 +146,7 @@ import { CustomentryComponent } from './components/customentry/customentry.compo
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
+import { OptimizerComponent } from './components/optimizer/optimizer.component';
 
 @NgModule({
   declarations: [
@@ -167,7 +171,7 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent,RebatorComponent,PriceComponent,YieldComponent,
+    CropComponent,RebatorComponent,PriceComponent,YieldComponent,YieldDialogComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
@@ -193,6 +197,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     RatingComponent,
     FarmFinancialComponent,
     CellValueComponent,
+    CustomentryComponent,
+    OptimizerComponent,
     CurrencyDirective,
     PercentageDirective,
     CustomentryComponent
@@ -237,7 +243,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     LoadingModule,
     NgxJsonViewerModule,
     AgGridModule.withComponents([NumericEditor,SelectEditor]),
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    SidebarModule.forRoot()
   ],
   exports: [
     FormsModule,
@@ -270,7 +277,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     MatPaginatorModule,
     MatButtonToggleModule,
     FocusDirective,
-    NgxJsonViewerModule
+    NgxJsonViewerModule,
+    MatDialogModule
   ],
   providers: [
     LocalStorageService,
@@ -299,7 +307,7 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     InsurancecalculationworkerService,
     AssociationcalculationworkerService
   ],
-  entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor],
+  entryComponents:[DeleteButtonRenderer,ConfirmComponent,EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

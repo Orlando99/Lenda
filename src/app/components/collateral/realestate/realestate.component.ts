@@ -36,7 +36,7 @@ export class RealEstateComponent implements OnInit {
   
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
@@ -83,13 +83,21 @@ export class RealEstateComponent implements OnInit {
   
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral', "LocalStorage updated");
-      this.localloanobject = res
-      this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3});
-      this.pinnedBottomRowData = this.computeTotal(res);
-        this.getgridheight();
+      this.logging.checkandcreatelog(1, 'LoanCollateral - Real Estate', "LocalStorage updated");
+      if (res.srccomponentedit == "RealEstateComponent") {
+        //if the same table invoked the change .. change only the edited row 
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 });
+        this.pinnedBottomRowData = this.computeTotal(res);
+      }
+      this.getgridheight();
+      // this.adjustgrid();
     });
+
     this.getdataforgrid();
   }
 
@@ -164,6 +172,9 @@ export class RealEstateComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex]=obj;
     }
+     //this shall have the last edit 
+    this.localloanobject.srccomponentedit = "RealEstateComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -186,7 +197,15 @@ export class RealEstateComponent implements OnInit {
   getgridheight(){
     this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
+  onGridSizeChanged(Event: any) {
+    debugger
+    try{
+    this.gridApi.sizeColumnsToFit();
+  }
+  catch{
 
+  }
+  }
 
   computeTotal(input) {
     var total = []

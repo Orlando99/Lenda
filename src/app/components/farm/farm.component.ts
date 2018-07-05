@@ -182,10 +182,10 @@ export class FarmComponent implements OnInit {
       this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
+      var rowindex=value.rowindex;
       if(obj.ActionStatus!=1)
        obj.ActionStatus = 2;
-      this.localloanobject.Farms[rowindex]=obj;
+      this.localloanobject.Farms[value.rowIndex]=obj;
     }
     
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject,value.colDef.calculationinvoke);
