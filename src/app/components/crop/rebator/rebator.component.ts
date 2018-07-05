@@ -36,7 +36,7 @@ export class RebatorComponent implements OnInit {
   public deleteAction=false;
   style = {
     marginTop: '10px',
-    width: '93%',
+    width: '97%',
     height: '240px',
     boxSizing: 'border-box'
   };
@@ -179,5 +179,15 @@ export class RebatorComponent implements OnInit {
 
   getgridheight(){
     this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+  }
+
+  onGridSizeChanged(Event: any) {
+    debugger
+    try{
+    this.gridApi.sizeColumnsToFit();
+  }
+  catch{
+
+  }
   }
 }
