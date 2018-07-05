@@ -10,16 +10,3 @@ input[type=number]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: $white-90;
-    opacity: 1; /* Firefox */
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: $white-90;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-    color: $white-90;
-}
