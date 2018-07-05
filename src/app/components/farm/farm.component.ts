@@ -71,7 +71,7 @@ export class FarmComponent implements OnInit {
     //Coldef here
     this.columnDefs = [
       {
-        headerName: 'State', field: 'Farm_State_ID',  cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'State', field: 'Farm_State_ID',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractStateValues(this.refdata.StateList)
         },
@@ -81,7 +81,7 @@ export class FarmComponent implements OnInit {
         valueSetter: Statevaluesetter
       },
       {
-        headerName: 'County', field: 'Farm_County_ID',  cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'County', field: 'Farm_County_ID',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
           return lookupCountyValue(params.value);
