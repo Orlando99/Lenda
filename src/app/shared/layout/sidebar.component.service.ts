@@ -13,11 +13,13 @@ export class SidebarService {
     private minLogo: HTMLElement;
 
     public setSidenav(sidenav: MatSidenav) {
+        
         this.sidenav = sidenav;
     }
 
     public setHtmlElement(mainheader: HTMLElement, maincontent: HTMLElement,
         mainsidebar: HTMLElement, mainLogo: HTMLElement, minLogo: HTMLElement ) {
+            
         this.mainHeader = mainheader;
         this.mainContent = maincontent;
         this.mainSideBar = mainsidebar;
@@ -26,17 +28,19 @@ export class SidebarService {
     }
 
     public open() {
+        
      this.sidenav.open();
     }
 
 
     public close() {
+        
         this.sidenav.close();
     }
 
     public toggle(isExpanded: boolean): void {
-        
-       // this.mainHeader.style.marginLeft = isExpanded ? '215px' : '68px';
+        debugger
+        //this.mainHeader.style.marginLeft = isExpanded ? '215px' : '68px';
         this.mainContent.style.marginLeft = isExpanded ? '215px' : '68px';
         this.mainSideBar.style.width = isExpanded ? '215px' : '68px';
         if (isExpanded) {

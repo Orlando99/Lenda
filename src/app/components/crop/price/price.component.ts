@@ -41,6 +41,10 @@ export class PriceComponent implements OnInit {
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; }; };
+  stylesidebar={
+    width: '95%',
+    height: '240px'
+  };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -260,12 +264,13 @@ export class PriceComponent implements OnInit {
 
   getgridheight() {
 
-    this.style.height = (29 * (this.rowData.length + 1)+9).toString() + "px";
+    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+    this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
     debugger
     try{
-    this.gridApi.sizeColumnsToFit();
+    //this.gridApi.sizeColumnsToFit();
   }
   catch{
 
@@ -275,6 +280,7 @@ export class PriceComponent implements OnInit {
   onColumnhiderequested(event,header:string){
     let checked=event.srcElement.checked;
     this.columnApi.setColumnVisible(header, checked);
+    //this.gridApi.sizeColumnsToFit();
   }
 }
 function adjustheader(): void {

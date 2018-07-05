@@ -47,6 +47,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 
 
 //START COMPONENTS
+import { SidebarModule } from 'ng-sidebar';
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
 import { HeaderComponent } from './shared/layout/header.component';
@@ -233,7 +234,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     LoadingModule,
     NgxJsonViewerModule,
     AgGridModule.withComponents([NumericEditor,SelectEditor]),
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    SidebarModule.forRoot()
   ],
   exports: [
     FormsModule,

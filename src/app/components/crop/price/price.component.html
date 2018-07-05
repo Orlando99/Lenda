@@ -14,8 +14,22 @@
 
     <div class="container bottom">
       <div class="row">
-        <mat-drawer-container style="width:96%">
-          <mat-drawer-content>
+          <ng-sidebar-container showBackdrop="false" animate="true" [ngStyle]="stylesidebar">
+              <ng-sidebar mode="over" position="right" style="background-color: cornsilk" closeOnClickOutside="true" #pricesidebar>
+                  <div class="row">
+                      <button class="vertical" (click)="pricesidebar.close()"  color="primary">
+                          <mat-icon aria-label="Columns">grid_on</mat-icon>
+                        </button>
+                    <p class="sidebarspaced" *ngFor="let col of columnDefs">
+                      <label *ngIf="col.headerName!=''">
+                        <input type="checkbox" class="sidebarchecks" checked (change)="onColumnhiderequested($event,col.field)"/>
+                        <span class="sidebartext">{{col.headerName}}</span>
+                      </label>
+                    </p>
+                    
+                  </div>
+                </ng-sidebar>
+          <div ng-sidebar-content style="overflow: hidden;">
 
             <div style="width:97%;float:left">
               <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
@@ -26,25 +40,15 @@
             </div>
             <div style="width:3%;float:left">
               <div class="row">
-                <button (click)="drawer.toggle()" mat-icon-button color="primary">
-                  <mat-icon aria-label="Example icon-button with a heart icon">favorite</mat-icon>
+                <button class="vertical" (click)="pricesidebar.open()"  color="primary">
+                  <mat-icon aria-label="Columns">grid_on</mat-icon>
                 </button>
 
               </div>
             </div>
-          </mat-drawer-content>
-          <mat-drawer align="end" #drawer mode="over">
-            <div class="row">
-              <p *ngFor="let col of columnDefs">
-                <label>
-                  <input type="checkbox" (change)="onColumnhiderequested($event,col.headerName)"/>
-                  <span>{{col.headerName}}</span>
-                </label>
-              </p>
-              
-            </div>
-          </mat-drawer>
-        </mat-drawer-container>
+          </div>
+          
+        </ng-sidebar-container>
       </div>
     </div>
     <br>
