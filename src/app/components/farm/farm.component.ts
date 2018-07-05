@@ -130,10 +130,14 @@ export class FarmComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
       this.localloanobject = res;
-      if(res.Farms)
-        this.rowData = res.Farms.filter(p => p.ActionStatus != 3);
-      else
+      if(res.Farms && res.srccomponentedit == "FarmComponent"){
+        this.rowData[res.lasteditrowindex] = this.localloanobject.Farms.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+        
+      }
+      else{
         this.rowData = [];
+        this.rowData = this.localloanobject.Farms.filter(p => p.ActionStatus != 3);
+      }
        this.gridApi.setRowData(this.rowData);
        if(this.currenteditedfield!=null){
          debugger
@@ -187,7 +191,8 @@ export class FarmComponent implements OnInit {
        obj.ActionStatus = 2;
       this.localloanobject.Farms[value.rowIndex]=obj;
     }
-    
+    this.localloanobject.srccomponentedit = "FarmComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject,value.colDef.calculationinvoke);
   }
 
