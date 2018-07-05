@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment.prod';
 import { modelparserfordb } from '../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../models/farmmodel.';
 import { FarmapiService } from '../../services/farm/farmapi.service';
-import { numberValueSetter, getNumericCellEditor } from '../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter, getNumericCellEditor, numberWithOneDecPrecValueSetter } from '../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../aggridcolumns/deletebuttoncolumn';
@@ -16,6 +16,7 @@ import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { Action } from 'rxjs/scheduler/Action';
+import { PriceFormatter, PercentageFormatter } from '../../Workers/utility/aggrid/formatters';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -70,7 +71,7 @@ export class FarmComponent implements OnInit {
     //Coldef here
     this.columnDefs = [
       {
-        headerName: 'State', field: 'Farm_State_ID',  editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'State', field: 'Farm_State_ID',  cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
         cellEditorParams: {
           values: extractStateValues(this.refdata.StateList)
         },
@@ -80,27 +81,45 @@ export class FarmComponent implements OnInit {
         valueSetter: Statevaluesetter
       },
       {
-        headerName: 'County', field: 'Farm_County_ID',  editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'County', field: 'Farm_County_ID',  cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
           return lookupCountyValue(params.value);
         },
         valueSetter: Countyvaluesetter
       },
-      { headerName: '% Prod', field: 'Prod',  editable: true },
-      { headerName: 'Landlord', field: 'Landowner', editable: true ,calculationinvoke:false},
-      { headerName: 'FSN', field: 'FSN', editable: true ,calculationinvoke:false},
-      { headerName: 'Section', field: 'Section',  editable: true ,calculationinvoke:false},
-      { headerName: 'Rated', field: 'Rated',  editable: true,calculationinvoke:false},
-      { headerName: 'Rent', field: 'Share_Rent',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Rent UoM', field: 'RentUoM',  editable: true },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', editable: true },
-      { headerName: 'Waived', field: 'Cash_Rent_Waived',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: '% Rent', field: 'Rentperc',  editable: true },
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  editable: true },
-      { headerName: 'IR Acres', field: 'Irr_Acres',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'NI Acres', field: 'NI_Acres',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres'},
+      { headerName: '% Prod', field: 'Prod',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      valueFormatter: function (params) {
+        return PercentageFormatter(params.value);
+      } },
+      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
+      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
+      { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false},
+      { headerName: 'Rated', field: 'Rated',  cellClass: 'editable-color', editable: true,calculationinvoke:false, cellEditor: "selectEditor",
+      cellEditorParams: {values : [{key : 'AAA', value:'AAA'},{key : 'BBB', value:'BBB'},{key : 'NR', value:'NR'}]},
+      },
+      { headerName: 'Rent', field: 'Share_Rent',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      } },
+      { headerName: 'Rent UoM', field: 'RentUoM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+      cellEditorParams: {values : [{key : '$ per acre', value:'$ per acre'},{key : '$ Total stores', value:'$ Total stores'}]},
+      },
+      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true },
+      { headerName: 'Waived', field: 'Cash_Rent_Waived',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: '% Rent', field: 'Rentperc',  cellClass: 'editable-color', editable: true,
+      valueFormatter: function (params) {
+        return PercentageFormatter(params.value);
+      }},
+      { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  cellClass: 'editable-color', editable: true , cellEditor: "selectEditor",
+      cellEditorParams: {values : [{key : 1, value:'Yes'},{key : 0, value:'No'}]},
+      },
+      { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
+      { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
+      { headerName: 'Total Acres', field: 'FC_Total_Acres',cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];

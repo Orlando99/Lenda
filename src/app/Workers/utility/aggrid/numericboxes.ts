@@ -8,12 +8,24 @@ export function getNumericCellEditor() {
       return !!/\d/.test(charStr);
     
     }
+    function isCharDot(charStr) {
+      
+      return charStr === '.';
+    
+    }
     
     function isKeyPressedNumeric(event) {
       
       var charCode = getCharCodeFromEvent(event);
       var charStr = String.fromCharCode(charCode);
       return isCharNumeric(charStr);
+    }
+
+    function isKeyPressedDot(event) {
+      
+      var charCode = getCharCodeFromEvent(event);
+      var charStr = String.fromCharCode(charCode);
+      return isCharDot(charStr);
     }
     function getCharCodeFromEvent(event) {
       event = event || window.event;
@@ -56,7 +68,7 @@ export function getNumericCellEditor() {
         
         //this.eInput
         //this.eInput.addClass('lenda-cellEdit-color')
-        if (!isKeyPressedNumeric(event)) {
+        if (!isKeyPressedNumeric(event) && !isKeyPressedDot(event)) {
           that.eInput.focus();
           if (event.preventDefault) event.preventDefault();
         }
@@ -109,6 +121,16 @@ export function numberValueSetter(params) {
     params.data[params.colDef.field]=data;
     return true;
   }
+
+  export function numberWithOneDecPrecValueSetter(params) {
+    debugger
+      if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
+      params.newValue=0;    
+      var data=parseFloat(params.newValue);
+      data =  Math.round( data * 10 ) / 10;
+      params.data[params.colDef.field]=data;
+      return true;
+    }
   
   
   //Numeric cell editor config Ends
