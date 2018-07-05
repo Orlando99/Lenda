@@ -11,16 +11,17 @@ import { environment } from '../environments/environment.prod';
 })
 export class AppComponent {
   title = 'LendaPlus';
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:unload', ['$event'])
   public beforeunloadHandler($event) {
-    this.loanstorage.clear("userid");
+    debugger
+    //.loanstorage.clear("userid");
  }
   constructor(private toaster: ToastsManager,private router: Router, vcf: ViewContainerRef,private loanstorage:LocalStorageService) {
     this.toaster.setRootViewContainerRef(vcf);
     router.events.subscribe((res:any)=>{
       let url:string=res.url;
       if(url!=undefined){
-        
+        debugger
       if(url.indexOf("login")!=-1){
 
       }

@@ -47,6 +47,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 
 
 //START COMPONENTS
+import { SidebarModule } from 'ng-sidebar';
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
 import { HeaderComponent } from './shared/layout/header.component';
@@ -139,10 +140,13 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+import { CurrencyDirective } from './components/borrower/shared/currency.directive';
+import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 import { CustomentryComponent } from './components/customentry/customentry.component';
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
+import { OptimizerComponent } from './components/optimizer/optimizer.component';
 
 @NgModule({
   declarations: [
@@ -193,6 +197,10 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     RatingComponent,
     FarmFinancialComponent,
     CellValueComponent,
+    CustomentryComponent,
+    OptimizerComponent,
+    CurrencyDirective,
+    PercentageDirective,
     CustomentryComponent
 
   ],
@@ -235,7 +243,8 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
     LoadingModule,
     NgxJsonViewerModule,
     AgGridModule.withComponents([NumericEditor,SelectEditor]),
-    ToastModule.forRoot()
+    ToastModule.forRoot(),
+    SidebarModule.forRoot()
   ],
   exports: [
     FormsModule,
