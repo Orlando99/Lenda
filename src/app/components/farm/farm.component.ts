@@ -157,14 +157,14 @@ export class FarmComponent implements OnInit {
         this.rowData = [];
         this.rowData = this.localloanobject.Farms.filter(p => p.ActionStatus != 3);
       }
-       this.gridApi.setRowData(this.rowData);
-       if(this.currenteditedfield!=null){
+      //  this.gridApi.setRowData(this.rowData);
+      //  if(this.currenteditedfield!=null){
 
-        this.gridApi.startEditingCell({
-          rowIndex: this.currenteditrowindex,
-          colKey: this.currenteditedfield
-        });
-       }
+      //   this.gridApi.startEditingCell({
+      //     rowIndex: this.currenteditrowindex,
+      //     colKey: this.currenteditedfield
+      //   });
+      //  }
     });
 
     this.getgridheight();
