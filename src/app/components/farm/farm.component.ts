@@ -281,7 +281,7 @@ export class FarmComponent implements OnInit {
   }
 
   syncenabled(){
-    if(this.rowData)
+    if(this.localloanobject.Farms)
    return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
   }
 
