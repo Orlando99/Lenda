@@ -146,6 +146,7 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
 
 //ag grid enterprise
 import {LicenseManager} from "ag-grid-enterprise/main";
+import { OptimizerComponent } from './components/optimizer/optimizer.component';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -197,7 +198,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     RatingComponent,
     FarmFinancialComponent,
     CellValueComponent,
-    CustomentryComponent
+    CustomentryComponent,
+    OptimizerComponent
 
   ],
   imports: [
