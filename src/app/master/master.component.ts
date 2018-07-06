@@ -4,14 +4,14 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
-  styleUrls: ['./master.component.sass']
+  styleUrls: ['./master.component.scss']
 })
 export class MasterComponent implements OnInit {
 
   constructor(private router: Router) { }
 
   ngOnInit() {
-   
+
   }
 
 }

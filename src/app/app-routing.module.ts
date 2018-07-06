@@ -23,6 +23,7 @@ import { CreateLoanComponent } from "./components/create-loan/create-loan.compon
 import { CollateralComponent } from "./components/collateral/collateral.component";
 import {FlowchartComponent} from './components/flowchart/flowchart.component';
 import { CustomentryComponent } from "./components/customentry/customentry.component";
+import { OptimizerComponent } from "./components/optimizer/optimizer.component";
 
 
 const appRoutes: Routes = [
@@ -53,6 +54,7 @@ const appRoutes: Routes = [
         { path: 'collateral', component: CollateralComponent },
         { path: 'work-in-progress', component: WorkInProgressComponent },
         { path: 'custom-entry', component: CustomentryComponent },
+        { path: 'optimizer', component: OptimizerComponent },
         { path: 'flowchart', component: FlowchartComponent },
       ] },
     ]

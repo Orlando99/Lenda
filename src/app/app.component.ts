@@ -13,7 +13,8 @@ export class AppComponent {
   title = 'LendaPlus';
   @HostListener('window:beforeunload', ['$event'])
   public beforeunloadHandler($event) {
-    this.loanstorage.clear("userid");
+    
+    //.loanstorage.clear("userid");
  }
   constructor(private toaster: ToastsManager,private router: Router, vcf: ViewContainerRef,private loanstorage:LocalStorageService) {
     this.toaster.setRootViewContainerRef(vcf);
@@ -30,9 +31,9 @@ export class AppComponent {
          router.navigateByUrl("login");
         }
       }
-      
+
     }
     })
-    
+
   }
 }

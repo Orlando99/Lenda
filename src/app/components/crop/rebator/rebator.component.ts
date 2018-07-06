@@ -40,6 +40,11 @@ export class RebatorComponent implements OnInit {
     height: '240px',
     boxSizing: 'border-box'
   };
+  defaultColDef = {
+    enableValue: true,
+    enableRowGroup: true,
+    enablePivot: true
+  };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,

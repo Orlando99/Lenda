@@ -1,0 +1,80 @@
+// Margins and Paddings
+.ml-25 {
+  margin-left: 25px;
+}
+
+.text-muted {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+// Custom style for flat style input
+.input-group-flat {
+  position: relative;
+  mat-icon {
+    position: absolute;
+    top: 10px;
+    font-size: $font-size-lg;
+    left: 10px;
+  }
+  .input-flat-form-control {
+    border-radius: 0.25em;
+    font-size: $base-font-size;
+    color: $white-90;
+    background: $white-30;
+    border: none;
+    font-size: $font-size-md;
+    font-weight: 300;
+    padding: 10px 40px;
+    min-width: 480px;
+  }
+}
+
+// TODO: Check following where these are used
+// ========
+.error{
+    background-color: red;
+}
+
+.lenda-editable-field{
+  color: blue;
+}
+
+.lenda-cellEdit-color{
+  background-color: yellow;
+}
+
+.arm-recent-record:nth-child(1){
+  margin-top: 20px;
+
+}
+
+.arm-recent-record{
+  padding-left: 30px;
+}
+
+
+#notification-header {
+  background: rgba(36, 112, 179, 1);
+  background: -moz-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -webkit-gradient(left top, right top, color-stop(0%, rgba(36, 112, 179, 1)), color-stop(100%, rgba(35, 209, 171, 1)));
+  background: -webkit-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -o-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: -ms-linear-gradient(left, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  background: linear-gradient(to right, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2470b3', endColorstr='#23d1ab', GradientType=1);
+  height: 35px;
+  margin-bottom: 2px;
+  border-radius: 5px 5px 0px 0px;
+  padding: 5px;
+}
+
+.rag-green{
+  background-color: red;
+
+}
+
+.showdetails{
+ color:white;
+ font-size: 11px;
+}
+// ===========
