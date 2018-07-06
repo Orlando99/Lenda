@@ -106,7 +106,18 @@ export class FarmComponent implements OnInit {
       { headerName: 'Rent UoM', field: 'RentUoM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : '$ per acre', value:'$ per acre'},{key : '$ Total stores', value:'$ Total stores'}]},
       },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true },
+      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true,
+      cellEditorParams: 'a',
+      valueFormatter: function (params) {
+        if(params.value){
+          var date = new Date(params.value);
+          return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+          
+        }else{
+          return '';
+        }
+        
+      }},
       { headerName: 'Waived', field: 'Cash_Rent_Waived',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
@@ -117,7 +128,9 @@ export class FarmComponent implements OnInit {
       }},
       { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  cellClass: 'editable-color', editable: true , cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : 1, value:'Yes'},{key : 0, value:'No'}]},
-      },
+      valueFormatter: function (params) {
+        return params.value === 1?'Yes' : 'No';
+      }},
       { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: 'Total Acres', field: 'FC_Total_Acres',cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
