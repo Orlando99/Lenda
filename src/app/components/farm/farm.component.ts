@@ -18,6 +18,7 @@ import { JsonConvert } from 'json2typescript';
 import { Action } from 'rxjs/scheduler/Action';
 import { PriceFormatter, PercentageFormatter } from '../../Workers/utility/aggrid/formatters';
 import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
+import { getDateCellEditor,getDateValue,formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -69,7 +70,7 @@ export class FarmComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor(),alphaNumericCellEditor : getAlphaNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(),alphaNumericCellEditor : getAlphaNumericCellEditor(),dateCellEditor : getDateCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
     this.columnDefs = [
@@ -109,18 +110,9 @@ export class FarmComponent implements OnInit {
       { headerName: 'Rent UoM', field: 'RentUoM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : '$ per acre', value:'$ per acre'},{key : '$ Total stores', value:'$ Total stores'}]},
       },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true,
-      cellEditorParams: 'a',
-      valueFormatter: function (params) {
-        if(params.value){
-          var date = new Date(params.value);
-          return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-          
-        }else{
-          return '';
-        }
-        
-      }},
+      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true, cellEditor: "dateCellEditor",
+      cellEditorParams: getDateValue,
+      valueFormatter: formatDateValue},
       { headerName: 'Waived', field: 'Cash_Rent_Waived',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
@@ -196,7 +188,6 @@ export class FarmComponent implements OnInit {
     });
   }
   rowvaluechanged(value: any) {
-
     this.currenteditedfield=null;
     this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
