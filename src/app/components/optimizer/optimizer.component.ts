@@ -7,8 +7,7 @@ import { lookupCountyValue, lookupStateValue, lookupStateRefValue } from '../../
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 @Component({
   selector: 'app-optimizer',
-  templateUrl: './optimizer.component.html',
-  styleUrls: ['./optimizer.component.scss']
+  templateUrl: './optimizer.component.html'
 })
 export class OptimizerComponent implements OnInit {
 
