@@ -270,8 +270,9 @@ export class FarmComponent implements OnInit {
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
+      this.getgridheight();
     })
-
+    
   }
 
   getgridheight() {
@@ -281,7 +282,7 @@ export class FarmComponent implements OnInit {
 
   syncenabled(){
     if(this.rowData)
-   return this.rowData.filter(p=>p.ActionStatus!=0).length>0
+   return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
   }
 
   //
