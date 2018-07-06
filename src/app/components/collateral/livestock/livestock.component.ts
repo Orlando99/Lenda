@@ -60,7 +60,7 @@ export class LivestockComponent implements OnInit {
         { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellStyle: { textAlign: "right" }, width:90 },
         { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:110},
         
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:130},
+        { headerName: 'Mkt Value', field: 'Market_Value',  editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:130},
         { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, width:130},
         { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true,width:120},
         { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
@@ -96,7 +96,8 @@ export class LivestockComponent implements OnInit {
       }else{
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 });
+        this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }):[];
+
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -112,7 +113,7 @@ export class LivestockComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
+      this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }):[];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
   }
@@ -151,9 +152,13 @@ export class LivestockComponent implements OnInit {
 
   //Grid Events
   addrow() {
+    if(this.localloanobject.LoanCollateral ==null)
+      this.localloanobject.LoanCollateral = [];
+      
     var newItem = new Loan_Collateral();
     newItem.Collateral_Category_Code = "LSK";
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.Disc_Value = 50;
     newItem.ActionStatus = 1;
     var res = this.rowData.push(newItem);
     this.localloanobject.LoanCollateral.push(newItem);
@@ -199,7 +204,7 @@ export class LivestockComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
   }
 
   onGridSizeChanged(Event: any) {

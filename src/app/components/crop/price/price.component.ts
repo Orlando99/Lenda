@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SidebarModule } from 'ng-sidebar';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model } from '../../../models/loanmodel';
@@ -36,12 +37,15 @@ export class PriceComponent implements OnInit {
   private gridApi;
   private columnApi;
   style = {
-    marginTop: '10px',
-    width: '97%',
+    width: '100%',
     height: '240px',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; }; };
+  stylesidebar={
+    width: '95%',
+    height: '240px'
+  };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -123,7 +127,7 @@ export class PriceComponent implements OnInit {
         return PercentageFormatter(params.value);
       } },
       { headerName: 'Ins UOM', field: 'Bu', editable: false },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
+      // { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
 
     ];
     ///
@@ -134,14 +138,14 @@ export class PriceComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       if (res.srccomponentedit == "PriceComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
       }
       else {
         this.localloanobject = res;
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+        this.rowData = this.localloanobject.LoanCropUnits !== null ? this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3):[];
       }
       this.getgridheight();
 
@@ -155,7 +159,7 @@ export class PriceComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+      this.rowData = this.localloanobject.LoanCropUnits !== null ? this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3):[];
 
     }
   }
@@ -212,8 +216,8 @@ export class PriceComponent implements OnInit {
 
   }
   rowvaluechanged(value: any) {
-    //Change class here for editing 
-    debugger
+    //Change class here for editing
+
     var obj = value.data;
     if (obj.Loan_CU_ID == undefined) {
       obj.ActionStatus = 1;
@@ -226,8 +230,8 @@ export class PriceComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCropUnits[rowindex] = obj;
     }
-    debugger
-    //this shall have the last edit 
+
+    //this shall have the last edit
     this.localloanobject.srccomponentedit = "PriceComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -261,19 +265,26 @@ export class PriceComponent implements OnInit {
 
   getgridheight() {
 
-    this.style.height = (29 * (this.rowData.length + 1)+9).toString() + "px";
+    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+    this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
-    this.gridApi.sizeColumnsToFit();
+    //this.gridApi.sizeColumnsToFit();
   }
   catch{
 
   }
   }
+
+  onColumnhiderequested(event,header:string){
+    let checked=event.srcElement.checked;
+    this.columnApi.setColumnVisible(header, checked);
+    //this.gridApi.sizeColumnsToFit();
+  }
 }
 function adjustheader(): void {
-  debugger
+
   document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
 }

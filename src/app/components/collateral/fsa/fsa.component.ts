@@ -47,12 +47,12 @@ export class FSAComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){ 
+    public loanapi:LoanApiService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-      
+
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
         { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
@@ -77,21 +77,21 @@ export class FSAComponent implements OnInit {
           valueFormatter: insuredFormatter},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
- 
-      this.context = { componentParent: this }; 
+
+      this.context = { componentParent: this };
   }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
       if (res.srccomponentedit == "FSAComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
       }else{
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 });
+        this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }):[];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -102,20 +102,20 @@ export class FSAComponent implements OnInit {
   }
 
   getdataforgrid() {
-    debugger
+
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 });
+      this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }):[];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
     this.adjustgrid();
   }
   onGridSizeChanged(Event: any) {
-    debugger
+
     this.adjustgrid();
   }
   private adjustgrid() {
@@ -161,9 +161,13 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
+    if(this.localloanobject.LoanCollateral ==null)
+      this.localloanobject.LoanCollateral = [];
+
     var newItem = new Loan_Collateral();
     newItem.Collateral_Category_Code = "FSA";
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.Disc_Value = 50;
     newItem.ActionStatus = 1;
     var res = this.rowData.push(newItem);
     this.localloanobject.LoanCollateral.push(newItem);
@@ -187,7 +191,7 @@ export class FSAComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex] = obj;
     }
-    //this shall have the last edit 
+    //this shall have the last edit
     this.localloanobject.srccomponentedit = "FSAComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -210,7 +214,7 @@ export class FSAComponent implements OnInit {
   }
 
   getgridheight() {
-    this.style.height = (29 * (this.rowData.length + 2) - 2).toString() + "px";
+    this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
 
 
