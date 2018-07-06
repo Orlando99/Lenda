@@ -15,7 +15,7 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
 
 
     agInit(params: any): void {
-        debugger
+
         this.params = params;
         this.value = this.params.value;
 
@@ -24,7 +24,7 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     getValue(): any {
-        debugger
+
         return this.value;
     }
 

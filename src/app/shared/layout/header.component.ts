@@ -18,7 +18,8 @@ import { versions } from '../../versions';
 
 @Component({
   selector: 'layout-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
 
 export class HeaderComponent implements OnInit {
@@ -50,7 +51,7 @@ export class HeaderComponent implements OnInit {
       if(res!=undefined && res!=null)
             this.loanid=res.Loan_Full_ID.replace("-","/");
     })
-  
+
         this.getloanid();
 
         // router.events.subscribe(res=>{
@@ -104,7 +105,7 @@ export class HeaderComponent implements OnInit {
     setTimeout(() => {
       this.initialtoggle();
     }, 1000);
-    
+
   }
   }
   toggleRightSidenav() {
@@ -148,7 +149,7 @@ export class HeaderComponent implements OnInit {
         else {
           this.toaster.error("Could not fetch Loan Object from API")
         }
-        
+
         loaded = true;
       });
 
@@ -166,12 +167,12 @@ export class HeaderComponent implements OnInit {
   getloanid(){
 
     try{
-      debugger
+
       this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");
       this.Databasename=this.localst.retrieve(environment.referencedatakey).Databasename;
     }
     catch{
-      
+
     }
   }
 }

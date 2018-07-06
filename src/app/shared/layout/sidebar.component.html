@@ -1,95 +1,80 @@
+<mat-sidenav #leftSidenav class="arm-sidenav" id="arm-sidenav" [mode]="'over'" opened="true" (open)="onOpen()" (close)="onClose()">
+  <mat-nav-list class="arm-sidenav-main">
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/summary']">
+      <mat-icon mat-list-icon>dehaze</mat-icon>
+      <p matLine>Summary</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/borrower']">
+      <mat-icon mat-list-icon>person</mat-icon>
+      <p matLine>Borrower</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/crop']">
+      <mat-icon mat-list-icon>spa</mat-icon>
+      <p matLine>Crop</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/farm']">
+      <mat-icon mat-list-icon>local_grocery_store</mat-icon>
+      <p matLine>Farm</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/insurance']">
+      <mat-icon mat-list-icon>beach_access</mat-icon>
+      <p matLine>Insurance</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/budget']">
+      <mat-icon mat-list-icon>event_note</mat-icon>
+      <p matLine>Budget</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/collateral']">
+      <mat-icon mat-list-icon>link</mat-icon>
+      <p matLine>Collateral</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/committee']">
+      <mat-icon mat-list-icon>people</mat-icon>
+      <p matLine>Committeee</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/closing']">
+      <mat-icon mat-list-icon>home</mat-icon>
+      <p matLine>Closing</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/preferences']">
+      <mat-icon mat-list-icon>extension</mat-icon>
+      <p matLine>My Preferences</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/favorites']">
+      <mat-icon mat-list-icon>star</mat-icon>
+      <p matLine>Favorites</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/flowchart']">
+      <mat-icon mat-list-icon>map</mat-icon>
+      <p matLine>Flowchart</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/work-in-progress']">
+      <mat-icon mat-list-icon>star</mat-icon>
+      <p matLine>Work In Progress</p>
+    </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/custom-entry']">
+      <mat-icon mat-list-icon>star</mat-icon>
+      <p matLine>Custom Entry</p>
+    </mat-list-item>
+    <br>
+    <mat-list-item class="arm-recent-record normalize" *ngIf="isExpanded">
+      <p matLine>Walter Kluwer</p>
+    </mat-list-item>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Knowledge Lake</p>
+    </mat-list-item>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Nortridge</p>
+    </mat-list-item>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Net Suite</p>
+    </mat-list-item>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>Domo</p>
+    </mat-list-item>
+    <mat-list-item class="arm-recent-record unfeatured" *ngIf="isExpanded">
+      <p matLine>SharePoint</p>
+    </mat-list-item>
 
-
-    <mat-sidenav #leftSidenav class="arm-sidenav"  id="arm-sidenav" [mode]="'over'" opened="true"  (open)="onOpen()" (close)="onClose()" >
-      <mat-nav-list class="arm-sidenav-main">
-        <!-- <mat-list-item class="navLogo min-logo" *ngIf="!isExpanded" (mouseover)="toggleSideBar($event)">
-          <a href="" class="navIcons">
-            <img src="assets/images/lendalogomin.png" alt="Lenda Logo">
-          </a>
-        </mat-list-item>
-        <mat-list-item class="navLogo">
-          <a href="" class="navIcons">
-            <img src="assets/images/lendalogo.png" alt="Lenda Logo">
-          </a>
-          <button mat-icon-button (click)="toggleSideBar($event)">
-            <mat-icon >chevron_left</mat-icon>
-          </button>
-        </mat-list-item>-->
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/summary']">
-         <mat-icon mat-list-icon >dehaze</mat-icon>
-           <p matLine >Summary</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/borrower']">
-         <mat-icon mat-list-icon>person</mat-icon>
-           <p matLine >Borrower</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/crop']">
-         <mat-icon mat-list-icon>spa</mat-icon>
-           <p matLine>Crop</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/farm']">
-         <mat-icon mat-list-icon>local_grocery_store</mat-icon>
-           <p matLine>Farm</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/insurance']">
-         <mat-icon mat-list-icon>beach_access</mat-icon>
-           <p matLine>Insurance</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/budget']">
-         <mat-icon mat-list-icon>event_note</mat-icon>
-           <p matLine>Budget</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/collateral']">
-         <mat-icon mat-list-icon>link</mat-icon>
-           <p matLine>Collateral</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/committee']">
-         <mat-icon mat-list-icon>people</mat-icon>
-           <p matLine>Committeee</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/closing']">
-         <mat-icon mat-list-icon>home</mat-icon>
-           <p matLine>Closing</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/preferences']">
-         <mat-icon mat-list-icon>extension</mat-icon>
-           <p matLine>My Preferences</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/favorites']">
-         <mat-icon mat-list-icon>star</mat-icon>
-           <p matLine>Favorites</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/flowchart']">
-          <mat-icon mat-list-icon>map</mat-icon>
-          <p matLine>Flowchart</p>
-        </mat-list-item>
-        <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/work-in-progress']">
-          <mat-icon mat-list-icon>star</mat-icon>
-            <p matLine>Work In Progress</p>
-         </mat-list-item>
-         <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/custom-entry']">
-          <mat-icon mat-list-icon>star</mat-icon>
-            <p matLine>Custom Entry</p>
-         </mat-list-item>
-        <br>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">Walter Kluwer</p>
-        </mat-list-item>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">Knowledge Lake</p>
-        </mat-list-item>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">Nortridge</p>
-        </mat-list-item>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">Net Suite</p>
-        </mat-list-item>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">Domo</p>
-        </mat-list-item>
-        <mat-list-item class="arm-recent-record">
-          <p matLine *ngIf = "isExpanded">SharePoint</p>
-        </mat-list-item>
-
-      </mat-nav-list>
-    </mat-sidenav>
+  </mat-nav-list>
+</mat-sidenav>

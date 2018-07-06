@@ -31,9 +31,9 @@ export class AppComponent {
          router.navigateByUrl("login");
         }
       }
-      
+
     }
     })
-    
+
   }
 }

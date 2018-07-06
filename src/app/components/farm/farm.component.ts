@@ -154,7 +154,7 @@ export class FarmComponent implements OnInit {
       }
        this.gridApi.setRowData(this.rowData);
        if(this.currenteditedfield!=null){
-         debugger
+
         this.gridApi.startEditingCell({
           rowIndex: this.currenteditrowindex,
           colKey: this.currenteditedfield
@@ -181,7 +181,7 @@ export class FarmComponent implements OnInit {
   }
 
   cellEditingStarted(value:any){
-    debugger
+
     this.currenteditedfield=value.colDef.field;
     this.currenteditrowindex=value.rowIndex;
     this.gridApi.startEditingCell({
@@ -190,7 +190,7 @@ export class FarmComponent implements OnInit {
     });
   }
   rowvaluechanged(value: any) {
-    debugger
+
     this.currenteditedfield=null;
     this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
