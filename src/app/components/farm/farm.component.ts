@@ -37,6 +37,7 @@ export class FarmComponent implements OnInit {
   public editType;
   private gridApi;
   private columnApi;
+  defaultColDef : any;
   //region Ag grid Configuration
   style = {
     marginTop: '10px',
@@ -54,7 +55,7 @@ export class FarmComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -79,7 +80,8 @@ export class FarmComponent implements OnInit {
         valueFormatter: function (params) {
           return lookupStateValue(params.colDef.cellEditorParams.values, params.value);
         },
-        valueSetter: Statevaluesetter
+        valueSetter: Statevaluesetter,
+        width : 70
       },
       {
         headerName: 'County', field: 'Farm_County_ID',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
@@ -92,7 +94,7 @@ export class FarmComponent implements OnInit {
       { headerName: '% Prod', field: 'Prod',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
-      } },
+      },width : 70 },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
       { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
       { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false},
@@ -125,18 +127,21 @@ export class FarmComponent implements OnInit {
       { headerName: '% Rent', field: 'Rentperc',  cellClass: 'editable-color', editable: true,
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
-      }},
+      },width : 70},
       { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  cellClass: 'editable-color', editable: true , cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : 1, value:'Yes'},{key : 0, value:'No'}]},
       valueFormatter: function (params) {
         return params.value === 1?'Yes' : 'No';
-      }},
+      },width : 72},
       { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: 'Total Acres', field: 'FC_Total_Acres',cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
       { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];
+    this.defaultColDef = {
+      width : 100
+    }
     ///
     this.context = { componentParent: this };
   }
