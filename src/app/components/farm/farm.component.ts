@@ -17,6 +17,7 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { Action } from 'rxjs/scheduler/Action';
 import { PriceFormatter, PercentageFormatter } from '../../Workers/utility/aggrid/formatters';
+import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -68,7 +69,7 @@ export class FarmComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(),alphaNumericCellEditor : getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
     this.columnDefs = [
@@ -95,9 +96,9 @@ export class FarmComponent implements OnInit {
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
       },width : 70 },
-      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
-      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false},
-      { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false},
+      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
+      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
+      { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
       { headerName: 'Rated', field: 'Rated',  cellClass: 'editable-color', editable: true,calculationinvoke:false, cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : 'AAA', value:'AAA'},{key : 'BBB', value:'BBB'},{key : 'NR', value:'NR'}]},
       },
