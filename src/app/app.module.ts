@@ -148,6 +148,10 @@ import { InsurancecalculationworkerService } from './Workers/calculations/insura
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
 
+//ag grid enterprise
+import {LicenseManager} from "ag-grid-enterprise/main";
+LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
+
 @NgModule({
   declarations: [
     NumericEditor,

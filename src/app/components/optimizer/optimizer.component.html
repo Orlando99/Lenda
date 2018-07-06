@@ -1,3 +1,40 @@
-<p>
-  optimizer works!
-</p>
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          OPTIMIZER
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <button (click)="synctoDb()" [disabled]="!syncenabled()"  mat-icon-button>
+        <mat-icon [style.color] = "!syncenabled()">publish</mat-icon>
+      </button>
+  
+      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
+        
+      <div class="container bottom">
+        <div class="row">
+        <ag-grid-angular  [ngStyle]="style"
+         class="ag-theme-balham"
+        [animateRows]="true"
+        [enableSorting]="true"
+        [suppressAggFuncInHeader]="true"
+        [enableFilter]="true"
+        [showToolPanel]="false"
+        [singleClickEdit]="true"
+        [defaultColDef]="defaultColDef"
+        [rowGroupPanelShow]="true"
+        (cellEditingStopped)="rowvaluechanged($event)"
+        [rowData]="rowData" 
+        [suppressAggFuncInHeader]="true"
+        [groupIncludeFooter]="true"
+        (gridReady)="onGridReady($event)"
+        [headerHeight]="45"
+        [columnDefs]="columnDefs">
+        </ag-grid-angular>
+        </div>
+      </div>
+            <br>
+    </mat-expansion-panel>
+    </mat-accordion>
