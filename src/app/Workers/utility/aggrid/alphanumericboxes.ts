@@ -1,7 +1,5 @@
-import { isNumber } from "util";
 
-
-//Numeric cell editor config
+//Alpha Numeric cell editor config
 export function getAlphaNumericCellEditor() {
     function isCharAlphaNumeric(charStr) {
      
@@ -80,24 +78,3 @@ export function getAlphaNumericCellEditor() {
     return AlphaNumericCellEditor;
   }
   
-// export function numberValueSetter(params) {
-//   
-//     if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
-//     params.newValue=0;    
-//     var data=parseFloat(params.newValue);
-//     params.data[params.colDef.field]=data;
-//     return true;
-//   }
-
-//   export function numberWithOneDecPrecValueSetter(params) {
-//     
-//       if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
-//       params.newValue=0;    
-//       var data=parseFloat(params.newValue);
-//       data =  Math.round( data * 10 ) / 10;
-//       params.data[params.colDef.field]=data;
-//       return true;
-//     }
-  
-  
-  //Numeric cell editor config Ends
