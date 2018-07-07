@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  public isExpanded = true;
+  public isExpanded = false;
   @ViewChild('leftSidenav') public sideNav: MatSidenav;
   private mainHeader;
   private mainContent;
