@@ -49,6 +49,8 @@ mat-sidenav  {
   background: $sidebar-bg-color;
   overflow-y: auto;
   position: fixed;
+  // TODO: If footer is not required, give height of 100%
+  // and hide footer
   height: calc(100% - 60px);
   top: 0;
   left: 0;
