@@ -1,7 +1,13 @@
+@import './../../sass/theme/variables';
+
 #arm-main-content {
   padding-top: 80px;
   padding-bottom: 50px;
-  margin-left: 215px;
+  margin-left: $sidebar-minimal-view;
   -webkit-transition: margin 0.25s;
   transition: margin 0.25s;
+
+  &.is-sidebar-expanded {
+    margin-left: $sidebar-expanded-view;
+  }
 }

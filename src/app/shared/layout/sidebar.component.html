@@ -1,4 +1,4 @@
-<mat-sidenav #leftSidenav class="arm-sidenav" id="arm-sidenav" [mode]="'over'" opened="true" (open)="onOpen()" (close)="onClose()">
+<mat-sidenav #leftSidenav class="arm-sidenav" [ngClass]="{'expanded': isExpanded}" id="arm-sidenav" [mode]="'over'" opened="true">
   <mat-nav-list class="arm-sidenav-main">
     <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/summary']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-menu"></i></mat-icon>

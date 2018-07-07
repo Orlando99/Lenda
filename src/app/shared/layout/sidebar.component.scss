@@ -14,6 +14,10 @@ mat-sidenav  {
     }
   }
 
+  .mat-list-item {
+    height: 50px;
+  }
+
   .mat-list-item:not(.unfeatured):not(.normalize) p.mat-line {
     margin-top: -1px;
     color: $white-90;
@@ -51,15 +55,15 @@ mat-sidenav  {
   position: fixed;
   // TODO: If footer is not required, give height of 100%
   // and hide footer
-  height: calc(100% - 60px);
+  height: calc(100% - 30px);
   top: 0;
   left: 0;
-  width: 70px;
+  width: $sidebar-minimal-view;
   -webkit-transition: width 0.25s;
   transition: width 0.25s;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   &.expanded {
-    width: 215px;
+    width: $sidebar-expanded-view;
   }
 }
 
