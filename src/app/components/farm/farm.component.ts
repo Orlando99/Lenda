@@ -16,7 +16,7 @@ import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { Action } from 'rxjs/scheduler/Action';
-import { PriceFormatter, PercentageFormatter } from '../../Workers/utility/aggrid/formatters';
+import { PriceFormatter, PercentageFormatter, numberWithOneDecPrecValueFormatter } from '../../Workers/utility/aggrid/formatters';
 import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
 import { getDateCellEditor,getDateValue,formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
@@ -126,9 +126,12 @@ export class FarmComponent implements OnInit {
       valueFormatter: function (params) {
         return params.value === 1?'Yes' : 'No';
       },width : 72},
-      { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
-      { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres',cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter },
+      { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+      valueFormatter : numberWithOneDecPrecValueFormatter },
+      { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+      valueFormatter : numberWithOneDecPrecValueFormatter },
+      { headerName: 'Total Acres', field: 'FC_Total_Acres',cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+      valueFormatter : numberWithOneDecPrecValueFormatter },
       { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
 
     ];

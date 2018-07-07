@@ -4,7 +4,7 @@ export function getAlphaNumericCellEditor() {
     function isCharAlphaNumeric(charStr) {
      
       //for alphaNumeric
-      return /^[a-z0-9 ]+$/i.test(charStr);
+      return /^[a-z0-9 ']+$/i.test(charStr);
     
     }
    
