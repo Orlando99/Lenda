@@ -49,14 +49,13 @@ mat-sidenav  {
   background: $sidebar-bg-color;
   overflow-y: auto;
   position: fixed;
-  height: 100%;
+  height: calc(100% - 60px);
   top: 0;
   left: 0;
   width: 70px;
   -webkit-transition: width 0.25s;
   transition: width 0.25s;
   -ms-overflow-style: -ms-autohiding-scrollbar;
-  padding-bottom: 60px;
   &.expanded {
     width: 215px;
   }
