@@ -34,6 +34,7 @@ export class FarmComponent implements OnInit {
   public currenteditedfield:string=null;
   public currenteditrowindex:number=-1;
   public components;
+  private popupParent;
   public context;
   public frameworkcomponents;
   public editType;
@@ -57,7 +58,7 @@ export class FarmComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    //params.api.sizeColumnsToFit();
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -140,6 +141,7 @@ export class FarmComponent implements OnInit {
     }
     ///
     this.context = { componentParent: this };
+    this.popupParent = document.querySelector("body");
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -191,6 +193,8 @@ export class FarmComponent implements OnInit {
     });
   }
   rowvaluechanged(value: any) {
+    debugger
+   let cells= this.gridApi.getEditingCells();
     this.currenteditedfield=null;
     this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
