@@ -124,14 +124,13 @@ export function numberValueSetter(params) {
   }
 
   export function numberWithOneDecPrecValueSetter(params) {
-    debugger
       if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
       params.newValue=0;    
       var data=parseFloat(params.newValue);
-      data =  Math.round( data * 10 ) / 10;
+      data = parseFloat(data.toFixed(1));
       params.data[params.colDef.field]=data;
       return true;
     }
-  
-  
+
+ 
   //Numeric cell editor config Ends
