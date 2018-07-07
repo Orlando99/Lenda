@@ -23,7 +23,7 @@ export class LivestockComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
- 
+
   public rowData = [];
   public components;
   public context;
@@ -33,33 +33,33 @@ export class LivestockComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public pinnedBottomRowData;
-  
+
   style = {
     marginTop: '10px',
     width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
-  
+
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){ 
+    public loanapi:LoanApiService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    
+
 
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
         { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
         { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellStyle: { textAlign: "right" }, width:90 },
         { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:110},
-        
+
         { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:130},
         { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, width:130},
         { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true,width:120},
@@ -83,14 +83,14 @@ export class LivestockComponent implements OnInit {
       ];
 
 
-      this.context = { componentParent: this }; 
+      this.context = { componentParent: this };
   }
-  
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral - Livestock', "LocalStorage updated");
       if (res.srccomponentedit == "LivestockComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
       }else{
@@ -122,7 +122,7 @@ export class LivestockComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
   }
- 
+
   syncenabled(){
     return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
   }
@@ -160,7 +160,7 @@ export class LivestockComponent implements OnInit {
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
-      colKey: "Collateral_Description" 
+      colKey: "Collateral_Description"
     });
     this.getgridheight();
   }
@@ -203,7 +203,7 @@ export class LivestockComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
     this.gridApi.sizeColumnsToFit();
   }

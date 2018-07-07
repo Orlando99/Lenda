@@ -57,10 +57,10 @@ export class HeaderComponent implements OnInit {
         // router.events.subscribe(res=>{
         //   if(res instanceof NavigationEnd)
         //   {
-        //     debugger
+        //
         //     this.initialtoggle();
         //   }
-        
+
         // })
   }
 
@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.isExpanded = false;
-    
+
     this.value = this.localst.retrieve(environment.logpriority);
   }
 
@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit {
   }
   }
   toggleRightSidenav() {
-    debugger
+
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {

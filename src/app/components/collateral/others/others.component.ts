@@ -23,7 +23,7 @@ export class OthersComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
- 
+
   public rowData = [];
   public components;
   public context;
@@ -33,26 +33,26 @@ export class OthersComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public pinnedBottomRowData;
-  
+
   style = {
     marginTop: '10px',
     width: '97%',
     height: '110px',
     boxSizing: 'border-box'
   };
-  
+
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){ 
+    public loanapi:LoanApiService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-      
+
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
         { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
@@ -77,15 +77,15 @@ export class OthersComponent implements OnInit {
           valueFormatter: insuredFormatter},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
- 
-      this.context = { componentParent: this }; 
+
+      this.context = { componentParent: this };
   }
-  
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
       if (res.srccomponentedit == "OthersComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
       }else{
@@ -117,7 +117,7 @@ export class OthersComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
   }
- 
+
   syncenabled(){
     return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
   }
@@ -155,7 +155,7 @@ export class OthersComponent implements OnInit {
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
-      colKey: "Collateral_Description" 
+      colKey: "Collateral_Description"
     });
     this.getgridheight();
   }
@@ -172,7 +172,7 @@ export class OthersComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex]=obj;
     }
-    //this shall have the last edit 
+    //this shall have the last edit
     this.localloanobject.srccomponentedit = "OthersComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -199,7 +199,7 @@ export class OthersComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
     this.gridApi.sizeColumnsToFit();
   }

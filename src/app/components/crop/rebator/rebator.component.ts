@@ -47,13 +47,13 @@ export class RebatorComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){ 
+    public loanapi:LoanApiService){
 
       //Aggrid Specific Code
       this.components = { numericCellEditor: getNumericCellEditor() };
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
-      
+
       //Coldef here
       this.columnDefs = [
         { headerName: 'Rebator', field: 'Assoc_Name',  editable: true },
@@ -71,7 +71,7 @@ export class RebatorComponent implements OnInit {
       this.context = { componentParent: this };
       //
   }
-  
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
@@ -81,7 +81,7 @@ export class RebatorComponent implements OnInit {
         this.getgridheight();
     })
     this.getdataforgrid();
-    
+
   }
 
   getdataforgrid() {
@@ -94,7 +94,7 @@ export class RebatorComponent implements OnInit {
 
     }
   }
- 
+
   synctoDb() {
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
@@ -161,7 +161,7 @@ export class RebatorComponent implements OnInit {
         var obj = this.localloanobject.Association[rowIndex];
         if (obj.Assoc_ID == 0) {
           this.localloanobject.Association.splice(rowIndex, 1);
-          
+
         }
         else {
           this.deleteAction = true;
@@ -182,7 +182,7 @@ export class RebatorComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
     this.gridApi.sizeColumnsToFit();
   }

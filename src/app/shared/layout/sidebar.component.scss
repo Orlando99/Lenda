@@ -32,14 +32,14 @@ mat-sidenav  {
   .mat-list-item-focus,
   .mat-list-item .active {
     background: $sidebar-selected-bg-color;
-    mat-icon {
+    .flaticon {
       color: $nav-hover-color;
     }
   }
 
   .mat-list-item:not(.navLogo):hover{
     background: $nav-hover-color;
-    mat-icon {
+    .flaticon {
       color: $white-90;
     }
   }
