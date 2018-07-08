@@ -1,4 +1,4 @@
-<div>
+<div class="section-one row-section">
   <div class="right-align">
     <bar-rating [readOnly]="true" [theme]="'stars'" [(rate)]="starsCount" [max]="5"></bar-rating>
   </div>
@@ -17,7 +17,7 @@
     </div>
   </div>
   <div>
-    <div class="col">
+    <div class="chart-wrapper">
       <span class="extra-info">
         Loan 0037037-001
       </span><br />
@@ -25,19 +25,20 @@
         Ag-Input (CPS)
       </span>
       <div class="progress-chart">
-        <canvas class="progress-chart" baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
+        <canvas baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
       [chartType]="doughnutChartType"></canvas>
       </div>
     </div>
-    <span class="bottom-icons">
-      <i class="flaticon-wrench inline icon">
-      </i>
-      <i class="flaticon-multiple-users-silhouette inline icon">
-      </i>
-      <i class="flaticon-hipster inline icon">
-      </i>
-      <i class="flaticon-random inline icon">
-      </i>
-    </span>
   </div>
+
+  <span class="bottom-icons">
+    <i class="flaticon-wrench inline icon">
+    </i>
+    <i class="flaticon-multiple-users-silhouette inline icon">
+    </i>
+    <i class="flaticon-hipster inline icon">
+    </i>
+    <i class="flaticon-random inline icon">
+    </i>
+  </span>
 </div>

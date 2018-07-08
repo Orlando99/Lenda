@@ -9,6 +9,7 @@ declare var Chart;
 })
 export class CompanyInfoComponent implements OnInit {
   public starsCount: number = 3.5;
+  public chartAreaRight: number = 100;
 
   // TODO: Replace this data with live API
   public doughnutChartLabels: string[] = ['Progress', 'Remaining'];
@@ -25,7 +26,7 @@ export class CompanyInfoComponent implements OnInit {
     }];
 
   public chartOptions: any = {
-    cutoutPercentage: 70,
+    cutoutPercentage: 75,
     legend: {
       display: false
     },
@@ -36,6 +37,14 @@ export class CompanyInfoComponent implements OnInit {
         textStyle: chartSettings.doughnut.typography.textStyle,
         iconStyle: chartSettings.doughnut.typography.iconStyle,
         textSuffixStyle: chartSettings.doughnut.typography.textSuffixStyle
+      }
+    },
+    layout: {
+      padding: {
+        left: this.chartAreaRight,
+        right: 0,
+        top: 0,
+        bottom: 0
       }
     }
   };
@@ -71,10 +80,10 @@ export class CompanyInfoComponent implements OnInit {
 
           // Set text - percentage
           ctx.font = centerConfig.textStyle;
-          ctx.fillText(centerConfig.text, centerX  - 5, centerY - 25);
+          ctx.fillText(centerConfig.text, centerX - 5, centerY - 15);
           // Smaller font for % text
           ctx.font = centerConfig.textSuffixStyle;
-          ctx.fillText('%',  centerX + 15, centerY - 25);
+          ctx.fillText('%', centerX + 15, centerY - 20);
         }
       }
     });

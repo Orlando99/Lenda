@@ -1,5 +1,11 @@
 @import "./../../../../../sass/theme/variables";
 
+.section-one {
+  padding-left: 10px;
+  height: 100%;
+  position: relative;
+}
+
 .company-info {
   padding-top: 10px;
 }
@@ -22,13 +28,20 @@
   padding-left: 25px;
 }
 
+.chart-wrapper {
+  position: relative;
+}
+
 .progress-chart {
-  margin-left: 15px;
-  margin-top: -30px;
+  right: -10px;
+  position: absolute;
+  max-width: 250px;
+  width: 250px;
 }
 
 .bottom-icons {
-  margin-top: -50px;
+  position: absolute;
+  bottom: 0;
   display: inline-block;
   .icon {
     padding: 0 5px;
@@ -49,4 +62,8 @@
   .flaticon-random {
     color: #c14d48;
   }
+}
+
+.row-section {
+  padding: 10px;
 }

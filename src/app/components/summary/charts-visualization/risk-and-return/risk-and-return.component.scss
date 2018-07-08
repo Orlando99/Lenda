@@ -12,3 +12,12 @@
     margin: 0 10px;
   }
 }
+
+.row-section {
+  height: 50%;
+  padding: 10px;
+
+  &:first-child {
+    border-bottom: 1px solid #eee;
+  }
+}
