@@ -1,0 +1,11 @@
+.summary-section {
+  padding: 10px;
+  min-height: 300px;
+  height: 300px;
+  max-height: 300px;
+  border-bottom: 1px solid #eee;
+
+  &:nth-child(1), &:nth-child(2) {
+    border-right: 1px solid #eee;
+  }
+}
