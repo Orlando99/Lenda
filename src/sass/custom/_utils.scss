@@ -16,6 +16,18 @@
   color: $primary-color;
 }
 
+.inline {
+  &[class^="flaticon-"]:before, &[class*=" flaticon-"]:before,
+  &[class^="flaticon-"]:after, &[class*=" flaticon-"]:after {
+      display: inline;
+  }
+}
+
+// Layout helpers
+.flex {
+  display: flex;
+}
+
 // Custom style for flat style input
 .input-group-flat {
   position: relative;

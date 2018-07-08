@@ -35,7 +35,8 @@ export class HeaderComponent implements OnInit {
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  private isExpanded: boolean = true;
+  public isExpanded: boolean = true;
+  public isRightBarExpanded;
 
   constructor(
     private globalService: GlobalService,

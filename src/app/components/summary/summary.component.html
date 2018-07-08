@@ -1,91 +1,87 @@
 <div class="basic-container">
+  <app-charts-visualization> </app-charts-visualization>
 
   <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        LOAN INFORMATION
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <app-spiner *ngIf="loading"></app-spiner>
-    <div *ngIf="allDataFetched && !loading" class="container">
-      <div class="row">
-        <div class="col s3">
-          <div class="section">
-            <h4>Applicant</h4>
-            <p>{{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_Last_Name}} <br><br>
-            {{localborrowerobject.Borrower_Address}} <br>
-            {{localborrowerobject.Borrower_City}}, {{localborrowerobject.Borrower_State_ID}} {{localborrowerobject.Borrower_Zip}}<br>
-            {{localborrowerobject.Borrower_Phone}} <br>
-            {{localborrowerobject.Borrower_Email}} </p>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          LOAN INFORMATION
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-spiner *ngIf="loading"></app-spiner>
+      <div *ngIf="allDataFetched && !loading" class="container">
+        <div class="row">
+          <div class="col s3">
+            <div class="section">
+              <h4>Applicant</h4>
+              <p>{{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_Last_Name}} <br><br> {{localborrowerobject.Borrower_Address}}
+                <br> {{localborrowerobject.Borrower_City}}, {{localborrowerobject.Borrower_State_ID}} {{localborrowerobject.Borrower_Zip}}<br>                {{localborrowerobject.Borrower_Phone}} <br> {{localborrowerobject.Borrower_Email}} </p>
+            </div>
           </div>
-        </div>
-        <div class="col s3">
-          <div class="section">
-            <h4>Co-Applicant</h4>
-            <p>{{localborrowerobject.Co_Borrower_First_Name }} {{localborrowerobject.Co_Borrower_Last_Name }} <br><br>
-            {{localborrowerobject.Co_Borrower_Address }} <br>
-            {{localborrowerobject.Co_Borrower_City }}  {{localborrowerobject.Co_Borrower_State }} {{localborrowerobject.Co_Borrower_Zip }}<br>
-            {{localborrowerobject.Co_Borrower_Phone }} <br>
-            {{localborrowerobject.Co_Borrower_email }} </p>
+          <div class="col s3">
+            <div class="section">
+              <h4>Co-Applicant</h4>
+              <p>{{localborrowerobject.Co_Borrower_First_Name }} {{localborrowerobject.Co_Borrower_Last_Name }} <br><br> {{localborrowerobject.Co_Borrower_Address
+                }} <br> {{localborrowerobject.Co_Borrower_City }} {{localborrowerobject.Co_Borrower_State }} {{localborrowerobject.Co_Borrower_Zip
+                }}<br> {{localborrowerobject.Co_Borrower_Phone }} <br> {{localborrowerobject.Co_Borrower_email }} </p>
+            </div>
+
+          </div>
+          <div class="col s2">
+            <div class="section">
+              <h4>Originating Officer</h4>
+              <p>--</p>
+              <h4>Application Date </h4>
+              <p>{{localborrowerobject.Application_Date | date:'MM/dd/yyyy' }}</p>
+              <h4>ARM Location </h4>
+              <p>--</p>
+            </div>
+          </div>
+          <div class="col s2">
+            <div class="section">
+              <h4>Arm Commitment</h4>
+              <p> $ {{localborrowerobject.ARM_Commitment}}
+              </p>
+              <h4>Dist Commitment </h4>
+              <p> $ {{localborrowerobject.Dist_Commitment}}
+              </p>
+            </div>
+          </div>
+          <div class="col s2">
+            <div class="section">
+              <h4>Interest Rate
+              </h4>
+              <p> {{localborrowerobject.Rate_Percent}} %
+              </p>
+              <h4>Loan Orig. Fee
+              </h4>
+              <p> {{localborrowerobject.Orgination_Fee_Percent}} %
+              </p>
+              <h4>Loan Srvc. Fee
+              </h4>
+              <p> {{localborrowerobject.Service_Fee_Percent}} %
+              </p>
+              <h4>Maturity Date
+              </h4>
+              <p> {{localborrowerobject.Maturity_Date | date:'MM/dd/yyyy'}}
+              </p>
+            </div>
           </div>
 
         </div>
-        <div class="col s2">
-          <div class="section">
-            <h4>Originating Officer</h4>
-            <p>--</p>
-            <h4>Application Date </h4>
-            <p>{{localborrowerobject.Application_Date | date:'MM/dd/yyyy' }}</p>
-            <h4>ARM Location </h4>
-            <p>--</p>
-          </div>
+        <h3>LOAN COMMENT</h3>
+        <div class="row">
+          <p>type comment here. loan comment editable until recommended. committee comment default is "urgent" but can be changed
+            to "passive" at any time. analyst comment default is "passive" but can be changed to "urgent" at any time. any
+            committee comment can be checked as "watchlist". watchlist comments automatically add management "report to"
+            chain and risk team to committee when checked and remove when unchecked. all comments are committee comments
+            are market read at the time the loan is approved. committee will not be notified of comments until they have
+            voted. committee cannot vote until all comments have been marked "read". emoji selection will promt a vote and/or
+            comment depending upon emoji catagory.
+          </p>
         </div>
-        <div class="col s2">
-          <div class="section">
-            <h4>Arm Commitment</h4>
-            <p> $ {{localborrowerobject.ARM_Commitment}}
-            </p>
-            <h4>Dist Commitment </h4>
-            <p> $ {{localborrowerobject.Dist_Commitment}}
-            </p>
-          </div>
-        </div>
-        <div class="col s2">
-          <div class="section">
-            <h4>Interest Rate
-            </h4>
-            <p> {{localborrowerobject.Rate_Percent}} %
-            </p>
-            <h4>Loan Orig. Fee
-            </h4>
-            <p> {{localborrowerobject.Orgination_Fee_Percent}} %
-            </p>
-            <h4>Loan Srvc. Fee
-            </h4>
-            <p> {{localborrowerobject.Service_Fee_Percent}} %
-            </p>
-            <h4>Maturity Date
-            </h4>
-            <p> {{localborrowerobject.Maturity_Date  | date:'MM/dd/yyyy'}}
-            </p>
-          </div>
-        </div>
-
       </div>
-      <h3>LOAN COMMENT</h3>
-      <div class="row">
-        <p>type comment here. loan comment editable until recommended. committee comment default is "urgent" but can be changed
-          to "passive" at any time. analyst comment default is "passive" but can be changed to "urgent" at any time. any
-          committee comment can be checked as "watchlist". watchlist comments automatically add management "report to" chain
-          and risk team to committee when checked and remove when unchecked. all comments are committee comments are market
-          read at the time the loan is approved. committee will not be notified of comments until they have voted. committee
-          cannot vote until all comments have been marked "read". emoji selection will promt a vote and/or comment depending
-          upon emoji catagory.
-        </p>
-      </div>
-    </div>
-  </mat-expansion-panel>
+    </mat-expansion-panel>
   </mat-accordion>
 
   <!-- Financials here -->

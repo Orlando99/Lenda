@@ -9,7 +9,7 @@ import { LayoutService } from '../shared/layout/layout.service';
   providers: [LayoutService]
 })
 export class MasterComponent implements OnInit {
-  private isSidebarExpanded: boolean = true;
+  public isSidebarExpanded: boolean = true;
 
   constructor(private router: Router,
     public layoutService: LayoutService) { }
