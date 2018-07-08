@@ -30,20 +30,24 @@
 /* margin-left: 20px; */
 }
 
-.flaticon-menu:before { content: "\f100"; }
-.flaticon-right-arrow:before { content: "\f101"; }
-.flaticon-back:before { content: "\f102"; }
-.flaticon-user-1:before { content: "\f103"; }
-.flaticon-team:before { content: "\f104"; }
-.flaticon-flowchart:before { content: "\f105"; }
-.flaticon-star:before { content: "\f106"; }
-.flaticon-preferences:before { content: "\f107"; }
-.flaticon-checklist:before { content: "\f108"; }
-.flaticon-group:before { content: "\f109"; }
-.flaticon-link:before { content: "\f10a"; }
-.flaticon-gear:before { content: "\f10b"; }
-.flaticon-calculator:before { content: "\f10c"; }
-.flaticon-umbrella:before { content: "\f10d"; }
-.flaticon-tractor:before { content: "\f10e"; }
-.flaticon-plant:before { content: "\f10f"; }
-.flaticon-user:before { content: "\f110"; }
+.flaticon-random:before { content: "\f100"; }
+.flaticon-hipster:before { content: "\f101"; }
+.flaticon-multiple-users-silhouette:before { content: "\f102"; }
+.flaticon-wrench:before { content: "\f103"; }
+.flaticon-menu:before { content: "\f104"; }
+.flaticon-right-arrow:before { content: "\f105"; }
+.flaticon-back:before { content: "\f106"; }
+.flaticon-user-1:before { content: "\f107"; }
+.flaticon-team:before { content: "\f108"; }
+.flaticon-flowchart:before { content: "\f109"; }
+.flaticon-star:before { content: "\f10a"; }
+.flaticon-preferences:before { content: "\f10b"; }
+.flaticon-checklist:before { content: "\f10c"; }
+.flaticon-group:before { content: "\f10d"; }
+.flaticon-link:before { content: "\f10e"; }
+.flaticon-gear:before { content: "\f10f"; }
+.flaticon-calculator:before { content: "\f110"; }
+.flaticon-umbrella:before { content: "\f111"; }
+.flaticon-tractor:before { content: "\f112"; }
+.flaticon-plant:before { content: "\f113"; }
+.flaticon-user:before { content: "\f114"; }
