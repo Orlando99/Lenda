@@ -1,0 +1,14 @@
+@import "./../../../../../sass/theme/variables";
+
+.muted-label {
+  color: #999;
+  font-weight: 500;
+}
+
+.risk-return-value {
+  font-weight: bold;
+  font-size: $font-size-md;
+  span:nth-child(2) {
+    margin: 0 10px;
+  }
+}
