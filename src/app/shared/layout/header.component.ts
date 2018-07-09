@@ -79,26 +79,26 @@ export class HeaderComponent implements OnInit {
     this.localst.store(environment.logpriority,parseInt(event.value));
   }
 
-  toggleSideBar(event) {
-    //this.isExpanded = !this.isExpanded;
-    this.sideBarService.toggle(this.isExpanded);
-  }
+  // toggleSideBar(event) {
+  //   //this.isExpanded = !this.isExpanded;
+  //   this.sideBarService.toggle(this.isExpanded);
+  // }
 
   toggleSideBar() {
     this.layoutService.toggleSidebar(!this.isExpanded);
   }
 
-  initialtoggle(){
-    try{
-      this.sideBarService.toggle(true);
-    }
-  catch{
-    setTimeout(() => {
-      this.initialtoggle();
-    }, 1000);
+  // initialtoggle(){
+  //   try{
+  //     this.sideBarService.toggle(true);
+  //   }
+  // catch{
+  //   setTimeout(() => {
+  //     this.initialtoggle();
+  //   }, 1000);
 
-  }
-  }
+  // }
+  //}
   toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();

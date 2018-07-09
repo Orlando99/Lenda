@@ -16,7 +16,7 @@ export class OptimizerComponent implements OnInit {
   private columnApi;
   rowData = [];
   public context;
-  private rowClassRules;
+  public rowClassRules;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined) {
