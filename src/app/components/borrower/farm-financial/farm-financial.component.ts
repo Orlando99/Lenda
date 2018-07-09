@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { loan_model } from '../../../models/loanmodel';
+import { LocalStorageService } from 'ngx-webstorage';
+import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
+import { environment } from '../../../../environments/environment.prod';
+import { ValueType } from '../shared/cell-value/cell-value.component';
 
 @Component({
   selector: 'app-farm-financial',
@@ -7,91 +12,126 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FarmFinancialComponent implements OnInit {
 
-  data : any;
-  constructor() { }
+  data: any;
+  localloanobj: loan_model;
+  constructor(private localstorageservice: LocalStorageService,
+    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
-    this.data = {
-      partOne: [
-        {
-          text: 'Borrower Ratting',
-          value: ['*****','***','**','*****','***','**']
+    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+    this.localloanobj = res;
+    this.binddata(this.localloanobj);
+    })
 
-        },
-        {
-          text: 'FICO Score',
-          value: [700, 720, 700, 700, 650, 0]
-        },
-        {
-          text: 'CPA Financials',
-          value: ['Yes', 'Yes', 'Yes', '', '', '']
-        },
-        {
-          text: '3yrs Tax Returns',
-          value: ['Yes', 'Yes', 'Yes', '', '', '']
-        },
-        {
-          text: 'Bankruptcy',
-          value: ['No', 'No', 'No', 'No', '', '']
-        },
-        {
-          text: 'Judgement',
-          value: ['No', 'No', 'No', 'No', '', '']
-        },
-        {
-          text: 'Years Farming',
-          value: [33, 7, 5, 3, 0, 0]
-        },
-        {
-          text: 'Farm Finacial Rating',
-          value: ['145.8%', '100%', '100%', '0%', '', ' ']
-        }
-      ],
-      partTwo : [
-        {
-          text: 'Income Constant %',
-          value: ['', '90%','90%','90%','90%','90%',]
-        },
-        {
-          text: 'Revanue Threshold',
-          value: ['902,457','902,457','902,457','812,211','812,211','812,211'],
-          isAmount :  true
-        },
-        {
-          text: 'Insurance Constant %',
-          value: ['', '110%','105%','100%','100%','100%']
-        },
-        {
-          text: 'Max Crop Loan',
-          value: ['902,457','902,457','902,457','812,211','812,211','812,211'],
-          isAmount :  true,
-          hightlightRow : true
-        },
+    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    this.binddata(this.localloanobj);
 
-      ],
-      partThree : [
-        {
-          text: 'Max Amount Constant',
-          value: ['','1,000,000','500,000','-','-','-'],
-          isAmount :  true
-        },
-        {
-          text: 'Disc Net Worth Constant %',
-          value: ['','100%','100%','100%','100%','100%',]
-        },
-        {
-          text: 'Disc Net Worth',
-          value: ['1,140,000','1,140,000','1,140,000','1,140,000','1,140,000','1,140,000'],
-          isAmount : true
-        },
-        {
-          text : 'Ag-Pro Max Addition',
-          value: ['','1,000,000','500,000','-','-','-'],
-          isAmount :  true,
-          hightlightRow : true
-        }
-      ]
+  }
+
+
+  private binddata(loanObject : loan_model) {
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
+      
+      let farmFinancialRatingValues  : FarmFinacialValueParams= {... this.getFormattedData(loanObject)};
+      this.data = {
+        liquidityAnalysis: [
+          {
+            text: 'Current Ratio',
+            value: farmFinancialRatingValues.currentRatio,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.currentRatio,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.currentRatio,this.loanMasterCaculationWorker.farmFinancialStaticValues.currentRatio, 1.00)
+
+          },
+          {
+            text: 'Working Capital',
+            value: farmFinancialRatingValues.workingCapital,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.workingCapital,this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital, 1.00)
+            
+          }],
+          solvencyAnalysis : [{
+            text: 'Debt/Assets',
+            value: farmFinancialRatingValues.debtByAssets,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets, 1.00)
+
+          },
+          {
+            text: 'Equity/Assets',
+            value: farmFinancialRatingValues.equityByAssets,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.equityByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets, 1.00)
+          },
+          {
+            text: 'Debt/Equity',
+            value: farmFinancialRatingValues.debtByEquity,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByEquity,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity, 1.00)
+          }],
+          profitabilityAnalysis : [{
+            text: 'ROA',
+            value: farmFinancialRatingValues.ROA,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.ROA,this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA, 1.00)
+          },
+          {
+            text: 'Operating Profit',
+            value: farmFinancialRatingValues.operatingProfit,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingProfit,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit, 1.00)
+          }],
+          financialEfficiency : [{
+            text: ' Operating Exp / Rev',
+            value: farmFinancialRatingValues.operatingByExpRev,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingByExpRev,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev, 1.00)
+          },
+          {
+            text: 'Interest/Cashflow',
+            value: farmFinancialRatingValues.interestByCashFlow,
+            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow,
+            possible : 1.00,
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.interestByCashFlow,this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow, 1.00)
+          }
+        ]
+      };
     }
   }
 
+  getFormattedData(loanObject : loan_model){
+    let loanMaster = loanObject.LoanMaster[0];
+    let borrower = loanObject.Borrower;
+    let farmFinancialRatingValues = new FarmFinacialValueParams();
+    farmFinancialRatingValues.currentRatio = borrower.FC_Borrower_Current_Ratio || 2.00;
+    farmFinancialRatingValues.workingCapital = 0.22;
+    farmFinancialRatingValues.debtByAssets = 43.2;
+    farmFinancialRatingValues.equityByAssets = 56.8;
+    farmFinancialRatingValues.debtByEquity = 76.0;
+    farmFinancialRatingValues.ROA = 10.3;
+    farmFinancialRatingValues.operatingProfit = 50.1;
+    farmFinancialRatingValues.operatingByExpRev = 49.9;
+    farmFinancialRatingValues.interestByCashFlow = 4.8;
+    return farmFinancialRatingValues;  
+  }
+}
+
+export class FarmFinacialValueParams{
+  currentRatio : number;
+  workingCapital : number;
+  debtByAssets : number;
+  debtByEquity : number;
+  equityByAssets : number;
+  ROA : number;
+  operatingProfit : number;
+  operatingByExpRev : number;
+  interestByCashFlow : number;
+  totalFarmFinacialRating : number;
 }

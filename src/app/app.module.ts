@@ -149,6 +149,7 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
 //ag grid enterprise
 import {LicenseManager} from "ag-grid-enterprise/main";
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
+import { SubTableComponent } from './components/borrower/farm-financial/sub-table/sub-table.component';
 import { ChartsVisualizationComponent } from './components/summary/charts-visualization/charts-visualization.component';
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
@@ -208,6 +209,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CustomentryComponent,
     OptimizerComponent,
     CustomentryComponent,
+    SubTableComponent,
     ChartsVisualizationComponent,
     CashFlowComponent,
     RiskAndReturnComponent,

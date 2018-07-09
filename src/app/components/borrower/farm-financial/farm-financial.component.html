@@ -1,22 +1,43 @@
 <div class="container bottom width-auto">
 
   <div class="bottom">
-    <div class="row">
-      <ng-container *ngFor="let row of data.partOne, let rowInd = index">
+    <div class="row  table-row">
       <div class="col m3">
-        <div class="col cell text-left" [class.font-weight-600]="rowInd===0">{{row.text}}</div>
+        <div class="col cell text-left font-weight-600">Liquidity Analysis</div>
       </div>
       <div class="col m9">
-        <div class="col m2 cell text-right" *ngFor="let val of row.value, let i = index"
-        [class.border-right]="i===0"
-        [class.font-weight-600]="i===0"
-        >
-        {{val || '&nbsp;'}}
-        </div>
-      
+        <div class="col m2 cell text-right font-weight-600" *ngFor="let header of  ['Ratio','Strong','Stable','Weak','Rating','Possible']">{{header}}</div>
       </div>
-    </ng-container>
-
-
+      <app-sub-table [rowTable]="data.liquidityAnalysis"></app-sub-table>
     </div>
+
+    <div class="row table-row">
+      <div class="col m3">
+        <div class="col cell text-left font-weight-600">Solvency Analysis</div>
+      </div>
+    </div>
+    <div class="row table-row">
+      <app-sub-table [rowTable]="data.solvencyAnalysis"></app-sub-table>
+    </div>
+
+    <div class="row table-row">
+      <div class="col m3">
+        <div class="col cell text-left font-weight-600">Profitability Analysis</div>
+      </div>
+    </div>
+    <div class="row table-row">
+      <app-sub-table [rowTable]="data.profitabilityAnalysis"></app-sub-table>
+    </div>
+
+    <div class="row table-row">
+        <div class="col m3">
+          <div class="col cell text-left font-weight-600">Financial Efficiency</div>
+        </div>
+      </div>
+      <div class="row table-row">
+        <app-sub-table [rowTable]="data.financialEfficiency"></app-sub-table>
+      </div>
+  </div>
+ 
+
 </div>

@@ -3,6 +3,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { loan_model } from '../../../models/loanmodel';
 import { environment } from '../../../../environments/environment.prod';
 import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
+import { ValueType } from '../shared/cell-value/cell-value.component';
 
 @Component({
   selector: 'app-rating',
@@ -19,63 +20,62 @@ export class RatingComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
     this.localloanobj = res;
-    this.binddata();
+    this.binddata(this.localloanobj);
     })
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    this.binddata();
+    this.binddata(this.localloanobj);
 
   }
 
 
-  private binddata() {
+  private binddata(loanObject : loan_model) {
     if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
-      let loanMaster = { ...this.localloanobj.LoanMaster[0] };
-      let borrower = { ...this.localloanobj.Borrower };
-      loanMaster.Borrower_Farm_Financial_Rating = '145.8%';
-      borrower.Borrower_Rating = 4;
-      borrower.Borrower_Credit_Score = 700;
+      
+      let borrowerRatingValues  : BorrowerRatingParams= {... this.getFormattedData(loanObject)};
       this.data = {
         partOne: [
           {
             text: 'Borrower Ratting',
-            value: "*".repeat(loanMaster.Borrower_Rating || 0),
-            staticValues: ['*****', '****', '***', '**', '*']
+            value: borrowerRatingValues.borrowerRating,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.borrowerRating
+
           },
           {
             text: 'FICO Score',
-            value: loanMaster.Credit_Score || '',
-            staticValues: [720, 700, 700, 650, 0]
+            value: borrowerRatingValues.FICOScore,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.FICOScore
           },
           {
             text: 'CPA Financials',
-            value: borrower.Borrower_CPA_financials ? 'Yes' : 'No',
-            staticValues: ['Yes', 'Yes', '', '', '']
+            value: borrowerRatingValues.CPAFiancial,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.CPAFiancial
+
           },
           {
             text: '3yrs Tax Returns',
-            value: borrower.Borrower_3yr_Tax_Returns==1 ? 'Yes' : 'No',
-            staticValues: ['Yes', 'Yes', '', '', '']
+            value: borrowerRatingValues.threeYrsReturns,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.threeYrsReturns
           },
           {
             text: 'Bankruptcy',
-            value: loanMaster.Bankruptcy_Status==1 ? 'Yes' : 'No',
-            staticValues: ['No', 'No', 'No', '', '']
+            value: borrowerRatingValues.bankruptcy,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.bankruptcy
           },
           {
             text: 'Judgement',
-            value: loanMaster.Judgement==1 ? 'Yes' : 'No',
-            staticValues: ['No', 'No', 'No', '', '']
+            value: borrowerRatingValues.judgement,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.judgement
           },
           {
             text: 'Years Farming',
-            value: loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 'NA',
-            staticValues: [7, 5, 3, 0, 0]
+            value: borrowerRatingValues.yearsFarming,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.yearsFarming
           },
           {
             text: 'Farm Finacial Rating',
-            value: loanMaster.Borrower_Farm_Financial_Rating || '',
-            staticValues: ['100%', '100%', '0%', '', ' ']
+            value: borrowerRatingValues.farmFinnacialRating,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.farmFinnacialRating,
           }
         ],
         partTwo: [
@@ -83,25 +83,26 @@ export class RatingComponent implements OnInit {
             text: 'Income Constant %',
             value: '',
             staticValues: this.loanMasterCaculationWorker.incomeConstant,
-            isPercentage: true,
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Revanue Threshold',
-            value: this.loanMasterCaculationWorker.getRevanueThresholdValue(),
-            staticValues: this.loanMasterCaculationWorker.getRevanueThresholdStaticValues(),
-            isAmount: true
+            value: this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject),
+            staticValues: this.loanMasterCaculationWorker.getRevanueThresholdStaticValues(loanObject),
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Insurance Constant %',
             value: '',
-            staticValues: this.loanMasterCaculationWorker.insuranceConstant,
-            isPercentage: true,
+            staticValues:  this.loanMasterCaculationWorker.insuranceConstant,
+            valueType : ValueType.PERCENTAGE,
+
           },
           {
             text: 'Max Crop Loan',
-            value: this.loanMasterCaculationWorker.getMaxCropLoanValue(),
-            staticValues: this.loanMasterCaculationWorker.getMaxCropLoanStaticValues(),
-            isAmount: true,
+            value: this.loanMasterCaculationWorker.getMaxCropLoanValue(loanObject),
+            staticValues: this.loanMasterCaculationWorker.getMaxCropLoanStaticValues(loanObject),
+            valueType : ValueType.AMOUNT,
             hightlightRow: true
           },
         ],
@@ -110,29 +111,55 @@ export class RatingComponent implements OnInit {
             text: 'Max Amount Constant',
             value: '',
             staticValues: [1000000, 500000, '-', '-', '-'],
-            isAmount: true
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Disc Net Worth Constant %',
             value: '',
-            staticValues: this.loanMasterCaculationWorker.discNetWorthConstant,
-            isPercentage: true
+            staticValues:  this.loanMasterCaculationWorker.discNetWorthConstant,
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Disc Net Worth',
-            value: this.loanMasterCaculationWorker.getDiscNetWorthValue(),
-            staticValues: this.loanMasterCaculationWorker.getDiscWorthStaticValue(),
-            isAmount: true
+            value: this.loanMasterCaculationWorker.getDiscNetWorthValue(loanObject),
+            staticValues: this.loanMasterCaculationWorker.getDiscWorthStaticValue(loanObject),
+            valueType : ValueType.AMOUNT,
           },
           {
             text: 'Ag-Pro Max Addition',
             value: '',
-            staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(),
-            isAmount: true,
+            staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(loanObject),
+            valueType : ValueType.AMOUNT,
             hightlightRow: true
           }
         ]
       };
     }
   }
+
+  getFormattedData(loanObject : loan_model){
+    let loanMaster = loanObject.LoanMaster[0];
+    let borrowerRatingValues = new BorrowerRatingParams();
+    borrowerRatingValues.borrowerRating = "*".repeat(loanMaster.Borrower_Rating || 0);
+    borrowerRatingValues.FICOScore = loanMaster.Credit_Score;
+    borrowerRatingValues.CPAFiancial = loanObject.Borrower.Borrower_CPA_financials ? 'Yes' : 'No';
+    borrowerRatingValues.threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
+    borrowerRatingValues.bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
+    borrowerRatingValues.judgement = loanMaster.Judgement ? 'Yes' : 'No';
+    borrowerRatingValues.yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
+    borrowerRatingValues.farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
+    return borrowerRatingValues;  
+  }
+}
+
+ class BorrowerRatingParams {
+  borrowerRating: string;
+  FICOScore: number
+  CPAFiancial: string;
+  threeYrsReturns: string
+  bankruptcy: string;
+  judgement: string;
+  yearsFarming: number;
+  farmFinnacialRating: string;
+  
 }
