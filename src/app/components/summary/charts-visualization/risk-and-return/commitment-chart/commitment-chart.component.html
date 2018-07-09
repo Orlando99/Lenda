@@ -1,3 +1,43 @@
-<p>
-  commitment-chart works!
-</p>
+<div class="col s6">
+  <span class="muted-label">
+      Commitment
+    </span>
+  <p class="risk-return-value">
+    $ 403,256
+  </p>
+</div>
+<div class="col s6">
+  <span class="muted-label">
+      Excess Ins
+    </span>
+  <p class="risk-return-value">
+    77.6%
+  </p>
+</div>
+<div class="col s12">
+  <svg height="75" class="w-100">
+    <!-- Gridlines -->
+    <g id="grid-0"></g>
+    <g id="grid-1"></g>
+    <g id="grid-2"></g>
+    <g id="grid-3"></g>
+    <g id="grid-4"></g>
+    <g id="grid-5"></g>
+    <g id="grid-6"></g>
+    <g id="grid-7"></g>
+    <g id="grid-8"></g>
+    <!-- Bars -->
+    <g id="arm"></g>
+    <g id="dist"></g>
+    <g id="excess"></g>
+    <!-- Bar Texts -->
+    <text x="30" y="21" font-family="roboto" font-size="10px" fill="#fff">$188,635</text>
+    <text x="130" y="21" font-family="roboto" font-size="10px" fill="#fff">$214,621</text>
+    <text x="250" y="36" font-family="roboto" font-size="10px" fill="#000">$313,095</text>
+    <!-- Legends -->
+    <rect width="10" height="10" x="15" y="50" [ngStyle]="{'fill': armCommit}" />
+    <text x="30" y="60" font-family="roboto" font-size="11px" fill="#bbb">ARM Commit Dist Commit</text>
+    <rect width="10" height="10" x="235" y="50" [ngStyle]="{'fill': excessIns}" />
+    <text x="250" y="60" font-family="roboto" font-size="11px" fill="#bbb">Excess Ins</text>
+  </svg>
+</div>

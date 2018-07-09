@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-declare var Chart: any;
-declare var ctx: any;
+import { chartSettings } from './../../../../../chart-settings';
 
 @Component({
   selector: 'app-risk-chart',
@@ -9,19 +8,17 @@ declare var ctx: any;
   styleUrls: ['./risk-chart.component.scss']
 })
 export class RiskChartComponent implements OnInit {
-
   constructor() { }
 
   ngOnInit() {
     // Set bar
-    this.setChart('#risk', 0, 100, '#ffc000');
-    this.setChart('#cushion', 100, 200, '#ffff00');
-    this.setChart('#returnFirst', 200, 300, '#92d050');
-    this.setChart('#returnSecond', 300, 400, '#339933');
+    this.setChart('#risk', 0, 100, chartSettings.riskAndReturns.riskBg);
+    this.setChart('#cushion', 100, 200, chartSettings.riskAndReturns.cushionBg);
+    this.setChart('#returnFirst', 200, 300, chartSettings.riskAndReturns.returnLightGreen);
+    this.setChart('#returnSecond', 300, 400, chartSettings.riskAndReturns.returnDarkGreen);
     // Set diamond
     this.setValues();
   }
-
 
   setChart(item, rangeStart, rangeEnd, color) {
     var linearScale = d3.scaleLinear()
@@ -67,7 +64,7 @@ export class RiskChartComponent implements OnInit {
           .type(d3[d]);
 
         return symbolGenerator();
-      }).attr('fill', '#1c1c1c');;
+      }).attr('fill', chartSettings.riskAndReturns.blackDiamond);
 
     d3.select('#redDiamond')
       .selectAll('path')
@@ -83,6 +80,6 @@ export class RiskChartComponent implements OnInit {
 
         return symbolGenerator();
       })
-      .attr('fill', '#ff1b1b');
+      .attr('fill', chartSettings.riskAndReturns.redDiamond);
   }
 }
