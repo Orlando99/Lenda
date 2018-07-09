@@ -16,7 +16,7 @@ export class OptimizerComponent implements OnInit {
   private columnApi;
   rowData = [];
   public context;
-  private rowClassRules;
+  public rowClassRules;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined) {
@@ -87,7 +87,7 @@ export class OptimizerComponent implements OnInit {
   ];
   //Generic Functions and validations
   validateacresvalue(id, newvalue: number) {
-    
+
     try {
       let Cropunit = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == id);
       if (Cropunit != undefined) {
