@@ -153,6 +153,8 @@ import { ChartsVisualizationComponent } from './components/summary/charts-visual
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
+import { RiskChartComponent } from './components/summary/charts-visualization/risk-and-return/risk-chart/risk-chart.component';
+import { CommitmentChartComponent } from './components/summary/charts-visualization/risk-and-return/commitment-chart/commitment-chart.component';
 
 @NgModule({
   declarations: [
@@ -211,7 +213,9 @@ import { CompanyInfoComponent } from './components/summary/charts-visualization/
     ChartsVisualizationComponent,
     CashFlowComponent,
     RiskAndReturnComponent,
-    CompanyInfoComponent
+    CompanyInfoComponent,
+    RiskChartComponent,
+    CommitmentChartComponent
 
   ],
   imports: [
