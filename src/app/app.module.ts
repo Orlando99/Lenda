@@ -153,7 +153,6 @@ import { ChartsVisualizationComponent } from './components/summary/charts-visual
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
-import { CurrencyDirective } from './components/borrower/shared/currency.directive';
 import { SidebarModule } from 'ng-sidebar';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
@@ -208,14 +207,11 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CellValueComponent,
     CustomentryComponent,
     OptimizerComponent,
-    CurrencyDirective,
-    PercentageDirective,
     CustomentryComponent,
     ChartsVisualizationComponent,
     CashFlowComponent,
     RiskAndReturnComponent,
     CompanyInfoComponent
-    OptimizerComponent,
 
   ],
   imports: [
