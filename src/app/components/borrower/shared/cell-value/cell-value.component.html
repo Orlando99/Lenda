@@ -1,14 +1,10 @@
 <div class="col m2 cell text-right" [class.font-weight-600]="bolderFont" [class.border-right]="borderRight"
   [class.background-highlight]="backgroundHighlight" [class.background-green]="backgroundGreen" [class.color-red]="colorRed">
-  
   <ng-container *ngIf="value">
-    <ng-container  [ngSwitch]="valueType">
-        <span *ngSwitchCase="ValueType.AMOUNT"  [appCurrency]="value"></span>
-        <span *ngSwitchCase="ValueType.PERCENTAGE" [appPercentage]="value"></span>
-        <span *ngSwitchDefault>{{value}}</span>
-    </ng-container>
+    <span class="float-left" *ngIf="isAmount">$</span>{{value}}
+    <span *ngIf="isPercentage">%</span>
   </ng-container>
   <ng-container *ngIf="!value">
-      <span *ngIf="!value">&nbsp;</span>
+    &nbsp;
   </ng-container>
 </div>

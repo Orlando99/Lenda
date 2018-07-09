@@ -49,7 +49,6 @@ import { LoanApiService } from './services/loan/loanapi.service';
 
 
 //START COMPONENTS
-import { SidebarModule } from 'ng-sidebar';
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
 import { HeaderComponent } from './shared/layout/header.component';
@@ -142,17 +141,21 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
-import { CurrencyDirective } from './components/borrower/shared/currency.directive';
-import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 import { CustomentryComponent } from './components/customentry/customentry.component';
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
+
+//ag grid enterprise
+import {LicenseManager} from "ag-grid-enterprise/main";
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
 import { ChartsVisualizationComponent } from './components/summary/charts-visualization/charts-visualization.component';
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
+import { CurrencyDirective } from './components/borrower/shared/currency.directive';
+import { SidebarModule } from 'ng-sidebar';
+LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
   declarations: [
@@ -212,6 +215,7 @@ import { CompanyInfoComponent } from './components/summary/charts-visualization/
     CashFlowComponent,
     RiskAndReturnComponent,
     CompanyInfoComponent
+    OptimizerComponent,
 
   ],
   imports: [

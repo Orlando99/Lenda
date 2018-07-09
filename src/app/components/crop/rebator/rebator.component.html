@@ -21,14 +21,16 @@
         [enableSorting]="true"
         [enableFilter]="true"
         [context]="context"
+        [showToolPanel]="true"
         (gridSizeChanged)="onGridSizeChanged($event)"
         [frameworkComponents]="frameworkcomponents"
         [components]="components"
         [singleClickEdit]="true"
+        [defaultColDef]="defaultColDef"
+        [rowGroupPanelShow]="true"
         (cellEditingStopped)="rowvaluechanged($event)"
         [rowData]="rowData" 
         (gridReady)="onGridReady($event)"
-        [headerHeight]="45"
         [columnDefs]="columnDefs">
         </ag-grid-angular>
         </div>

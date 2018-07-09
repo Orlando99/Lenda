@@ -9,19 +9,16 @@ export class CellValueComponent implements OnInit {
 
   @Input('bolderFont') bolderFont : boolean;
   @Input('borderRight') borderRight : boolean;
-  @Input('valueType') valueType : ValueType;
+  @Input('isAmount') isAmount : boolean;
+  @Input('isPercentage') isPercentage : boolean;
   @Input('value') value : boolean;
   @Input('backgroundHighlight') backgroundHighlight : boolean;
   @Input('backgroundGreen') backgroundGreen : boolean; 
   @Input('colorRed') colorRed : boolean; 
-  ValueType = ValueType;
+  
   constructor() { }
 
   ngOnInit() {
   }
 
-}
-export enum ValueType{
-  AMOUNT,
-  PERCENTAGE
 }

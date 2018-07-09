@@ -57,10 +57,12 @@ export class HeaderComponent implements OnInit {
         this.loanid = res.Loan_Full_ID.replace("-", "/");
     })
 
-    this.getloanid();
+        this.getloanid();
   }
 
   ngOnInit() {
+    this.isExpanded = true;
+    //default open
     this.value = this.localst.retrieve(environment.logpriority);
     this.layoutService.isSidebarExpanded().subscribe((value) => {
       this.isExpanded = value;
@@ -74,15 +76,30 @@ export class HeaderComponent implements OnInit {
   }
 
   changepriority(event: any) {
-    this.localst.store(environment.logpriority, parseInt(event.value));
+    this.localst.store(environment.logpriority,parseInt(event.value));
+  }
+
+  toggleSideBar(event) {
+    //this.isExpanded = !this.isExpanded;
+    this.sideBarService.toggle(this.isExpanded);
   }
 
   toggleSideBar() {
     this.layoutService.toggleSidebar(!this.isExpanded);
   }
 
-  toggleRightSidenav() {
+  initialtoggle(){
+    try{
+      this.sideBarService.toggle(true);
+    }
+  catch{
+    setTimeout(() => {
+      this.initialtoggle();
+    }, 1000);
 
+  }
+  }
+  toggleRightSidenav() {
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {

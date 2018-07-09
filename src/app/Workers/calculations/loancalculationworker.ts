@@ -12,7 +12,6 @@ import { AssociationcalculationworkerService } from './associationcalculationwor
 import { MAT_MENU_DEFAULT_OPTIONS } from '@angular/material';
 import { Collateralcalculationworker } from './collateralcalculationworker.service';
 import { QuestionscalculationworkerService } from './questionscalculationworker.service';
-import { LoanMasterCalculationWorkerService } from './loan-master-calculation-worker.service';
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
 
@@ -27,9 +26,7 @@ export class LoancalculationWorker {
     private loancrophistoryworker: LoancrophistoryService,
     private farmcalculation: FarmcalculationworkerService,
     private collateralcalculation: Collateralcalculationworker,
-    private questionscalculations:QuestionscalculationworkerService,
-    private loanMasterCalcualtions : LoanMasterCalculationWorkerService,
-    // private associationcalculation:AssociationcalculationworkerService,
+    private questionscalculations: QuestionscalculationworkerService,
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
     private associationcalculation: AssociationcalculationworkerService,
@@ -127,9 +124,8 @@ export class LoancalculationWorker {
             localloanobj = this.questionscalculations.performcalculationforquestionsupdated(localloanobj);
 
       // STEP 8 --- MASTER CALCULATIONS
-        if(localloanobj.LoanMaster !==null){
-          localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
-        }
+          if (localloanobj.LoanMaster != null)
+            localloanobj.LoanMaster = localloanobj.LoanMaster;
 
       // OTHER UNSORTED 
           localloanobj.DashboardStats = localloanobj.DashboardStats;
