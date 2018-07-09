@@ -1,5 +1,6 @@
-/* START HEADER */
 body {
   font-family: $base-font-family;
   font-size: $base-font-size;
+  min-height: 100vh;
+  overflow-x: hidden;
 }

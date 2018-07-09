@@ -1,35 +1,37 @@
 <!-- Start Top Nav Bar -->
 <!-- Start Application Header -->
-<header class="webApp_header top_NavBar sidebar-is-expanded" id="arm-main-header">
+<header class="webApp_header top_NavBar arm-main-header" [ngClass]="{'is-expanded': isExpanded}" id="arm-main-header">
   <nav>
     <div class="navbar-wrapper">
       <nav class="header-nav">
         <div class="nav-wrapper">
           <mat-toolbar color="primary" class="arm-menu-bar">
-            <span class="navLogo min-logo" id="navlogo-min" *ngIf="!isExpanded" (mouseover)="toggleSideBar($event)">
-              <a href="" class="navIcons">
-                <img src="assets/images/lendalogomin.png" class="logo" alt="Lenda Logo">
+            <span class="navLogo min-logo" *ngIf="!isExpanded">
+              <a>
+                <img src="assets/images/lendalogomin.png" class="min-logo-img" alt="Lenda Logo">
               </a>
+
+              <button class="close-menu" mat-icon-button (click)="toggleSideBar()">
+                <i class="flaticon-primary flaticon-right-arrow"></i>
+              </button>
             </span>
+
             <span class="navLogo" *ngIf="isExpanded" id="navlogo-main">
               <a href="/home/loans" class="navIcons">
                 <img src="assets/images/lendalogo.png" class="logo" alt="Lenda Logo">
               </a>
-              <button class="close-menu" [hidden]="isExpanded" mat-icon-button (click)="toggleSideBar($event)">
-                <mat-icon>chevron_left</mat-icon>
+              <button class="close-menu" mat-icon-button (click)="toggleSideBar()">
+                <i class="flaticon-primary flaticon-back"></i>
               </button>
             </span>
+
             <span class="ml-25 input-group-flat search-box">
               <div class="search">
                 <mat-icon>search</mat-icon>
                 <input class="input-flat-form-control" type="text" placeholder="Search">
               </div>
             </span>
-              <!-- <span class="showdetails">
-              DB : {{Databasename}} <br>
-              API : {{apiurl}} <br>
-              Git Version : {{Git}}
-            </span> -->
+
             <div class="nav-parent">
               <span class="nav-item">
                   <button mat-button [matMenuTriggerFor]="menu" primary>List
@@ -106,8 +108,9 @@
               </span>
 
               <span>
-                  <i [style.visibility]="decideShow" id="decide" class="fa-lightbulb">
-                  <mat-icon>lightbulb_outline</mat-icon> &nbsp; &nbsp;Decide</i>  &nbsp;
+                  <i *ngIf="isRightBarExpanded" id="decide" class="fa-lightbulb">
+                    <mat-icon>lightbulb_outline</mat-icon> &nbsp; &nbsp;Decide
+                  </i>
                   <mat-icon (click)="toggleRightSidenav()" class="pre-arrow">{{icon}}</mat-icon>
               </span>
             </div>

@@ -1,17 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { LayoutService } from '../shared/layout/layout.service';
 
 @Component({
   selector: 'app-master',
   templateUrl: './master.component.html',
-  styleUrls: ['./master.component.scss']
+  styleUrls: ['./master.component.scss'],
+  providers: [LayoutService]
 })
 export class MasterComponent implements OnInit {
+  public isSidebarExpanded: boolean = true;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    public layoutService: LayoutService) { }
 
   ngOnInit() {
-
+    this.layoutService.isSidebarExpanded().subscribe((value) => {
+      this.isSidebarExpanded = value;
+    })
   }
 
 }

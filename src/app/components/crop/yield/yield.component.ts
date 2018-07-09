@@ -44,7 +44,7 @@ export class YieldComponent implements OnInit {
   public addAction = false;
   public cropYear;
   context: any;
-  
+
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
     marginTop: '10px',
@@ -62,7 +62,7 @@ export class YieldComponent implements OnInit {
   public loanapi:LoanApiService,
   public alertify:AlertifyService,
   public dialog: MatDialog
-  ) { 
+  ) {
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -128,7 +128,7 @@ export class YieldComponent implements OnInit {
     this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
-   
+
     this.context = { componentParent: this };
   }
 
@@ -136,7 +136,7 @@ export class YieldComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       if (res.srccomponentedit == "YieldComponent") {
-        //if the same table invoked the change .. change only the edited row 
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
       }
@@ -169,7 +169,7 @@ export class YieldComponent implements OnInit {
   rowvaluechanged(value:any){
     var obj = value.data;
     var rowindex = value.rowIndex;
-    
+
     if(obj.ActionStatus === 0){
       this.localloanobject.CropYield[rowindex]=obj;
       if(obj.Crop && obj.CropType && obj.Practice){
@@ -338,7 +338,7 @@ export class YieldComponent implements OnInit {
         this.getgridheight();
         }
     });
-    
+
   }
 
   getgridheight() {
@@ -346,7 +346,7 @@ export class YieldComponent implements OnInit {
     this.style.height = (30 * (this.rowData.length + 1)+9).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
-    debugger
+
     try{
     this.gridApi.sizeColumnsToFit();
   }
@@ -356,7 +356,7 @@ export class YieldComponent implements OnInit {
   }
 }
 function adjustheader(): void {
-  debugger
+
   document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
 }
 
