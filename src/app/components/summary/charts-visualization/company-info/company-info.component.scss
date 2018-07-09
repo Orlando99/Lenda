@@ -1,0 +1,69 @@
+@import "./../../../../../sass/theme/variables";
+
+.section-one {
+  padding-left: 10px;
+  height: 100%;
+  position: relative;
+}
+
+.company-info {
+  padding-top: 10px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.flex {
+  .material-icons {
+    margin-top: -2px;
+    padding-right: 10px;
+    color: #bbb;
+  }
+}
+
+.extra-info {
+  color: #999;
+  padding-left: 25px;
+}
+
+.chart-wrapper {
+  position: relative;
+}
+
+.progress-chart {
+  right: -10px;
+  position: absolute;
+  max-width: 250px;
+  width: 250px;
+}
+
+.bottom-icons {
+  position: absolute;
+  bottom: 0;
+  display: inline-block;
+  .icon {
+    padding: 0 5px;
+  }
+
+  .flaticon-wrench {
+    color: #9cd460;
+  }
+
+  .flaticon-multiple-users-silhouette {
+    color: #528bd4;
+  }
+
+  .flaticon-hipster {
+    color: #ffe494;
+  }
+
+  .flaticon-random {
+    color: #c14d48;
+  }
+}
+
+.row-section {
+  padding: 10px;
+}

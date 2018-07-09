@@ -10,11 +10,11 @@
       <mat-icon [style.color]="!syncenabled() ? 'light-gray':'green'">publish</mat-icon>
     </button>
 
-    <button (click)="addrow()" mat-raised-button color="primary">Add </button>
+    <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
 
     <div class="container bottom">
       <div class="row">
-          <ng-sidebar-container showBackdrop="false" animate="true" [ngStyle]="stylesidebar">
+          <!-- <ng-sidebar-container showBackdrop="false" animate="true" [ngStyle]="stylesidebar">
               <ng-sidebar mode="over" position="right" style="background-color: cornsilk" closeOnClickOutside="true" #pricesidebar>
                   <div class="row">
                       <button class="vertical" (click)="pricesidebar.close()"  color="primary">
@@ -28,7 +28,7 @@
                     </p>
                     
                   </div>
-                </ng-sidebar>
+                </ng-sidebar> -->
           <div ng-sidebar-content style="overflow: hidden;">
 
             <div style="width:97%;float:left">
@@ -39,16 +39,16 @@
               </ag-grid-angular>
             </div>
             <div style="width:3%;float:left">
-              <div class="row">
+              <!-- <div class="row">
                 <button class="vertical" (click)="pricesidebar.open()"  color="primary">
                   <mat-icon aria-label="Columns">grid_on</mat-icon>
                 </button>
 
-              </div>
+              </div> -->
             </div>
           </div>
           
-        </ng-sidebar-container>
+        <!-- </ng-sidebar-container> -->
       </div>
     </div>
     <br>

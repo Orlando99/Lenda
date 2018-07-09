@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OptimizerComponent } from './optimizer.component';
+import { CashFlowComponent } from './cash-flow.component';
 
-describe('OptimizerComponent', () => {
-  let component: OptimizerComponent;
-  let fixture: ComponentFixture<OptimizerComponent>;
+describe('CashFlowComponent', () => {
+  let component: CashFlowComponent;
+  let fixture: ComponentFixture<CashFlowComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptimizerComponent ]
+      declarations: [ CashFlowComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OptimizerComponent);
+    fixture = TestBed.createComponent(CashFlowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

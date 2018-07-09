@@ -34,6 +34,7 @@ export class FarmComponent implements OnInit {
   public currenteditedfield:string=null;
   public currenteditrowindex:number=-1;
   public components;
+  private popupParent;
   public context;
   public frameworkcomponents;
   public editType;
@@ -57,7 +58,7 @@ export class FarmComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    //params.api.sizeColumnsToFit();
+    params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -161,6 +162,7 @@ export class FarmComponent implements OnInit {
     }
     ///
     this.context = { componentParent: this };
+    this.popupParent = document.querySelector("body");
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -212,6 +214,8 @@ export class FarmComponent implements OnInit {
     });
   }
   rowvaluechanged(value: any) {
+    debugger
+   let cells= this.gridApi.getEditingCells();
     this.currenteditedfield=null;
     this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
@@ -224,10 +228,10 @@ export class FarmComponent implements OnInit {
       this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
-      var rowindex=value.rowindex;
+      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
       if(obj.ActionStatus!=1)
        obj.ActionStatus = 2;
-      this.localloanobject.Farms[value.rowIndex]=obj;
+      this.localloanobject.Farms[rowindex]=obj;
     }
     this.localloanobject.srccomponentedit = "FarmComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;

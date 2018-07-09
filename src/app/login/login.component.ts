@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    debugger
+
     let userfound=Users[this.username];
     if(userfound!=undefined && this.username==this.password)
      {

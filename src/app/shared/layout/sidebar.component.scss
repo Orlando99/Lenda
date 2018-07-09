@@ -14,6 +14,10 @@ mat-sidenav  {
     }
   }
 
+  .mat-list-item {
+    height: 50px;
+  }
+
   .mat-list-item:not(.unfeatured):not(.normalize) p.mat-line {
     margin-top: -1px;
     color: $white-90;
@@ -32,14 +36,14 @@ mat-sidenav  {
   .mat-list-item-focus,
   .mat-list-item .active {
     background: $sidebar-selected-bg-color;
-    mat-icon {
+    .flaticon {
       color: $nav-hover-color;
     }
   }
 
   .mat-list-item:not(.navLogo):hover{
     background: $nav-hover-color;
-    mat-icon {
+    .flaticon {
       color: $white-90;
     }
   }
@@ -49,15 +53,17 @@ mat-sidenav  {
   background: $sidebar-bg-color;
   overflow-y: auto;
   position: fixed;
-  height: 100%;
+  // TODO: If footer is not required, give height of 100%
+  // and hide footer
+  height: calc(100% - 30px);
   top: 0;
   left: 0;
-  width: 70px;
+  width: $sidebar-minimal-view;
   -webkit-transition: width 0.25s;
   transition: width 0.25s;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   &.expanded {
-    width: 215px;
+    width: $sidebar-expanded-view;
   }
 }
 

@@ -11,12 +11,6 @@ $sidebar-bg-color: #164c7b;
 $sidebar-selected-bg-color: #0A3864;
 $sidebar-unfeatured-item-color: rgba(255, 255, 255, 0.5);
 
-// Named colors and variants
-$white: #fff;
-$white-30: rgba(255, 255, 255, 0.30);
-$white-75: rgba(255, 255, 255, 0.75);
-$white-90: rgba(255, 255, 255, 0.90);
-
 // Fonts
 $base-font-family: 'Roboto', sans-serif;
 $font-size-sm: 10px;
@@ -24,5 +18,14 @@ $base-font-size: 12px;
 $font-size-md: 14px;
 $font-size-lg: 18px;
 
-$unit: 5px;
+// Named colors and variants
+$white: #fff;
+$white-30: rgba(255, 255, 255, 0.30);
+$white-75: rgba(255, 255, 255, 0.75);
+$white-90: rgba(255, 255, 255, 0.90);
 
+/**
+Layout calculation variables
+*/
+$sidebar-minimal-view: 70px;
+$sidebar-expanded-view: 215px;

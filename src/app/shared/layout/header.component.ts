@@ -1,18 +1,21 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, RouterEvent, NavigationEnd } from '@angular/router';
-import { GlobalService } from '../../services/global.service';
+import { ToastsManager } from 'ng2-toastr';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { LocalStorageService } from 'ngx-webstorage';
+import { JsonConvert } from 'json2typescript';
+
 import { environment } from '../../../environments/environment.prod';
 import { NotificationFeedsComponent } from '../notification-feeds/notification-feeds.component';
 import { SidebarComponent } from '../layout/sidebar.component';
+
 import { NotificationFeedsService } from '../notification-feeds/notification-feeds.service';
-import { SidebarService } from '../../shared/layout/sidebar.component.service';
 import { ReferenceService } from '../../services/reference/reference.service';
-import { ToastsManager } from 'ng2-toastr';
+import { LayoutService } from '../../shared/layout/layout.service';
+import { GlobalService } from '../../services/global.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
+
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
-import { JsonConvert } from 'json2typescript';
 import { loan_model } from '../../models/loanmodel';
 import { versions } from '../../versions';
 
@@ -23,16 +26,18 @@ import { versions } from '../../versions';
 })
 
 export class HeaderComponent implements OnInit {
-  public loanid:string=""
+  public loanid: string = ""
   _res: any = {};
-  public apiurl=environment.apiUrl;
-  public Git=versions.revision;
-  public Databasename:string="";
+  public apiurl = environment.apiUrl;
+  public Git = versions.revision;
+  public Databasename: string = "";
   public value: number = 1;
   toggleActive: boolean = false;
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
-  public isExpanded;
+  public isExpanded: boolean = true;
+  public isRightBarExpanded;
+
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
@@ -40,41 +45,28 @@ export class HeaderComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     public localst: LocalStorageService,
     private notificationFeedService: NotificationFeedsService,
-    private sideBarService: SidebarService,
-    public referencedataapi:ReferenceService,
-    public toaster:ToastsManager,
-    public loanservice:LoanApiService,
-    public loancalculation:LoancalculationWorker
+    public referencedataapi: ReferenceService,
+    public toaster: ToastsManager,
+    public loanservice: LoanApiService,
+    public loancalculation: LoancalculationWorker,
+    public layoutService: LayoutService
   ) {
 
-    this.localst.observe(environment.loankey).subscribe(res=>{
-      if(res!=undefined && res!=null)
-            this.loanid=res.Loan_Full_ID.replace("-","/");
+    this.localst.observe(environment.loankey).subscribe(res => {
+      if (res != undefined && res != null)
+        this.loanid = res.Loan_Full_ID.replace("-", "/");
     })
 
         this.getloanid();
-
-        // router.events.subscribe(res=>{
-        //   if(res instanceof NavigationEnd)
-        //   {
-        //     debugger
-        //     this.initialtoggle();
-        //   }
-        
-        // })
   }
 
-
-
-  //private leftnav: MatSidenav;
-
-
-
-
   ngOnInit() {
-    this.isExpanded = false;
-    
+    this.isExpanded = true;
+    //default open
     this.value = this.localst.retrieve(environment.logpriority);
+    this.layoutService.isSidebarExpanded().subscribe((value) => {
+      this.isExpanded = value;
+    });
   }
 
   logout() {
@@ -88,18 +80,17 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleSideBar(event) {
-    this.isExpanded = !this.isExpanded;
+    //this.isExpanded = !this.isExpanded;
     this.sideBarService.toggle(this.isExpanded);
   }
 
-  ngAfterViewInit() {
-   this.initialtoggle();
+  toggleSideBar() {
+    this.layoutService.toggleSidebar(!this.isExpanded);
   }
 
   initialtoggle(){
     try{
-      this.isExpanded=false;
-      this.toggleSideBar(null);
+      this.sideBarService.toggle(true);
     }
   catch{
     setTimeout(() => {
@@ -109,7 +100,6 @@ export class HeaderComponent implements OnInit {
   }
   }
   toggleRightSidenav() {
-    debugger
     this.toggleActive = !this.toggleActive;
     this.notificationFeedService.toggle();
     if (this.toggleActive === true) {
@@ -122,12 +112,11 @@ export class HeaderComponent implements OnInit {
     console.log('Clicked');
   }
 
-  ClearLocalstorage(){
+  ClearLocalstorage() {
     this.getloanid();
     this.localst.clear();
     this.getLoanBasicDetails();
     this.getreferencedata();
-
   }
 
   getLoanBasicDetails() {
@@ -135,7 +124,7 @@ export class HeaderComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      this.loanservice.getLoanById(this.loanid.replace("/","-")).subscribe(res => {
+      this.loanservice.getLoanById(this.loanid.replace("/", "-")).subscribe(res => {
         console.log(res)
         //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
@@ -161,15 +150,15 @@ export class HeaderComponent implements OnInit {
   getreferencedata() {
     this.referencedataapi.getreferencedata().subscribe(res => {
       this.localst.store(environment.referencedatakey, res.Data);
-      this.Databasename=res.Data.Databasename;
+      this.Databasename = res.Data.Databasename;
     })
   }
-  getloanid(){
+  getloanid() {
 
-    try{
+    try {
 
-      this.loanid=this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-","/");
-      this.Databasename=this.localst.retrieve(environment.referencedatakey).Databasename;
+      this.loanid = this.localst.retrieve(environment.loankey).Loan_Full_ID.replace("-", "/");
+      this.Databasename = this.localst.retrieve(environment.referencedatakey).Databasename;
     }
     catch{
 

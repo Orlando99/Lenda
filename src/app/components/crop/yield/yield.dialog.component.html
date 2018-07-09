@@ -1,5 +1,5 @@
-<div class="mat-dialog-container">
-<h1 mat-dialog-title>Add New Crop</h1>
+
+<h2 mat-dialog-title>Add New Crop</h2>
 <div mat-dialog-content>
   <mat-select placeholder="Crop" [(ngModel)]= data.selected.crop>
     <mat-option *ngFor="let crop of data.crops" [value]="crop">
@@ -16,5 +16,4 @@
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button [mat-dialog-close]="data.selected" cdkFocusInitial>Ok</button>
-</div>
 </div>
