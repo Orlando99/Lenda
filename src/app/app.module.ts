@@ -147,6 +147,7 @@ import { LoancroppracticeworkerService } from './Workers/calculations/loancroppr
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
+import { SubTableComponent } from './components/borrower/farm-financial/sub-table/sub-table.component';
 
 @NgModule({
   declarations: [
@@ -201,7 +202,8 @@ import { OptimizerComponent } from './components/optimizer/optimizer.component';
     OptimizerComponent,
     CurrencyDirective,
     PercentageDirective,
-    CustomentryComponent
+    CustomentryComponent,
+    SubTableComponent
 
   ],
   imports: [

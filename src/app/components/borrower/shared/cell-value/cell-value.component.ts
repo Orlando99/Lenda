@@ -13,6 +13,8 @@ export class CellValueComponent implements OnInit {
   @Input('value') value : boolean;
   @Input('backgroundHighlight') backgroundHighlight : boolean;
   @Input('backgroundGreen') backgroundGreen : boolean; 
+  @Input('backgroundLightGreen') backgroundLightGreen : boolean; 
+  @Input('backgroundYellow') backgroundYellow : boolean; 
   @Input('colorRed') colorRed : boolean; 
   ValueType = ValueType;
   constructor() { }

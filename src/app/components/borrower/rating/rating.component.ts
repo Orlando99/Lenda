@@ -38,44 +38,44 @@ export class RatingComponent implements OnInit {
           {
             text: 'Borrower Ratting',
             value: borrowerRatingValues.borrowerRating,
-            staticValues: this.loanMasterCaculationWorker.staticValues.borrowerRating
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.borrowerRating
 
           },
           {
             text: 'FICO Score',
             value: borrowerRatingValues.FICOScore,
-            staticValues: this.loanMasterCaculationWorker.staticValues.FICOScore
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.FICOScore
           },
           {
             text: 'CPA Financials',
             value: borrowerRatingValues.CPAFiancial,
-            staticValues: this.loanMasterCaculationWorker.staticValues.CPAFiancial
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.CPAFiancial
 
           },
           {
             text: '3yrs Tax Returns',
             value: borrowerRatingValues.threeYrsReturns,
-            staticValues: this.loanMasterCaculationWorker.staticValues.threeYrsReturns
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.threeYrsReturns
           },
           {
             text: 'Bankruptcy',
             value: borrowerRatingValues.bankruptcy,
-            staticValues: this.loanMasterCaculationWorker.staticValues.bankruptcy
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.bankruptcy
           },
           {
             text: 'Judgement',
             value: borrowerRatingValues.judgement,
-            staticValues: this.loanMasterCaculationWorker.staticValues.judgement
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.judgement
           },
           {
             text: 'Years Farming',
             value: borrowerRatingValues.yearsFarming,
-            staticValues: this.loanMasterCaculationWorker.staticValues.yearsFarming
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.yearsFarming
           },
           {
             text: 'Farm Finacial Rating',
             value: borrowerRatingValues.farmFinnacialRating,
-            staticValues: this.loanMasterCaculationWorker.staticValues.farmFinnacialRating,
+            staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.farmFinnacialRating,
           }
         ],
         partTwo: [
