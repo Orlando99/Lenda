@@ -34,6 +34,7 @@
 
 .progress-chart {
   right: -10px;
+  margin-top: -10px;
   position: absolute;
   max-width: 250px;
   width: 250px;
@@ -41,7 +42,7 @@
 
 .bottom-icons {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   display: inline-block;
   .icon {
     padding: 0 5px;
