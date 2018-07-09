@@ -24,6 +24,10 @@
       <mat-icon mat-list-icon><i class="flaticon flaticon-calculator"></i></mat-icon>
       <p matLine>Budget</p>
     </mat-list-item>
+    <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/optimizer']">
+      <mat-icon mat-list-icon>event_note</mat-icon>
+      <p matLine>Optimizer</p>
+    </mat-list-item>
     <mat-list-item [routerLink]="['/home/loanoverview/'+loanid+'/collateral']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-link"></i></mat-icon>
       <p matLine>Collateral</p>

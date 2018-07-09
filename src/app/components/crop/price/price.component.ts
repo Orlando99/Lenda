@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SidebarModule } from 'ng-sidebar';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model } from '../../../models/loanmodel';
@@ -126,7 +127,7 @@ export class PriceComponent implements OnInit {
         return PercentageFormatter(params.value);
       } },
       { headerName: 'Ins UOM', field: 'Bu', editable: false },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
+      // { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
 
     ];
     ///
@@ -144,7 +145,7 @@ export class PriceComponent implements OnInit {
       else {
         this.localloanobject = res;
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+        this.rowData = this.localloanobject.LoanCropUnits !== null ? this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3):[];
       }
       this.getgridheight();
 
@@ -158,7 +159,7 @@ export class PriceComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+      this.rowData = this.localloanobject.LoanCropUnits !== null ? this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3):[];
 
     }
   }

@@ -27,11 +27,14 @@
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
             [singleClickEdit]="true"
-            (cellEditingStopped)="rowvaluechanged($event)"
+            (cellValueChanged)="rowvaluechanged($event)"
             (cellEditingStarted)="cellEditingStarted($event)"
             [rowData]="rowData"
+            
             (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs">
+            [defaultColDef]="defaultColDef"
+            [columnDefs]="columnDefs"
+            [headerHeight]="45">
             </ag-grid-angular>
             </div>
           </div>

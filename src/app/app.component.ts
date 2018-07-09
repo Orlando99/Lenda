@@ -11,9 +11,9 @@ import { environment } from '../environments/environment.prod';
 })
 export class AppComponent {
   title = 'LendaPlus';
-  @HostListener('window:unload', ['$event'])
+  @HostListener('window:beforeunload', ['$event'])
   public beforeunloadHandler($event) {
-
+    
     //.loanstorage.clear("userid");
  }
   constructor(private toaster: ToastsManager,private router: Router, vcf: ViewContainerRef,private loanstorage:LocalStorageService) {
@@ -21,7 +21,7 @@ export class AppComponent {
     router.events.subscribe((res:any)=>{
       let url:string=res.url;
       if(url!=undefined){
-
+        
       if(url.indexOf("login")!=-1){
 
       }

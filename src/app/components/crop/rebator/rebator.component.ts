@@ -40,6 +40,11 @@ export class RebatorComponent implements OnInit {
     height: '240px',
     boxSizing: 'border-box'
   };
+  defaultColDef = {
+    enableValue: true,
+    enableRowGroup: true,
+    enablePivot: true
+  };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
@@ -77,7 +82,7 @@ export class RebatorComponent implements OnInit {
       this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
       this.localloanobject = res;
       this.rowData=[];
-        this.rowData=this.localloanobject.Association
+        this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
         this.getgridheight();
     })
     this.getdataforgrid();
@@ -90,7 +95,7 @@ export class RebatorComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
-      this.rowData=this.localloanobject.Association
+      this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
 
     }
   }

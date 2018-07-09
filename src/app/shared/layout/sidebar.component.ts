@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LayoutService } from '../layout/layout.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
+import { MatSidenav } from '@angular/material';
 /**
  * @title Autosize sidenav
  */
@@ -12,8 +13,15 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent implements OnInit {
-  public isExpanded = false;
 
+  public isExpanded = true;
+
+  @ViewChild('leftSidenav') public sideNav: MatSidenav;
+  private mainHeader;
+  private mainContent;
+  private mainSideBar;
+  private mainLogo;
+  private minLogo;
   public loanid: string = "";
   constructor(
     private router: Router,

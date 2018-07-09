@@ -91,7 +91,7 @@ export class RealEstateComponent implements OnInit {
       }else{
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 });
+        this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 }):[];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -107,7 +107,7 @@ export class RealEstateComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
-      this.rowData=this.localloanobject.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3});
+      this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 }):[];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
   }
@@ -146,9 +146,13 @@ export class RealEstateComponent implements OnInit {
 
   //Grid Events
   addrow() {
+    if(this.localloanobject.LoanCollateral ==null)
+      this.localloanobject.LoanCollateral = [];
+      
     var newItem = new Loan_Collateral();
     newItem.Collateral_Category_Code = "RET";
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.Disc_Value = 40;
     newItem.ActionStatus = 1;
     var res = this.rowData.push(newItem);
     this.localloanobject.LoanCollateral.push(newItem);
@@ -195,7 +199,7 @@ export class RealEstateComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
   }
   onGridSizeChanged(Event: any) {
 
