@@ -22,5 +22,9 @@ export class CellValueComponent implements OnInit {
 
   ngOnInit() {
   }
-
+     
+}
+export enum ValueType{
+  AMOUNT,
+  PERCENTAGE
 }
