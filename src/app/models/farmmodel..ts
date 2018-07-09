@@ -11,6 +11,10 @@ export class Loan_Farm
     Farm_State_ID: number=0;
     @JsonProperty("Farm_County_ID", IntConverter,false)
     Farm_County_ID: number=1;
+    @JsonProperty("Percent_Prod", IntConverter,false)
+    Percent_Prod: number=0;
+    @JsonProperty("Rent_UOM", IntConverter,false)
+    Rent_UOM: number=1;
     @JsonProperty("FSN", StringConverter,false)
     FSN: string='';
     @JsonProperty("Section", StringConverter,false)

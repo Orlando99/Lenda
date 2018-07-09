@@ -1,5 +1,7 @@
 <div class="col m2 cell text-right" [class.font-weight-600]="bolderFont" [class.border-right]="borderRight"
-  [class.background-highlight]="backgroundHighlight" [class.background-green]="backgroundGreen" [class.color-red]="colorRed">
+  [class.background-highlight]="backgroundHighlight" [class.background-green]="backgroundGreen" [class.background-yellow]="backgroundYellow"
+  [class.background-lightgreen]="backgroundLightGreen" [class.color-red]="colorRed">
+  
   <ng-container *ngIf="value">
     <span class="float-left" *ngIf="isAmount">$</span>{{value}}
     <span *ngIf="isPercentage">%</span>
