@@ -17,7 +17,8 @@ export class CellValueComponent implements OnInit {
   @Input('backgroundLightGreen') backgroundLightGreen : boolean; 
   @Input('backgroundYellow') backgroundYellow : boolean; 
   @Input('colorRed') colorRed : boolean; 
-  
+  @Input('valueType') valueType : ValueType; 
+
   constructor() { }
 
   ngOnInit() {

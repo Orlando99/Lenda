@@ -213,7 +213,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     ChartsVisualizationComponent,
     CashFlowComponent,
     RiskAndReturnComponent,
-    CompanyInfoComponent
+    CompanyInfoComponent,
+  
 
   ],
   imports: [
