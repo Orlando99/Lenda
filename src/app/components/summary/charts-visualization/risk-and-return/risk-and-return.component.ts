@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-risk-and-return',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./risk-and-return.component.scss']
 })
 export class RiskAndReturnComponent implements OnInit {
+  @Input() viewMode;
   constructor() { }
 
   ngOnInit() {

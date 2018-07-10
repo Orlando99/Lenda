@@ -1,0 +1,30 @@
+.bottom-icons {
+  position: absolute;
+  bottom: 10px;
+  display: inline-block;
+  .icon {
+    padding: 0 5px;
+  }
+
+  .flaticon-wrench {
+    color: #9cd460;
+  }
+
+  .flaticon-multiple-users-silhouette {
+    color: #528bd4;
+  }
+
+  .flaticon-hipster {
+    color: #ffe494;
+  }
+
+  .flaticon-random {
+    color: #c14d48;
+  }
+}
+
+.right-align {
+  &.bottom-icons {
+    right: 20px;
+  }
+}

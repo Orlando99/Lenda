@@ -1,32 +1,49 @@
-<div class="col s6">
-    <span class="muted-label">
+<div class="col s6" *ngIf="viewMode!=0">
+  <span class="muted-label">
       Risk Cushion
     </span>
-    <p class="risk-return-value">
-      <span>$ 241,561</span>
-      <span>128.1%</span>
-    </p>
-  </div>
-  <div class="col s6">
-    <span class="muted-label">
+  <p class="risk-return-value">
+    <span>$ 241,561</span>
+    <span>128.1%</span>
+  </p>
+</div>
+<div class="col s6" *ngIf="viewMode!=0">
+  <span class="muted-label">
       Return
     </span>
-    <p class="risk-return-value">
-      10.5%
-    </p>
-  </div>
+  <p class="risk-return-value">
+    10.5%
+  </p>
+</div>
 
-  <div class="col s12">
-    <svg height="50" class="w-100">
-      <g id="blackDiamond"></g>
-      <g id="redDiamond"></g>
-      <g id="risk">
-      </g>
-      <g id="cushion">
-      </g>
-      <g id="returnFirst">
-      </g>
-      <g id="returnSecond">
-      </g>
-    </svg>
-  </div>
+<div class="col s12" [hidden]="viewMode==0">
+  <svg height="50" class="w-100">
+    <g id="blackDiamond"></g>
+    <g id="redDiamond"></g>
+    <g id="risk">
+    </g>
+    <g id="cushion">
+    </g>
+    <g id="returnFirst">
+    </g>
+    <g id="returnSecond">
+    </g>
+  </svg>
+</div>
+
+<div class="col s6 concise" *ngIf="viewMode==0">
+  <span class="muted-label">
+      Risk Cushion
+    </span>
+  <span class="risk-return-value">
+    <span>128.1%</span>
+  </span>
+</div>
+<div class="col s6"  *ngIf="viewMode==0">
+  <span class="muted-label">
+      Return
+    </span>
+  <span class="risk-return-value">
+    10.5%
+  </span>
+</div>

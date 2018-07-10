@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { chartSettings } from './../../../../chart-settings';
 import 'chart.piecelabel.js';
 
@@ -8,6 +8,9 @@ import 'chart.piecelabel.js';
   styleUrls: ['./cash-flow.component.scss']
 })
 export class CashFlowComponent implements OnInit {
+  @Input() viewMode;
+  @Input() viewClass;
+
   // Doughnut
   // TODO: Replace this data with live API
   public doughnutChartLabels: string[] = ['Seed', 'Cash Rent', 'Fertilizer', 'Herbicide', 'Harvesting', 'Fuel', 'Insecticide', 'Custom', 'Labor', 'Repairs'];
@@ -39,5 +42,4 @@ export class CashFlowComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

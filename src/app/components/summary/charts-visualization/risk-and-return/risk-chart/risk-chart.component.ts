@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as d3 from 'd3';
 import { chartSettings } from './../../../../../chart-settings';
 
@@ -8,6 +8,8 @@ import { chartSettings } from './../../../../../chart-settings';
   styleUrls: ['./risk-chart.component.scss']
 })
 export class RiskChartComponent implements OnInit {
+  @Input() viewMode;
+
   constructor() { }
 
   ngOnInit() {

@@ -1,6 +1,6 @@
-<div class="row-section">
-  <app-risk-chart></app-risk-chart>
+<div class="row-section" [ngClass]="{'concise':viewMode==0}">
+  <app-risk-chart [viewMode]="viewMode"></app-risk-chart>
 </div>
-<div class="row-section">
+<div class="row-section" *ngIf="viewMode!=0">
   <app-commitment-chart></app-commitment-chart>
 </div>

@@ -1,5 +1,26 @@
 @import "./../../../../../sass/theme/variables";
 
+.concise {
+  .material-icons {
+    font-size: 16px;
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-top: -2px;
+    i {
+      margin-top: 1px;
+      margin-right: 5px;
+    }
+  }
+
+  .right-align {
+    flex: right;
+  }
+}
+
 .section-one {
   padding-left: 10px;
   height: 100%;
@@ -38,31 +59,6 @@
   position: absolute;
   max-width: 250px;
   width: 250px;
-}
-
-.bottom-icons {
-  position: absolute;
-  bottom: 10px;
-  display: inline-block;
-  .icon {
-    padding: 0 5px;
-  }
-
-  .flaticon-wrench {
-    color: #9cd460;
-  }
-
-  .flaticon-multiple-users-silhouette {
-    color: #528bd4;
-  }
-
-  .flaticon-hipster {
-    color: #ffe494;
-  }
-
-  .flaticon-random {
-    color: #c14d48;
-  }
 }
 
 .row-section {

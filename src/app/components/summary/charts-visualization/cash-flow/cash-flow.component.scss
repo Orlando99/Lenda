@@ -1,3 +1,5 @@
+@import "./../../../../../sass/theme/variables";
+
 .header-label, .header-value {
   font-weight: bold;
 }
@@ -16,3 +18,9 @@
 .row-section {
   padding: 10px;
 }
+
+.concise {
+  padding: 15px;
+  position: relative;
+}
+
