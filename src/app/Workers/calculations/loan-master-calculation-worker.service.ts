@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { loan_model } from '../../models/loanmodel';
-import { LocalStorageService } from 'ngx-webstorage';
+import { loan_model, loan_borrower, borrower_model } from '../../models/loanmodel';
 import { environment } from '../../../environments/environment.prod';
 
 @Injectable()
@@ -71,9 +70,9 @@ export class LoanMasterCalculationWorkerService {
         break;
       }
 
-      
     }
-    return loanObject ;
+
+    return loanObject;
   }
 
 
@@ -100,7 +99,7 @@ export class LoanMasterCalculationWorkerService {
     let temp = loanMaster.Net_Market_Value_Crops || 0 + loanMaster.Net_Market_Value_Stored_Crops || 0 + loanMaster.Net_Market_Value_FSA || 0 + loanMaster.Net_Market_Value_Livestock || 0 +
       loanMaster.Net_Market_Value__Other || 0;
     return temp;
-    
+
   }
 
   getRevanueThresholdStaticValues(loanObject: loan_model) {
@@ -153,3 +152,5 @@ export class LoanMasterCalculationWorkerService {
 
 
 }
+
+

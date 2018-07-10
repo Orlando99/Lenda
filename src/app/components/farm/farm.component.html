@@ -27,7 +27,7 @@
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
             [singleClickEdit]="true"
-            (cellValueChanged)="rowvaluechanged($event)"
+            (cellEditingStopped)="rowvaluechanged($event)"
             (cellEditingStarted)="cellEditingStarted($event)"
             [rowData]="rowData"
             
