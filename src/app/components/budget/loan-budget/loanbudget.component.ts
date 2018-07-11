@@ -53,19 +53,19 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", cellClass: ['lenda-editable-field'],valueSetter: numberValueSetter,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'],valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'],valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", cellClass: ['lenda-editable-field'], valueSetter: numberValueSetter, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'], valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'], valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
         ]
       },
       {
         headerName: "Crop Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
         ]
       }
     ];
@@ -87,22 +87,11 @@ export class LoanbudgetComponent implements OnInit {
     //TODO-SANKET can we have obsever one level up instead of for each cropPractice ?
     this.localStorageService.observe(environment.loankey).subscribe(res => {
       this.localLoanObject = res;
+ 
       this.bindData(this.localLoanObject);
     })
 
     this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
-
-    //TODO-SANKET remove below line, once the api data is up to date
-    this.localLoanObject.LoanBudget.map(budget=> this.budgetService.muplitypePropsWithAcres(budget,this.cropPractice.LCP_Acres))
-    this.localLoanObject.LoanBudget.map(budget=> {
-
-      budget.Total_Budget_Acre =  parseFloat(budget.ARM_Budget_Acre.toString()) + parseFloat(budget.Distributor_Budget_Acre.toString()) + parseFloat(budget.Third_Party_Budget_Acre.toString());
-      return budget;
-    });
-
-    this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
-    //REMOVE END
-
 
     this.bindData(this.localLoanObject);
 
@@ -134,10 +123,17 @@ export class LoanbudgetComponent implements OnInit {
   rowvaluechanged(value: any) {
     let budget = this.localLoanObject.LoanBudget.find(budget => budget.Loan_Budget_ID === value.data.Loan_Budget_ID);
     budget.Total_Budget_Acre = parseFloat(budget.ARM_Budget_Acre.toString()) + parseFloat(budget.Distributor_Budget_Acre.toString()) + parseFloat(budget.Third_Party_Budget_Acre.toString());
-    budget = this.budgetService.muplitypePropsWithAcres(budget, this.cropPractice.LCP_Acres);
-    budget.ActionStatus = 2;
 
-    let cropPractice = this.localLoanObject.LoanCropPractice.find(cp => cp.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID);
+    for(let i = 0; i<this.localLoanObject.LoanBudget.length;i++){
+      let currentBudget =   this.localLoanObject.LoanBudget[i];
+      let cropPractice = this.localLoanObject.LoanCropPractices.find(cp=>cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+      currentBudget = this.budgetService.multiplyPropsWithAcres(currentBudget, cropPractice.LCP_Acres);
+    }
+    //budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
+    //this.localLoanObject = this.budgetService.caculateTotalsBeforeStore(this.localLoanObject);
+     budget.ActionStatus = 2;
+
+    let cropPractice = this.localLoanObject.LoanCropPractices.find(cp => cp.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID);
     cropPractice = this.budgetService.populateTotalsInCropPractice(cropPractice, this.localLoanObject.LoanBudget);
 
     this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);

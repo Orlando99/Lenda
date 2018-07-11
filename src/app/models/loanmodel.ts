@@ -268,7 +268,8 @@ export class borrower_model
         @JsonProperty("DashboardStats",[])
         DashboardStats:any=undefined;
 
-        LoanCropPractice? :Array<Loan_Crop_Practice>=[];
+        @JsonProperty("LoanCropPractices",[])
+        LoanCropPractices :Array<Loan_Crop_Practice>=[];
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
