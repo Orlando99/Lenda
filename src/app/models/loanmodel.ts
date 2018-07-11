@@ -251,7 +251,7 @@ export class borrower_model
         LoanQResponse:any=undefined;
 
         @JsonProperty("LoanBudget",[])
-        LoanBudget:any=undefined;
+        LoanBudget:Array<Loan_Budget>=[];
 
         @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
@@ -319,6 +319,8 @@ export class borrower_model
        
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=0;
+
+        FC_Expense_Name? : string;
 
     }
 

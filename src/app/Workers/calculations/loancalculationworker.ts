@@ -133,7 +133,7 @@ export class LoancalculationWorker {
 
         if(!localloanobj.LoanCropPractice || localloanobj.LoanCropPractice.length ===0){
 
-          
+          //TODO-SANKET - remove static initializer and get it from api
           localloanobj.LoanCropPractice= [
             {
               Loan_Crop_Practice_ID : 1,
