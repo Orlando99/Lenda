@@ -6,13 +6,53 @@
     <app-harvester></app-harvester>
 
     <app-loanbudget-group></app-loanbudget-group> -->
-    
-     
-    
-            <app-loanbudget *ngFor=" let cp of cropPractices" [cropPractice]="cp" 
-                 ></app-loanbudget>
-         
+
+    <mat-accordion>
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Total Budget
+                   
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <button (click)="synctoDb()" mat-icon-button>
+                    <mat-icon>publish</mat-icon>
+            </button>
+            <div class="container bottom">
+                    <div class="container bottom">
+                            <div class="row">
+                            <ag-grid-angular 
+                            [ngStyle]="style"
+                            class="ag-theme-balham"
+                            [animateRows]="true"
+                            [enableSorting]="true"
+                            [enableFilter]="true"
+                            [context]="context"
+                            [frameworkComponents]="frameworkcomponents"
+                            [components]="components"
+                            (cellEditingStopped)="rowvaluechanged($event)"   
+                            (cellValueChanged)="cellvaluechanged($event)"   
+                            [rowData]="rowData" 
+                            (gridReady)="onGridReady($event)"
+                            [columnDefs]="columnDefs"
+                            [getRowStyle]="getRowStyle"
+                            [pinnedBottomRowData]="pinnedBottomRowData"     
+                              
+                            >
+                            </ag-grid-angular>
+                            </div>
+                          </div>
+            </div>
+            <br>
+
+            <app-loanbudget *ngFor=" let cp of cropPractices" [cropPractice]="cp"></app-loanbudget>
+        </mat-expansion-panel>
+    </mat-accordion>
 
 
- </div>
-    
+
+
+
+
+</div>

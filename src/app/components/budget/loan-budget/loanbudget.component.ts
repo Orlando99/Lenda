@@ -53,19 +53,19 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, editable: true, cellEditor: "textCellEditor", },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'] },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'] },
-          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false },
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", cellClass: ['lenda-editable-field'],valueSetter: numberValueSetter,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'],valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['lenda-editable-field'],valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
         ]
       },
       {
         headerName: "Crop Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false },
-          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false },
+          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false,valueFormatter: (params)=> params.value ? params.value.toFixed(2) : 0 },
         ]
       }
     ];
@@ -99,6 +99,8 @@ export class LoanbudgetComponent implements OnInit {
       budget.Total_Budget_Acre =  parseFloat(budget.ARM_Budget_Acre.toString()) + parseFloat(budget.Distributor_Budget_Acre.toString()) + parseFloat(budget.Third_Party_Budget_Acre.toString());
       return budget;
     });
+
+    this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
     //REMOVE END
 
 
@@ -138,7 +140,7 @@ export class LoanbudgetComponent implements OnInit {
     budget.ActionStatus = 2;
 
     let cropPractice = this.localLoanObject.LoanCropPractice.find(cp => cp.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID);
-    cropPractice = this.budgetService.populateTotalsInCropPractice(cropPractice, budget);
+    cropPractice = this.budgetService.populateTotalsInCropPractice(cropPractice, this.localLoanObject.LoanBudget);
 
     this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
   }
