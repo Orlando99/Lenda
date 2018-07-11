@@ -157,6 +157,7 @@ import { RiskChartComponent } from './components/summary/charts-visualization/ri
 import { CommitmentChartComponent } from './components/summary/charts-visualization/risk-and-return/commitment-chart/commitment-chart.component';
 import { SidebarModule } from 'ng-sidebar';
 import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
+import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -218,7 +219,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     RiskChartComponent,
     CommitmentChartComponent,
     CompanyInfoComponent,
-    BottomIconsComponent
+    BottomIconsComponent,
+    ProgressChartComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,4 @@
-.row-section:not(.concise) {
+.complete {
   height: 50%;
   padding: 10px;
 
@@ -7,6 +7,14 @@
   }
 }
 
+.essential,
 .concise {
+  &:first-child {
+    border-bottom: none;
+  }
+}
+
+.concise,
+.essential {
   padding: 15px;
 }

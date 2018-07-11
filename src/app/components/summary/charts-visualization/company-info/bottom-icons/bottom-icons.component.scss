@@ -23,6 +23,13 @@
   }
 }
 
+.essential {
+  &.bottom-icons {
+    right: 0;
+    bottom: 10px;
+  }
+}
+
 .right-align {
   &.bottom-icons {
     right: 25px;

@@ -25,10 +25,7 @@
       <span class="extra-info">
         Ag-Input (CPS)
       </span>
-      <div class="progress-chart">
-        <canvas baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
-      [chartType]="doughnutChartType"></canvas>
-      </div>
+      <app-progress-chart></app-progress-chart>
     </div>
   </div>
 
@@ -37,22 +34,19 @@
 
 <!-- Essential View -->
 <div class="section-one row-section essential" *ngIf="viewMode==1">
-  <div class="right-align">
-    <bar-rating [readOnly]="true" [theme]="'stars'" [(rate)]="starsCount" [max]="5"></bar-rating>
-  </div>
   <div class="clearfix company-info">
-    <div class="flex">
+    <bar-rating class="right-align" [readOnly]="true" [theme]="'stars'" [(rate)]="starsCount" [max]="5"></bar-rating>
+    <div class="title">
       <i class="material-icons">
         person
-      </i>
-      <span class="title">Matthew West Farms, LLC</span>
+      </i> Matthew West Farms, LLC
     </div>
-    <div class="flex">
-      <i class="material-icons">
+  </div>
+  <div class="title">
+    <i class="material-icons">
         group
       </i>
-      <span class="title">West, Matthew D.</span>
-    </div>
+    <span class="title">West, Matthew D.</span>
   </div>
   <div>
     <div class="chart-wrapper">
@@ -62,14 +56,12 @@
       <span class="extra-info">
         Ag-Input (CPS)
       </span>
-      <div class="progress-chart">
-        <canvas baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
-      [chartType]="doughnutChartType"></canvas>
+      <div class="essential">
+        <app-bottom-icons [viewMode]="viewMode"></app-bottom-icons>
       </div>
     </div>
   </div>
 
-  <app-bottom-icons></app-bottom-icons>
 </div>
 
 <!-- Concise View -->
@@ -79,8 +71,7 @@
     <div class="title">
       <i class="material-icons">
         person
-      </i>
-      Matthew West Farms, LLC
+      </i> Matthew West Farms, LLC
     </div>
   </div>
 </div>

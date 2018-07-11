@@ -7,12 +7,14 @@
   height: 18px;
 }
 
-.concise .br-stars .br-unit {
+.concise .br-stars .br-unit,
+.essential .br-stars .br-unit {
   width: 14px;
   height: 14px;
 }
 
-.concise .br-units {
+.concise .br-units,
+.essential .br-units {
   float: right;
 }
 

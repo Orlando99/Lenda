@@ -3,10 +3,10 @@
     <app-company-info [viewMode]="viewMode"></app-company-info>
   </div>
   <div class="col s5 summary-section">
-     <app-risk-and-return [viewMode]="viewMode"></app-risk-and-return>
+    <app-risk-and-return [viewMode]="viewMode"></app-risk-and-return>
   </div>
   <div class="col s4 summary-section">
-     <app-cash-flow [viewMode]="viewMode"></app-cash-flow>
+    <app-cash-flow [viewMode]="viewMode"></app-cash-flow>
   </div>
 
   <!-- Toolbar to update view mode -->
@@ -14,14 +14,14 @@
     <!-- <i class="flaticon flaticon-gear"></i> -->
     <i class="flaticon material-icons" mat-button [matMenuTriggerFor]="settings">
     settings
-  </i>
+    </i>
     <mat-menu #settings="matMenu" class="context-menu">
       <button mat-menu-item (click)="setView(0)">
-      <a>Concise</a>
-    </button>
-      <!-- <button mat-menu-item (click)="setView(1)">
-      <a>Essential</a>
-    </button> -->
+        <a>Concise</a>
+      </button>
+      <button mat-menu-item (click)="setView(1)">
+        <a>Essential</a>
+      </button>
       <button mat-menu-item (click)="setView(2)">
       <a>Complete</a>
     </button>
