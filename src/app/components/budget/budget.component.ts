@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { loan_model, Loan_Association } from '../../models/loanmodel';
+import { loan_model, Loan_Association, Loan_Crop_Practice } from '../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -15,6 +15,7 @@ import { DeleteButtonRenderer } from '../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import { BudgetHelperService } from './budget-helper.service';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 
 @Component({
@@ -23,7 +24,7 @@ import { JsonConvert } from 'json2typescript';
   styleUrls: ['./budget.component.scss']
 })
 export class BudgetComponent implements OnInit {
-   posts : any[];
+  posts: any[];
   // constructor() {  
 
   // this.posts =[];
@@ -32,22 +33,36 @@ export class BudgetComponent implements OnInit {
   // this.posts.push({title:"HAR", postText:"WoW"});
 
   //  }
-  public refdata: any = {};
-  public localloanobject: loan_model = new loan_model();
+  
+  public cropPractices :Array<Loan_Crop_Practice>;
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
+    private budgetService: BudgetHelperService,
     public insuranceservice: InsuranceapiService,
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi:LoanApiService
+    public loanapi: LoanApiService,
   ) {
 
-    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+
+      this.bindData(res);
+      
+    })
+
+    this.bindData(this.localstorageservice.retrieve(environment.loankey));
+
   }
 
+  bindData(loanObject : loan_model) {
+    if(loanObject.LoanCropPractice)
+    {
+      this.cropPractices = this.budgetService.prepareCropPractice(loanObject.LoanCropPractice);
+    }
+  }
   ngOnInit() {
+
   }
 
 }

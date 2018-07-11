@@ -1,15 +1,15 @@
 <!-- <app-cropbasedbudget></app-cropbasedbudget> -->
 
 <div class="basic-container">
-    <app-distributer></app-distributer>
+    <!-- <app-distributer></app-distributer>
     <app-thirdparty></app-thirdparty>
     <app-harvester></app-harvester>
 
-    <app-loanbudget-group></app-loanbudget-group>
+    <app-loanbudget-group></app-loanbudget-group> -->
     
      
     
-            <app-loanbudget *ngFor=" let item of localloanobject.CropYield" [budgetobject]="item" 
+            <app-loanbudget *ngFor=" let cp of cropPractices" [cropPractices]="cp" 
                  ></app-loanbudget>
          
 

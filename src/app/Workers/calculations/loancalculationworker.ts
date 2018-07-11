@@ -131,6 +131,51 @@ export class LoancalculationWorker {
           localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
         }
 
+        if(!localloanobj.LoanCropPractice || localloanobj.LoanCropPractice.length ===0){
+
+          
+          localloanobj.LoanCropPractice= [
+            {
+              Loan_Crop_Practice_ID : 1,
+               Loan_Full_ID : '000001-000',
+               Crop_Practice_ID : 2,
+               LCP_APH : 200,
+               LCP_Acres : 100.2,
+               LCP_ARM_Budget : 10000,
+               LCP_Distributer_Budget :20000,
+               LCP_Third_Party_Budget:30000,
+               LCP_Notes: 'Notes',
+               LCP_Status: 1,
+               ActionStatus : 0
+           },
+           {
+            Loan_Crop_Practice_ID : 2,
+             Loan_Full_ID : '000001-000',
+             Crop_Practice_ID : 6,
+             LCP_APH : 120,
+             LCP_Acres : 100.3,
+             LCP_ARM_Budget : 10000,
+             LCP_Distributer_Budget :20000,
+             LCP_Third_Party_Budget:30000,
+             LCP_Notes: 'Some Note',
+             LCP_Status: 1,
+             ActionStatus : 0
+         },
+         {
+          Loan_Crop_Practice_ID : 3,
+           Loan_Full_ID : '000001-000',
+           Crop_Practice_ID : 13,
+           LCP_APH : 120,
+           LCP_Acres : 100.3,
+           LCP_ARM_Budget : 10000,
+           LCP_Distributer_Budget :20000,
+           LCP_Third_Party_Budget:30000,
+           LCP_Notes: 'Some Note',
+           LCP_Status: 1,
+           ActionStatus : 0
+       }
+          ]
+        }
       // OTHER UNSORTED 
           localloanobj.DashboardStats = localloanobj.DashboardStats;
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;

@@ -25,7 +25,7 @@ import { textValueSetter, getTextCellEditor } from '../../../Workers/utility/agg
 export class LoanbudgetComponent implements OnInit {
 
    
-    @Input() budgetobject : any;
+    @Input() cropPractices : any;
 
   public refdata: any = {};
   indexsedit = [];
@@ -119,23 +119,23 @@ export class LoanbudgetComponent implements OnInit {
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+      this.localloanobject = res;
       
       if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
-      this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
-      this.GetTotals();
+      // this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
+      // this.GetTotals();
       }
     });
   
 
-    this.getdataforgrid();
-    this.editType = "fullRow";
+    // this.getdataforgrid();
+    // this.editType = "fullRow";
   }
   getdataforgrid() {
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
       if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanBudget!=null && this.localloanobject.LoanBudget!=undefined) {
-      this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.budgetobject.CropType && p.Crop_Practice_Type_Code==this.budgetobject.Practice );
+      this.rowData = this.localloanobject.LoanBudget.filter(p => p.ActionStatus != -1 && p.Crop_Code==this.cropPractices.CropType && p.Crop_Practice_Type_Code==this.cropPractices.Practice );
       this.GetTotals();
       }
     }
