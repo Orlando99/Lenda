@@ -132,8 +132,6 @@ export class LoanbudgetComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    debugger;
-
     let budget = this.localLoanObject.LoanBudget.find(budget => budget.Loan_Budget_ID === value.data.Loan_Budget_ID);
     budget.Total_Budget_Acre = parseFloat(budget.ARM_Budget_Acre.toString()) + parseFloat(budget.Distributor_Budget_Acre.toString()) + parseFloat(budget.Third_Party_Budget_Acre.toString());
     budget = this.budgetService.muplitypePropsWithAcres(budget, this.cropPractice.LCP_Acres);
