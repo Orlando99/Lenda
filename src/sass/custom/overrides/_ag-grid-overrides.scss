@@ -11,7 +11,11 @@
 }
 
 .ag-cell {
-  background-color:white
+  background-color:white;
+   border-width: 0px 1px 0px 0px !important;
+    border-color: lightgray !important;
+    border-style: solid !important;
+
 }
 
 .ag-header-row{
@@ -124,3 +128,4 @@
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
