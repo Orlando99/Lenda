@@ -104,7 +104,6 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
 import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
-import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
 import { WorkInProgressComponent } from './components/work-in-progress/work-in-progress.component';
 import { FinanceStatsComponent } from './components/work-in-progress/finance-stats/finance-stats.component';
@@ -196,7 +195,6 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,
-    LoanbudgetGroupComponent,
     WorkInProgressComponent,
     FinanceStatsComponent,
     ExceptionsComponent,
