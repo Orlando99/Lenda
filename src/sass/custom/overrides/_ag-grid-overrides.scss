@@ -11,7 +11,11 @@
 }
 
 .ag-cell {
-  background-color:white
+  background-color:white;
+   border-width: 0px 1px 0px 0px !important;
+    border-color: lightgray !important;
+    border-style: solid !important;
+
 }
 
 .ag-header-row{
@@ -20,12 +24,9 @@
 }
 
 .editable-color{
-  background-color: #dcf0f4 !important
-}
-
-.editable-color-not-important{
   background-color: #dcf0f4;
 }
+
 
 .text-right{
   text-align: right;
@@ -124,3 +125,4 @@
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+

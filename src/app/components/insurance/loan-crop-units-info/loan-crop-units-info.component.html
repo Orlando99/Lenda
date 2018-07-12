@@ -13,13 +13,13 @@
         <mat-icon >publish</mat-icon>
       </button>
 
-      <button (click)="addrow()" mat-button-primary >Add </button>
+      <button (click)="addrow()" mat-raised-button color="primary"  >Add </button>
 
       <div class="container bottom">
         <div class="row">
           <ag-grid-angular
             style="width: 96%; height: 250px;"
-            class="ag-theme-balham"
+            class="ag-theme-balham roboto-font"
             [context]="context"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
@@ -27,7 +27,8 @@
             [rowData]="rowData"
             [editType]="editType"
             (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs">
+            [columnDefs]="columnDefs"
+            >
           </ag-grid-angular>
         </div>
       </div>
