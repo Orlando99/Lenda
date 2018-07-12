@@ -6,6 +6,7 @@ import { BrowserModule } from '@angular/platform-browser';
 //import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
 import { SpinerComponent } from './spiner/spiner.component';
+import { RightSidebarComponent } from './layout/right-sidebar/right-sidebar.component';
 
 @NgModule({
     imports: [
@@ -18,7 +19,7 @@ import { SpinerComponent } from './spiner/spiner.component';
     ],
     declarations: [
 
-    ],
+    RightSidebarComponent],
     providers: [],
     exports: [
         CommonModule,

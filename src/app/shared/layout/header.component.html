@@ -108,10 +108,13 @@
               </span>
 
               <span>
-                  <i *ngIf="isRightBarExpanded" id="decide" class="fa-lightbulb">
-                    <mat-icon>lightbulb_outline</mat-icon> &nbsp; &nbsp;Decide
-                  </i>
-                  <mat-icon (click)="toggleRightSidenav()" class="pre-arrow">{{icon}}</mat-icon>
+                  <button mat-icon-button *ngIf="isRightBarExpanded">
+                    <mat-icon>lightbulb_outline</mat-icon>
+                    <span>Decide</span>
+                  </button>
+                  <button mat-icon-button (click)="toggleRightSidenav()" *ngIf="!isRightBarExpanded">
+                    <mat-icon>lightbulb_outline</mat-icon>
+                  </button>
               </span>
             </div>
           </mat-toolbar>

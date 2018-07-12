@@ -84,16 +84,16 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleRightSidenav() {
-    this.toggleActive = !this.toggleActive;
-    this.notificationFeedService.toggle();
-    if (this.toggleActive === true) {
-      this.icon = 'arrow_forward_ios';
-      this.decideShow = 'visible';
-    } else {
-      this.icon = 'lightbulb_outline';
-      this.decideShow = 'hidden';
-    }
-    console.log('Clicked');
+    // this.toggleActive = !this.toggleActive;
+    // this.notificationFeedService.toggle();
+    // if (this.toggleActive === true) {
+    //   this.icon = 'arrow_forward_ios';
+    //   this.decideShow = 'visible';
+    // } else {
+    //   this.icon = 'lightbulb_outline';
+    //   this.decideShow = 'hidden';
+    // }
+    // console.log('Clicked');
   }
 
   ClearLocalstorage() {
