@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
+declare var $;
 
 @Component({
   selector: 'app-flowchart',
@@ -9,14 +10,20 @@ import { environment } from '../../../environments/environment.prod';
 })
 export class FlowchartComponent implements OnInit {
 
-  constructor(private localstorage:LocalStorageService) { 
-    this.localstorage.observe(environment.loankey).subscribe(res=>{
-      if(res!=undefined && res!=null)
-      {
-        var data=this.localstorage.retrieve(environment.loankey).DashboardStats;
+  constructor(
+    private renderer: Renderer2,
+    private localstorage: LocalStorageService,
+    private elRef: ElementRef) {
+    this.localstorage.observe(environment.loankey).subscribe(res => {
+      if (res != undefined && res != null) {
+        var data = this.localstorage.retrieve(environment.loankey).DashboardStats;
         this.buildChart(data);
       }
     })
+  }
+
+  ngAfterViewInit() {
+    this.initTooltip();
   }
 
   ngOnInit() {
@@ -184,7 +191,7 @@ export class FlowchartComponent implements OnInit {
       //   }
       // ];
 
-      var data=this.localstorage.retrieve(environment.loankey).DashboardStats;
+      var data = this.localstorage.retrieve(environment.loankey).DashboardStats;
 
       this.buildChart(data);
     }, 2000);
@@ -198,4 +205,27 @@ export class FlowchartComponent implements OnInit {
     }
   }
 
+  initTooltip() {
+    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
+    let icons = this.elRef.nativeElement.querySelectorAll('.icon');
+    let text = this.renderer.createText('Crop1, Crop 2, Crop 3');
+
+    for (let icon of icons) {
+      // Mouseenter event for tooltip
+      icon.addEventListener('mouseenter', (event) => {
+        this.renderer.addClass(tooltip, 'active');
+        this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
+        this.renderer.setStyle(tooltip, 'top', event.pageY - 50 + 'px');
+        this.renderer.appendChild(tooltip, text);
+      });
+
+      // Mouseleave event for tooltip
+      icon.addEventListener('mouseleave', (event) => {
+        setTimeout(() => {
+          this.renderer.removeClass(tooltip, 'active');
+          this.renderer.removeChild(tooltip, text);
+        }, 500);
+      });
+    }
+  }
 }
