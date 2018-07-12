@@ -47,26 +47,36 @@ export class LoanbudgetComponent implements OnInit {
 
 
   ngOnInit() {
-
+    const totalRowHeader= 'Total'; // is used to check if the current row should be editable or not
+    
     this.columnDefs = [
 
       { headerName: 'Expense', field: 'FC_Expense_Name', editable: false },
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color-not-important','text-right'], valueSetter: numberValueSetter,
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
+          },
+          editable : (params)=>{
+           return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
+          },
+          editable : (params)=>{
+           return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'], 
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'], 
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
+          },
+          editable : (params)=>{
+           return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false, cellClass: ['text-right'],
+          { headerName: totalRowHeader, field: 'Total_Budget_Acre', width: 120, editable: false, cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
@@ -102,12 +112,6 @@ export class LoanbudgetComponent implements OnInit {
         return { "font-weight": "bold", "background-color": "#F5F7F7" };
       }
     };
-
-    // this.cellStyle = function(params) {
-    //   if (params.node.rowPinned) {
-    //     return { "font-weight": "bold","background-color":"#F5F7F7" };
-    //   }
-    // };
 
     //TODO-SANKET can we have obsever one level up instead of for each cropPractice ?
     this.localStorageService.observe(environment.loankey).subscribe(res => {
