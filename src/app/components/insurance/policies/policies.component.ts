@@ -22,98 +22,98 @@ import { Insurance_Policy } from '../../../models/insurancemodel';
   styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
-  synclocalloanobject(event: any): any {
-     debugger
-  }
+ 
+
+
   deleteunwantedcolumn(): any {
-    var currentvisiblecolumns=this.columnDefs.filter(p=>p.headerName.includes("Subtype")).map(p=>p.headerName.split("_")[0]);
+    var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
-      let included=false;
+      let included = false;
       this.rowData.forEach(row => {
-        if(row.SecInsurance.includes(element))
-        {
-          included=true;
+        if (row.SecInsurance.includes(element)) {
+          included = true;
         }
       });
-      if(!included){
+      if (!included) {
         // let indexofcolumn= this.columnDefs.findIndex(p=>p.headerName.includes(element))
         // this.columnDefs.splice(indexofcolumn,1);
         //Delete insurance Value Columns
-        _.remove(this.columnDefs,p=>p.headerName.includes(element))
+        _.remove(this.columnDefs, p => p.headerName.includes(element))
 
       }
     });
 
-    
+
   }
   PlanTypes(): any {
     return { values: ['MPCI', 'HMAX', 'STAX'] };
   }
   //validations
-  checkcropandinsurancecombination(crop:string,maintype:string,subtype:string){
-  
+  checkcropandinsurancecombination(crop: string, maintype: string, subtype: string) {
+
   }
 
-  addNumericColumn(element:string){
+  addNumericColumn(element: string) {
     debugger
     this.columnDefs.push({
       headerName: element, field: element, editable: true,
       cellEditorSelector: function (params) {
         debugger
-        let arrays= params.colDef.headerName.split('_');
-        if(arrays.length>0){
-        if (params.data.SecInsurance.includes(arrays[1])) {
-          return {
-            component: 'numericCellEditor'
-          };
+        let arrays = params.colDef.headerName.split('_');
+        if (arrays.length > 0) {
+          if (params.data.SecInsurance.includes(arrays[1])) {
+            return {
+              component: 'numericCellEditor'
+            };
+          }
+          else {
+            return {
+              component: 'emptyeditor'
+            };
+          }
         }
-        else {
-          return {
-            component: 'emptyeditor'
-          };
-        }
-      }
-       
+
       },
       cellClass: function (params) {
-        let arrays= params.colDef.headerName.split('_');
-        if(arrays.length>0){
-        if (!params.data.SecInsurance.includes(arrays[1])) {
-          return 'grayedcell';
-        }}
+        let arrays = params.colDef.headerName.split('_');
+        if (arrays.length > 0) {
+          if (!params.data.SecInsurance.includes(arrays[1])) {
+            return 'grayedcell';
+          }
+        }
       }
     })
   }
-  
-  ShowHideColumnsonselection(value:string){
-    let rendervalues=[];
-    if(value=="HMAX"){ //these values are Suffixed rather than prefixed
+
+  ShowHideColumnsonselection(value: string) {
+    let rendervalues = [];
+    if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
-       rendervalues=['Upper_HMAX','Lower_HMAX','Price_HMAX']
+      rendervalues = ['Upper_HMAX', 'Lower_HMAX', 'Price_HMAX']
       //HMAX
     }
-    if(value=="STAX"){
-      rendervalues=['Upper_STAX','Yield_STAX']
+    if (value == "STAX") {
+      rendervalues = ['Upper_STAX', 'Yield_STAX']
     }
-    if(value=="RAMP"){
-      rendervalues=['Upper_RAMP','Lower_RAMP','Price_RAMP','Liability_RAMP']
+    if (value == "RAMP") {
+      rendervalues = ['Upper_RAMP', 'Lower_RAMP', 'Price_RAMP', 'Liability_RAMP']
     }
-    if(value=="ICE"){
-      rendervalues=['Yield_ICE','Price_ICE']
+    if (value == "ICE") {
+      rendervalues = ['Yield_ICE', 'Price_ICE']
     }
-    if(value=="ABC"){
-      rendervalues=['Upper_ABC','Lower_ABC']
+    if (value == "ABC") {
+      rendervalues = ['Upper_ABC', 'Lower_ABC']
     }
-    if(value=="PCI"){
-      rendervalues=['FCMC_PCI']
+    if (value == "PCI") {
+      rendervalues = ['FCMC_PCI']
     }
-    if(value=="CROPHAIL"){
-      rendervalues=['Upper_CROPHAIL','Deduct_CROPHAIL','Price_CROPHAIL','Liability_CROPHAIL']
+    if (value == "CROPHAIL") {
+      rendervalues = ['Upper_CROPHAIL', 'Deduct_CROPHAIL', 'Price_CROPHAIL', 'Liability_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
       this.addNumericColumn(element);
-     });
+    });
   }
   //
   getsubtypeforinsurance(type: string) {
@@ -192,7 +192,7 @@ export class PoliciesComponent implements OnInit {
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker
   ) {
-    this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, numericCellEditor: NumericEditor,emptyeditor:EmptyEditor };
+    this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, numericCellEditor: NumericEditor, emptyeditor: EmptyEditor };
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanobj = this.localstorage.retrieve(environment.loankey);
     this.context = { componentParent: this };
@@ -243,11 +243,11 @@ export class PoliciesComponent implements OnInit {
             { "id": 8, "itemName": "CROPHAIL" }
           ]
         }
-      //   valueSetter: function (params) {
-      //    return params.newValue;
-         
-      // }
-    },
+        //   valueSetter: function (params) {
+        //    return params.newValue;
+
+        // }
+      },
       {
         headerName: 'Unit', field: 'Rent_UOM', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 1, value: 'EU' }, { key: 2, value: 'BU' }, { key: 2, value: 'EP' }, { key: 2, value: 'OU' }] },
@@ -321,7 +321,11 @@ export class PoliciesComponent implements OnInit {
           row.StateandCountry = lookupStateValueinRefobj(farm.Farm_State_ID) + "|" + lookupCountyValue(farm.Farm_County_ID);
           row.CropName = lookupCropValuewithoutmapping(crop.Crop_Code);
           row.Practice = crop.Crop_Practice_Type_Code;
+          row.Crop_Code = crop.Crop_Code;
+          row.Crop_Practice = crop.Crop_Practice_Type_Code;
           row.Plan = null;
+          row.Countyid = farm.Farm_County_ID;
+          row.Stateid = farm.Farm_State_ID;
           row.PlanSubtype = null;
           row.SecInsurance = "";
           row.Unit = null;
@@ -331,11 +335,105 @@ export class PoliciesComponent implements OnInit {
           this.rowData.push(row);
         });
       });
-     
+
     }
 
   }
 
+  //DB Operations
+
+  deleteanyotherrecord(options: [string], farmid: any, cropcode: any, practice: any): any {
+    let itemsinloan=this.loanmodel.InsurancePolicies.filter(p => p.Farmid == farmid && p.Crop_Code == cropcode && p.Crop_Practice_Code == practice)
+    itemsinloan.forEach((element,index) => {
+      if(options.find(p=>p==element.Option)==undefined){
+        this.loanmodel.InsurancePolicies.splice(index,1);
+      }
+    });
+  }
+  synclocalloanobject(event: any): any {
+    debugger
+    let selectedfarm = event.data.Farm_ID;
+    let recordsforthefarm = this.loanmodel.InsurancePolicies.filter(p => p.Farmid == selectedfarm);
+    debugger
+    if (recordsforthefarm.length > 0) {
+      let optionsselected = event.data.SecInsurance.split(",");
+      if (optionsselected != "") {
+        optionsselected.forEach(element => {
+          let foundoldrecord = this.loanmodel.InsurancePolicies.find(p => p.Farmid == event.data.Farm_ID && p.Crop_Code == event.data.Crop_Code && p.Crop_Practice_Code == event.data.Crop_Practice && p.Option == element)
+          if (foundoldrecord != undefined) {
+            let index = this.loanmodel.InsurancePolicies.indexOf(foundoldrecord);
+            this.updatepolicyrecordinloanobject(index, foundoldrecord, event, element);
+          }
+          else
+            this.addpolicyrecordinloanobject(event, element);
+        });
+
+        this.deleteanyotherrecord(optionsselected,event.data.Farm_ID,event.data.Crop_Code,event.data.Crop_Practice)
+      }
+    }
+    else {
+      let optionsselected = event.data.SecInsurance.split(",");
+      if (optionsselected != "") {
+        optionsselected.forEach(element => {
+          debugger
+          this.addpolicyrecordinloanobject(event, element);
+        });
+      }
+    }
+    this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+  }
+
+
+
+  updatepolicyrecordinloanobject(index, policy: Insurance_Policy, event: any, optiontype: string) {
+    debugger
+
+    policy.Agentid = event.data.Agentid;
+    policy.CountyId = event.data.Countyid;
+    policy.StateId = event.data.Stateid;
+    policy.Crop_Code = event.data.Crop_Code;
+    policy.Crop_Practice_Code = event.data.Crop_Practice;
+    policy.Croprecordid = event.data.CropRecord_ID;
+    policy.Farmid = event.data.Farm_ID;
+    policy.Level = event.data.Level;
+    policy.MPCI_Subplan = event.data.PlanSubtype;
+    policy.Option = optiontype;
+    debugger
+    policy.Option_subtype = event.data[optiontype + "_st"];
+    policy.OV_Deduct = event.data["Deduct_" + optiontype];
+    policy.OV_FCMC = event.data["FCMC" + optiontype];
+    policy.OV_Liability = event.data["Liability_" + optiontype];
+    policy.OV_Lower = event.data["Lower_" + optiontype];
+    policy.OV_Upper = event.data["Upper_" + optiontype];
+    policy.OV_Yield = event.data["Yield_" + optiontype];
+    this.loanmodel.InsurancePolicies[index] = policy;
+
+  }
+  addpolicyrecordinloanobject(event: any, optiontype: string) {
+    debugger
+    let policy = new Insurance_Policy();
+    policy.Agentid = event.data.Agentid;
+    policy.CountyId = event.data.Countyid;
+    policy.StateId = event.data.Stateid;
+    policy.Crop_Code = event.data.Crop_Code;
+    policy.Crop_Practice_Code = event.data.Crop_Practice;
+    policy.Croprecordid = event.data.CropRecord_ID;
+    policy.Farmid = event.data.Farm_ID;
+    policy.Level = event.data.Level;
+    policy.MPCI_Subplan = event.data.PlanSubtype;
+    policy.Option = optiontype;
+    debugger
+    policy.Option_subtype = event.data[optiontype + "_st"];
+    policy.OV_Deduct = event.data["Deduct_" + optiontype];
+    policy.OV_FCMC = event.data["FCMC" + optiontype];
+    policy.OV_Liability = event.data["Liability_" + optiontype];
+    policy.OV_Lower = event.data["Lower_" + optiontype];
+    policy.OV_Upper = event.data["Upper_" + optiontype];
+    policy.OV_Yield = event.data["Yield_" + optiontype];
+    this.loanmodel.InsurancePolicies.push(policy);
+
+  }
+  //
   syncenabled() {
     return false;
   }
@@ -357,7 +455,7 @@ export class PoliciesComponent implements OnInit {
       debugger
       var items = $event.data.SecInsurance.toString().split(",");
       items.forEach(element => {
-        
+
         if (this.columnDefs.find(p => p.headerName.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
           this.columnDefs.push({
@@ -390,12 +488,11 @@ export class PoliciesComponent implements OnInit {
       this.deleteunwantedcolumn();
       this.gridApi.setColumnDefs(this.columnDefs);
       debugger
-      this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length-1].field)
-       
+      this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
+
     }
-   //get the local loan object synced
-   this.synclocalloanobject($event);
-   //
+    //get the local loan object synced
+    this.synclocalloanobject($event);
   }
 
   onGridReady(params) {
