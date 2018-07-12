@@ -55,21 +55,21 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color-not-important','text-right'], valueSetter: numberValueSetter,
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
           editable : (params)=>{
            return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'],
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
           editable : (params)=>{
            return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'], 
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'], 
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
