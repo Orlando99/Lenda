@@ -157,6 +157,7 @@ import { CashFlowComponent } from './components/summary/charts-visualization/cas
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
 import { SidebarModule } from 'ng-sidebar';
+import { BudgetHelperService } from './components/budget/budget-helper.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -323,7 +324,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     QuestionscalculationworkerService,
     LoancroppracticeworkerService,
     InsurancecalculationworkerService,
-    AssociationcalculationworkerService
+    AssociationcalculationworkerService,
+    BudgetHelperService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

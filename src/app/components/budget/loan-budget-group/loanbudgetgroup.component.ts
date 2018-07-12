@@ -98,7 +98,7 @@ export class LoanbudgetGroupComponent implements OnInit {
   ngOnInit() {  
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      //this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);      
       //this.rowDataGroup = obj.Association.filter(p => p.ActionStatus != -1);
       this.rowDataGroup = this.localloanobject.LoanBudget;
@@ -111,7 +111,7 @@ export class LoanbudgetGroupComponent implements OnInit {
   }
   getdataforgrid() {
    // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    //this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;
@@ -121,9 +121,9 @@ export class LoanbudgetGroupComponent implements OnInit {
   }
    GetTotals()
   {
-    this.pinnedBottomRowData[0].ARM_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.ARM_Budget_Crop||'0')).reduce((sum, current) => sum + current);
-    this.pinnedBottomRowData[0].Third_Party_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.Third_Party_Budget_Crop||'0')).reduce((sum, current) => sum + current);
-    this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c =>parseFloat( c.BudgetTotal_Crop||'0')).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].ARM_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.ARM_Budget_Crop.toString()||'0')).reduce((sum, current) => sum + current);
+    this.pinnedBottomRowData[0].Third_Party_Budget_Crop=this.localloanobject.LoanBudget.map(c => parseFloat(c.Third_Party_Budget_Crop.toString()||'0')).reduce((sum, current) => sum + current);
+    //this.pinnedBottomRowData[0].BudgetTotal_Crop=this.localloanobject.LoanBudget.map(c =>parseFloat( c.BudgetTotal_Crop.toString()||'0')).reduce((sum, current) => sum + current);
 
   }
   getgridheight(){
