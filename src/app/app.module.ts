@@ -51,6 +51,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 //START COMPONENTS
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { HeaderComponent } from './shared/layout/header.component';
 import { FooterComponent } from './shared/layout/footer.component';
 import { LoginComponent } from './login/login.component';
@@ -157,12 +158,17 @@ import { CashFlowComponent } from './components/summary/charts-visualization/cas
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
 import { SidebarModule } from 'ng-sidebar';
+import { PoliciesComponent } from './components/insurance/policies/policies.component';
+import { ChipsListEditor } from './aggridcolumns/chipscelleditor';
+import { EmptyEditor } from './aggridfilters/emptybox';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
   declarations: [
     NumericEditor,
     SelectEditor,
+    EmptyEditor,
+    ChipsListEditor,
     AppComponent,
     SpinerComponent,
     DeleteButtonRenderer,
@@ -218,6 +224,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CashFlowComponent,
     RiskAndReturnComponent,
     CompanyInfoComponent,
+    PoliciesComponent,
   
 
   ],
@@ -259,11 +266,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
-    BarRatingModule
+    BarRatingModule,
+    AngularMultiSelectModule
   ],
   exports: [
     FormsModule,
