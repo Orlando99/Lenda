@@ -1,54 +1,40 @@
 <!-- <app-cropbasedbudget></app-cropbasedbudget> -->
 
 <div class="basic-container">
-    <!-- <app-distributer></app-distributer>
+  <!-- <app-distributer></app-distributer>
     <app-thirdparty></app-thirdparty>
     <app-harvester></app-harvester>
 
     <app-loanbudget-group></app-loanbudget-group> -->
 
-    <mat-accordion>
-        <mat-expansion-panel [expanded]="true">
-            <mat-expansion-panel-header>
-                <mat-panel-title>
-                    Total Budget
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Total Budget
 
-                </mat-panel-title>
-            </mat-expansion-panel-header>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
 
-            <button (click)="synctoDb()" class="btn-unstyle">
+      <button (click)="synctoDb()" class="btn-unstyle">
                 <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
             </button>
-            <div class="container bottom">
-                    <div class="container bottom">
-                            <div class="row">
-                            <ag-grid-angular
-                            [ngStyle]="style"
-                            class="ag-theme-balham"
-                            [animateRows]="true"
-                            [enableSorting]="true"
-                            [enableFilter]="true"
-                            [context]="context"
-                            [frameworkComponents]="frameworkcomponents"
-                            [components]="components"
-                            (cellEditingStopped)="rowvaluechanged($event)"
-                            (cellValueChanged)="cellvaluechanged($event)"
-                            [rowData]="rowData"
-                            (gridReady)="onGridReady($event)"
-                            [columnDefs]="columnDefs"
-                            [getRowStyle]="getRowStyle"
-                            [pinnedBottomRowData]="pinnedBottomRowData"
+      <div class="container bottom">
+        <div class="container bottom">
+          <div class="row">
+            <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+              [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" (cellEditingStopped)="rowvaluechanged($event)"
+              (cellValueChanged)="cellvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"
+              [getRowStyle]="getRowStyle" [pinnedBottomRowData]="pinnedBottomRowData">
+            </ag-grid-angular>
+          </div>
+        </div>
+      </div>
+      <br>
 
-                            >
-                            </ag-grid-angular>
-                            </div>
-                          </div>
-            </div>
-            <br>
-
-            <app-loanbudget *ngFor=" let cp of cropPractices" [cropPractice]="cp"></app-loanbudget>
-        </mat-expansion-panel>
-    </mat-accordion>
+      <app-loanbudget *ngFor=" let cp of cropPractices" [cropPractice]="cp"></app-loanbudget>
+    </mat-expansion-panel>
+  </mat-accordion>
 
 
 

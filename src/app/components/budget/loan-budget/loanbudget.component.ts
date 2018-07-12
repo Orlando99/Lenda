@@ -25,8 +25,12 @@ import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
   styleUrls: ['./loanbudget.component.scss']
 })
 export class LoanbudgetComponent implements OnInit {
-
-
+  // Following properties are added as produ build was failing
+  // ----
+  frameworkcomponents;
+  context;
+  cellvaluechanged;
+  // ---
   @Input() cropPractice: Loan_Crop_Practice;
   columnDefs: Array<any>;
   rowData: Array<any>;
@@ -34,7 +38,7 @@ export class LoanbudgetComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   public pinnedBottomRowData;
-  private components;
+  public components;
   private localLoanObject: loan_model;
 
 
@@ -48,7 +52,7 @@ export class LoanbudgetComponent implements OnInit {
 
   ngOnInit() {
     const totalRowHeader= 'Total'; // is used to check if the current row should be editable or not
-    
+
     this.columnDefs = [
 
       { headerName: 'Expense', field: 'FC_Expense_Name', editable: false },
@@ -69,7 +73,7 @@ export class LoanbudgetComponent implements OnInit {
           editable : (params)=>{
            return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'], 
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
@@ -85,7 +89,7 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Crop Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Crop', cellClass: ['text-right'], editable: false, 
+          { headerName: 'ARM', field: 'ARM_Budget_Crop', cellClass: ['text-right'], editable: false,
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
@@ -93,11 +97,11 @@ export class LoanbudgetComponent implements OnInit {
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,cellClass: ['text-right'], 
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
-          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, cellClass: ['text-right'], 
+          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
@@ -116,7 +120,7 @@ export class LoanbudgetComponent implements OnInit {
     //TODO-SANKET can we have obsever one level up instead of for each cropPractice ?
     this.localStorageService.observe(environment.loankey).subscribe(res => {
       this.localLoanObject = res;
-      
+
       this.bindData(this.localLoanObject);
     })
 
@@ -141,7 +145,7 @@ export class LoanbudgetComponent implements OnInit {
     if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
       //if the same table invoked the change .. change only the edited row
       this.rowData[localLoanObject.lasteditrowindex]  = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
-      
+
     }
     else {
       this.rowData = [];
@@ -255,16 +259,16 @@ export class LoanbudgetComponent implements OnInit {
 
   //     this.columnDefs = [
 
-  //       { headerName: 'Expense', field: 'FC_Expense_Name',  editable: false },   
+  //       { headerName: 'Expense', field: 'FC_Expense_Name',  editable: false },
   //       { headerName: "Per Acre Budget",
-  //         children: [   
+  //         children: [
   //       { headerName: 'ARM', field: 'ARM_Budget_Acre', width:120,  editable: true , cellEditor: "textCellEditor",cellClass: changeCellStyle  },
   //       { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
   //       { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',width:120,  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
   //       { headerName: 'Total', field: 'Total_Budget_Acre',width:120, editable: false},
   //         ]},
   //       { headerName: "Crop Budget",
-  //         children: [   
+  //         children: [
   //       { headerName: 'ARM', field: 'ARM_Budget_Crop',  editable: false },
   //       { headerName: 'Distributer', field: 'Distributor_Budget_Crop',   editable: false },
   //       { headerName: '3rd Party', field: 'Third_Party_Budget_Crop',  editable: false },
@@ -285,7 +289,7 @@ export class LoanbudgetComponent implements OnInit {
   //       }
   //     };
   //   }
-  //   ngOnInit() {  
+  //   ngOnInit() {
 
   //     this.localstorageservice.observe(environment.loankey).subscribe(res => {
   //       this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
@@ -320,7 +324,7 @@ export class LoanbudgetComponent implements OnInit {
   //     var obj = value.data;
   //     if (obj.ActionStatus == undefined) {
   //       obj.ActionStatus = 1;
-  //       obj.Assoc_ID=0;  
+  //       obj.Assoc_ID=0;
   //       var rowIndex=this.localloanobject.LoanBudget.length;
   //       this.localloanobject.LoanBudget[rowIndex]=value.data;
   //     }
@@ -362,7 +366,7 @@ export class LoanbudgetComponent implements OnInit {
   //   addrow() {
 
   //     var newItem = new Loan_Budget();
-  //     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;  
+  //     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
   //     var res = this.rowData.push(newItem);
   //     this.gridApi.updateRowData({ add: [newItem] });
   //     this.gridApi.startEditingCell({
@@ -445,7 +449,7 @@ export class LoanbudgetComponent implements OnInit {
   // }
 
 
-  // if(params.newValue==undefined || params.newValue==null||params.newValue=="") { 
+  // if(params.newValue==undefined || params.newValue==null||params.newValue=="") {
   //   return params.value === "" ? "error" : "lenda-editable-field";
   //  }
 

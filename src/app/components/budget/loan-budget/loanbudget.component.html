@@ -1,39 +1,24 @@
-
 <div class="basic-container">
 
-    <mat-accordion>
+  <mat-accordion>
     <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
-            Budget : {{cropPractice.FC_CropName}}  {{cropPractice.FC_PracticeType}}  ( {{ cropPractice.LCP_Acres||0 }} ac)
+          Budget : {{cropPractice.FC_CropName}} {{cropPractice.FC_PracticeType}} ( {{ cropPractice.LCP_Acres||0 }} ac)
         </mat-panel-title>
-      </mat-expansion-panel-header>  
-        
-            <div class="container bottom">
-              <div class="row">
-              <ag-grid-angular 
-              [ngStyle]="style"
-              class="ag-theme-balham"
-              [animateRows]="true"
-              [enableSorting]="true"
-              [enableFilter]="true"
-              [context]="context"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
-              (cellEditingStopped)="rowvaluechanged($event)"   
-              (cellValueChanged)="cellvaluechanged($event)"   
-              [rowData]="rowData" 
-              (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs"
-              [getRowStyle]="getRowStyle"
-              [pinnedBottomRowData]="pinnedBottomRowData"     
-                
-              >
-              </ag-grid-angular>
-              </div>
-            </div>
-            <br>
+      </mat-expansion-panel-header>
+
+      <div class="container bottom">
+        <div class="row">
+          <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+            [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" (cellEditingStopped)="rowvaluechanged($event)"
+            (cellValueChanged)="cellvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"
+            [getRowStyle]="getRowStyle" [pinnedBottomRowData]="pinnedBottomRowData">
+          </ag-grid-angular>
+        </div>
+      </div>
+      <br>
     </mat-expansion-panel>
-    </mat-accordion>
-   
-  </div>
+  </mat-accordion>
+
+</div>
