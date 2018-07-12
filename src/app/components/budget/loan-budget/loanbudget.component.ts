@@ -138,15 +138,16 @@ export class LoanbudgetComponent implements OnInit {
   bindData(localLoanObject: loan_model) {
     let loanBudget = localLoanObject.LoanBudget;
 
-    if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
-      //if the same table invoked the change .. change only the edited row
-      this.rowData[localLoanObject.lasteditrowindex]  = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+    // if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
+    //   //if the same table invoked the change .. change only the edited row
+    //   this.rowData[localLoanObject.lasteditrowindex]  = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
       
-    }
-    else {
-      this.rowData = [];
-      this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
-    }
+    // }
+    // else {
+    //   this.rowData = [];
+    //   this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
+    // }
+    this.rowData =this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres);
     this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
   }
 
