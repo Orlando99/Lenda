@@ -193,6 +193,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AggridTxtAreaComponent,
     FarmComponent,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     BudgetComponent,
     CropbasedbudgetComponent, InsuranceComponent, AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent,
@@ -302,6 +304,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatPaginatorModule,
     MatButtonToggleModule,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     NgxJsonViewerModule,
     MatDialogModule
   ],

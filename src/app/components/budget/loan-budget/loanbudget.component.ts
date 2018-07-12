@@ -34,7 +34,7 @@ export class LoanbudgetComponent implements OnInit {
   private columnApi;
   public getRowStyle;
   public pinnedBottomRowData;
-  private components;
+  public components;
   private localLoanObject: loan_model;
 
 
