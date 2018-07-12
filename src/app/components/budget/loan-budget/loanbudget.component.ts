@@ -116,7 +116,7 @@ export class LoanbudgetComponent implements OnInit {
     //TODO-SANKET can we have obsever one level up instead of for each cropPractice ?
     this.localStorageService.observe(environment.loankey).subscribe(res => {
       this.localLoanObject = res;
- 
+      
       this.bindData(this.localLoanObject);
     })
 
@@ -137,7 +137,16 @@ export class LoanbudgetComponent implements OnInit {
 
   bindData(localLoanObject: loan_model) {
     let loanBudget = localLoanObject.LoanBudget;
-    this.rowData = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres);
+
+    if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
+      //if the same table invoked the change .. change only the edited row
+      this.rowData[localLoanObject.lasteditrowindex]  = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+      
+    }
+    else {
+      this.rowData = [];
+      this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
+    }
     this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
   }
 
@@ -165,6 +174,9 @@ export class LoanbudgetComponent implements OnInit {
     let cropPractice = this.localLoanObject.LoanCropPractices.find(cp => cp.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID);
     cropPractice = this.budgetService.populateTotalsInCropPractice(cropPractice, this.localLoanObject.LoanBudget);
 
+    //this shall have the last edit
+    this.localLoanObject.srccomponentedit = "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID;
+    this.localLoanObject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
   }
 
