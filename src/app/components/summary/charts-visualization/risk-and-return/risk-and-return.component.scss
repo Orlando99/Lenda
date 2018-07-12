@@ -1,23 +1,20 @@
-@import "./../../../../../sass/theme/variables";
-
-.muted-label {
-  color: #999;
-  font-weight: 500;
-}
-
-.risk-return-value {
-  font-weight: bold;
-  font-size: $font-size-md;
-  span:nth-child(2) {
-    margin: 0 10px;
-  }
-}
-
-.row-section {
+.complete {
   height: 50%;
   padding: 10px;
 
   &:first-child {
     border-bottom: 1px solid #eee;
   }
+}
+
+.essential,
+.concise {
+  &:first-child {
+    border-bottom: none;
+  }
+}
+
+.concise,
+.essential {
+  padding: 15px;
 }

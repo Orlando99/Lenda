@@ -1,5 +1,31 @@
 @import "./../../../../../sass/theme/variables";
 
+.concise, .essential {
+  .material-icons {
+    font-size: 16px;
+    color: #bbb;
+  }
+  .title {
+    font-size: 14px;
+    font-weight: 500;
+    display: inline-flex;
+    vertical-align: middle;
+    margin-top: -2px;
+    i {
+      margin-top: 1px;
+      margin-right: 5px;
+    }
+  }
+
+  .right-align {
+    flex: right;
+  }
+  .extra-info {
+    color: #999;
+    padding-left: 20px;
+  }
+}
+
 .section-one {
   padding-left: 10px;
   height: 100%;
@@ -25,43 +51,11 @@
 
 .extra-info {
   color: #999;
-  padding-left: 25px;
+  padding-left: 35px;
 }
 
 .chart-wrapper {
   position: relative;
-}
-
-.progress-chart {
-  right: -10px;
-  position: absolute;
-  max-width: 250px;
-  width: 250px;
-}
-
-.bottom-icons {
-  position: absolute;
-  bottom: 0;
-  display: inline-block;
-  .icon {
-    padding: 0 5px;
-  }
-
-  .flaticon-wrench {
-    color: #9cd460;
-  }
-
-  .flaticon-multiple-users-silhouette {
-    color: #528bd4;
-  }
-
-  .flaticon-hipster {
-    color: #ffe494;
-  }
-
-  .flaticon-random {
-    color: #c14d48;
-  }
 }
 
 .row-section {
