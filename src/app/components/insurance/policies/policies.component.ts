@@ -14,6 +14,7 @@ import { numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes'
 import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
+import { Insurance_Policy } from '../../../models/insurancemodel';
 
 @Component({
   selector: 'app-policies',
@@ -21,6 +22,9 @@ import { EmptyEditor } from '../../../aggridfilters/emptybox';
   styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
+  synclocalloanobject(event: any): any {
+     debugger
+  }
   deleteunwantedcolumn(): any {
     var currentvisiblecolumns=this.columnDefs.filter(p=>p.headerName.includes("Subtype")).map(p=>p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
@@ -327,9 +331,7 @@ export class PoliciesComponent implements OnInit {
           this.rowData.push(row);
         });
       });
-      //Start making Rows here for IRR
-
-      //End rows here
+     
     }
 
   }
@@ -389,12 +391,11 @@ export class PoliciesComponent implements OnInit {
       this.gridApi.setColumnDefs(this.columnDefs);
       debugger
       this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length-1].field)
+       
     }
-    // let oldvalue = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
-    // if (oldvalue != $event.value) {
-    //   this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres = parseInt($event.value);
-    //   this.loancalculationservice.performcalculationonloanobject(this.loanmodel, false);
-    // }
+   //get the local loan object synced
+   this.synclocalloanobject($event);
+   //
   }
 
   onGridReady(params) {
