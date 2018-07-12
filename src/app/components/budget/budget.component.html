@@ -12,17 +12,17 @@
             <mat-expansion-panel-header>
                 <mat-panel-title>
                     Total Budget
-                   
+
                 </mat-panel-title>
             </mat-expansion-panel-header>
 
-            <button (click)="synctoDb()" mat-icon-button>
-                    <mat-icon>publish</mat-icon>
+            <button (click)="synctoDb()" class="btn-unstyle">
+                <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
             </button>
             <div class="container bottom">
                     <div class="container bottom">
                             <div class="row">
-                            <ag-grid-angular 
+                            <ag-grid-angular
                             [ngStyle]="style"
                             class="ag-theme-balham"
                             [animateRows]="true"
@@ -31,14 +31,14 @@
                             [context]="context"
                             [frameworkComponents]="frameworkcomponents"
                             [components]="components"
-                            (cellEditingStopped)="rowvaluechanged($event)"   
-                            (cellValueChanged)="cellvaluechanged($event)"   
-                            [rowData]="rowData" 
+                            (cellEditingStopped)="rowvaluechanged($event)"
+                            (cellValueChanged)="cellvaluechanged($event)"
+                            [rowData]="rowData"
                             (gridReady)="onGridReady($event)"
                             [columnDefs]="columnDefs"
                             [getRowStyle]="getRowStyle"
-                            [pinnedBottomRowData]="pinnedBottomRowData"     
-                              
+                            [pinnedBottomRowData]="pinnedBottomRowData"
+
                             >
                             </ag-grid-angular>
                             </div>

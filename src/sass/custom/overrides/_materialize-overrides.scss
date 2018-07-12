@@ -1,0 +1,6 @@
+.btn, .btn-large, .btn-outline, .btn-small {
+  background-color: $primary-color;
+  &:hover {
+    background-color: $nav-hover-color;
+  }
+}

@@ -1,39 +1,28 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Stored Crop
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <mat-accordion>
-        <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Stored Crop
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-      
-            <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+     <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled()">
            <!-- <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon> -->
-        <mat-icon >publish</mat-icon>
-          </button>
-      
-          <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-            
-          <div class="container bottom">
-            <div class="row">
-            <ag-grid-angular  [ngStyle]="style"
-            class="ag-theme-balham"
-            [animateRows]="true"
-            [enableSorting]="true"
-            [enableFilter]="true"
-            [context]="context"
-            (gridSizeChanged)="onGridSizeChanged($event)"
-            [frameworkComponents]="frameworkcomponents"
-            [components]="components"
-            [singleClickEdit]="true"
-            (cellEditingStopped)="rowvaluechanged($event)"
-            [rowData]="rowData" 
-            (gridReady)="onGridReady($event)"
-            [pinnedBottomRowData]="pinnedBottomRowData"
-            [columnDefs]="columnDefs">
-            </ag-grid-angular>
-            </div>
-          </div>
-                <br>
-        </mat-expansion-panel>
-        </mat-accordion>
+        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
+    </button>
+
+    <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
+     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+
+    <div class="container bottom">
+      <div class="row">
+        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+          [context]="context" (gridSizeChanged)="onGridSizeChanged($event)" [frameworkComponents]="frameworkcomponents" [components]="components"
+          [singleClickEdit]="true" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)"
+          [pinnedBottomRowData]="pinnedBottomRowData" [columnDefs]="columnDefs">
+        </ag-grid-angular>
+      </div>
+    </div>
+    <br>
+  </mat-expansion-panel>
+</mat-accordion>

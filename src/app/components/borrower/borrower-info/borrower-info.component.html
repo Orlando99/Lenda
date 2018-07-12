@@ -1,6 +1,6 @@
 
-      <button (click)="synctoDb()" mat-icon-button *ngIf="allowIndividualSave" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
-        <mat-icon>publish</mat-icon>
+      <button (click)="synctoDb()" *ngIf="allowIndividualSave" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
+        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
       </button>
 
 
