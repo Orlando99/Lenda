@@ -34,7 +34,6 @@ export class FarmComponent implements OnInit {
   public currenteditedfield:string=null;
   public currenteditrowindex:number=-1;
   public components;
-  private popupParent;
   public context;
   public frameworkcomponents;
   public editType;
@@ -58,7 +57,7 @@ export class FarmComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
   }
   //End here
   // Aggrid ends
@@ -94,10 +93,19 @@ export class FarmComponent implements OnInit {
         },
         valueSetter: Countyvaluesetter
       },
-      { headerName: '% Prod', field: 'Prod',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: '% Prod', field: 'Percent_Prod',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
-      },width : 70 },
+      },
+      valueSetter : function(params){
+        
+        numberValueSetter(params);
+        if(params.newValue){
+          params.data['Rentperc']= 100-parseFloat(params.newValue);
+        }
+        return true;
+      },
+      width : 70 },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
       { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
       { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
@@ -108,8 +116,12 @@ export class FarmComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       } },
-      { headerName: 'Rent UoM', field: 'RentUoM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-      cellEditorParams: {values : [{key : '$ per acre', value:'$ per acre'},{key : '$ Total stores', value:'$ Total stores'}]},
+      { headerName: 'Rent UoM', field: 'Rent_UOM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+      cellEditorParams: {values : [{key : 1, value:'$ per acre'},{key : 2, value:'$ Total'}]},
+      valueFormatter: function (params) {
+         let selected = [{key : 1, value:'$ per acre'},{key : 2, value:'$ Total'}].find(v=>v.key==params.value);
+         return selected ? selected.value :  undefined;
+      }
       },
       { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true, cellEditor: "dateCellEditor",
       cellEditorParams: getDateValue,
@@ -118,9 +130,17 @@ export class FarmComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: '% Rent', field: 'Rentperc',  cellClass: 'editable-color', editable: true,
+      { headerName: '% Rent', field: 'Rentperc',
+      cellEditorParams: function(params){
+       
+      },
       valueFormatter: function (params) {
-        return PercentageFormatter(params.value);
+        if(params.data.Percent_Prod){
+          return PercentageFormatter(100-params.data.Percent_Prod);
+        }else{
+          return PercentageFormatter(0);
+        }
+        
       },width : 70},
       { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  cellClass: 'editable-color', editable: true , cellEditor: "selectEditor",
       cellEditorParams: {values : [{key : 1, value:'Yes'},{key : 0, value:'No'}]},
@@ -141,7 +161,6 @@ export class FarmComponent implements OnInit {
     }
     ///
     this.context = { componentParent: this };
-    this.popupParent = document.querySelector("body");
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -193,8 +212,6 @@ export class FarmComponent implements OnInit {
     });
   }
   rowvaluechanged(value: any) {
-    debugger
-   let cells= this.gridApi.getEditingCells();
     this.currenteditedfield=null;
     this.currenteditrowindex=-1;
     if(!this.localloanobject.Farms){
@@ -207,10 +224,10 @@ export class FarmComponent implements OnInit {
       this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Farms.findIndex(p=>p.Farm_ID==obj.Farm_ID);
+      var rowindex=value.rowindex;
       if(obj.ActionStatus!=1)
        obj.ActionStatus = 2;
-      this.localloanobject.Farms[rowindex]=obj;
+      this.localloanobject.Farms[value.rowIndex]=obj;
     }
     this.localloanobject.srccomponentedit = "FarmComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;

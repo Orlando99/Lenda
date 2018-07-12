@@ -141,6 +141,8 @@ import { FarmFinancialComponent } from './components/borrower/farm-financial/far
 import { LoanMasterCalculationWorkerService } from './Workers/calculations/loan-master-calculation-worker.service';
 import { CellValueComponent } from './components/borrower/shared/cell-value/cell-value.component';
 import { QuestionscalculationworkerService } from './Workers/calculations/questionscalculationworker.service';
+import { CurrencyDirective } from './components/borrower/shared/currency.directive';
+import { PercentageDirective } from './components/borrower/shared/percentage.directive';
 import { CustomentryComponent } from './components/customentry/customentry.component';
 import { LoancroppracticeworkerService } from './Workers/calculations/loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './Workers/calculations/insurancecalculationworker.service';
@@ -149,6 +151,7 @@ import { AssociationcalculationworkerService } from './Workers/calculations/asso
 //ag grid enterprise
 import { LicenseManager } from "ag-grid-enterprise/main";
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
+import { SubTableComponent } from './components/borrower/farm-financial/sub-table/sub-table.component';
 import { ChartsVisualizationComponent } from './components/summary/charts-visualization/charts-visualization.component';
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
@@ -158,6 +161,7 @@ import { CommitmentChartComponent } from './components/summary/charts-visualizat
 import { SidebarModule } from 'ng-sidebar';
 import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
+import { BudgetHelperService } from './components/budget/budget-helper.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -212,6 +216,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CustomentryComponent,
     OptimizerComponent,
     CustomentryComponent,
+    SubTableComponent,
     ChartsVisualizationComponent,
     CashFlowComponent,
     RiskAndReturnComponent,
@@ -325,7 +330,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     QuestionscalculationworkerService,
     LoancroppracticeworkerService,
     InsurancecalculationworkerService,
-    AssociationcalculationworkerService
+    AssociationcalculationworkerService,
+    BudgetHelperService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

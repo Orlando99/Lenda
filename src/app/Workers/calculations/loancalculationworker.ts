@@ -12,6 +12,7 @@ import { AssociationcalculationworkerService } from './associationcalculationwor
 import { MAT_MENU_DEFAULT_OPTIONS } from '@angular/material';
 import { Collateralcalculationworker } from './collateralcalculationworker.service';
 import { QuestionscalculationworkerService } from './questionscalculationworker.service';
+import { LoanMasterCalculationWorkerService } from './loan-master-calculation-worker.service';
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
 
@@ -26,7 +27,9 @@ export class LoancalculationWorker {
     private loancrophistoryworker: LoancrophistoryService,
     private farmcalculation: FarmcalculationworkerService,
     private collateralcalculation: Collateralcalculationworker,
-    private questionscalculations: QuestionscalculationworkerService,
+    private questionscalculations:QuestionscalculationworkerService,
+    private loanMasterCalcualtions : LoanMasterCalculationWorkerService,
+    // private associationcalculation:AssociationcalculationworkerService,
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
     private associationcalculation: AssociationcalculationworkerService,
@@ -110,8 +113,18 @@ export class LoancalculationWorker {
           localloanobj = this.insuranceworker.performcalculations(localloanobj);
 
       //STEP 5 --- BUDGET CALCULATIONS
-          if (localloanobj.LoanBudget != null)
-          localloanobj.LoanBudget = localloanobj.LoanBudget;
+          if (localloanobj.LoanBudget != null){
+
+            for(let i = 0; i<localloanobj.LoanBudget.length;i++){
+              let currentBudget =  localloanobj.LoanBudget[i];
+              let cropPractice = localloanobj.LoanCropPractices.find(cp=>cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+                currentBudget.ARM_Budget_Crop = currentBudget.ARM_Budget_Acre * cropPractice.LCP_Acres;
+                currentBudget.Distributor_Budget_Crop = currentBudget.Distributor_Budget_Acre * cropPractice.LCP_Acres;
+                currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
+                currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
+            }
+          }
+          //localloanobj.LoanBudget = localloanobj.LoanBudget;
 
       //STEP 6 --- COLLATERAL CALCULATIONS
           if (localloanobj.LoanCollateral != null) {
@@ -124,9 +137,60 @@ export class LoancalculationWorker {
             localloanobj = this.questionscalculations.performcalculationforquestionsupdated(localloanobj);
 
       // STEP 8 --- MASTER CALCULATIONS
-          if (localloanobj.LoanMaster != null)
-            localloanobj.LoanMaster = localloanobj.LoanMaster;
+        if(localloanobj.LoanMaster !==null){
+          localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+        }
 
+        //TODO-SANKET : should be remove
+        // localloanobj =  this.budgetService.caculateTotalsBeforeStore(localloanobj);
+        // debugger;
+        //REMOVE ENDS
+
+      //   if(!localloanobj.LoanCropPractices || localloanobj.LoanCropPractices.length ===0){
+
+      //     //TODO-SANKET - remove static initializer and get it from api
+      //     localloanobj.LoanCropPractices= [
+      //       {
+      //         Loan_Crop_Practice_ID : 1,
+      //          Loan_Full_ID : '000001-000',
+      //          Crop_Practice_ID : 2,
+      //          LCP_APH : 200,
+      //          LCP_Acres : 100.2,
+      //          LCP_ARM_Budget : 10000,
+      //          LCP_Distributer_Budget :20000,
+      //          LCP_Third_Party_Budget:30000,
+      //          LCP_Notes: 'Notes',
+      //          LCP_Status: 1,
+      //          ActionStatus : 0
+      //      },
+      //      {
+      //       Loan_Crop_Practice_ID : 2,
+      //        Loan_Full_ID : '000001-000',
+      //        Crop_Practice_ID : 6,
+      //        LCP_APH : 120,
+      //        LCP_Acres : 100.3,
+      //        LCP_ARM_Budget : 10000,
+      //        LCP_Distributer_Budget :20000,
+      //        LCP_Third_Party_Budget:30000,
+      //        LCP_Notes: 'Some Note',
+      //        LCP_Status: 1,
+      //        ActionStatus : 0
+      //    },
+      //    {
+      //     Loan_Crop_Practice_ID : 3,
+      //      Loan_Full_ID : '000001-000',
+      //      Crop_Practice_ID : 13,
+      //      LCP_APH : 120,
+      //      LCP_Acres : 100.3,
+      //      LCP_ARM_Budget : 10000,
+      //      LCP_Distributer_Budget :20000,
+      //      LCP_Third_Party_Budget:30000,
+      //      LCP_Notes: 'Some Note',
+      //      LCP_Status: 1,
+      //      ActionStatus : 0
+      //  }
+      //     ]
+      //   }
       // OTHER UNSORTED 
           localloanobj.DashboardStats = localloanobj.DashboardStats;
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;

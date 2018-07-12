@@ -251,7 +251,7 @@ export class borrower_model
         LoanQResponse:any=undefined;
 
         @JsonProperty("LoanBudget",[])
-        LoanBudget:any=undefined;
+        LoanBudget:Array<Loan_Budget>=[];
 
         @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
@@ -267,6 +267,9 @@ export class borrower_model
 
         @JsonProperty("DashboardStats",[])
         DashboardStats:any=undefined;
+
+        @JsonProperty("LoanCropPractices",[])
+        LoanCropPractices :Array<Loan_Crop_Practice>=[];
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
 
@@ -282,49 +285,75 @@ export class borrower_model
     {   
         @JsonProperty("Loan_Budget_ID", IntConverter,false)
         Loan_Budget_ID: number;
-        @JsonProperty("Loan_ID", IntConverter,false)
-        Loan_ID: number;
-        @JsonProperty("Z_Loan_Seq_num", StringConverter,false)
-        Z_Loan_Seq_num: string="";
         @JsonProperty("Loan_Full_ID", StringConverter,false)
         Loan_Full_ID: string="";
-        @JsonProperty("Z_Loan_CU_ID", IntConverter,false)
-        Z_Loan_CU_ID: number=0;
-        @JsonProperty("Z_Expense_Type_Code", IntConverter,false)
-        Z_Expense_Type_Code: number=0;
+        @JsonProperty("Crop_Practice_ID", IntConverter,false)
+        Crop_Practice_ID: number;
+        @JsonProperty("Expense_Type_ID", IntConverter,false)
+        Expense_Type_ID: number=0;
         @JsonProperty("ARM_Budget_Acre", IntConverter,false)
         ARM_Budget_Acre: number=0;
         @JsonProperty("Distributor_Budget_Acre", IntConverter,false)
         Distributor_Budget_Acre: number=0;
         @JsonProperty("Third_Party_Budget_Acre", IntConverter,false)
         Third_Party_Budget_Acre: number=0;
-        @JsonProperty("BudgetTotal_Acre", IntConverter,false)
-        BudgetTotal_Acre: number=0;
+        @JsonProperty("Total_Budget_Acre", IntConverter,false)
+        Total_Budget_Acre: number=0;
         @JsonProperty("ARM_Budget_Crop", IntConverter,false)
         ARM_Budget_Crop: number=0;
         @JsonProperty("Distributor_Budget_Crop", IntConverter,false)
         Distributor_Budget_Crop: number=0;
         @JsonProperty("Third_Party_Budget_Crop", IntConverter,false)
         Third_Party_Budget_Crop: number=0;
-        @JsonProperty("BudgetTotal_Crop", IntConverter,false)
-        BudgetTotal_Crop: number=0;
+        @JsonProperty("Total_Budget_Crop_ET", IntConverter,false)
+        Total_Budget_Crop_ET: number=0;
         @JsonProperty("Notes", StringConverter,false)
         Notes: string="";
         @JsonProperty("Other_Description_Text", StringConverter,false)
         Other_Description_Text: string="";
-
-        @JsonProperty("Crop_Code", StringConverter,false)
-        Crop_Code: string="";
-        @JsonProperty("Crop_Practice_Type_Code", StringConverter,false)
-        Crop_Practice_Type_Code: string="";
-        @JsonProperty("Budget_Expense_Name", StringConverter,false)
-        Budget_Expense_Name: string="";
-
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
+        @JsonProperty("Z_Loan_ID", IntConverter,false)
+        Z_Loan_ID: number=0;
+        @JsonProperty("Z_Loan_Seq_num", StringConverter,false)
+        Z_Loan_Seq_num: string="";
+       
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=0;
 
+        FC_Expense_Name? : string;
+
+    }
+
+
+    export class Loan_Crop_Practice{
+        @JsonProperty("Loan_Crop_Practice_ID", IntConverter,false)
+        Loan_Crop_Practice_ID: number=0;
+        @JsonProperty("Loan_Full_ID", StringConverter,false)
+        Loan_Full_ID: string='';
+        @JsonProperty("Crop_Practice_ID", IntConverter,false)
+        Crop_Practice_ID: number=0;
+        @JsonProperty("LCP_APH", IntConverter,false)
+        LCP_APH: number=0;
+        @JsonProperty("LCP_Acres", IntConverter,false)
+        LCP_Acres: number=0;
+        @JsonProperty("LCP_ARM_Budget", IntConverter,false)
+        LCP_ARM_Budget: number=0;
+        @JsonProperty("LCP_Distributer_Budget", IntConverter,false)
+        LCP_Distributer_Budget: number=0;
+        @JsonProperty("LCP_Third_Party_Budget", IntConverter,false)
+        LCP_Third_Party_Budget: number=0;
+        @JsonProperty("LCP_Notes", StringConverter,false)
+        LCP_Notes: string='';
+        @JsonProperty("LCP_Status", IntConverter,false)
+        LCP_Status: number=0;
+        
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=0;
+
+        FC_CropName? : string = '';
+        FC_PracticeType? : string = '';
+        
     }
     @JsonObject
     export class Loan_Collateral

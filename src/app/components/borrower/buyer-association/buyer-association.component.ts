@@ -123,7 +123,7 @@ export class BuyerAssociationComponent implements OnInit {
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode==1){
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-
+          
           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
           if (res.ResCode == 1) {
             this.toaster.success("Records Synced");
