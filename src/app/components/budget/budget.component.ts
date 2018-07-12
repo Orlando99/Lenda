@@ -32,6 +32,7 @@ export class BudgetComponent implements OnInit {
   gridApi;
   columnApi;
   pinnedBottomRowData;
+  public getRowStyle;
   // constructor() {  
 
   // this.posts =[];
@@ -99,6 +100,13 @@ export class BudgetComponent implements OnInit {
         ]
       }
     ];
+
+    this.getRowStyle = function (params) {
+      if (params.node.rowPinned) {
+        return { "font-weight": "bold", "background-color": "#F5F7F7" };
+      }
+    };
+
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localLoanObject = res;
       this.bindData(this.localLoanObject);
@@ -114,7 +122,7 @@ export class BudgetComponent implements OnInit {
       return budget;
     });
     //REMOVE END
-    this.bindData(this.localLoanObject);
+    this.bindData(this.localLoanObject);   
   }
 
   bindData(loanObject: loan_model) {
@@ -123,12 +131,12 @@ export class BudgetComponent implements OnInit {
       this.rowData = this.budgetService.getTotalTableData(loanObject.LoanBudget, this.cropPractices);
       this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
 
-    }
+    }   
   }
   ngOnInit() {
 
   }
-
+ 
   style = {
     marginTop: '10px',
     width: '96%',
