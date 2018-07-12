@@ -16,6 +16,7 @@ import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { BudgetHelperService } from './budget-helper.service';
+import { PriceFormatter } from '../../Workers/utility/aggrid/formatters';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 
 @Component({
@@ -58,19 +59,43 @@ export class BudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120, editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellClass: ['text-right'], 
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          }},
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
+          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120,cellClass: ['text-right'], editable: false,
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
         ]
       },
       {
         headerName: "Crop Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
-          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, valueFormatter: (params) => params.value ? params.value.toFixed(2) : 0 },
+          { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
+          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
+          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false,cellClass: ['text-right'],
+          valueFormatter: function (params) {
+            return PriceFormatter(params.value);
+          } },
         ]
       }
     ];
