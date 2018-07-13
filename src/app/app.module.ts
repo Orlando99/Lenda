@@ -150,17 +150,22 @@ import { InsurancecalculationworkerService } from './Workers/calculations/insura
 import { AssociationcalculationworkerService } from './Workers/calculations/associationcalculationworker.service';
 
 //ag grid enterprise
-import {LicenseManager} from "ag-grid-enterprise/main";
+import { LicenseManager } from "ag-grid-enterprise/main";
 import { OptimizerComponent } from './components/optimizer/optimizer.component';
 import { SubTableComponent } from './components/borrower/farm-financial/sub-table/sub-table.component';
 import { ChartsVisualizationComponent } from './components/summary/charts-visualization/charts-visualization.component';
 import { CashFlowComponent } from './components/summary/charts-visualization/cash-flow/cash-flow.component';
 import { RiskAndReturnComponent } from './components/summary/charts-visualization/risk-and-return/risk-and-return.component';
 import { CompanyInfoComponent } from './components/summary/charts-visualization/company-info/company-info.component';
+import { RiskChartComponent } from './components/summary/charts-visualization/risk-and-return/risk-chart/risk-chart.component';
+import { CommitmentChartComponent } from './components/summary/charts-visualization/risk-and-return/commitment-chart/commitment-chart.component';
 import { SidebarModule } from 'ng-sidebar';
 import { PoliciesComponent } from './components/insurance/policies/policies.component';
 import { ChipsListEditor } from './aggridcolumns/chipscelleditor';
 import { EmptyEditor } from './aggridfilters/emptybox';
+import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
+import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
+import { BudgetHelperService } from './components/budget/budget-helper.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -194,6 +199,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AggridTxtAreaComponent,
     FarmComponent,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     BudgetComponent,
     CropbasedbudgetComponent, InsuranceComponent, AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent,
@@ -216,8 +223,6 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CellValueComponent,
     CustomentryComponent,
     OptimizerComponent,
-    CurrencyDirective,
-    PercentageDirective,
     CustomentryComponent,
     SubTableComponent,
     ChartsVisualizationComponent,
@@ -225,8 +230,11 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     RiskAndReturnComponent,
     CompanyInfoComponent,
     PoliciesComponent,
-  
-
+    RiskChartComponent,
+    CommitmentChartComponent,
+    CompanyInfoComponent,
+    BottomIconsComponent,
+    ProgressChartComponent
   ],
   imports: [
     BrowserModule,
@@ -304,6 +312,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatPaginatorModule,
     MatButtonToggleModule,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     NgxJsonViewerModule,
     MatDialogModule
   ],
@@ -332,7 +342,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     QuestionscalculationworkerService,
     LoancroppracticeworkerService,
     InsurancecalculationworkerService,
-    AssociationcalculationworkerService
+    AssociationcalculationworkerService,
+    BudgetHelperService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

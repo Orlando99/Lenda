@@ -2,10 +2,10 @@
 <div class="basic-container">
 
     <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
-            Budget : {{budgetobject.Crop}} ( {{ budgetobject.CropYield||0 }} ac)
+            Budget : {{cropPractice.FC_CropName}}  {{cropPractice.FC_PracticeType}}  ( {{ cropPractice.LCP_Acres||0 }} ac)
         </mat-panel-title>
       </mat-expansion-panel-header>  
         
@@ -13,15 +13,12 @@
               <div class="row">
               <ag-grid-angular 
               [ngStyle]="style"
-              class="ag-theme-balham"
+              class="ag-theme-balham roboto-font"
               [animateRows]="true"
               [enableSorting]="true"
               [enableFilter]="true"
-              [context]="context"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
               (cellEditingStopped)="rowvaluechanged($event)"   
-              (cellValueChanged)="cellvaluechanged($event)"   
+              [components]="components"
               [rowData]="rowData" 
               (gridReady)="onGridReady($event)"
               [columnDefs]="columnDefs"

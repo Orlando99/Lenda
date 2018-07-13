@@ -1,4 +1,4 @@
-<div class="row-section">
+<div class="row-section" *ngIf="viewMode == 2">
   <div>
     <span class="header-label">Budget</span>
     <span class="header-value">$ 393</span>
@@ -15,4 +15,30 @@
     <canvas baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
       [chartType]="doughnutChartType"></canvas>
   </div>
+</div>
+
+<!-- Essential -->
+<div class="row-section" *ngIf="viewMode == 1">
+  <div>
+    <span class="header-label">Budget</span>
+    <span class="header-value">$ 393</span>
+  </div>
+  <div>
+    <span class="header-label">Cash Flow</span>
+    <span class="header-value">$ 452</span>
+  </div>
+  <div>
+    <span class="header-label">Break Even</span>
+    <span class="header-value">47.19</span>
+  </div>
+  <app-progress-chart [viewMode]="viewMode"></app-progress-chart>
+</div>
+
+<!-- Concise -->
+<div class="row-section concise" *ngIf="viewMode == 0">
+  <div>
+    <span class="header-label">Cash Flow</span>
+    <span class="header-value">$ 452</span>
+  </div>
+  <app-bottom-icons [viewMode]="viewMode"></app-bottom-icons>
 </div>

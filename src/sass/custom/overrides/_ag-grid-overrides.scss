@@ -11,16 +11,30 @@
 }
 
 .ag-cell {
-  background-color:white
+  background-color:#f6f5f5;
+   border-width: 0px 1px 0px 0px !important;
+    border-color: lightgray !important;
+    border-style: solid !important;
+
 }
 
 .ag-header-row{
   background-color: #23C8AB;
   color: white;
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
 
 .editable-color{
-  background-color: #dcf0f4 !important
+  background-color: white;
+  color : #1a61df;
+}
+
+
+.text-right{
+  text-align: right;
+}
+.ag-header-group-cell-label > .ag-header-group-text{
+  margin: 0 auto;
 }
 
 .edited-color{
@@ -121,3 +135,7 @@
       .grayedcell{
         background: gray !important
       }
+
+.roboto-font{
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
+}

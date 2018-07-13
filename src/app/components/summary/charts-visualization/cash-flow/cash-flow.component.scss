@@ -1,3 +1,5 @@
+@import "./../../../../../sass/theme/variables";
+
 .header-label, .header-value {
   font-weight: bold;
 }
@@ -9,9 +11,18 @@
 
 .budget-doughnut {
   width: 95%;
+  max-width: 350px;
   margin: 0 auto;
 }
 
 .row-section {
   padding: 10px;
+  position: relative;
+  height: 100%;
 }
+
+.concise {
+  padding: 15px;
+  position: relative;
+}
+

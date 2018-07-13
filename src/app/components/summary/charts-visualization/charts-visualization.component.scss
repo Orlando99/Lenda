@@ -1,3 +1,19 @@
+@import "./../../../../sass/theme/variables";
+
+.concise {
+  .summary-section {
+    min-height: 50px;
+    height: 50px;
+  }
+}
+
+.essential {
+  .summary-section {
+    min-height: 100px;
+    height: 100px;
+  }
+}
+
 .summary-section {
   min-height: 250px;
   height: 250px;
@@ -6,5 +22,40 @@
 
   &:nth-child(1), &:nth-child(2) {
     border-right: 1px solid #eee;
+  }
+}
+
+.corner-right {
+  position: absolute;
+  right: 0;
+  background: $primary-color;
+  border: 1px solid #333;
+  border-radius: 0.2em;
+  border-top: none;
+  padding: 3px;
+  margin-top: -2px;
+  cursor: pointer;
+}
+
+.flaticon {
+  font-size: $font-size-md;
+  display: block;
+  color: #eee;
+  animation-name: rotate;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes rotate {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+
+.context-menu {
+  button {
+    display: block;
+    padding: 5px;
+    color: $primary-color;
   }
 }
