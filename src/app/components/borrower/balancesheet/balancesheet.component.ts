@@ -98,12 +98,28 @@ export class BalancesheetComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
-      this.rowData=[];
       this.pinnedBottomRowData=[];
-      this.prepareviewmodel();
+      let rows = this.prepareviewmodel();
+
+      switch (this.localloanobject.srccomponentedit) {
+        case 'Balancesheet-Current':
+          this.rowData[0] = Object.assign({},rows[0]);
+          break;
+        case 'Balancesheet-Intermediate':
+          this.rowData[1] = rows[1];
+        break;
+        case 'Balancesheet-Fixed':
+          this.rowData[2] = rows[2];
+        break;
+      
+        default:
+        this.rowData = rows;
+          break;
+      }
+      this.localloanobject.srccomponentedit = undefined;
+
     })
     this.getdataforgrid();
-    this.prepareviewmodel();
   }
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
@@ -111,14 +127,19 @@ export class BalancesheetComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
     }
+    
+    this.rowData = this.prepareviewmodel();
   }
 
   // Ag grid Editing Event
   celleditingstopped(event: any) {
 
-    var financetype=event.data.Financials;
-    if(financetype=="Intermediate"){
+    var financetypeOriginal=event.data.Financials;
+    var financetype= '';
+    if(financetypeOriginal=="Intermediate"){
       financetype="Inter";
+    }else{
+      financetype = financetypeOriginal;
     }
   var property="";
   if(event.colDef.field=="Discount")
@@ -134,6 +155,7 @@ export class BalancesheetComponent implements OnInit {
     property=financetype+"_Liabilities";
   }
   this.localloanobject.LoanMaster[0][property]=parseFloat(event.value);
+  this.localloanobject.srccomponentedit = "Balancesheet-"+financetypeOriginal;
   this.logging.checkandcreatelog(3,'BalanceSheet',"Field Edited -"+property);
   this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
@@ -141,28 +163,31 @@ export class BalancesheetComponent implements OnInit {
   //Aggrid Data Preperation
   prepareviewmodel() {
     //prepare three rows here
+      let rows = [];
+      if(this.localloanobject.LoanMaster){
+        let loanMaster = this.localloanobject.LoanMaster[0];
+        //1st Current Financial Row
+        var currentobj={Financials:'Current',Assets:loanMaster.Current_Assets,Discount:loanMaster.Current_Assets_Disc_Percent,
+        AdjValue:loanMaster.FC_Current_Adjvalue,Debt:loanMaster.Current_Liabilities,DiscountedNW:loanMaster.Current_Disc_Net_Worth}
+        rows.push(currentobj);
 
-      let loanMaster = this.localloanobject.LoanMaster[0];
-      //1st Current Financial Row
-      var currentobj={Financials:'Current',Assets:loanMaster.Current_Assets,Discount:loanMaster.Current_Assets_Disc_Percent,
-      AdjValue:loanMaster.FC_Current_Adjvalue,Debt:loanMaster.Current_Liabilities,DiscountedNW:loanMaster.Current_Disc_Net_Worth}
-      this.rowData.push(currentobj);
-
-       //1st Intermediate Financial Row
-      var Intermediateobj={Financials:'Intermediate',Assets:loanMaster.Inter_Assets,Discount:loanMaster.Inter_Assets_Disc_Percent,
-      AdjValue:loanMaster.FC_Inter_Adjvalue,Debt:loanMaster.Inter_Liabilities,DiscountedNW:loanMaster.Inter_Disc_Net_Worth}
-      this.rowData.push(Intermediateobj)
+        //1st Intermediate Financial Row
+        var Intermediateobj={Financials:'Intermediate',Assets:loanMaster.Inter_Assets,Discount:loanMaster.Inter_Assets_Disc_Percent,
+        AdjValue:loanMaster.FC_Inter_Adjvalue,Debt:loanMaster.Inter_Liabilities,DiscountedNW:loanMaster.Inter_Disc_Net_Worth}
+        rows.push(Intermediateobj)
 
 
-       //1st LongTerm Financial Row
-       var LongTermobj={Financials:'Fixed',Assets:loanMaster.Fixed_Assets,Discount:loanMaster.Fixed_Assets_Disc_Percent,
-       AdjValue:loanMaster.FC_Fixed_Adjvalue,Debt:loanMaster.Fixed_Liabilities,DiscountedNW:loanMaster.Fixed_Disc_Net_Worth}
-       this.rowData.push(LongTermobj)
+        //1st LongTerm Financial Row
+        var LongTermobj={Financials:'Fixed',Assets:loanMaster.Fixed_Assets,Discount:loanMaster.Fixed_Assets_Disc_Percent,
+        AdjValue:loanMaster.FC_Fixed_Adjvalue,Debt:loanMaster.Fixed_Liabilities,DiscountedNW:loanMaster.Fixed_Disc_Net_Worth}
+        rows.push(LongTermobj)
 
-       //Last Aggregate Row
-       var Aggregateobj={Financials:'Total',Assets:loanMaster.Total_Assets,Discount:'',
-       AdjValue:loanMaster.FC_Total_AdjValue,Debt:loanMaster.Total_Liabilities,DiscountedNW:loanMaster.Total_Disc_Net_Worth}
-       this.pinnedBottomRowData.push(Aggregateobj);
+        //Last Aggregate Row
+        var Aggregateobj={Financials:'Total',Assets:loanMaster.Total_Assets,Discount:'',
+        AdjValue:loanMaster.FC_Total_AdjValue,Debt:loanMaster.Total_Liabilities,DiscountedNW:loanMaster.Total_Disc_Net_Worth}
+        this.pinnedBottomRowData.push(Aggregateobj);
+      }
+    return rows;
 
   }
   //ends here
