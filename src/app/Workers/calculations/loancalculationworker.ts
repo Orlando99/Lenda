@@ -195,6 +195,7 @@ export class LoancalculationWorker {
           localloanobj.DashboardStats = localloanobj.DashboardStats;
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;
           localloanobj.srccomponentedit = localloanobj.srccomponentedit;
+          localloanobj.InsurancePolicies=localloanobj.InsurancePolicies;
           console.log("Calculation Ended");
           let endtime = new Date().getTime();
           this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");

@@ -36,7 +36,7 @@ export class RatingComponent implements OnInit {
       this.data = {
         partOne: [
           {
-            text: 'Borrower Ratting',
+            text: 'Borrower Rating',
             value: borrowerRatingValues.borrowerRating,
             staticValues: this.loanMasterCaculationWorker.borrowerRatingstaticValues.borrowerRating
 
