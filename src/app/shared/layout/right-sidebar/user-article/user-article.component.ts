@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-user-article',
@@ -6,7 +6,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./user-article.component.scss']
 })
 export class UserArticleComponent implements OnInit {
-
+  @Input() title;
+  @Input() text;
+  @Input() date;
   constructor() { }
 
   ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-media-article',
@@ -6,7 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./media-article.component.scss']
 })
 export class MediaArticleComponent implements OnInit {
-
+  @Input() text;
+  @Input() icon;
   constructor() { }
 
   ngOnInit() {

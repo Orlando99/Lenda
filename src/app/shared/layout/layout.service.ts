@@ -8,7 +8,7 @@ import { Observable } from "rxjs/Rx";
 @Injectable()
 export class LayoutService {
   private isExpanded: BehaviorSubject<boolean> = new BehaviorSubject(true);
-  private isRightbarExpanded: BehaviorSubject<boolean> = new BehaviorSubject(true);
+  private isRightbarExpanded: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   public isSidebarExpanded(): Observable<boolean> {
     return this.isExpanded.asObservable();
