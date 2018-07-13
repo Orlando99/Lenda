@@ -11,3 +11,22 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
   box-shadow: 0 3px 1px -2px rgba(22, 76, 123, 0.2), 0 2px 2px 0 rgba(22, 76, 123, 0.3), 0 1px 5px 0 rgba(22, 76, 123, 0.2) !important;
 }
+
+// Accordion overrides
+.mat-expansion-panel-header {
+  display: block !important;
+  .mat-content {
+    display: inline-block;
+    margin-top: 15px;
+  }
+  .mat-expansion-indicator  {
+    float: left;
+    margin-top: 12px;
+    margin-right: 10px;
+  }
+  &.mat-expanded {
+    .mat-expansion-indicator {
+      margin-top: 18px;
+    }
+  }
+}
