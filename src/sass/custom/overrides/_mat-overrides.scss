@@ -13,8 +13,35 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
 }
 
 // Accordion overrides
+body .mat-expansion-panel-header:hover {
+  background-color: rgb(22, 76, 123) !important;
+  .mat-expansion-panel-header-title,
+  .mat-expansion-indicator::after {
+    color: $white;
+  }
+}
+
+.mat-expansion-panel-header.cdk-mouse-focused {
+  background-color: rgba(22, 76, 123, 0.9) !important;
+  .mat-expansion-panel-header-title,
+  .mat-expansion-indicator::after {
+    color: $white;
+    font-size: $font-size-md;
+  }
+}
+
+body .mat-expansion-panel-body {
+  padding: 15px 0;
+}
+
 .mat-expansion-panel-header {
   display: block !important;
+  background-color: rgba(22, 76, 123, 0.9);
+  border: 1px solid $white-90;
+  color: $white !important;
+  height: 50px;
+  max-height: 50px;
+
   .mat-content {
     display: inline-block;
     margin-top: 15px;
@@ -24,9 +51,14 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
     margin-top: 12px;
     margin-right: 10px;
   }
+  .mat-expansion-panel-header-title,
+  .mat-expansion-indicator::after {
+    color: $white;
+    font-size: $font-size-md;
+  }
   &.mat-expanded {
     .mat-expansion-indicator {
-      margin-top: 18px;
+      margin-top: 17px;
     }
   }
 }
