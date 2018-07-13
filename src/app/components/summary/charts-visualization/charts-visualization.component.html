@@ -1,11 +1,30 @@
-<div class="row p-0 m-0">
+<div class="row p-0 m-0" [ngClass]="{'concise':viewMode==0, 'essential':viewMode==1, 'complete':viewMode==2}">
   <div class="col s3 summary-section">
-    <app-company-info></app-company-info>
+    <app-company-info [viewMode]="viewMode"></app-company-info>
   </div>
   <div class="col s5 summary-section">
-    <app-risk-and-return></app-risk-and-return>
+    <app-risk-and-return [viewMode]="viewMode"></app-risk-and-return>
   </div>
   <div class="col s4 summary-section">
-    <app-cash-flow></app-cash-flow>
+    <app-cash-flow [viewMode]="viewMode"></app-cash-flow>
   </div>
+
+  <!-- Toolbar to update view mode -->
+  <mat-icon mat-list-icon class="corner-right">
+    <!-- <i class="flaticon flaticon-gear"></i> -->
+    <i class="flaticon material-icons" mat-button [matMenuTriggerFor]="settings">
+    settings
+    </i>
+    <mat-menu #settings="matMenu" class="context-menu">
+      <button mat-menu-item (click)="setView(0)">
+        <a>Concise</a>
+      </button>
+      <button mat-menu-item (click)="setView(1)">
+        <a>Essential</a>
+      </button>
+      <button mat-menu-item (click)="setView(2)">
+      <a>Complete</a>
+    </button>
+    </mat-menu>
+  </mat-icon>
 </div>

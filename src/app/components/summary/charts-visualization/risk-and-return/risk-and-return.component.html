@@ -1,52 +1,6 @@
-<div class="row-section">
-  <div class="col s6">
-    <span class="muted-label">
-      Risk Cushion
-    </span>
-    <p class="risk-return-value">
-      <span>$ 241,561</span>
-      <span>128.1%</span>
-    </p>
-  </div>
-  <div class="col s6">
-    <span class="muted-label">
-      Return
-    </span>
-    <p class="risk-return-value">
-      10.5%
-    </p>
-  </div>
-
-  <div class="col s12">
-    <svg height="50" class="w-100">
-      <g id="blackDiamond"></g>
-      <g id="redDiamond"></g>
-      <g id="risk">
-      </g>
-      <g id="cushion">
-      </g>
-      <g id="returnFirst">
-      </g>
-      <g id="returnSecond">
-      </g>
-    </svg>
-  </div>
+<div class="row-section" [ngClass]="{'concise':viewMode==0, 'essential': viewMode==1, 'complete': viewMode==2}">
+  <app-risk-chart [viewMode]="viewMode"></app-risk-chart>
 </div>
-<div class="row-section">
-  <div class="col s6">
-    <span class="muted-label">
-      Commitment
-    </span>
-    <p class="risk-return-value">
-      $ 403,256
-    </p>
-  </div>
-  <div class="col s6">
-    <span class="muted-label">
-      Excess Ins
-    </span>
-    <p class="risk-return-value">
-      77.6%
-    </p>
-  </div>
+<div class="row-section" *ngIf="viewMode==2">
+  <app-commitment-chart></app-commitment-chart>
 </div>

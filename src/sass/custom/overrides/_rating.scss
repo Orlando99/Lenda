@@ -2,9 +2,20 @@
   margin: 0 !important;
 }
 
-.br-unit {
-  width: 18px !important;
-  height: 18px !important;
+.br-stars .br-unit {
+  width: 18px;
+  height: 18px;
+}
+
+.concise .br-stars .br-unit,
+.essential .br-stars .br-unit {
+  width: 14px;
+  height: 14px;
+}
+
+.concise .br-units,
+.essential .br-units {
+  float: right;
 }
 
 .br-stars .br-units {
