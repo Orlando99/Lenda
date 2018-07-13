@@ -137,7 +137,6 @@ export class LoanbudgetComponent implements OnInit {
 
   bindData(localLoanObject: loan_model) {
     let lstLoanBudget = localLoanObject.LoanBudget;
-    debugger;
     if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
       //if the same table invoked the change .. change only the edited row
      // let budget = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
