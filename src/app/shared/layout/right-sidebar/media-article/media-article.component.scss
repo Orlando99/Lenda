@@ -1,0 +1,21 @@
+@import "./../../../../../sass/theme/variables";
+
+.media-article {
+  display: flex;
+  background: $white-90;
+  border-radius: 0.25em;
+  padding: 10px;
+  font-weight: bold;
+  font-size: $font-size-sm;
+  color: $black-70;
+  margin: 5px 0;
+  border: 1px solid #eee;
+  .text {
+    margin-top: 5px;
+    margin-left: 10px;
+  }
+
+  .forum {
+    color: #21d2ac;
+  }
+}

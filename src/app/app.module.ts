@@ -114,6 +114,8 @@ import { NotificationFeedsService } from './shared/notification-feeds/notificati
 import { NotificationFeedsComponent } from './shared/notification-feeds/notification-feeds.component';
 import { SidebarComponent } from './shared/layout/sidebar.component';
 import { RightSidebarComponent } from './shared/layout/right-sidebar/right-sidebar.component';
+import { MediaArticleComponent } from './shared/layout/right-sidebar/media-article/media-article.component';
+import { UserArticleComponent } from './shared/layout/right-sidebar/user-article/user-article.component';
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
 import { SpinerComponent } from './shared/spiner/spiner.component';
 import { FlowchartComponent } from './components/flowchart/flowchart.component';
@@ -209,6 +211,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     NotificationFeedsComponent,
     SidebarComponent,
     RightSidebarComponent,
+    MediaArticleComponent,
+    UserArticleComponent,
     CreateLoanComponent,
     CollateralComponent, FSAComponent, LivestockComponent, StoredCropComponent, EquipmentComponent, RealEstateComponent, OthersComponent,
     FlowchartComponent,

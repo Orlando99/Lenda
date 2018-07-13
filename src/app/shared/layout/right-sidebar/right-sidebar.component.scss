@@ -17,7 +17,7 @@
   transition: width 0.25s;
   -ms-overflow-style: -ms-autohiding-scrollbar;
   &.expanded {
-    width: $sidebar-expanded-view;
+    width: $right-sidebar-expanded-view;
     padding: 90px 5px 10px 5px;
   }
 }

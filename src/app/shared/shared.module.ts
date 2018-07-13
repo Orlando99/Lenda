@@ -7,6 +7,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from '../app-routing.module';
 import { SpinerComponent } from './spiner/spiner.component';
 import { RightSidebarComponent } from './layout/right-sidebar/right-sidebar.component';
+import { MediaArticleComponent } from './layout/right-sidebar/media-article/media-article.component';
+import { UserArticleComponent } from './layout/right-sidebar/user-article/user-article.component';
 
 @NgModule({
     imports: [
@@ -17,8 +19,7 @@ import { RightSidebarComponent } from './layout/right-sidebar/right-sidebar.comp
         AppRoutingModule,
         BrowserModule,
     ],
-    declarations: [
-    ],
+    declarations: [],
     providers: [],
     exports: [
         CommonModule,

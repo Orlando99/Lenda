@@ -1,0 +1,31 @@
+@import "./../../../../../sass/theme/variables";
+
+.user-article {
+  display: flex;
+  background: $white-90;
+  border-radius: 0.25em;
+  padding: 10px;
+  font-weight: bold;
+  font-size: $font-size-sm;
+  color: $black-70;
+  border: 1px solid #eee;
+  .info {
+    margin-left: 10px;
+  }
+  .title {
+    font-size: 12px;
+  }
+  .forum {
+    color: #21d2ac;
+  }
+  .account {
+    color: #247ab1;
+  }
+  .date {
+    color: #ccc;
+    font-weight: normal;
+    font-size: $font-size-sm;
+    display: block;
+    float: right;
+  }
+}

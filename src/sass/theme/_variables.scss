@@ -23,9 +23,11 @@ $white: #fff;
 $white-30: rgba(255, 255, 255, 0.30);
 $white-75: rgba(255, 255, 255, 0.75);
 $white-90: rgba(255, 255, 255, 0.90);
-
+$black: #000;
+$black-70: rgba(0, 0, 0, 0.7);
 /**
 Layout calculation variables
 */
 $sidebar-minimal-view: 70px;
 $sidebar-expanded-view: 215px;
+$right-sidebar-expanded-view: 275px;
