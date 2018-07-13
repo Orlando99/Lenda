@@ -110,11 +110,11 @@ export class FarmFinancialComponent implements OnInit {
     let loanMaster = loanObject.LoanMaster[0];
     let borrower = loanObject.Borrower;
     let farmFinancialRatingValues = new FarmFinacialValueParams();
-    farmFinancialRatingValues.currentRatio = borrower.FC_Borrower_Current_Ratio || 2.00;
-    farmFinancialRatingValues.workingCapital = 0.22;
-    farmFinancialRatingValues.debtByAssets = 43.2;
-    farmFinancialRatingValues.equityByAssets = 56.8;
-    farmFinancialRatingValues.debtByEquity = 76.0;
+    farmFinancialRatingValues.currentRatio = (loanMaster.Current_Liabilities/ loanMaster.Current_Assets);
+    farmFinancialRatingValues.workingCapital = ((loanMaster.Current_Assets - loanMaster.Current_Liabilities)/this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject));
+    farmFinancialRatingValues.debtByAssets = ((loanMaster.Total_Liabilities/ loanMaster.Total_Assets)*100);
+    farmFinancialRatingValues.equityByAssets = (((loanMaster.Total_Assets - loanMaster.Total_Liabilities)/loanMaster.Total_Assets)*100);
+    farmFinancialRatingValues.debtByEquity = ((loanMaster.Total_Liabilities)/ (loanMaster.Total_Assets - loanMaster.Total_Liabilities)*100);
     farmFinancialRatingValues.ROA = 10.3;
     farmFinancialRatingValues.operatingProfit = 50.1;
     farmFinancialRatingValues.operatingByExpRev = 49.9;
