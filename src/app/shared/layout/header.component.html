@@ -107,12 +107,13 @@
                 </mat-menu>
               </span>
 
-              <span>
-                  <button mat-icon-button *ngIf="isRightBarExpanded">
+              <span class="lighbulb-icon" [ngClass]="{'expanded': isRightSidebarExpanded}">
+                  <button class="toggled" (click)="toggleRightSidenav()" mat-icon-button *ngIf="isRightSidebarExpanded">
                     <mat-icon>lightbulb_outline</mat-icon>
-                    <span>Decide</span>
+                    <span class="decide">Decide</span>
+                    <i class="flaticon-right-arrow"></i>
                   </button>
-                  <button mat-icon-button (click)="toggleRightSidenav()" *ngIf="!isRightBarExpanded">
+                  <button mat-icon-button (click)="toggleRightSidenav()" *ngIf="!isRightSidebarExpanded">
                     <mat-icon>lightbulb_outline</mat-icon>
                   </button>
               </span>

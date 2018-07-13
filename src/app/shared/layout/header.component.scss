@@ -80,6 +80,7 @@
   }
 
   .logged-in-menu {
+    margin-right: 30px;
     .mat-button {
       padding: 0 10px;
       font-size: $font-size-lg;
@@ -89,5 +90,31 @@
   .nav-parent {
     width: 100%;
     text-align: right;
+  }
+
+  .lighbulb-icon {
+    margin-right: 30px;
+    transition: all 0.25s;
+    &.expanded{
+      margin-right: 80px;
+      mat-icon {
+        transform: rotate(30deg);
+      }
+    }
+    mat-icon {
+      font-size: 28px;
+    }
+    .decide {
+      font-size: 16px;
+      font-style: italic;
+    }
+    .flaticon-right-arrow {
+      margin-left: 30px;
+      margin-top: 5px;
+      display: inline-block;
+      &::before {
+        font-size: 18px;
+      }
+    }
   }
 }

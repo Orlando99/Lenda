@@ -18,8 +18,7 @@ import { RightSidebarComponent } from './layout/right-sidebar/right-sidebar.comp
         BrowserModule,
     ],
     declarations: [
-
-    RightSidebarComponent],
+    ],
     providers: [],
     exports: [
         CommonModule,

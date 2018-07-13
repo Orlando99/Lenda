@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LayoutService } from '../../layout/layout.service';
 
 @Component({
   selector: 'app-right-sidebar',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./right-sidebar.component.scss']
 })
 export class RightSidebarComponent implements OnInit {
+  public isRightbarExpanded: boolean = false;
 
-  constructor() { }
+  constructor(private layoutService: LayoutService) { }
 
   ngOnInit() {
+    this.layoutService.isRightSidebarExpanded().subscribe((value) => {
+      this.isRightbarExpanded = value;
+    });
   }
 
 }
