@@ -9,6 +9,8 @@ import { BorrowerapiService } from '../../../services/borrower/borrowerapi.servi
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
+import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-balancesheet',
@@ -25,15 +27,44 @@ export class BalancesheetComponent implements OnInit {
   public getRowClass;
   private gridApi;
   private columnApi;
+  public components;
    //region Ag grid Configuration
 
    columnDefs = [
-    { headerName: 'Financials', field: 'Financials' },
-    { headerName: 'Assets', field: 'Assets',editable:true },
-    { headerName: 'Discount', field: 'Discount',editable:true },
-    { headerName: 'AdjValue', field: 'AdjValue' },
-    { headerName: 'Debt', field: 'Debt',editable:true },
-    { headerName: 'Discounted NW', field: 'DiscountedNW' }
+    { headerName: 'Financials', field: 'Financials', },
+    { headerName: 'Assets', field: 'Assets', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    },
+    editable : (params)=>{
+     return params.data.Financials !== 'Total';
+    }  },
+    { headerName: 'Discount', field: 'Discount', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
+    valueFormatter: function (params) {
+      if(params.data.Financials !== 'Total'){
+      return PercentageFormatter(params.value);
+      }else{
+        return '';
+      }
+    },
+    editable : (params)=>{
+     return params.data.Financials !== 'Total';
+    }},
+    { headerName: 'AdjValue', field: 'AdjValue',cellClass: ['text-right'],
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    }, },
+    { headerName: 'Debt', field: 'Debt', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    },
+    editable : (params)=>{
+     return params.data.Financials !== 'Total';
+    }},
+    { headerName: 'Discounted NW', field: 'DiscountedNW',cellClass: ['text-right'],
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    }, }
   ];
 
   onGridReady(params) {
@@ -59,6 +90,8 @@ export class BalancesheetComponent implements OnInit {
         return  'ag-aggregate-row';
       }
     };
+
+    this.components = { numericCellEditor: getNumericCellEditor() };
   }
 
   ngOnInit() {
