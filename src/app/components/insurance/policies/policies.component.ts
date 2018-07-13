@@ -288,7 +288,7 @@ export class PoliciesComponent implements OnInit {
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
       this.loanmodel = res;
-      this.getgriddata();
+      //this.getgriddata();
     })
   }
 
