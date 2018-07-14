@@ -22,10 +22,10 @@ body .mat-expansion-panel-header:hover {
 }
 
 .mat-expansion-panel-header.cdk-mouse-focused {
-  background-color: rgba(22, 76, 123, 0.9) !important;
+  background: #eee !important;
   .mat-expansion-panel-header-title,
   .mat-expansion-indicator::after {
-    color: $white;
+    color: $black-70;
     font-size: $font-size-md;
   }
 }
@@ -36,11 +36,11 @@ body .mat-expansion-panel-body {
 
 .mat-expansion-panel-header {
   display: block !important;
-  background-color: rgba(22, 76, 123, 0.9);
+  background: #eee;
+  // background-color: rgba(22, 76, 123, 0.9);
   // background-color: $nav-hover-color;
   // background: linear-gradient(to right, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
-  border: 1px solid $white-90;
-  color: $white !important;
+  border: 1px solid $black-30;
   height: 50px;
   max-height: 50px;
 
@@ -55,7 +55,7 @@ body .mat-expansion-panel-body {
   }
   .mat-expansion-panel-header-title,
   .mat-expansion-indicator::after {
-    color: $white;
+    color: $black-70;
     font-size: $font-size-md;
   }
   &.mat-expanded {
