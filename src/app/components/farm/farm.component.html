@@ -9,7 +9,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-      <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+      <button (click)="synctoDb()" [disabled]="syncFarmStatus===0" mat-icon-button>
       <mat-icon >publish</mat-icon>
     </button>
 
