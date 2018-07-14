@@ -37,6 +37,8 @@ body .mat-expansion-panel-body {
 .mat-expansion-panel-header {
   display: block !important;
   background-color: rgba(22, 76, 123, 0.9);
+  // background-color: $nav-hover-color;
+  // background: linear-gradient(to right, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
   border: 1px solid $white-90;
   color: $white !important;
   height: 50px;
