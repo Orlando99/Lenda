@@ -19,6 +19,7 @@ import { Action } from 'rxjs/scheduler/Action';
 import { PriceFormatter, PercentageFormatter, numberWithOneDecPrecValueFormatter } from '../../Workers/utility/aggrid/formatters';
 import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
 import { getDateCellEditor,getDateValue,formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
+import { ModelStatus, status } from '../../models/syncstatusmodel';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -39,6 +40,7 @@ export class FarmComponent implements OnInit {
   public editType;
   private gridApi;
   private columnApi;
+  public syncFarmStatus : status;
   defaultColDef : any;
   //region Ag grid Configuration
   style = {
@@ -231,6 +233,7 @@ export class FarmComponent implements OnInit {
     }
     this.localloanobject.srccomponentedit = "FarmComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
+    this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject,value.colDef.calculationinvoke);
   }
 
@@ -284,6 +287,8 @@ export class FarmComponent implements OnInit {
         else {
           obj.ActionStatus = 3;
         }
+
+        this.updateSyncStatus();
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
       this.getgridheight();
@@ -296,13 +301,29 @@ export class FarmComponent implements OnInit {
     this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   }
 
-  syncenabled(){
-    if(this.localloanobject.Farms)
-   return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
+  // syncenabled(){
+  //   if(this.localloanobject.Farms){
+  //     return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
+  //   }
+
+   
+  // }
+
+  updateSyncStatus(){
+    if(this.localloanobject.Farms.filter(p=>p.ActionStatus==1 || p.ActionStatus==3).length > 0){
+      this.syncFarmStatus = status.ADDORDELETE;
+    }else if(this.localloanobject.Farms.filter(p=>p.ActionStatus==2).length > 0){
+      this.syncFarmStatus = status.EDITED;
+    }else{
+      this.syncFarmStatus = status.NOCHANGE;
+    }
+
+    
+    this.localloanobject.SyncStatus.Status_Farm = this.syncFarmStatus;  
+    
+    
   }
-
-  //
-
+  
 
 }
 

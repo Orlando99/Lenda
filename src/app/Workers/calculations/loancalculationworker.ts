@@ -15,6 +15,7 @@ import { QuestionscalculationworkerService } from './questionscalculationworker.
 import { LoanMasterCalculationWorkerService } from './loan-master-calculation-worker.service';
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
+import { OverallCalculationServiceService } from './overall-calculation-service.service';
 
 
 
@@ -29,6 +30,7 @@ export class LoancalculationWorker {
     private collateralcalculation: Collateralcalculationworker,
     private questionscalculations:QuestionscalculationworkerService,
     private loanMasterCalcualtions : LoanMasterCalculationWorkerService,
+    private overallCalculationService : OverallCalculationServiceService,
     // private associationcalculation:AssociationcalculationworkerService,
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
@@ -139,6 +141,7 @@ export class LoancalculationWorker {
       // STEP 8 --- MASTER CALCULATIONS
         if(localloanobj.LoanMaster !==null){
           localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+          localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
         }
 
         //TODO-SANKET : should be remove

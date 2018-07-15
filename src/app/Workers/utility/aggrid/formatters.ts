@@ -4,7 +4,7 @@ export function PriceFormatter(price) {
         return "$ 0";
     }
     else
-return "$ "+price.toFixed(2);
+        return "$ "+price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 export function PercentageFormatter(perce) {
     if(perce==null || perce==undefined)
