@@ -16,6 +16,7 @@ export class LoancrophistoryService {
     }
   }
   prepare_Crop_Yield() {
+    debugger
     for (let i = 0; i < this.input.CropYield.length; i++) {
       let cropyielditems = [];
       this.years.forEach(year => {
@@ -39,6 +40,7 @@ export class LoancrophistoryService {
   }
 
   prepareLoancrophistorymodel(input: loan_model): loan_model {
+  
     try {
       this.input = input;
       let starttime = new Date().getMilliseconds();
