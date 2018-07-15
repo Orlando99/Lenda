@@ -4,6 +4,7 @@ import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors
 import { Loan_Farm } from "./farmmodel.";
 import {LoanQResponse} from './loan-response.model';
 import { ModelStatus, status } from "./syncstatusmodel";
+import { Insurance_Policy } from "./insurancemodel";
 
 
 @JsonObject
@@ -273,6 +274,8 @@ export class borrower_model
         LoanCropPractices :Array<Loan_Crop_Practice>=[];
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
+        
+        InsurancePolicies:Array<Insurance_Policy>=new Array<Insurance_Policy>();
 
         lasteditrowindex:number;
         srccomponentedit:string;

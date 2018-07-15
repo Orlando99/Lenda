@@ -51,6 +51,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 //START COMPONENTS
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { HeaderComponent } from './shared/layout/header.component';
 import { FooterComponent } from './shared/layout/footer.component';
 import { LoginComponent } from './login/login.component';
@@ -158,6 +159,9 @@ import { CompanyInfoComponent } from './components/summary/charts-visualization/
 import { RiskChartComponent } from './components/summary/charts-visualization/risk-and-return/risk-chart/risk-chart.component';
 import { CommitmentChartComponent } from './components/summary/charts-visualization/risk-and-return/commitment-chart/commitment-chart.component';
 import { SidebarModule } from 'ng-sidebar';
+import { PoliciesComponent } from './components/insurance/policies/policies.component';
+import { ChipsListEditor } from './aggridcolumns/chipscelleditor';
+import { EmptyEditor } from './aggridfilters/emptybox';
 import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 import { BudgetHelperService } from './components/budget/budget-helper.service';
@@ -168,6 +172,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
   declarations: [
     NumericEditor,
     SelectEditor,
+    EmptyEditor,
+    ChipsListEditor,
     AppComponent,
     SpinerComponent,
     DeleteButtonRenderer,
@@ -222,6 +228,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CashFlowComponent,
     RiskAndReturnComponent,
     CompanyInfoComponent,
+    PoliciesComponent,
     RiskChartComponent,
     CommitmentChartComponent,
     CompanyInfoComponent,
@@ -266,11 +273,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
-    BarRatingModule
+    BarRatingModule,
+    AngularMultiSelectModule
   ],
   exports: [
     FormsModule,
