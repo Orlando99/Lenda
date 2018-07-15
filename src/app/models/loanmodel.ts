@@ -3,6 +3,7 @@ import { Loan_Crop_Unit, Loan_Crop_Unit_FC, V_Crop_Price_Details, Loan_Crop_Hist
 import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
 import { Loan_Farm } from "./farmmodel.";
 import {LoanQResponse} from './loan-response.model';
+import { ModelStatus, status } from "./syncstatusmodel";
 import { Insurance_Policy } from "./insurancemodel";
 
 
@@ -279,6 +280,7 @@ export class borrower_model
         lasteditrowindex:number;
         srccomponentedit:string;
 
+        SyncStatus: ModelStatus = {Status_Farm : status.NOCHANGE, Status_Crop_Practice : status.NOCHANGE};
     }
      
 

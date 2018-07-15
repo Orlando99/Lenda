@@ -105,7 +105,6 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
 import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
-import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
 import { WorkInProgressComponent } from './components/work-in-progress/work-in-progress.component';
 import { FinanceStatsComponent } from './components/work-in-progress/finance-stats/finance-stats.component';
@@ -166,6 +165,7 @@ import { EmptyEditor } from './aggridfilters/emptybox';
 import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 import { BudgetHelperService } from './components/budget/budget-helper.service';
+import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -208,7 +208,6 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,
-    LoanbudgetGroupComponent,
     WorkInProgressComponent,
     FinanceStatsComponent,
     ExceptionsComponent,
@@ -343,7 +342,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoancroppracticeworkerService,
     InsurancecalculationworkerService,
     AssociationcalculationworkerService,
-    BudgetHelperService
+    BudgetHelperService,
+    OverallCalculationServiceService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]
