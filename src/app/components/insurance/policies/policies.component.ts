@@ -4,7 +4,7 @@ import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupState
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { environment } from '../../../../environments/environment.prod';
-import _ = require('lodash');
+
 import { ChipsListEditor } from '../../../aggridcolumns/chipscelleditor';
 import { GridOptions } from 'ag-grid';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -16,6 +16,7 @@ import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy } from '../../../models/insurancemodel';
 import { debug } from 'util';
+import * as _ from 'lodash'
 
 @Component({
   selector: 'app-policies',
@@ -268,8 +269,8 @@ export class PoliciesComponent implements OnInit {
   public context;
   public loanobj: loan_model;
   public rowClassRules;
-  private paginationPageSize;
-  private paginationNumberFormatter;
+  public paginationPageSize;
+  public paginationNumberFormatter;
 
   defaultColDef = {
 
@@ -309,6 +310,7 @@ export class PoliciesComponent implements OnInit {
 
   ngOnInit() {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
+    this.declarecoldefs();
     this.getgriddata();
   }
 
