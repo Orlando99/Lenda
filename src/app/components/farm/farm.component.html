@@ -1,44 +1,48 @@
 
 <div class="basic-container">
 
-  <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
+  <mat-accordion >
+  <mat-expansion-panel  [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Farm
       </mat-panel-title>
     </mat-expansion-panel-header>
-
-      <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
-      <mat-icon >publish</mat-icon>
-    </button>
-
-    <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-
-          <div class="container bottom">
-            <div class="row">
-            <ag-grid-angular
-            [ngStyle]="style"
-            class="ag-theme-balham roboto-font"
-            [animateRows]="true"
-            [enableSorting]="true"
-            [enableFilter]="true"
-            [context]="context"
-            [frameworkComponents]="frameworkcomponents"
-            [components]="components"
-            [singleClickEdit]="true"
-            (cellEditingStopped)="rowvaluechanged($event)"
-            (cellEditingStarted)="cellEditingStarted($event)"
-            [rowData]="rowData"
-            
-            (gridReady)="onGridReady($event)"
-            [defaultColDef]="defaultColDef"
-            [columnDefs]="columnDefs"
-            [headerHeight]="45">
-            </ag-grid-angular>
-            </div>
-          </div>
-          <br>
+    <ng-template matExpansionPanelContent>
+        <div class="row">
+            <div class="col s12">
+              <button (click)="synctoDb()" [disabled]="!syncenabled()" mat-icon-button>
+              <mat-icon >publish</mat-icon>
+            </button>
+        
+            <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
+        
+               
+                    <ag-grid-angular
+                    [ngStyle]="style"
+                    class="ag-theme-balham roboto-font"
+                    [animateRows]="true"
+                    [enableSorting]="true"
+                    [enableFilter]="true"
+                    [context]="context"
+                    [frameworkComponents]="frameworkcomponents"
+                    [components]="components"
+                    [singleClickEdit]="true"
+                    (cellEditingStopped)="rowvaluechanged($event)"
+                    (cellEditingStarted)="cellEditingStarted($event)"
+                    [rowData]="rowData"
+                    [gridAutoHeight]=true
+                    (gridReady)="onGridReady($event)"
+                    [defaultColDef]="defaultColDef"
+                    [columnDefs]="columnDefs"
+                    [headerHeight]="45">
+                    </ag-grid-angular>
+                  
+                  <br>
+                </div>
+                </div>
+      </ng-template>
+   
   </mat-expansion-panel>
   </mat-accordion>
 

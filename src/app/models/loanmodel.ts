@@ -274,7 +274,8 @@ export class borrower_model
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
         
-        InsurancePolicies:Array<Insurance_Policy>=new Array<Insurance_Policy>();
+        @JsonProperty("InsurancePolicies",[])
+        InsurancePolicies :Array<Insurance_Policy>=[];
 
         lasteditrowindex:number;
         srccomponentedit:string;
