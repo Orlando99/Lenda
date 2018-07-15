@@ -11,7 +11,7 @@
 }
 
 .ag-cell {
-  background-color:white;
+  background-color:#f6f5f5;
    border-width: 0px 1px 0px 0px !important;
     border-color: lightgray !important;
     border-style: solid !important;
@@ -21,10 +21,12 @@
 .ag-header-row{
   background-color: #23C8AB;
   color: white;
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
 
 .editable-color{
-  background-color: #dcf0f4;
+  background-color: white;
+  color : #1a61df;
 }
 
 
@@ -126,3 +128,6 @@
   visibility: visible;
 }
 
+.roboto-font{
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
+}
