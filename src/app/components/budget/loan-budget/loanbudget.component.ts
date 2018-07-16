@@ -59,21 +59,21 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color-not-important','text-right'], valueSetter: numberValueSetter,
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
           editable : (params)=>{
            return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'],
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
           editable : (params)=>{
            return params.data.FC_Expense_Name !== totalRowHeader+':';
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color-not-important','text-right'],
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           },
@@ -140,17 +140,20 @@ export class LoanbudgetComponent implements OnInit {
   };
 
   bindData(localLoanObject: loan_model) {
-    let loanBudget = localLoanObject.LoanBudget;
-
+    let lstLoanBudget = localLoanObject.LoanBudget;
     if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
       //if the same table invoked the change .. change only the edited row
-      this.rowData[localLoanObject.lasteditrowindex]  = this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+     // let budget = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
+      // this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+     // budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
+      this.rowData[localLoanObject.lasteditrowindex]  = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
 
     }
     else {
       this.rowData = [];
-      this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
+      this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(lstLoanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
     }
+    //this.rowData =this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres);
     this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
   }
 

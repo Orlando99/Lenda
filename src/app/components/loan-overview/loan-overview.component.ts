@@ -30,8 +30,13 @@ export class LoanOverviewComponent implements OnInit {
 
     let temp = this.route.params.subscribe(params => {
       // Defaults to 0 if no query param provided.
-      
+      debugger
       this.loanid = (params["loan"].toString())+"-"+ (params["seq"]);
+      let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+      if(this.loanid!=currentloanid)
+      {
+        this.localstorageservice.store(environment.loanidkey,this.loanid);
+      }
     });
   }
 
@@ -53,7 +58,7 @@ export class LoanOverviewComponent implements OnInit {
 
     if (this.loanid != null) {
       let loaded = false;
-      
+      this.localstorageservice.clear(environment.loankey);
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
         console.log(res)
         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
@@ -63,6 +68,7 @@ export class LoanOverviewComponent implements OnInit {
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also
           this.localstorageservice.store(environment.loankey_copy, res.Data);
+         
         }
         else {
           this.toaster.error("Could not fetch Loan Object from API")
@@ -79,27 +85,28 @@ export class LoanOverviewComponent implements OnInit {
   // Navigational Methods
 
   gotosummary() {
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/summary")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid + "/summary")
   }
   gotoborrower() {
-    
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/borrower")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid + "/borrower")
   }
   gotocrop() {
-    
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/crop")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid + "/crop")
   }
   gotofarm() {
-    
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/farm")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid+ "/farm")
   }
   gotobudget() {
-    
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/")+ "/budget")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid+ "/budget")
   }
 
   gotoinsurance() {
-    
-    this.router.navigateByUrl("/home/loanoverview/" + this.loanid.replace("-","/") + "/insurance")
+    let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
+    this.router.navigateByUrl("/home/loanoverview/" + currentloanid + "/insurance")
   }
 }

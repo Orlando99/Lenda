@@ -40,12 +40,11 @@ export class LoanMasterCalculationWorkerService {
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
     let loanMaster = loanObject.LoanMaster[0];
-    loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145.8;
+    loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
     loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns || 1;
     loanObject.Borrower.Borrower_CPA_financials = loanObject.Borrower.Borrower_CPA_financials || 1;
     loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
-    loanMaster.Borrower_Farm_Financial_Rating = 148.5;
-
+    
     let FICOScore = loanMaster.Credit_Score;
     let CPAFiancial = loanObject.Borrower.Borrower_CPA_financials ? 'Yes' : 'No';
     let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
@@ -71,6 +70,8 @@ export class LoanMasterCalculationWorkerService {
       }
 
     }
+
+    
 
     return loanObject;
   }
@@ -138,7 +139,6 @@ export class LoanMasterCalculationWorkerService {
 
 
   getRating(ratio: number, params: Array<any>, possible: number) {
-    debugger;
     let operator = params[2];
     let stable = params[1];
     let strong = params[0];

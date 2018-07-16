@@ -51,6 +51,7 @@ import { LoanApiService } from './services/loan/loanapi.service';
 //START COMPONENTS
 import { AppComponent } from './app.component';
 import { AlertComponent, ConfirmComponent } from './alertify/components'
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown/angular2-multiselect-dropdown';
 import { HeaderComponent } from './shared/layout/header.component';
 import { FooterComponent } from './shared/layout/footer.component';
 import { LoginComponent } from './login/login.component';
@@ -104,7 +105,6 @@ import { QuestionsComponent } from './components/borrower/questions/questions.co
 import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
 import { LoanbudgetComponent } from './components/budget/loan-budget/loanbudget.component';
-import { LoanbudgetGroupComponent } from './components/budget/loan-budget-group/loanbudgetgroup.component';
 import { EmailEditor } from './Workers/utility/aggrid/emailboxes';
 import { WorkInProgressComponent } from './components/work-in-progress/work-in-progress.component';
 import { FinanceStatsComponent } from './components/work-in-progress/finance-stats/finance-stats.component';
@@ -162,15 +162,21 @@ import { CompanyInfoComponent } from './components/summary/charts-visualization/
 import { RiskChartComponent } from './components/summary/charts-visualization/risk-and-return/risk-chart/risk-chart.component';
 import { CommitmentChartComponent } from './components/summary/charts-visualization/risk-and-return/commitment-chart/commitment-chart.component';
 import { SidebarModule } from 'ng-sidebar';
+import { PoliciesComponent } from './components/insurance/policies/policies.component';
+import { ChipsListEditor } from './aggridcolumns/chipscelleditor';
+import { EmptyEditor } from './aggridfilters/emptybox';
 import { BottomIconsComponent } from './components/summary/charts-visualization/company-info/bottom-icons/bottom-icons.component';
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 import { BudgetHelperService } from './components/budget/budget-helper.service';
+import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
   declarations: [
     NumericEditor,
     SelectEditor,
+    EmptyEditor,
+    ChipsListEditor,
     AppComponent,
     SpinerComponent,
     DeleteButtonRenderer,
@@ -196,6 +202,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AggridTxtAreaComponent,
     FarmComponent,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     BudgetComponent,
     CropbasedbudgetComponent, InsuranceComponent, AgentComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent,
@@ -203,7 +211,6 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,
-    LoanbudgetGroupComponent,
     WorkInProgressComponent,
     FinanceStatsComponent,
     ExceptionsComponent,
@@ -227,6 +234,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CashFlowComponent,
     RiskAndReturnComponent,
     CompanyInfoComponent,
+    PoliciesComponent,
     RiskChartComponent,
     CommitmentChartComponent,
     CompanyInfoComponent,
@@ -273,11 +281,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
-    BarRatingModule
+    BarRatingModule,
+    AngularMultiSelectModule
   ],
   exports: [
     FormsModule,
@@ -310,6 +319,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatPaginatorModule,
     MatButtonToggleModule,
     FocusDirective,
+    CurrencyDirective,
+    PercentageDirective,
     NgxJsonViewerModule,
     MatDialogModule
   ],
@@ -339,7 +350,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoancroppracticeworkerService,
     InsurancecalculationworkerService,
     AssociationcalculationworkerService,
-    BudgetHelperService
+    BudgetHelperService,
+    OverallCalculationServiceService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

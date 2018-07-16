@@ -16,7 +16,7 @@
       <div class="container bottom">
         <div class="row">
         <ag-grid-angular  [ngStyle]="style"
-         class="ag-theme-balham"
+         class="ag-theme-balham roboto-font"
         [animateRows]="true"
         [enableSorting]="false"
         [enableFilter]="true"
@@ -32,7 +32,8 @@
         [rowData]="rowData"
         (gridReady)="onGridReady($event)"
         [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef">
+        [defaultColDef]="defaultColDef"
+        [gridAutoHeight]=true>
         </ag-grid-angular>
         </div>
       </div>

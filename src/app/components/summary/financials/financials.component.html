@@ -9,14 +9,15 @@
     <div class="container">
     <ag-grid-angular 
     style="width: 96%; height: 200px;" 
-    class="ag-theme-balham"
+    class="ag-theme-balham roboto-font"
     [enableSorting]="true"
     [enableFilter]="true"
     [rowData]="rowData" 
     [getRowClass]="getRowClass"
     (gridReady)="onGridReady($event)"
     [pinnedBottomRowData]="pinnedBottomRowData"
-    [columnDefs]="columnDefs">
+    [columnDefs]="columnDefs"
+    [gridAutoHeight]=true>
     </ag-grid-angular>
     </div>
   </mat-expansion-panel>

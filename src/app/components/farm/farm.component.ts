@@ -19,6 +19,7 @@ import { Action } from 'rxjs/scheduler/Action';
 import { PriceFormatter, PercentageFormatter, numberWithOneDecPrecValueFormatter } from '../../Workers/utility/aggrid/formatters';
 import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
 import { getDateCellEditor,getDateValue,formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
+import { ModelStatus, status } from '../../models/syncstatusmodel';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -39,6 +40,7 @@ export class FarmComponent implements OnInit {
   public editType;
   private gridApi;
   private columnApi;
+  public syncFarmStatus : status;
   defaultColDef : any;
   //region Ag grid Configuration
   style = {
@@ -73,97 +75,120 @@ export class FarmComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor(),alphaNumericCellEditor : getAlphaNumericCellEditor(),dateCellEditor : getDateCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     //Coldef here
+    if(this.refdata!=null)
+    this.declarecolumns();
+    ///
+    this.context = { componentParent: this };
+  }
+  private declarecolumns() {
     this.columnDefs = [
       {
-        headerName: 'State', field: 'Farm_State_ID',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        headerName: 'State', field: 'Farm_State_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractStateValues(this.refdata.StateList)
         },
         valueFormatter: function (params) {
-          return lookupStateValue(params.colDef.cellEditorParams.values, params.value);
+          return lookupStateValue(params.colDef.cellEditorParams.values, parseInt(params.value));
         },
         valueSetter: Statevaluesetter,
-        width : 70
+        width: 70
       },
       {
-        headerName: 'County', field: 'Farm_County_ID',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        headerName: 'County', field: 'Farm_County_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
           return lookupCountyValue(params.value);
         },
         valueSetter: Countyvaluesetter
       },
-      { headerName: '% Prod', field: 'Percent_Prod',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
-      valueFormatter: function (params) {
-        return PercentageFormatter(params.value);
+      {
+      headerName: '% Prod', field: 'Percent_Prod', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
+        valueFormatter: function (params) {
+          return PercentageFormatter(params.value);
+        },
+        valueSetter: function (params) {
+          numberValueSetter(params);
+          if (params.newValue) {
+            params.data['Rentperc'] = 100 - parseFloat(params.newValue);
+          }
+          return true;
+        },
+        width: 70
       },
-      valueSetter : function(params){
-        
-        numberValueSetter(params);
-        if(params.newValue){
-          params.data['Rentperc']= 100-parseFloat(params.newValue);
+      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
+      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
+      { headerName: 'Section', field: 'Section', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
+      {
+      headerName: 'Rated', field: 'Rated', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "selectEditor",
+        cellEditorParams: { values: [{ key: 'AAA', value: 'AAA' }, { key: 'BBB', value: 'BBB' }, { key: 'NR', value: 'NR' }] },
+      },
+      {
+      headerName: 'Rent', field: 'Share_Rent', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        valueFormatter: function (params) {
+          return PriceFormatter(params.value);
         }
-        return true;
       },
-      width : 70 },
-      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
-      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
-      { headerName: 'Section', field: 'Section',  cellClass: 'editable-color', editable: true ,calculationinvoke:false, cellEditor : "alphaNumericCellEditor"},
-      { headerName: 'Rated', field: 'Rated',  cellClass: 'editable-color', editable: true,calculationinvoke:false, cellEditor: "selectEditor",
-      cellEditorParams: {values : [{key : 'AAA', value:'AAA'},{key : 'BBB', value:'BBB'},{key : 'NR', value:'NR'}]},
-      },
-      { headerName: 'Rent', field: 'Share_Rent',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      } },
-      { headerName: 'Rent UoM', field: 'Rent_UOM',  cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-      cellEditorParams: {values : [{key : 1, value:'$ per acre'},{key : 2, value:'$ Total'}]},
-      valueFormatter: function (params) {
-         let selected = [{key : 1, value:'$ per acre'},{key : 2, value:'$ Total'}].find(v=>v.key==params.value);
-         return selected ? selected.value :  undefined;
-      }
-      },
-      { headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true, cellEditor: "dateCellEditor",
-      cellEditorParams: getDateValue,
-      valueFormatter: formatDateValue},
-      { headerName: 'Waived', field: 'Cash_Rent_Waived',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
-      { headerName: '% Rent', field: 'Rentperc',
-      cellEditorParams: function(params){
-       
-      },
-      valueFormatter: function (params) {
-        if(params.data.Percent_Prod){
-          return PercentageFormatter(100-params.data.Percent_Prod);
-        }else{
-          return PercentageFormatter(0);
+      {
+      headerName: 'Rent UoM', field: 'Rent_UOM', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        cellEditorParams: { values: [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }] },
+        valueFormatter: function (params) {
+          let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
+          return selected ? selected.value : undefined;
         }
-        
-      },width : 70},
-      { headerName: 'Perm to Ins', field: 'Permission_To_Insure',  cellClass: 'editable-color', editable: true , cellEditor: "selectEditor",
-      cellEditorParams: {values : [{key : 1, value:'Yes'},{key : 0, value:'No'}]},
-      valueFormatter: function (params) {
-        return params.value === 1?'Yes' : 'No';
-      },width : 72},
-      { headerName: 'IR Acres', field: 'Irr_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-      valueFormatter : numberWithOneDecPrecValueFormatter },
-      { headerName: 'NI Acres', field: 'NI_Acres',  cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-      valueFormatter : numberWithOneDecPrecValueFormatter },
-      { headerName: 'Total Acres', field: 'FC_Total_Acres',cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-      valueFormatter : numberWithOneDecPrecValueFormatter },
-      { headerName: '', field: 'value',  cellRenderer: "deletecolumn" },
-
+      },
+      {
+      headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true, cellEditor: "dateCellEditor",
+        cellEditorParams: getDateValue,
+        valueFormatter: formatDateValue
+      },
+      {
+      headerName: 'Waived', field: 'Cash_Rent_Waived', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        valueFormatter: function (params) {
+          return PriceFormatter(params.value);
+        }
+      },
+      {
+      headerName: '% Rent', field: 'Rentperc',
+        cellEditorParams: function (params) {
+        },
+        valueFormatter: function (params) {
+          if (params.data.Percent_Prod) {
+            return PercentageFormatter(100 - params.data.Percent_Prod);
+          }
+          else {
+            return PercentageFormatter(0);
+          }
+        }, width: 70
+      },
+      {
+      headerName: 'Perm to Ins', field: 'Permission_To_Insure', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
+        valueFormatter: function (params) {
+          return params.value === 1 ? 'Yes' : 'No';
+        }, width: 72
+      },
+      {
+      headerName: 'IR Acres', field: 'Irr_Acres', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        valueFormatter: numberWithOneDecPrecValueFormatter
+      },
+      {
+      headerName: 'NI Acres', field: 'NI_Acres', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        valueFormatter: numberWithOneDecPrecValueFormatter
+      },
+      {
+      headerName: 'Total Acres', field: 'FC_Total_Acres', cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        valueFormatter: numberWithOneDecPrecValueFormatter
+      },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     this.defaultColDef = {
-      width : 100
-    }
-    ///
-    this.context = { componentParent: this };
+      width: 100
+    };
   }
+
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      if(res!=null){
       this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
       this.localloanobject = res;
       if(res.Farms && res.srccomponentedit == "FarmComponent"){
@@ -174,17 +199,12 @@ export class FarmComponent implements OnInit {
         this.rowData = [];
         this.rowData = this.localloanobject.Farms.filter(p => p.ActionStatus != 3);
       }
-      //  this.gridApi.setRowData(this.rowData);
-      //  if(this.currenteditedfield!=null){
-
-      //   this.gridApi.startEditingCell({
-      //     rowIndex: this.currenteditrowindex,
-      //     colKey: this.currenteditedfield
-      //   });
-      //  }
+    }
     });
+ 
 
     this.getgridheight();
+    if(this.localloanobject!=null && this.localloanobject!=undefined)
     this.getdataforgrid();
     //this.editType = "fullRow";
   }
@@ -231,6 +251,7 @@ export class FarmComponent implements OnInit {
     }
     this.localloanobject.srccomponentedit = "FarmComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
+    this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject,value.colDef.calculationinvoke);
   }
 
@@ -284,6 +305,8 @@ export class FarmComponent implements OnInit {
         else {
           obj.ActionStatus = 3;
         }
+
+        this.updateSyncStatus();
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
       this.getgridheight();
@@ -296,13 +319,29 @@ export class FarmComponent implements OnInit {
     this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   }
 
-  syncenabled(){
-    if(this.localloanobject.Farms)
-   return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
+  // syncenabled(){
+  //   if(this.localloanobject.Farms){
+  //     return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
+  //   }
+
+   
+  // }
+
+  updateSyncStatus(){
+    if(this.localloanobject.Farms.filter(p=>p.ActionStatus==1 || p.ActionStatus==3).length > 0){
+      this.syncFarmStatus = status.ADDORDELETE;
+    }else if(this.localloanobject.Farms.filter(p=>p.ActionStatus==2).length > 0){
+      this.syncFarmStatus = status.EDITED;
+    }else{
+      this.syncFarmStatus = status.NOCHANGE;
+    }
+
+    
+    this.localloanobject.SyncStatus.Status_Farm = this.syncFarmStatus;  
+    
+    
   }
-
-  //
-
+  
 
 }
 

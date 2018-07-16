@@ -1,0 +1,26 @@
+    
+
+          <ag-grid-angular  [ngStyle]="style"
+          class="ag-theme-balham"
+         [animateRows]="true"
+         [enableSorting]="false"
+         [enableFilter]="true"
+         [frameworkComponents]="frameworkcomponents"
+         [showToolPanel]="false"
+         [toolPanelSuppressRowGroups]="true"
+         [rowClassRules]="rowClassRules"
+         [toolPanelSuppressValues]="true"
+         [toolPanelSuppressPivots]="true"
+         [toolPanelSuppressPivotMode]="true"
+         [singleClickEdit]="true"
+         (cellEditingStopped)="rowvaluechanged($event)"
+         [rowData]="rowData" 
+         [context]="context"
+         (gridReady)="onGridReady($event)"
+         [pagination]="true"
+         [paginationPageSize]="paginationPageSize"
+         [paginationNumberFormatter]="paginationNumberFormatter"
+         [columnDefs]="columnDefs"
+         [defaultColDef]="defaultColDef">
+         </ag-grid-angular>
+       

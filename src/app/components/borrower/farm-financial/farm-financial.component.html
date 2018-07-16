@@ -1,14 +1,14 @@
 <div class="container bottom width-auto">
 
   <div class="bottom">
-    <div class="row  table-row">
+    <div class="row  table-row"  *ngIf="data!=undefined && data.liquidityAnalysis!=undefined">
       <div class="col m3">
         <div class="col cell text-left font-weight-600">Liquidity Analysis</div>
       </div>
       <div class="col m9">
         <div class="col m2 cell text-right font-weight-600" *ngFor="let header of  ['Ratio','Strong','Stable','Weak','Rating','Possible']">{{header}}</div>
       </div>
-      <app-sub-table [rowTable]="data.liquidityAnalysis"></app-sub-table>
+      <app-sub-table  [rowTable]="data.liquidityAnalysis"></app-sub-table>
     </div>
 
     <div class="row table-row">
@@ -16,8 +16,8 @@
         <div class="col cell text-left font-weight-600">Solvency Analysis</div>
       </div>
     </div>
-    <div class="row table-row">
-      <app-sub-table [rowTable]="data.solvencyAnalysis"></app-sub-table>
+    <div class="row table-row" *ngIf="data!=undefined && data.solvencyAnalysis!=undefined">
+      <app-sub-table  [rowTable]="data.solvencyAnalysis"></app-sub-table>
     </div>
 
     <div class="row table-row">
@@ -25,8 +25,8 @@
         <div class="col cell text-left font-weight-600">Profitability Analysis</div>
       </div>
     </div>
-    <div class="row table-row">
-      <app-sub-table [rowTable]="data.profitabilityAnalysis"></app-sub-table>
+    <div class="row table-row" *ngIf="data!=undefined && data.profitabilityAnalysis!=undefined">
+      <app-sub-table  [rowTable]="data.profitabilityAnalysis"></app-sub-table>
     </div>
 
     <div class="row table-row">
@@ -34,7 +34,7 @@
           <div class="col cell text-left font-weight-600">Financial Efficiency</div>
         </div>
       </div>
-      <div class="row table-row">
+      <div class="row table-row"  *ngIf="data!=undefined && data.financialEfficiency!=undefined">
         <app-sub-table [rowTable]="data.financialEfficiency"></app-sub-table>
       </div>
   </div>

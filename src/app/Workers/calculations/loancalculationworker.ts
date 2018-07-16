@@ -15,6 +15,7 @@ import { QuestionscalculationworkerService } from './questionscalculationworker.
 import { LoanMasterCalculationWorkerService } from './loan-master-calculation-worker.service';
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
+import { OverallCalculationServiceService } from './overall-calculation-service.service';
 
 
 
@@ -29,6 +30,7 @@ export class LoancalculationWorker {
     private collateralcalculation: Collateralcalculationworker,
     private questionscalculations:QuestionscalculationworkerService,
     private loanMasterCalcualtions : LoanMasterCalculationWorkerService,
+    private overallCalculationService : OverallCalculationServiceService,
     // private associationcalculation:AssociationcalculationworkerService,
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
@@ -113,17 +115,22 @@ export class LoancalculationWorker {
           localloanobj = this.insuranceworker.performcalculations(localloanobj);
 
       //STEP 5 --- BUDGET CALCULATIONS
-          if (localloanobj.LoanBudget != null){
+      try{
 
             for(let i = 0; i<localloanobj.LoanBudget.length;i++){
               let currentBudget =  localloanobj.LoanBudget[i];
               let cropPractice = localloanobj.LoanCropPractices.find(cp=>cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+              if(cropPractice!=undefined && cropPractice!=null){
                 currentBudget.ARM_Budget_Crop = currentBudget.ARM_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Distributor_Budget_Crop = currentBudget.Distributor_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
+              }
             }
-          }
+          }catch(e){
+          console.error("ERROR IN BUDGET CALCULATION"+JSON.stringify(e));
+          
+        }
           //localloanobj.LoanBudget = localloanobj.LoanBudget;
 
       //STEP 6 --- COLLATERAL CALCULATIONS
@@ -139,6 +146,7 @@ export class LoancalculationWorker {
       // STEP 8 --- MASTER CALCULATIONS
         if(localloanobj.LoanMaster !==null){
           localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+          localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
         }
 
         //TODO-SANKET : should be remove
@@ -195,6 +203,7 @@ export class LoancalculationWorker {
           localloanobj.DashboardStats = localloanobj.DashboardStats;
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;
           localloanobj.srccomponentedit = localloanobj.srccomponentedit;
+          localloanobj.InsurancePolicies=localloanobj.InsurancePolicies;
           console.log("Calculation Ended");
           let endtime = new Date().getTime();
           this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");

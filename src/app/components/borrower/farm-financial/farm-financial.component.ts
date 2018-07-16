@@ -18,12 +18,18 @@ export class FarmFinancialComponent implements OnInit {
     private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
+    debugger
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-    this.localloanobj = res;
-    this.binddata(this.localloanobj);
+      if(res!=null)
+      {
+        debugger
+          this.localloanobj = res;
+         this.binddata(this.localloanobj);
+      }
     })
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    if(this.localloanobj!=null && this.localloanobj!=undefined)
     this.binddata(this.localloanobj);
 
   }
@@ -56,7 +62,8 @@ export class FarmFinancialComponent implements OnInit {
             value: farmFinancialRatingValues.debtByAssets,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets, 1.00),
+            valueType : ValueType.PERCENTAGE,
 
           },
           {
@@ -64,42 +71,48 @@ export class FarmFinancialComponent implements OnInit {
             value: farmFinancialRatingValues.equityByAssets,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.equityByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.equityByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets, 1.00),
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Debt/Equity',
             value: farmFinancialRatingValues.debtByEquity,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByEquity,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByEquity,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity, 1.00),
+            valueType : ValueType.PERCENTAGE,
           }],
           profitabilityAnalysis : [{
             text: 'ROA',
             value: farmFinancialRatingValues.ROA,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.ROA,this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.ROA,this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA, 1.00),
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Operating Profit',
             value: farmFinancialRatingValues.operatingProfit,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingProfit,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingProfit,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit, 1.00),
+            valueType : ValueType.PERCENTAGE,
           }],
           financialEfficiency : [{
             text: ' Operating Exp / Rev',
             value: farmFinancialRatingValues.operatingByExpRev,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingByExpRev,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingByExpRev,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev, 1.00),
+            valueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Interest/Cashflow',
             value: farmFinancialRatingValues.interestByCashFlow,
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow,
             possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.interestByCashFlow,this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow, 1.00)
+            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.interestByCashFlow,this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow, 1.00),
+            valueType : ValueType.PERCENTAGE,
           }
         ]
       };
@@ -110,11 +123,11 @@ export class FarmFinancialComponent implements OnInit {
     let loanMaster = loanObject.LoanMaster[0];
     let borrower = loanObject.Borrower;
     let farmFinancialRatingValues = new FarmFinacialValueParams();
-    farmFinancialRatingValues.currentRatio = borrower.FC_Borrower_Current_Ratio || 2.00;
-    farmFinancialRatingValues.workingCapital = 0.22;
-    farmFinancialRatingValues.debtByAssets = 43.2;
-    farmFinancialRatingValues.equityByAssets = 56.8;
-    farmFinancialRatingValues.debtByEquity = 76.0;
+    farmFinancialRatingValues.currentRatio = (loanMaster.Current_Assets / loanMaster.Current_Liabilities);
+    farmFinancialRatingValues.workingCapital = ((loanMaster.Current_Assets - loanMaster.Current_Liabilities)/this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject));
+    farmFinancialRatingValues.debtByAssets = ((loanMaster.Total_Liabilities/ loanMaster.Total_Assets)*100);
+    farmFinancialRatingValues.equityByAssets = (((loanMaster.Total_Assets - loanMaster.Total_Liabilities)/loanMaster.Total_Assets)*100);
+    farmFinancialRatingValues.debtByEquity = ((loanMaster.Total_Liabilities)/ (loanMaster.Total_Assets - loanMaster.Total_Liabilities)*100);
     farmFinancialRatingValues.ROA = 10.3;
     farmFinancialRatingValues.operatingProfit = 50.1;
     farmFinancialRatingValues.operatingByExpRev = 49.9;

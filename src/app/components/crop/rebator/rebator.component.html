@@ -16,7 +16,7 @@
 
     <div class="container bottom">
       <div class="row">
-        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
           [context]="context" [showToolPanel]="true" (gridSizeChanged)="onGridSizeChanged($event)" [frameworkComponents]="frameworkcomponents"
           [components]="components" [singleClickEdit]="true" [defaultColDef]="defaultColDef" [rowGroupPanelShow]="true" (cellEditingStopped)="rowvaluechanged($event)"
           [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs">

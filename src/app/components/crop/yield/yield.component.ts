@@ -18,6 +18,7 @@ import { tick } from '@angular/core/testing';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { empty } from 'rxjs/observable/empty';
+import { status } from '../../../models/syncstatusmodel';
 
 export interface DialogData {
   animal: string;
@@ -44,6 +45,7 @@ export class YieldComponent implements OnInit {
   public addAction = false;
   public cropYear;
   context: any;
+  public syncYieldStatus : status;
 
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
@@ -135,15 +137,19 @@ export class YieldComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
+      debugger
       if (res.srccomponentedit == "YieldComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+        debugger
+        let rownode=this.gridApi.getrowNode("aa");
+        this.gridApi.refreshCells();
       }
       else {
         this.localloanobject = res;
-        this.rowData = [];
         this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
+        this.gridApi.refreshCells();
       }
       this.getgridheight();
     });
@@ -192,12 +198,14 @@ export class YieldComponent implements OnInit {
       }
     this.localloanobject.srccomponentedit = "YieldComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
+
+    this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
-  syncenabled(){
-    return this.edits.length>0 || this.deleteAction || this.addAction
-  }
+  // syncenabled(){
+  //   return this.edits.length>0 || this.deleteAction || this.addAction
+  // }
 
   synctoDb() {
     console.log('edits',this.edits);
@@ -289,6 +297,7 @@ export class YieldComponent implements OnInit {
           this.deleteAction = true;
           obj.ActionStatus = 3;
         }
+        this.updateSyncStatus();
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
@@ -353,6 +362,19 @@ export class YieldComponent implements OnInit {
   catch{
 
   }
+  }
+
+
+  updateSyncStatus(){
+    if(this.deleteAction || this.addAction){
+      this.syncYieldStatus = status.ADDORDELETE;
+    }else if(this.edits && this.edits.length>0){
+      this.syncYieldStatus = status.EDITED;
+    }else{
+      this.syncYieldStatus = status.NOCHANGE;
+    } 
+    this.localloanobject.SyncStatus.Status_Crop_Practice = this.syncYieldStatus;  
+    
   }
 }
 function adjustheader(): void {

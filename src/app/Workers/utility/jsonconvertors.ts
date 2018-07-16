@@ -14,6 +14,23 @@ export class StringConverter implements JsonCustomConvert<String> {
         }
     }
 }
+
+@JsonConverter
+export class ArrayConverter implements JsonCustomConvert<Array<any>> {
+    serialize(value:Array<any>): any {
+        debugger
+        return value;
+    }
+    deserialize(value: any): Array<any> {
+        debugger
+        if(value==undefined || value==null){
+            return new Array<any>();
+        }
+        else{
+            return value;
+        }
+    }
+}
 @JsonConverter
 export class IntConverter implements JsonCustomConvert<number> {
     serialize(value:number): any {

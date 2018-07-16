@@ -5,6 +5,7 @@ import { deserialize } from 'serializer.ts/Serializer';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoggingService } from '../../../services/Logs/logging.service';
+import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
 
 
 @Component({
@@ -13,7 +14,7 @@ import { LoggingService } from '../../../services/Logs/logging.service';
   styleUrls: ['./financials.component.scss']
 })
 export class FinancialsComponent implements OnInit {
-  private localborrowerobject: any;
+  private loanMaster: any;
   public allDataFetched = false;
   public rowData = [];
   public pinnedBottomRowData=[];
@@ -34,12 +35,21 @@ export class FinancialsComponent implements OnInit {
 
   columnDefs = [
     { headerName: 'Financials', field: 'Financials' },
-    { headerName: 'Assets', field: 'Assets' },
-    { headerName: 'Debt', field: 'Debt' },
-    { headerName: 'Equity', field: 'Equity' },
-    { headerName: 'Ratios', field: 'Ratios' },
-    { headerName: 'FICO', field: 'FICO' },
-    { headerName: 'Rating', field: 'Rating' }
+    { headerName: 'Assets', field: 'Assets',cellClass: ['text-right'],
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    } },
+    { headerName: 'Debt', field: 'Debt',cellClass: ['text-right'],
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    }, },
+    { headerName: 'Equity', field: 'Equity',cellClass: ['text-right'],
+    valueFormatter: function (params) {
+      return PriceFormatter(params.value);
+    }, },
+    { headerName: 'Ratios', field: 'Ratios',cellClass: ['text-right'], },
+    { headerName: 'FICO', field: 'FICO',cellClass: ['text-right'], },
+    { headerName: 'Rating', field: 'Rating',cellClass: ['text-right'], }
   ];
 
   onGridReady(params) {
@@ -53,18 +63,19 @@ export class FinancialsComponent implements OnInit {
   //End here
 
 
-  ngOnInit() {
+  ngOnInit() {    
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       if(res!=undefined && res!=null)
       {
+        this.loanMaster = res.LoanMaster[0];       
       // log
       this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
-      //
-      this.localborrowerobject = res.LoanMaster[0];
-      this.allDataFetched = true;
+     
+       this.allDataFetched = true;       
+       this.prepareviewmodel();
       }
     })
-    this.getdataforgrid();
+      this.getdataforgrid();
   }
 
   getdataforgrid() {
@@ -72,44 +83,52 @@ export class FinancialsComponent implements OnInit {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'financials', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
-      this.localborrowerobject = obj.LoanMaster[0];
+      this.loanMaster = obj.LoanMaster[0];
       this.allDataFetched = true;
-      if(this.localborrowerobject!=null)
+      if(this.loanMaster!=null)
       this.prepareviewmodel();
       else
       this.rowData=[];
     }
   }
   prepareviewmodel() {
-    try{
-    //prepare three rows here
-      //1st Current Financial Row
-      var currentobj={Financials:'Current',Assets:'$ '+ this.localborrowerobject.Current_Assets ,Debt:'$ '+ this.localborrowerobject.Current_Liabilities ,
-      Equity:'$ '+ (this.localborrowerobject.Current_Assets - this.localborrowerobject.Current_Liabilities) ,Ratios:(this.localborrowerobject.Current_Assets / this.localborrowerobject.Current_Liabilities),FICO: this.localborrowerobject.Credit_Score ,Rating: this.localborrowerobject.Borrower_Rating }
-      this.rowData.push(currentobj);
+    
+   // prepare three rows here
 
-       //1st Intermediate Financial Row
-      var Intermediateobj={Financials:'Intermediate',Assets:'$ '+ this.localborrowerobject.Intermediate_Assets,Debt:'$ '+ this.localborrowerobject.Intermediate_Liabilities ,
-      Equity:'$ '+ (this.localborrowerobject.Intermediate_Assets - this.localborrowerobject.Intermediate_Liabilities) ,Ratios:'',FICO:'',Rating:''}
-      this.rowData.push(Intermediateobj)
+      if(this.loanMaster)
+      {  
+        this.rowData=[];
+        this.pinnedBottomRowData = [];
+        //1st Current Financial Row
+        var currentobj={Financials:'Current',Assets:this.loanMaster.Current_Assets ,Debt:this.loanMaster.Current_Liabilities ,
+        Equity:(this.loanMaster.Current_Assets - this.loanMaster.Current_Liabilities) ,Ratios:(this.loanMaster.Current_Assets / this.loanMaster.Current_Liabilities).toFixed(2),FICO: this.loanMaster.Credit_Score ,Rating: "*".repeat(this.loanMaster.Borrower_Rating || 0)  }
+        this.rowData.push(currentobj);
+
+        //1st Intermediate Financial Row
+        var Intermediateobj={Financials:'Intermediate',Assets:this.loanMaster.Inter_Assets,Debt:this.loanMaster.Inter_Liabilities ,
+        Equity:(this.loanMaster.Inter_Assets - this.loanMaster.Inter_Liabilities) ,Ratios:'',FICO:'',Rating:''}
+        this.rowData.push(Intermediateobj)
 
 
-       //1st LongTerm Financial Row
-       var LongTermobj={Financials:'Long Term',Assets:'$ '+this.localborrowerobject.Fixed_Assets,Debt:'$ '+this.localborrowerobject.Fixed_Liabilities,
-       Equity:'$ '+ (this.localborrowerobject.Fixed_Assets - this.localborrowerobject.Fixed_Liabilities) ,Ratios:'',FICO:'',Rating:''}
-       this.rowData.push(LongTermobj)
+        //1st LongTerm Financial Row
+        var LongTermobj={Financials:'Long Term',Assets:this.loanMaster.Fixed_Assets,Debt:this.loanMaster.Fixed_Liabilities,
+        Equity:(this.loanMaster.Fixed_Assets - this.loanMaster.Fixed_Liabilities) ,Ratios:'',FICO:'',Rating:''}
+        this.rowData.push(LongTermobj)
 
-       //Last Aggregate Row
-       var Aggregateobj={Financials:'Total Financials',Assets:this.localborrowerobject.FC_Borrower_TotalAssets,Debt:this.localborrowerobject.FC_Borrower_TotalDebt,
-       Equity:this.localborrowerobject.FC_Borrower_TotalEquity,Ratios:this.localborrowerobject.FC_Borrower_NetRatio.toString() +' % Debt/Equity',FICO:"Financials as of",Rating:new Date(this.localborrowerobject.Borrower_Financials_Date).toLocaleDateString()}
-       this.pinnedBottomRowData.push(Aggregateobj);
+        //Last Aggregate Row
+        var Aggregateobj={Financials:'Total Financials',Assets:this.loanMaster.Total_Assets,Debt:this.loanMaster.Total_Liabilities,
+        Equity:this.loanMaster.Total_Disc_Net_Worth,
+        Ratios:(this.loanMaster.Total_Liabilities / this.loanMaster.Total_Assets ).toFixed(2)+' % Debt/Equity',
+        FICO:"Financials as of",
+        Rating:new Date(this.loanMaster.Borrower_Financials_Date).toLocaleDateString()};
+
+        this.pinnedBottomRowData.push(Aggregateobj);
       }
-      catch{
-
-      }
-
+        
   }
-
-
-
+           
 }
+
+
+
+

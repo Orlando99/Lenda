@@ -21,7 +21,7 @@
         <div class="row">
           <ag-grid-angular
             style="width: 96%; height: 250px;"
-            class="ag-theme-balham"
+            class="ag-theme-balham roboto-font"
             [context]="context"
             [frameworkComponents]="frameworkcomponents"
             [components]="components"
@@ -29,7 +29,8 @@
             [rowData]="rowData"
             [editType]="editType"
             (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs">
+            [columnDefs]="columnDefs"
+            >
           </ag-grid-angular>
         </div>
       </div>

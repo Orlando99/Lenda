@@ -8,7 +8,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-    <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled()">
+    <button (click)="synctoDb()" class="btn-unstyle" [disabled]="syncFarmStatus===0">
       <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
      </button>
 
@@ -17,7 +17,7 @@
 
       <div class="container bottom">
         <div class="row">
-          <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+          <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
             [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" [singleClickEdit]="true"
             (cellEditingStopped)="rowvaluechanged($event)" (cellEditingStarted)="cellEditingStarted($event)" [rowData]="rowData"
             (gridReady)="onGridReady($event)" [defaultColDef]="defaultColDef" [columnDefs]="columnDefs" [headerHeight]="45">

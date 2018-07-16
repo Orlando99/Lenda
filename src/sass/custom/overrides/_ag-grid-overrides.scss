@@ -11,21 +11,24 @@
 }
 
 .ag-cell {
-  background-color:white
+  background-color:#f6f5f5;
+   border-width: 0px 1px 0px 0px !important;
+    border-color: lightgray !important;
+    border-style: solid !important;
+
 }
 
 .ag-header-row{
   background-color: #23C8AB;
   color: white;
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
 
 .editable-color{
-  background-color: #dcf0f4 !important
+  background-color: white;
+  color : #1a61df;
 }
 
-.editable-color-not-important{
-  background-color: #dcf0f4;
-}
 
 .text-right{
   text-align: right;
@@ -44,7 +47,7 @@
 }
 
 .ag-floating-bottom-container > .ag-row >.ag-cell{
-  background-color: darkslateblue;
+  background-color: #66afc9;
 }
 
 // .ag-theme-balham .ag-header-cell-label .ag-header-cell-text{
@@ -123,4 +126,16 @@
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
+}
+.cuppa-dropdown{
+  width:100px !important
+      }
+
+
+      .grayedcell{
+        background: gray !important
+      }
+
+.roboto-font{
+  font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
