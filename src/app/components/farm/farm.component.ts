@@ -188,6 +188,8 @@ export class FarmComponent implements OnInit {
       //     colKey: this.currenteditedfield
       //   });
       //  }
+      
+    this.getgridheight();
     });
 
     this.getgridheight();
