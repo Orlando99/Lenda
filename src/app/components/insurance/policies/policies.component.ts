@@ -4,7 +4,7 @@ import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupState
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { environment } from '../../../../environments/environment.prod';
-
+import * as _ from 'lodash'
 import { ChipsListEditor } from '../../../aggridcolumns/chipscelleditor';
 import { GridOptions } from 'ag-grid';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -16,7 +16,6 @@ import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy } from '../../../models/insurancemodel';
 import { debug } from 'util';
-import * as _ from 'lodash'
 
 @Component({
   selector: 'app-policies',

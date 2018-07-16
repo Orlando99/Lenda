@@ -9,6 +9,7 @@ export const environment = {
   loankey_copy:"rawcurrentselectedloan",
   logpriority:"logpriority",
   referencedatakey:"refdata",
-  uid:"userid"
+  uid:"userid",
+  loanidkey:"selectedloanId"
 };
 

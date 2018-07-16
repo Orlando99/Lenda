@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LoanApiService } from './../../services/loan/loanapi.service';
 import { LoanListResModel } from '../../models/resmodels/loan-list.model';
 import { Router } from '@angular/router';
+import { LocalStorageService } from '../../../../node_modules/ngx-webstorage';
+import { environment } from '../../../environments/environment.prod';
 
 @Component({
   selector: 'app-loan-list',
@@ -13,7 +15,9 @@ export class LoanListComponent implements OnInit {
   private pagesize = 10;
   public loanlist: Array<any> = new Array<any>();
   public pageheader = 'Loan Listing';
-  constructor(private loanService: LoanApiService, private route: Router) { }
+  constructor(private loanService: LoanApiService, private route: Router,
+  private localstorageservice:LocalStorageService
+  ) { }
 
   ngOnInit() {
     this.getloanlist();
@@ -28,7 +32,7 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: string) {
-    
+    this.localstorageservice.store(environment.loanidkey,id)
     this.route.navigateByUrl("/home/loanoverview/"+id.replace("-","/")+"/summary");
   }
 }
