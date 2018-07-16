@@ -7,3 +7,10 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
     display: inline-flex;
     vertical-align: middle;
 }
+
+.mat-dialog-container{
+  padding: 20px 20px 20px 20px !important;
+  width: 500px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}

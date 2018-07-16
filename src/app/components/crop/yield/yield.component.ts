@@ -45,7 +45,7 @@ export class YieldComponent implements OnInit {
   public addAction = false;
   public cropYear;
   context: any;
-  public syncYieldStatus : status;
+  public syncYieldStatus : status = 0;
 
   frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
   style = {
