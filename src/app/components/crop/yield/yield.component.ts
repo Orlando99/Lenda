@@ -137,15 +137,19 @@ export class YieldComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
+      debugger
       if (res.srccomponentedit == "YieldComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+        debugger
+        let rownode=this.gridApi.getrowNode("aa");
+        this.gridApi.refreshCells();
       }
       else {
         this.localloanobject = res;
-        this.rowData = [];
         this.rowData=res.CropYield.filter(cy=>{return cy.ActionStatus != 3});;
+        this.gridApi.refreshCells();
       }
       this.getgridheight();
     });
