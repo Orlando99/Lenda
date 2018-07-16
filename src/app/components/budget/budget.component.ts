@@ -25,6 +25,14 @@ import { PriceFormatter } from '../../Workers/utility/aggrid/formatters';
   styleUrls: ['./budget.component.scss']
 })
 export class BudgetComponent implements OnInit {
+  // Following properties are added as produ build was failing
+  // ----
+  components;
+  frameworkcomponents;
+  context;
+  rowvaluechanged;
+  cellvaluechanged;
+  // ----
   posts: any[];
   columnDefs: Array<any>;
   rowData: Array<Loan_Budget>;
@@ -33,7 +41,7 @@ export class BudgetComponent implements OnInit {
   columnApi;
   pinnedBottomRowData;
   public getRowStyle;
-  // constructor() {  
+  // constructor() {
 
   // this.posts =[];
   // this.posts.push({title:"DIS",postText:"Wow greate post"});
@@ -60,7 +68,7 @@ export class BudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellClass: ['text-right'], 
+          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           }},
@@ -122,7 +130,7 @@ export class BudgetComponent implements OnInit {
       return budget;
     });
     //REMOVE END
-    this.bindData(this.localLoanObject);   
+    this.bindData(this.localLoanObject);
   }
 
   bindData(loanObject: loan_model) {
@@ -131,12 +139,12 @@ export class BudgetComponent implements OnInit {
       this.rowData = this.budgetService.getTotalTableData(loanObject.LoanBudget, this.cropPractices);
       this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
 
-    }   
+    }
   }
   ngOnInit() {
 
   }
- 
+
   style = {
     marginTop: '10px',
     width: '96%',

@@ -1,41 +1,28 @@
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        REBATOR
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          REBATOR
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-  
-      <button (click)="synctoDb()" [disabled]="!syncenabled()"  mat-icon-button>
-        <mat-icon [style.color] = "!syncenabled()">publish</mat-icon>
+    <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled()">
+        <!-- <mat-icon [style.color] = "!syncenabled()">publish</mat-icon> -->
+        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
       </button>
-  
-      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-        
-      <div class="container bottom">
-        <div class="row">
-        <ag-grid-angular  [ngStyle]="style"
-        class="ag-theme-balham roboto-font"
-        [animateRows]="true"
-        [enableSorting]="true"
-        [enableFilter]="true"
-        [context]="context"
-        [showToolPanel]="true"
-        (gridSizeChanged)="onGridSizeChanged($event)"
-        [frameworkComponents]="frameworkcomponents"
-        [components]="components"
-        [singleClickEdit]="true"
-        [defaultColDef]="defaultColDef"
-        [rowGroupPanelShow]="true"
-        (cellEditingStopped)="rowvaluechanged($event)"
-        [rowData]="rowData" 
-        (gridReady)="onGridReady($event)"
-        [columnDefs]="columnDefs"
-        >
+
+    <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
+     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+
+    <div class="container bottom">
+      <div class="row">
+        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+          [context]="context" [showToolPanel]="true" (gridSizeChanged)="onGridSizeChanged($event)" [frameworkComponents]="frameworkcomponents"
+          [components]="components" [singleClickEdit]="true" [defaultColDef]="defaultColDef" [rowGroupPanelShow]="true" (cellEditingStopped)="rowvaluechanged($event)"
+          [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs">
         </ag-grid-angular>
-        </div>
       </div>
-            <br>
-    </mat-expansion-panel>
-    </mat-accordion>
+    </div>
+    <br>
+  </mat-expansion-panel>
+</mat-accordion>

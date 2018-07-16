@@ -2,11 +2,11 @@
 
 #arm-main-content {
   padding-top: 80px;
-  padding-bottom: 50px;
+  margin-bottom: 20px;
   margin-left: $sidebar-minimal-view;
   -webkit-transition: margin 0.25s;
   transition: margin 0.25s;
-
+  background: $white-90;
   &.is-sidebar-expanded {
     margin-left: $sidebar-expanded-view;
   }
