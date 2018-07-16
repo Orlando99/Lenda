@@ -1,6 +1,6 @@
-<div class="container bottom width-auto">
+<div class="container bottom width-auto" >
 
-  <div class="bottom">
+  <div class="bottom" *ngIf="data.partOne!=undefined">
     <div class="row">
       <ng-container *ngFor="let row of data.partOne, let rowInd = index">
         <div class="col m3">
@@ -18,7 +18,7 @@
 
     </div>
   </div>
-  <div class="bottom">
+  <div class="bottom" *ngIf="data.partTwo!=undefined">
     <div class="row table-row">
       <ng-container *ngFor="let row of data.partTwo, let rowInd = index">
         <div class="col m3">
@@ -40,7 +40,7 @@
 
   </div>
 
-  <div class="bottom">
+  <div class="bottom" *ngIf="data.partThree!=undefined">
     <div class="row table-row">
       <ng-container *ngFor="let row of data.partThree, let rowInd= index">
         <div class="col m3">

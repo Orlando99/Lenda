@@ -1,6 +1,6 @@
 import { JsonProperty, JsonObject, JsonConverter, JsonCustomConvert } from "json2typescript";
 import { Loan_Crop_Unit, Loan_Crop_Unit_FC, V_Crop_Price_Details, Loan_Crop_History_FC } from "./cropmodel";
-import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
+import { IntConverter, StringConverter, ArrayConverter } from "../Workers/utility/jsonconvertors";
 import { Loan_Farm } from "./farmmodel.";
 import {LoanQResponse} from './loan-response.model';
 import { ModelStatus, status } from "./syncstatusmodel";
@@ -240,29 +240,29 @@ export class borrower_model
         @JsonProperty("Borrower", borrower_model)
         Borrower: borrower_model=null;
 
-        @JsonProperty("LoanCropUnits", [Loan_Crop_Unit])
-        LoanCropUnits:Loan_Crop_Unit[]=new Array<Loan_Crop_Unit>();
+        @JsonProperty("LoanCropUnits", ArrayConverter,true)
+        LoanCropUnits:Loan_Crop_Unit[]=[];
 
         @JsonProperty("CropYield", [])
         CropYield:any=null;
 
-        @JsonProperty("Farms", [Loan_Farm],true)
-        Farms:Loan_Farm[]=new Array<Loan_Farm>();
+        @JsonProperty("Farms", ArrayConverter,true)
+        Farms:Loan_Farm[]=[];
 
-       // @JsonProperty("LoanQResponse", [])
+       @JsonProperty("LoanQResponse", ArrayConverter,true)
         LoanQResponse:any=[];
 
-        @JsonProperty("LoanBudget",[])
-        LoanBudget:Array<Loan_Budget>=new Array<Loan_Budget>();
+        @JsonProperty("LoanBudget",ArrayConverter,true)
+        LoanBudget:Array<Loan_Budget>=[];
 
         @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
 
-       // @JsonProperty("Association", [Loan_Association])
+       @JsonProperty("Association", ArrayConverter,true)
         Association: Loan_Association[]=new Array<Loan_Association>();
 
-       // @JsonProperty("LoanCollateral", [],true,)
-        LoanCollateral: Loan_Collateral[]=new Array<Loan_Collateral>();
+       @JsonProperty("LoanCollateral",ArrayConverter,true,)
+        LoanCollateral: Loan_Collateral[]=[];
 
         @JsonProperty("LoanMaster", [])
         LoanMaster: any = undefined;
@@ -270,13 +270,13 @@ export class borrower_model
         @JsonProperty("DashboardStats",[])
         DashboardStats:any=undefined;
 
-        // @JsonProperty("LoanCropPractices",[])
-        LoanCropPractices :Array<Loan_Crop_Practice>=new Array<Loan_Crop_Practice>();
+        @JsonProperty("LoanCropPractices",ArrayConverter,true)
+        LoanCropPractices :Array<Loan_Crop_Practice>=[];
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
         
-        // @JsonProperty("InsurancePolicies",[])
-        InsurancePolicies :Array<Insurance_Policy>=new Array<Insurance_Policy>();
+        @JsonProperty("InsurancePolicies",ArrayConverter,true)
+        InsurancePolicies :Array<Insurance_Policy>=undefined;
 
         lasteditrowindex:number;
         srccomponentedit:string;

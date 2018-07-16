@@ -12,18 +12,22 @@ import { ValueType } from '../shared/cell-value/cell-value.component';
 })
 export class RatingComponent implements OnInit {
 
-  data: any;
+  data: any={};
   localloanobj: loan_model;
   constructor(private localstorageservice: LocalStorageService,
     private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-    this.localloanobj = res;
-    this.binddata(this.localloanobj);
+      if(res!=null)
+      {
+       this.localloanobj = res;
+        this.binddata(this.localloanobj);
+      }
     })
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    if(this.localloanobj!=null && this.localloanobj!=undefined)
     this.binddata(this.localloanobj);
 
   }
