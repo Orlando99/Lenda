@@ -212,7 +212,7 @@ export class FlowchartComponent implements OnInit {
 
     for (let icon of icons) {
       // Mouseenter event for tooltip
-      icon.addEventListener('mouseenter', (event) => {
+      icon.addEventListener('mouseover', (event) => {
         this.renderer.addClass(tooltip, 'active');
         this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
         this.renderer.setStyle(tooltip, 'top', event.pageY - 50 + 'px');
@@ -221,10 +221,8 @@ export class FlowchartComponent implements OnInit {
 
       // Mouseleave event for tooltip
       icon.addEventListener('mouseleave', (event) => {
-        setTimeout(() => {
-          this.renderer.removeClass(tooltip, 'active');
-          this.renderer.removeChild(tooltip, text);
-        }, 500);
+        this.renderer.removeClass(tooltip, 'active');
+        this.renderer.removeChild(tooltip, text);
       });
     }
   }
