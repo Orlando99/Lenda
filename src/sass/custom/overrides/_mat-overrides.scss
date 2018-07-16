@@ -34,25 +34,31 @@ body .mat-expansion-panel-body {
   padding: 15px 0;
 }
 
-.mat-expansion-panel-header {
+body .mat-expansion-panel-header {
   display: block !important;
   background: #eee;
   // background-color: rgba(22, 76, 123, 0.9);
   // background-color: $nav-hover-color;
   // background: linear-gradient(to right, rgba(36, 112, 179, 1) 0%, rgba(35, 209, 171, 1) 100%);
   border: 1px solid $black-30;
-  height: 50px;
-  max-height: 50px;
+  height: 40px;
+  max-height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 10px;
 
   .mat-content {
     display: inline-block;
-    margin-top: 15px;
+    margin-top: 10px;
   }
+
   .mat-expansion-indicator  {
     float: left;
-    margin-top: 12px;
+    margin-top: 8px;
     margin-right: 10px;
   }
+
   .mat-expansion-panel-header-title,
   .mat-expansion-indicator::after {
     color: $black-70;
@@ -60,7 +66,7 @@ body .mat-expansion-panel-body {
   }
   &.mat-expanded {
     .mat-expansion-indicator {
-      margin-top: 17px;
+      margin-top: 12px;
     }
   }
 }
