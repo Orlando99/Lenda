@@ -25,9 +25,10 @@ export class QuestionsComponent implements OnInit {
      this.RefQuestions=[];
     this.LoanQResponse=this.localloanobject.LoanQResponse;
     //temporary fix for unmatched length of questions and response rows
+    if(this.localloanobject.LoanQResponse && this.localloanobject.LoanQResponse.length > 0){
     this.localloanobject.LoanQResponse.forEach((element,index) => {
       this.RefQuestions.push(this.refdata.RefQuestions[index])
-    });
+    });}
 
     console.log(this.RefQuestions, this.LoanQResponse)
   }
