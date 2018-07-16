@@ -19,6 +19,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { empty } from 'rxjs/observable/empty';
 import { status } from '../../../models/syncstatusmodel';
+import { NO_CHANGE } from '@angular/core/src/render3/instructions';
 
 export interface DialogData {
   animal: string;
@@ -284,6 +285,7 @@ export class YieldComponent implements OnInit {
       });
       this.edits=[];
     }
+    this.syncYieldStatus = status.NOCHANGE;
   }
 
   DeleteClicked(rowIndex: any) {
