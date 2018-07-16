@@ -13,6 +13,8 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { GridOptions } from '../../../../../node_modules/ag-grid';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-fsa',
@@ -23,7 +25,6 @@ export class FSAComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-
   public rowData = [];
   public components;
   public context;
@@ -33,6 +34,7 @@ export class FSAComponent implements OnInit {
   public columnApi;
   public deleteAction = false;
   public pinnedBottomRowData;
+  public rowClassRules;
 
   style = {
     marginTop: '10px',
@@ -46,39 +48,47 @@ export class FSAComponent implements OnInit {
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     public logging: LoggingService,
-    public alertify:AlertifyService,
-    public loanapi:LoanApiService){
+    public alertify: AlertifyService,
+    public loanapi: LoanApiService) {
 
-      this.components = { numericCellEditor: getNumericCellEditor()};
-      this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-      this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
-      this.columnDefs = [
-        { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
-        { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
-        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
-        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true, width:130},
-        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
-          // valueGetter: function (params) {
-          //   return setNetMktValue(params);}
-        },
-        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:130,
-          pinnedRowCellRenderer: function(){ return '-';}},
-        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
-          // valueGetter: function (params) {
-          //   return setDiscValue(params);
-          // },
-          valueFormatter: currencyFormatter},
-        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,
-          cellEditorParams:{
-            values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
-          },pinnedRowCellRenderer: function(){ return ' ';},
-          valueFormatter: insuredFormatter},
-        { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
-      ];
+    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
-      this.context = { componentParent: this };
+    this.columnDefs = [
+      { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
+      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120 },
+      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
+      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
+      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130 },
+      {
+        headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
+        // valueGetter: function (params) {
+        //   return setNetMktValue(params);}
+      },
+      {
+        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellStyle: { textAlign: "right" }, width: 130,
+        pinnedRowCellRenderer: function () { return '-'; }
+      },
+      {
+        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
+        // valueGetter: function (params) {
+        //   return setDiscValue(params);
+        // },
+        valueFormatter: currencyFormatter
+      },
+      {
+        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100,
+        cellEditorParams: {
+          values: [{ 'key': 0, 'value': 'No' }, { 'key': 1, 'value': 'Yes' }]
+        }, pinnedRowCellRenderer: function () { return ' '; },
+        valueFormatter: insuredFormatter
+      },
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
+    ];
+
+    this.context = { componentParent: this };
   }
 
   ngOnInit() {
@@ -87,11 +97,11 @@ export class FSAComponent implements OnInit {
       if (res.srccomponentedit == "FSAComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] =  this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-      }else{
+        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  })[res.lasteditrowindex];
+      } else {
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }):[];
+        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -108,7 +118,7 @@ export class FSAComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }):[];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
@@ -126,7 +136,9 @@ export class FSAComponent implements OnInit {
     }
   }
 
+
   onGridReady(params) {
+    debugger
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
@@ -161,7 +173,7 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    if(this.localloanobject.LoanCollateral ==null)
+    if (this.localloanobject.LoanCollateral == null)
       this.localloanobject.LoanCollateral = [];
 
     var newItem = new Loan_Collateral();
@@ -198,11 +210,12 @@ export class FSAComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
+    debugger
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
+          this.rowData.splice(rowIndex, 1);+
           this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
         } else {
           this.deleteAction = true;
