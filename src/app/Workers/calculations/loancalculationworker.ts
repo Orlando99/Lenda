@@ -120,10 +120,12 @@ export class LoancalculationWorker {
             for(let i = 0; i<localloanobj.LoanBudget.length;i++){
               let currentBudget =  localloanobj.LoanBudget[i];
               let cropPractice = localloanobj.LoanCropPractices.find(cp=>cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+              if(cropPractice!=undefined && cropPractice!=null){
                 currentBudget.ARM_Budget_Crop = currentBudget.ARM_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Distributor_Budget_Crop = currentBudget.Distributor_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
+              }
             }
           }catch(e){
           console.error("ERROR IN BUDGET CALCULATION"+JSON.stringify(e));

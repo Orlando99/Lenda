@@ -238,31 +238,31 @@ export class borrower_model
     export class loan_model{
 
         @JsonProperty("Borrower", borrower_model)
-        Borrower: borrower_model=undefined;
+        Borrower: borrower_model=null;
 
         @JsonProperty("LoanCropUnits", [Loan_Crop_Unit])
-        LoanCropUnits:Loan_Crop_Unit[]=undefined;
+        LoanCropUnits:Loan_Crop_Unit[]=new Array<Loan_Crop_Unit>();
 
         @JsonProperty("CropYield", [])
-        CropYield:any=undefined;
+        CropYield:any=null;
 
-        @JsonProperty("Farms", [Loan_Farm])
-        Farms:Loan_Farm[]=undefined;
+        @JsonProperty("Farms", [Loan_Farm],true)
+        Farms:Loan_Farm[]=new Array<Loan_Farm>();
 
        // @JsonProperty("LoanQResponse", [])
-        LoanQResponse:any=undefined;
+        LoanQResponse:any=[];
 
         @JsonProperty("LoanBudget",[])
-        LoanBudget:Array<Loan_Budget>=[];
+        LoanBudget:Array<Loan_Budget>=new Array<Loan_Budget>();
 
         @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
 
        // @JsonProperty("Association", [Loan_Association])
-        Association: Loan_Association[]=undefined;
+        Association: Loan_Association[]=new Array<Loan_Association>();
 
        // @JsonProperty("LoanCollateral", [],true,)
-        LoanCollateral: Loan_Collateral[]=undefined;
+        LoanCollateral: Loan_Collateral[]=new Array<Loan_Collateral>();
 
         @JsonProperty("LoanMaster", [])
         LoanMaster: any = undefined;
@@ -271,12 +271,12 @@ export class borrower_model
         DashboardStats:any=undefined;
 
         // @JsonProperty("LoanCropPractices",[])
-        LoanCropPractices :Array<Loan_Crop_Practice>=[];
+        LoanCropPractices :Array<Loan_Crop_Practice>=new Array<Loan_Crop_Practice>();
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
         
         // @JsonProperty("InsurancePolicies",[])
-        InsurancePolicies :Array<Insurance_Policy>=[];
+        InsurancePolicies :Array<Insurance_Policy>=new Array<Insurance_Policy>();
 
         lasteditrowindex:number;
         srccomponentedit:string;
