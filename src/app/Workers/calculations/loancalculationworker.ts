@@ -115,7 +115,7 @@ export class LoancalculationWorker {
           localloanobj = this.insuranceworker.performcalculations(localloanobj);
 
       //STEP 5 --- BUDGET CALCULATIONS
-          if (localloanobj.LoanBudget != null){
+      try{
 
             for(let i = 0; i<localloanobj.LoanBudget.length;i++){
               let currentBudget =  localloanobj.LoanBudget[i];
@@ -125,7 +125,10 @@ export class LoancalculationWorker {
                 currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
                 currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
             }
-          }
+          }catch(e){
+          console.error("ERROR IN BUDGET CALCULATION"+JSON.stringify(e));
+          
+        }
           //localloanobj.LoanBudget = localloanobj.LoanBudget;
 
       //STEP 6 --- COLLATERAL CALCULATIONS

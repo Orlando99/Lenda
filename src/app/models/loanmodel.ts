@@ -249,7 +249,7 @@ export class borrower_model
         @JsonProperty("Farms", [Loan_Farm])
         Farms:Loan_Farm[]=undefined;
 
-        @JsonProperty("LoanQResponse", [])
+       // @JsonProperty("LoanQResponse", [])
         LoanQResponse:any=undefined;
 
         @JsonProperty("LoanBudget",[])
@@ -258,10 +258,10 @@ export class borrower_model
         @JsonProperty("Loan_Full_ID", StringConverter)
         Loan_Full_ID:string=undefined;
 
-        @JsonProperty("Association", [Loan_Association])
+       // @JsonProperty("Association", [Loan_Association])
         Association: Loan_Association[]=undefined;
 
-        @JsonProperty("LoanCollateral", [],true)
+       // @JsonProperty("LoanCollateral", [],true,)
         LoanCollateral: Loan_Collateral[]=undefined;
 
         @JsonProperty("LoanMaster", [])
@@ -270,12 +270,13 @@ export class borrower_model
         @JsonProperty("DashboardStats",[])
         DashboardStats:any=undefined;
 
-        @JsonProperty("LoanCropPractices",[])
+        // @JsonProperty("LoanCropPractices",[])
         LoanCropPractices :Array<Loan_Crop_Practice>=[];
         
         LoanCropUnitFCvalues:Loan_Crop_Unit_FC=new Loan_Crop_Unit_FC();
         
-        InsurancePolicies:Array<Insurance_Policy>=new Array<Insurance_Policy>();
+        // @JsonProperty("InsurancePolicies",[])
+        InsurancePolicies :Array<Insurance_Policy>=[];
 
         lasteditrowindex:number;
         srccomponentedit:string;
