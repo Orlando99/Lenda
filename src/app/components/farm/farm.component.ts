@@ -170,12 +170,16 @@ export class FarmComponent implements OnInit {
       this.localloanobject = res;
       if(res.Farms && res.srccomponentedit == "FarmComponent"){
         this.rowData[res.lasteditrowindex] = this.localloanobject.Farms.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
+        this.localloanobject.srccomponentedit = undefined;
+        this.localloanobject.lasteditrowindex = undefined;
+      }
+      else if(res.Farms){
         
-      }
-      else{
-        this.rowData = [];
         this.rowData = this.localloanobject.Farms.filter(p => p.ActionStatus != 3);
+      }else{
+        this.rowData = [];
       }
+
       //  this.gridApi.setRowData(this.rowData);
       //  if(this.currenteditedfield!=null){
 
@@ -226,10 +230,11 @@ export class FarmComponent implements OnInit {
       this.localloanobject.Farms[this.localloanobject.Farms.length]=value.data;
     }
     else {
-      var rowindex=value.rowindex;
+      //var rowindex=value.rowindex;
       if(obj.ActionStatus!=1)
        obj.ActionStatus = 2;
-      this.localloanobject.Farms[value.rowIndex]=obj;
+       //obj itself should have memory referece of localstorage respective farm object
+     // this.localloanobject.Farms[value.rowIndex]=obj;
     }
     this.localloanobject.srccomponentedit = "FarmComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
@@ -277,18 +282,23 @@ export class FarmComponent implements OnInit {
     this.getgridheight();
   }
 
-  DeleteClicked(rowIndex: any) {
+  DeleteClicked(rowIndex: any,data) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Farms[rowIndex];
+        var obj = this.rowData[rowIndex];
+        //var localStorageRowIndex = this.localloanobject.Farms.findIndex(f=>f.Farm_ID === obj.Farm_ID);
         if (obj.Farm_ID == 0) {
-          this.localloanobject.Farms.splice(rowIndex, 1);
+          //there can be multipe row with Farm_ID = 0
+          let localFarmRow = this.localloanobject.Farms.findIndex(f=>f === data);
+          this.localloanobject.Farms.splice(localFarmRow, 1); // it will then assigned to rowData so it will be affected to it
         }
         else {
           obj.ActionStatus = 3;
         }
 
         this.updateSyncStatus();
+        this.localloanobject.srccomponentedit = undefined;
+        this.localloanobject.lasteditrowindex = undefined;
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
       this.getgridheight();
