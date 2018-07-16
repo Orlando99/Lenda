@@ -96,7 +96,7 @@ export class BuyerAssociationComponent implements OnInit {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
-    if (this.localloanobject != null && this.localloanobject != undefined) {
+    if (this.localloanobject && this.localloanobject.Association && this.localloanobject.Association.length>0) {
       //this.localloanobject = obj;
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY");
     }

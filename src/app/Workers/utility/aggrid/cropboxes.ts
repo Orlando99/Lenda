@@ -14,8 +14,12 @@ export function extractCropValues(mappings) {
 }
 
 export function lookupCropValue(mappings, key) {
-    let test = mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
-    return test
+    if(key){
+        return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
+    }else{
+        return "";
+    }
+    
 }
 
 export function lookupCropValuewithoutmapping(key) {
