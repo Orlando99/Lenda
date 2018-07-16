@@ -13,3 +13,6 @@ table {
 tfoot{
     background: lightgreen
 }
+td:not(.title){
+    text-align: right;
+}
