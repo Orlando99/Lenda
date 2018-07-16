@@ -9,7 +9,9 @@ declare var $;
   styleUrls: ['./flowchart.component.scss']
 })
 export class FlowchartComponent implements OnInit {
-
+  private textElements = [];
+  private lineBreaks = [];
+  private isDirty;
   constructor(
     private renderer: Renderer2,
     private localstorage: LocalStorageService,
@@ -208,22 +210,62 @@ export class FlowchartComponent implements OnInit {
   initTooltip() {
     let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
     let icons = this.elRef.nativeElement.querySelectorAll('.icon');
-    let text = this.renderer.createText('Crop1, Crop 2, Crop 3');
-
+    // Hardcoded tooltip text for demo
+    // TODO: Replace with dynamic logic once API is implemented
+    // let text = this.renderer.createText('Crop1, Crop 2, Crop 3');
     for (let icon of icons) {
       // Mouseenter event for tooltip
       icon.addEventListener('mouseover', (event) => {
-        this.renderer.addClass(tooltip, 'active');
-        this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
-        this.renderer.setStyle(tooltip, 'top', event.pageY - 50 + 'px');
-        this.renderer.appendChild(tooltip, text);
+        let texts = this.getTooltipText(event);
+        this.addTooltipNodes(tooltip, texts, event);
       });
 
       // Mouseleave event for tooltip
       icon.addEventListener('mouseleave', (event) => {
+        tooltip.querySelectorAll('div').forEach(function (node) {
+          node.parentNode.removeChild(node);
+        });
         this.renderer.removeClass(tooltip, 'active');
-        this.renderer.removeChild(tooltip, text);
+        this.isDirty = false;
       });
+    }
+  }
+
+  getTooltipText(event) {
+    if (event.target.parentNode.id.indexOf('farmer') !== -1) {
+      return ['Farmer 1 - 50', 'Farmer 2 - 160', 'Farmer 3 - 200'];
+    } else if (event.target.parentNode.id.indexOf('borrower') !== -1) {
+      return ['Borrower 1 - 30', 'Borrower 2 - 60', 'Borrower 3 - 100'];
+    } else if (event.target.parentNode.id.indexOf('tree') !== -1) {
+      return ['Crop 1 - 30', 'Crop 2 - 60', 'Crop 3 - 100', 'Crop 4 - 300'];
+    } else {
+      return ['Misc 1 - 30', 'Misc 2 - 60', 'Misc 3 - 100'];
+    }
+  }
+
+  addTooltipNodes(tooltip, texts, event) {
+    if (!this.isDirty) {
+      this.textElements = [];
+      this.lineBreaks = [];
+      let parentElement = this.renderer.createElement('div');
+      this.renderer.addClass(tooltip, 'active');
+      this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
+      for (let item of texts) {
+        let text = this.renderer.createText(item);
+        let lineBreak = this.renderer.createElement('br');
+        this.textElements.push(text);
+
+        this.lineBreaks.push(lineBreak);
+        this.renderer.appendChild(parentElement, text);
+        this.renderer.appendChild(
+          parentElement,
+          lineBreak
+        );
+        this.renderer.appendChild(tooltip, parentElement);
+        this.renderer.setStyle(tooltip, 'height', 30 * this.textElements.length + 'px');
+        this.renderer.setStyle(tooltip, 'top', event.pageY - (50 + 20 * this.textElements.length) + 'px');
+      }
+      this.isDirty = true;
     }
   }
 }
