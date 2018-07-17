@@ -139,3 +139,37 @@
 .roboto-font{
   font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
+
+// Cuppa dropdown
+// ====
+
+.cuppa-dropdown {
+  .selected-list .c-btn {
+    min-height: 25px; // = cell height
+    padding: 0 !important;
+    box-shadow: none;
+    border: none;
+    font-size: $font-size-sm;
+  }
+  .ng-star-inserted {
+    font-size: $font-size-sm;
+    padding: 5px 0;
+  }
+  .ng-star-inserted {
+    padding-top: 5px;
+  }
+  .c-token  {
+    margin-top: 5px !important;
+    &.ng-star-inserted {
+      margin-top: 0px !important;
+    }
+  }
+  .c-angle-up,
+  .c-angle-down {
+    right: 8px !important;
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+// ====
