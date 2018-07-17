@@ -22,7 +22,7 @@ export class DeleteButtonRenderer implements ICellRendererAngularComp {
 
     public invokeParentMethod() {
         
-        this.params.context.componentParent.DeleteClicked(this.params.rowIndex)
+        this.params.context.componentParent.DeleteClicked(this.params.rowIndex, this.params.data)
     }
 
     refresh(): boolean {
