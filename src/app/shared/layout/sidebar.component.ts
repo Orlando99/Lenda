@@ -31,7 +31,7 @@ export class SidebarComponent implements OnInit {
   ) {
     this.localstorage.observe(environment.loankey).subscribe(res => {
       if (res != undefined && res != null)
-        this.loanid = res.Loan_Full_ID.replace("-", "/");
+        this.loanid =this.localstorage.retrieve(environment.loanidkey).replace("-","/");
     })
     this.getloanid();
 
@@ -49,7 +49,7 @@ export class SidebarComponent implements OnInit {
 
   getloanid() {
     try {
-      this.loanid = this.localstorage.retrieve(environment.loankey).Loan_Full_ID.replace("-", "/");;
+      this.loanid =this.localstorage.retrieve(environment.loanidkey).replace("-","/");
     }
     catch (ex) {
 

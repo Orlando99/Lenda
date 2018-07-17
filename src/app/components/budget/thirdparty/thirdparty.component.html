@@ -1,41 +1,30 @@
-
 <div class="basic-container">
 
-    <mat-accordion>
+  <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
           3rd Party Credit Provider
         </mat-panel-title>
       </mat-expansion-panel-header>
-  
-        <button (click)="synctoDb()" [disabled]="!syncenabled" mat-icon-button>
-        <mat-icon >publish</mat-icon>
-      </button>
-  
-      <button (click)="addrow()" mat-raised-button color="primary" >Add </button>
-        
-            <div class="container bottom">
-              <div class="row">
-              <ag-grid-angular 
-              [ngStyle]="style"
-              class="ag-theme-balham roboto-font"
-              [animateRows]="true"
-              [enableSorting]="true"
-              [enableFilter]="true"
-              [context]="context"
-              [frameworkComponents]="frameworkcomponents"
-              [components]="components"
-              (rowEditingStopped)="rowvaluechanged($event)"
-              [rowData]="rowData" 
-              [editType]="editType"
-              (gridReady)="onGridReady($event)"
-              [columnDefs]="columnDefs">
-              </ag-grid-angular>
-              </div>
-            </div>
-            <br>
+
+       <button (click)="synctoDb()" [disabled]="!syncenabled">
+        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
+       </button>
+
+     <!-- <button (click)="addrow()" mat-raised-button color="primary" >Add </button> -->
+     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+
+      <div class="container bottom">
+        <div class="row">
+          <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
+            [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" (rowEditingStopped)="rowvaluechanged($event)"
+            [rowData]="rowData" [editType]="editType" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs">
+          </ag-grid-angular>
+        </div>
+      </div>
+      <br>
     </mat-expansion-panel>
-    </mat-accordion>
-   
-  </div>
+  </mat-accordion>
+
+</div>

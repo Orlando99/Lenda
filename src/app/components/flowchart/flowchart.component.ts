@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
+declare var $;
 
 @Component({
   selector: 'app-flowchart',
@@ -8,15 +9,23 @@ import { environment } from '../../../environments/environment.prod';
   styleUrls: ['./flowchart.component.scss']
 })
 export class FlowchartComponent implements OnInit {
-
-  constructor(private localstorage:LocalStorageService) { 
-    this.localstorage.observe(environment.loankey).subscribe(res=>{
-      if(res!=undefined && res!=null)
-      {
-        var data=this.localstorage.retrieve(environment.loankey).DashboardStats;
+  private textElements = [];
+  private lineBreaks = [];
+  private isDirty;
+  constructor(
+    private renderer: Renderer2,
+    private localstorage: LocalStorageService,
+    private elRef: ElementRef) {
+    this.localstorage.observe(environment.loankey).subscribe(res => {
+      if (res != undefined && res != null) {
+        var data = this.localstorage.retrieve(environment.loankey).DashboardStats;
         this.buildChart(data);
       }
     })
+  }
+
+  ngAfterViewInit() {
+    this.initTooltip();
   }
 
   ngOnInit() {
@@ -184,7 +193,7 @@ export class FlowchartComponent implements OnInit {
       //   }
       // ];
 
-      var data=this.localstorage.retrieve(environment.loankey).DashboardStats;
+      var data = this.localstorage.retrieve(environment.loankey).DashboardStats;
 
       this.buildChart(data);
     }, 2000);
@@ -198,4 +207,65 @@ export class FlowchartComponent implements OnInit {
     }
   }
 
+  initTooltip() {
+    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
+    let icons = this.elRef.nativeElement.querySelectorAll('.icon');
+    // Hardcoded tooltip text for demo
+    // TODO: Replace with dynamic logic once API is implemented
+    // let text = this.renderer.createText('Crop1, Crop 2, Crop 3');
+    for (let icon of icons) {
+      // Mouseenter event for tooltip
+      icon.addEventListener('mouseover', (event) => {
+        let texts = this.getTooltipText(event);
+        this.addTooltipNodes(tooltip, texts, event);
+      });
+
+      // Mouseleave event for tooltip
+      icon.addEventListener('mouseleave', (event) => {
+        tooltip.querySelectorAll('div').forEach(function (node) {
+          node.parentNode.removeChild(node);
+        });
+        this.renderer.removeClass(tooltip, 'active');
+        this.isDirty = false;
+      });
+    }
+  }
+
+  getTooltipText(event) {
+    if (event.target.parentNode.id.indexOf('farmer') !== -1) {
+      return ['Farmer 1 - 50', 'Farmer 2 - 160', 'Farmer 3 - 200'];
+    } else if (event.target.parentNode.id.indexOf('borrower') !== -1) {
+      return ['Borrower 1 - 30', 'Borrower 2 - 60', 'Borrower 3 - 100'];
+    } else if (event.target.parentNode.id.indexOf('tree') !== -1) {
+      return ['Crop 1 - 30', 'Crop 2 - 60', 'Crop 3 - 100', 'Crop 4 - 300'];
+    } else {
+      return ['Misc 1 - 30', 'Misc 2 - 60', 'Misc 3 - 100'];
+    }
+  }
+
+  addTooltipNodes(tooltip, texts, event) {
+    if (!this.isDirty) {
+      this.textElements = [];
+      this.lineBreaks = [];
+      let parentElement = this.renderer.createElement('div');
+      this.renderer.addClass(tooltip, 'active');
+      this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
+      for (let item of texts) {
+        let text = this.renderer.createText(item);
+        let lineBreak = this.renderer.createElement('br');
+        this.textElements.push(text);
+
+        this.lineBreaks.push(lineBreak);
+        this.renderer.appendChild(parentElement, text);
+        this.renderer.appendChild(
+          parentElement,
+          lineBreak
+        );
+        this.renderer.appendChild(tooltip, parentElement);
+        this.renderer.setStyle(tooltip, 'height', 30 * this.textElements.length + 'px');
+        this.renderer.setStyle(tooltip, 'top', event.pageY - (50 + 20 * this.textElements.length) + 'px');
+      }
+      this.isDirty = true;
+    }
+  }
 }

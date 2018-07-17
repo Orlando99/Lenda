@@ -143,7 +143,7 @@ export class YieldComponent implements OnInit {
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
         debugger
-        let rownode=this.gridApi.getrowNode("aa");
+       
         this.gridApi.refreshCells();
       }
       else {

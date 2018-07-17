@@ -4,7 +4,7 @@ import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupState
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { environment } from '../../../../environments/environment.prod';
-
+import * as _ from 'lodash'
 import { ChipsListEditor } from '../../../aggridcolumns/chipscelleditor';
 import { GridOptions } from 'ag-grid';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -16,7 +16,6 @@ import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
 import { debug } from 'util';
-import * as _ from 'lodash'
 import { status } from '../../../models/syncstatusmodel';
 
 @Component({
@@ -255,8 +254,8 @@ export class PoliciesComponent implements OnInit {
     return { values: ['ADM', 'AFBIS', 'ARMTECH'] };
   }
   getAgents(): any {
-
-    let ret = this.loanobj.Association;
+    debugger
+    let ret = this.loanobj.Association.filter(p=>p.ActionStatus!=3 && p.Assoc_Type_Code=="AGT");
     let obj: any[] = [];
     ret.forEach((element: any) => {
       obj.push({ key: element.Assoc_ID, value: element.Assoc_Name.toString() });
@@ -285,7 +284,7 @@ export class PoliciesComponent implements OnInit {
     height: '240px',
 
   };
-  public loanmodel: loan_model;
+  public loanmodel: loan_model=null;
 
   gridOptions: GridOptions;
   columnDefs: any[];
@@ -306,16 +305,22 @@ export class PoliciesComponent implements OnInit {
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
+      if(res!=null){
       this.loanmodel = res;
       this.declarecoldefs();
       this.getgriddata();
+    }
     })
   }
 
   ngOnInit() {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
+    if(this.loanmodel!=null && this.loanmodel!=undefined) //if the data is still in calculation mode and components loads before it
+    {
+      debugger
     this.declarecoldefs();
     this.getgriddata();
+   }
   }
 
   //Crops Functions

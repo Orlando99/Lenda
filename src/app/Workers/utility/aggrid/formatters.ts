@@ -1,4 +1,5 @@
 export function PriceFormatter(price) {
+    
     if(price==null || price==undefined)
     {
         return "$ 0";

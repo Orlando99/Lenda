@@ -93,23 +93,30 @@ export class BalancesheetComponent implements OnInit {
 
     this.components = { numericCellEditor: getNumericCellEditor() };
   }
-
+  updaterownode(index,data){
+    debugger
+    var rowNode = this.gridApi.getRowNode(index);
+    Object.keys(data).forEach(element => {
+      rowNode.setDataValue(element, data[element]);
+    });
+    
+  }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       let rows = this.prepareviewmodel();
-
+      debugger
       switch (this.localloanobject.srccomponentedit) {
         case 'Balancesheet-Current':
-          this.rowData[0] = Object.assign({},rows[0]);
+          this.updaterownode(0,rows[0]);
           break;
         case 'Balancesheet-Intermediate':
-          this.rowData[1] = rows[1];
+        this.updaterownode(1,rows[1]);
         break;
         case 'Balancesheet-Fixed':
-          this.rowData[2] = rows[2];
+        this.updaterownode(2,rows[2]);
         break;
       
         default:
@@ -117,7 +124,10 @@ export class BalancesheetComponent implements OnInit {
           break;
       }
       this.localloanobject.srccomponentedit = undefined;
-
+      if(this.gridApi!=undefined){
+        var params = { force: true };
+        this.gridApi.refreshCells(params);
+      }
     })
     this.getdataforgrid();
   }
@@ -127,8 +137,8 @@ export class BalancesheetComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
     }
-    
     this.rowData = this.prepareviewmodel();
+   
   }
 
   // Ag grid Editing Event
@@ -163,6 +173,7 @@ export class BalancesheetComponent implements OnInit {
   //Aggrid Data Preperation
   prepareviewmodel() {
     //prepare three rows here
+    debugger
       let rows = [];
       if(this.localloanobject.LoanMaster){
         let loanMaster = this.localloanobject.LoanMaster[0];
