@@ -320,7 +320,7 @@ export class YieldComponent implements OnInit {
     });
 
     const dialogRef = this.dialog.open(YieldDialogComponent, {
-      // width: '250px',
+      width: '450px',
       data: {
         crops: cropLists,
         selected: { crop: '', practice: '' }
