@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
   icon: String = 'lightbulb_outline';
   decideShow: string = 'hidden';
   public isExpanded: boolean = true;
-  public isRightBarExpanded;
+  public isRightSidebarExpanded: boolean;
 
   constructor(
     private globalService: GlobalService,
@@ -61,11 +61,13 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isExpanded = true;
     //default open
     this.value = this.localst.retrieve(environment.logpriority);
     this.layoutService.isSidebarExpanded().subscribe((value) => {
       this.isExpanded = value;
+    });
+    this.layoutService.isRightSidebarExpanded().subscribe((value) => {
+      this.isRightSidebarExpanded = value;
     });
   }
 
@@ -79,37 +81,12 @@ export class HeaderComponent implements OnInit {
     this.localst.store(environment.logpriority,parseInt(event.value));
   }
 
-  // toggleSideBar(event) {
-  //   //this.isExpanded = !this.isExpanded;
-  //   this.sideBarService.toggle(this.isExpanded);
-  // }
-
   toggleSideBar() {
     this.layoutService.toggleSidebar(!this.isExpanded);
   }
 
-  // initialtoggle(){
-  //   try{
-  //     this.sideBarService.toggle(true);
-  //   }
-  // catch{
-  //   setTimeout(() => {
-  //     this.initialtoggle();
-  //   }, 1000);
-
-  // }
-  //}
   toggleRightSidenav() {
-    this.toggleActive = !this.toggleActive;
-    this.notificationFeedService.toggle();
-    if (this.toggleActive === true) {
-      this.icon = 'arrow_forward_ios';
-      this.decideShow = 'visible';
-    } else {
-      this.icon = 'lightbulb_outline';
-      this.decideShow = 'hidden';
-    }
-    console.log('Clicked');
+    this.layoutService.toggleRightSidebar(!this.isRightSidebarExpanded);
   }
 
   ClearLocalstorage() {
