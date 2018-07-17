@@ -278,6 +278,9 @@ export class borrower_model
         @JsonProperty("InsurancePolicies",ArrayConverter,true)
         InsurancePolicies :Array<Insurance_Policy>=undefined;
 
+        @JsonProperty("Loan_Marketing_Contracts",ArrayConverter,true)
+        Loan_Marketing_Contracts :Array<Loan_Marketing_Contract>=[];
+
         lasteditrowindex:number;
         srccomponentedit:string;
 
@@ -436,6 +439,24 @@ export class borrower_model
         Spouse__MI : string;
         Spouse_Phone : string;
         Spouse_Email : string;
+    }
+
+
+    export class Loan_Marketing_Contract{
+        Contract_ID: number;
+        Z_Loan_ID: number;
+        Z_Loan_Seq_Num:string;
+        Loan_Full_ID:string;
+        Category: number;
+        Crop_Code: number;
+        Crop_Type_Code: string;
+        Assoc_Type_Code:string;
+        Assoc_ID:number;
+        Quantity:number;
+        Price:number;
+        UoM:string;
+        Description_Text:string;
+        ActionStatus : number;
     }
 
     export class loan_farmer{
