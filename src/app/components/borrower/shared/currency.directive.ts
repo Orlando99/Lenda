@@ -5,7 +5,6 @@ import { isNumber } from 'util';
   selector: '[appCurrency]'
 })
 export class CurrencyDirective implements OnChanges{
-
   @Input('appCurrency') appCurrency : any;
   constructor(private el : ElementRef) {
    }

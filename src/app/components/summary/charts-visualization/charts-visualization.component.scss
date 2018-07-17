@@ -1,5 +1,9 @@
 @import "./../../../../sass/theme/variables";
 
+.box-shadow {
+  box-shadow:  0 1px 1px 0 rgba(22, 76, 123, 0.7) !important;
+}
+
 .concise {
   .summary-section {
     min-height: 50px;

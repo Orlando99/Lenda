@@ -1,0 +1,28 @@
+@import "./../../../../sass/theme/variables";
+
+.right-sidebar {
+  background: $white;
+  box-shadow: 0px 0px 6px 0px #444;
+  overflow-y: auto;
+  position: fixed;
+  height: 100%;
+  z-index: 100;
+  // TODO: If footer is not required, give height of 100%
+  // and hide footer
+  height: calc(100% - 30px);
+  top: 0;
+  right: 0;
+  width: 0;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  &.expanded {
+    width: $right-sidebar-expanded-view;
+    padding: 90px 5px 10px 5px;
+  }
+}
+
+.material-icons, .flaticon-hipster {
+  font-size: 18px;
+  color: #21d2ac;
+}
