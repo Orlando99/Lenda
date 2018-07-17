@@ -167,11 +167,10 @@ export class PriceComponent implements OnInit {
 
 
   synctoDb() {
-
+    this.gridApi.showLoadingOverlay();
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-
           this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
           if (res.ResCode == 1) {
             this.toaster.success("Records Synced");
@@ -181,9 +180,11 @@ export class PriceComponent implements OnInit {
           else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
+          this.gridApi.hideOverlay()
         });
       }
       else {
+        this.gridApi.hideOverlay()
         this.toaster.error("Error in Sync");
       }
     })
@@ -260,7 +261,11 @@ export class PriceComponent implements OnInit {
   }
 
   syncenabled() {
-    return this.rowData.filter(p => p.ActionStatus != 0).length > 0
+    debugger
+    if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
+    return 'disabled';
+    else
+    return '';
   }
 
   getgridheight() {

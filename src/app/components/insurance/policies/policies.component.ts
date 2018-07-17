@@ -17,6 +17,11 @@ import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
 import { debug } from 'util';
 import { status } from '../../../models/syncstatusmodel';
+import { JsonConvert } from '../../../../../node_modules/json2typescript';
+import { ToastsManager } from '../../../../../node_modules/ng2-toastr';
+import { LoggingService } from '../../../services/Logs/logging.service';
+import { AlertifyService } from '../../../alertify/alertify.service';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
 
 @Component({
   selector: 'app-policies',
@@ -25,7 +30,7 @@ import { status } from '../../../models/syncstatusmodel';
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
-
+ 
 
   deleteunwantedcolumn(): any {
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
@@ -59,6 +64,14 @@ export class PoliciesComponent implements OnInit {
   }
 
   declarecoldefs() {
+    this.defaultColDef = {
+      cellClassRules: {
+        "edited-color": function(params){
+           return params.data.ActionStatus==2;
+             
+        }
+      }
+    };
     this.columnDefs = [];
     this.columnDefs = [
       {
@@ -147,6 +160,7 @@ export class PoliciesComponent implements OnInit {
       }
 
     ];
+  
   }
   addNumericColumn(element: string) {
 
@@ -254,7 +268,7 @@ export class PoliciesComponent implements OnInit {
     return { values: ['ADM', 'AFBIS', 'ARMTECH'] };
   }
   getAgents(): any {
-    debugger
+    
     let ret = this.loanobj.Association.filter(p=>p.ActionStatus!=3 && p.Assoc_Type_Code=="AGT");
     let obj: any[] = [];
     ret.forEach((element: any) => {
@@ -275,9 +289,7 @@ export class PoliciesComponent implements OnInit {
   public paginationPageSize;
   public paginationNumberFormatter;
 
-  defaultColDef = {
-
-  };
+  public defaultColDef ={};
   style = {
     marginTop: '10px',
     width: '93%',
@@ -286,11 +298,15 @@ export class PoliciesComponent implements OnInit {
   };
   public loanmodel: loan_model=null;
 
-  gridOptions: GridOptions;
+  public gridOptions=[];
   columnDefs: any[];
   constructor(
     private localstorage: LocalStorageService,
-    private loancalculationservice: LoancalculationWorker
+    private loancalculationservice: LoancalculationWorker,
+    private toaster: ToastsManager,
+              public logging: LoggingService,
+              public alertify: AlertifyService,
+              public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, numericCellEditor: NumericEditor, emptyeditor: EmptyEditor };
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
@@ -306,10 +322,11 @@ export class PoliciesComponent implements OnInit {
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
       if(res!=null){
+        
       this.loanmodel = res;
       this.declarecoldefs();
       this.getgriddata();
-    }
+      }
     })
   }
 
@@ -317,10 +334,11 @@ export class PoliciesComponent implements OnInit {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     if(this.loanmodel!=null && this.loanmodel!=undefined) //if the data is still in calculation mode and components loads before it
     {
-      debugger
+      
     this.declarecoldefs();
     this.getgriddata();
    }
+   
   }
 
   //Crops Functions
@@ -348,16 +366,17 @@ export class PoliciesComponent implements OnInit {
         row.mainpolicyId = item.Policy_id;
         row.Agent_Id = item.Agent_Id;
         row.ProposedAIP = item.ProposedAIP;
+        row.ActionStatus=item.ActionStatus;
         row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
         row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
         row.Practice = this.getcroppracticebyVcropid(item.Crop_Practice_Id);
         row.MPCI_Subplan = item.MPCI_Subplan;
-        row.SecInsurance = item.Subpolicies.map(p => p.Ins_Type).join(',');
+        row.SecInsurance = _.uniqBy(item.Subpolicies.filter(p=>p.ActionStatus!=3),"Ins_Type").map(p => p.Ins_Type).join(',');
         row.Unit = item.Unit;
         row.Level = item.Level;
         row.Price = item.Price;
         row.Premium = item.Premium;
-        item.Subpolicies.forEach(policy => {
+        item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
 
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
@@ -391,6 +410,7 @@ export class PoliciesComponent implements OnInit {
           renderedvalues.forEach(element => {
             let tobindcol = element.toString().replace("_" + policy.Ins_Type, "");
             row[element] = policy[tobindcol];
+            row.ActionStatus=policy.ActionStatus;
           });
         });
 
@@ -415,6 +435,7 @@ export class PoliciesComponent implements OnInit {
     }
     else {
       this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
+      this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus=2;
     }
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
   }
@@ -425,15 +446,13 @@ export class PoliciesComponent implements OnInit {
     return false;
   }
 
-  synctoDb() {
-
-  }
+ 
 
   rowvaluechanged($event) {
     
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-      
+      debugger
       var items = $event.data.SecInsurance.toString().split(",");
       items.forEach(element => {
         if (this.columnDefs.find(p => p.headerName.split('_')[0] == element) == undefined) {
@@ -463,7 +482,7 @@ export class PoliciesComponent implements OnInit {
           })
         }
         let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
-        if(mainobj.Subpolicies.find(p=>p.Ins_SubType==element)==undefined){
+        if(mainobj.Subpolicies.find(p=>p.Ins_Type==element)==undefined){
           let sp:Insurance_Subpolicy=new Insurance_Subpolicy();
           sp.FK_Policy_Id=$event.data.mainpolicyId;
           sp.ActionStatus=1;
@@ -471,6 +490,14 @@ export class PoliciesComponent implements OnInit {
           sp.Ins_Type=element;
           mainobj.Subpolicies.push(sp);
         }
+      
+      });
+      debugger
+      let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+      mainobj.Subpolicies.forEach(eelement => {
+        if(items.find(p=>p==eelement.Ins_Type)==undefined){
+           eelement.ActionStatus=3;
+        } 
       });
       //Delete unwanted Column here
       
@@ -491,11 +518,33 @@ export class PoliciesComponent implements OnInit {
     params.api.sizeColumnsToFit();//autoresizing
   }
   //Grid Functions End
+  synctoDb() {
+    this.loanapi.syncloanobject(this.loanmodel).subscribe(res=>{
+      if(res.ResCode==1){
+        this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
 
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    })
+
+
+  }
 
   //update Loan Status
   updateSyncStatus() {
-      debugger
+      
      
     if (this.checkforstatus([1,3]) ) {
       this.syncInsuranceStatus = status.ADDORDELETE;
@@ -508,7 +557,7 @@ export class PoliciesComponent implements OnInit {
   }
 
   checkforstatus(statuscode:Array<number>){
-    debugger
+    
     
     var status=false;
     statuscode.forEach(element => {

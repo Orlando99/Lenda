@@ -5,6 +5,11 @@ import { loan_model } from '../../models/loanmodel';
 import * as _ from "lodash";
 import { lookupCountyValue, lookupStateValue, lookupStateRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
+import { ToastsManager } from '../../../../node_modules/ng2-toastr';
+import { LoggingService } from '../../services/Logs/logging.service';
+import { AlertifyService } from '../../alertify/alertify.service';
+import { LoanApiService } from '../../services/loan/loanapi.service';
+import { JsonConvert } from '../../../../node_modules/json2typescript';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html'
@@ -15,6 +20,7 @@ export class OptimizerComponent implements OnInit {
   private gridApi;
   private columnApi;
   rowData = [];
+  public loading=false;
   public context;
   public rowClassRules;
   defaultColDef = {
@@ -140,7 +146,11 @@ export class OptimizerComponent implements OnInit {
 
   constructor(
     private localstorage: LocalStorageService,
-    private loancalculationservice: LoancalculationWorker
+    private loancalculationservice: LoancalculationWorker,
+    private toaster: ToastsManager,
+              public logging: LoggingService,
+              public alertify: AlertifyService,
+              public loanapi:LoanApiService
   ) {
     this.context = { componentParent: this };
     // change row class contextually here
@@ -227,22 +237,44 @@ export class OptimizerComponent implements OnInit {
   }
 
   syncenabled() {
-    return false;
+    return true;
   }
 
   synctoDb() {
+    debugger
+    this.loading=true;
+    this.loanapi.syncloanobject(this.loanmodel).subscribe(res=>{
+      if(res.ResCode==1){
+        this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
 
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+      this.loading=false;
+    })
   }
 
   rowvaluechanged($event) {
     let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
     if(oldvalue!=$event.value){
-    this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres = parseInt($event.value);
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres =parseInt($event.value);
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).ActionStatus =2;
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel, false);
   }
   }
 
-  onGridReady(params) {
+  onGridReady(params) { 
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();//autoresizing
