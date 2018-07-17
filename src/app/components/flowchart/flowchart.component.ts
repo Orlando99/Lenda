@@ -216,7 +216,10 @@ export class FlowchartComponent implements OnInit {
     for (let icon of icons) {
       // Mouseenter event for tooltip
       icon.addEventListener('mouseover', (event) => {
-        let texts = this.getTooltipText(event);
+        let hoverNodeId = event.target.parentNode.id;
+        // If it is number then, find the parent
+        // if (hoverNodeId)
+        let texts = this.getTooltipText(hoverNodeId);
         this.addTooltipNodes(tooltip, texts, event);
       });
 
@@ -231,12 +234,12 @@ export class FlowchartComponent implements OnInit {
     }
   }
 
-  getTooltipText(event) {
-    if (event.target.parentNode.id.indexOf('farmer') !== -1) {
+  getTooltipText(hoverNodeId) {
+    if (hoverNodeId.indexOf('farmer') !== -1) {
       return ['Farmer 1 - 50', 'Farmer 2 - 160', 'Farmer 3 - 200'];
-    } else if (event.target.parentNode.id.indexOf('borrower') !== -1) {
+    } else if (hoverNodeId.indexOf('borrower') !== -1) {
       return ['Borrower 1 - 30', 'Borrower 2 - 60', 'Borrower 3 - 100'];
-    } else if (event.target.parentNode.id.indexOf('tree') !== -1) {
+    } else if (hoverNodeId.indexOf('tree') !== -1) {
       return ['Crop 1 - 30', 'Crop 2 - 60', 'Crop 3 - 100', 'Crop 4 - 300'];
     } else {
       return ['Misc 1 - 30', 'Misc 2 - 60', 'Misc 3 - 100'];
