@@ -18,11 +18,11 @@ export class FarmFinancialComponent implements OnInit {
     private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
-    debugger
+
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       if(res!=null)
       {
-        debugger
+
           this.localloanobj = res;
          this.binddata(this.localloanobj);
       }
@@ -37,7 +37,7 @@ export class FarmFinancialComponent implements OnInit {
 
   private binddata(loanObject : loan_model) {
     if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
-      
+
       let farmFinancialRatingValues  : FarmFinacialValueParams= {... this.getFormattedData(loanObject)};
       this.data = {
         liquidityAnalysis: [
@@ -55,7 +55,7 @@ export class FarmFinancialComponent implements OnInit {
             staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital,
             possible : 1.00,
             rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.workingCapital,this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital, 1.00)
-            
+
           }],
           solvencyAnalysis : [{
             text: 'Debt/Assets',
@@ -132,7 +132,7 @@ export class FarmFinancialComponent implements OnInit {
     farmFinancialRatingValues.operatingProfit = 50.1;
     farmFinancialRatingValues.operatingByExpRev = 49.9;
     farmFinancialRatingValues.interestByCashFlow = 4.8;
-    return farmFinancialRatingValues;  
+    return farmFinancialRatingValues;
   }
 }
 

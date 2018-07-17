@@ -111,7 +111,7 @@ export class LoancalculationWorker {
           if (localloanobj.Farms != null)
             localloanobj = this.farmcalculation.prepareLoanfarmmodel(localloanobj);
 
-      //STEP 4 --- INSURANCE POLICIES  
+      //STEP 4 --- INSURANCE POLICIES
           localloanobj = this.insuranceworker.performcalculations(localloanobj);
 
       //STEP 5 --- BUDGET CALCULATIONS
@@ -129,7 +129,7 @@ export class LoancalculationWorker {
             }
           }catch(e){
           console.error("ERROR IN BUDGET CALCULATION"+JSON.stringify(e));
-          
+
         }
           //localloanobj.LoanBudget = localloanobj.LoanBudget;
 
@@ -151,7 +151,7 @@ export class LoancalculationWorker {
 
         //TODO-SANKET : should be remove
         // localloanobj =  this.budgetService.caculateTotalsBeforeStore(localloanobj);
-        // debugger;
+        // ;
         //REMOVE ENDS
 
       //   if(!localloanobj.LoanCropPractices || localloanobj.LoanCropPractices.length ===0){
@@ -199,7 +199,7 @@ export class LoancalculationWorker {
       //  }
       //     ]
       //   }
-      // OTHER UNSORTED 
+      // OTHER UNSORTED
           localloanobj.DashboardStats = localloanobj.DashboardStats;
           localloanobj.lasteditrowindex = localloanobj.lasteditrowindex;
           localloanobj.srccomponentedit = localloanobj.srccomponentedit;
@@ -207,7 +207,7 @@ export class LoancalculationWorker {
           console.log("Calculation Ended");
           let endtime = new Date().getTime();
           this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
-          console.log("Time taken :" + (starttime - endtime).toString() + " ms"); 
+          console.log("Time taken :" + (starttime - endtime).toString() + " ms");
 
     }
      // At End push the new obj with new caluclated values into localstorage and emit value changes
@@ -218,6 +218,6 @@ export class LoancalculationWorker {
      }
      else
        console.log("object updated without calculations");
-     
+
   }
 }

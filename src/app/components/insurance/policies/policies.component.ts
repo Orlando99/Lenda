@@ -23,7 +23,7 @@ import { debug } from 'util';
   styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
- 
+
 
 
   deleteunwantedcolumn(): any {
@@ -145,7 +145,7 @@ export class PoliciesComponent implements OnInit {
     ];
   }
   addNumericColumn(element: string) {
-  
+
     this.columnDefs.push({
       headerName: element, field: element, editable: true,
       cellEditorSelector: function (params) {
@@ -166,7 +166,7 @@ export class PoliciesComponent implements OnInit {
 
       },
       cellClass: function (params) {
-        debugger
+
         let pos = params.colDef.headerName.lastIndexOf("_") + 1;
        let policyname= params.colDef.headerName.substr(pos, params.colDef.headerName.length - pos)
         if (policyname.length > 0) {
@@ -250,7 +250,7 @@ export class PoliciesComponent implements OnInit {
     return { values: ['ADM', 'AFBIS', 'ARMTECH'] };
   }
   getAgents(): any {
-    debugger
+
     let ret = this.loanobj.Association.filter(p=>p.ActionStatus!=3 && p.Assoc_Type_Code=="AGT");
     let obj: any[] = [];
     ret.forEach((element:any) => {
@@ -297,7 +297,7 @@ export class PoliciesComponent implements OnInit {
       return "[" + params.value.toLocaleString() + "]";
     };
     //Col defs
-   
+
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
@@ -313,7 +313,7 @@ export class PoliciesComponent implements OnInit {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     if(this.loanmodel!=null && this.loanmodel!=undefined) //if the data is still in calculation mode and components loads before it
     {
-      debugger
+
     this.declarecoldefs();
     this.getgriddata();
    }
@@ -335,11 +335,11 @@ export class PoliciesComponent implements OnInit {
   getgriddata() {
     //Get localstorage first
     this.rowData = [];
-    
+
     if (this.loanmodel != null) {
      let insurancepolicies=this.loanmodel.InsurancePolicies;
      insurancepolicies.forEach(item => {
-        
+
           let row: any = {};
           row.mainpolicyId = item.Policy_id;
           row.Agent_Id = item.Agent_Id;
@@ -354,7 +354,7 @@ export class PoliciesComponent implements OnInit {
           row.Price = item.Price;
           row.Premium = item.Premium;
           item.Subpolicies.forEach(policy => {
-            
+
             var newsubcol=policy.Ins_Type.toString() + "_Subtype";
             row[policy.Ins_Type.toString() + "_st"]=policy.Ins_SubType;
             if(this.columnDefs.find(p=>p.headerName==newsubcol)==undefined)
@@ -362,7 +362,7 @@ export class PoliciesComponent implements OnInit {
             this.columnDefs.push({
               headerName: newsubcol, field: policy.Ins_Type + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(policy.Ins_Type),
               cellEditorSelector: function (params) {
-                
+
                 let column = params.colDef.headerName.split('_')[0];
                 if (params.data.SecInsurance.includes(column)) {
                   return {
@@ -384,23 +384,23 @@ export class PoliciesComponent implements OnInit {
             })
             }
            let renderedvalues =this.ShowHideColumnsonselection(policy.Ins_Type);
-           debugger
+
            renderedvalues.forEach(element => {
              let tobindcol=element.toString().replace("_"+policy.Ins_Type,"");
               row[element]=policy[tobindcol];
            });
           });
-          
+
           this.rowData.push(row);
     })
-    
+
   }
   }
 
   //DB Operations
 
   updatelocalloanobject(event: any): any {
-    debugger
+
   if(event.colDef.headerName.includes("_")){
     let pos = event.colDef.headerName.lastIndexOf("_") + 1;
     let policyname= event.colDef.headerName.substr(pos, event.colDef.headerName.length - pos)
@@ -414,7 +414,7 @@ export class PoliciesComponent implements OnInit {
   }
 
 
-  
+
   syncenabled() {
     return false;
   }
@@ -424,10 +424,10 @@ export class PoliciesComponent implements OnInit {
   }
 
   rowvaluechanged($event) {
-    debugger
+
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-      debugger
+
       var items = $event.data.SecInsurance.toString().split(",");
       items.forEach(element => {
 
@@ -436,7 +436,7 @@ export class PoliciesComponent implements OnInit {
           this.columnDefs.push({
             headerName: element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
             cellEditorSelector: function (params) {
-              debugger
+
               let column = params.colDef.headerName.split('_')[0];
               if (params.data.SecInsurance.includes(column)) {
                 return {
@@ -459,10 +459,10 @@ export class PoliciesComponent implements OnInit {
         }
       });
       //Delete unwanted Column here
-      debugger
+
       this.deleteunwantedcolumn();
       this.gridApi.setColumnDefs(this.columnDefs);
-      debugger
+
       this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
     //get the local loan object synced

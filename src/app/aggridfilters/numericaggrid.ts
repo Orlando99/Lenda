@@ -24,7 +24,7 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     getValue(): any {
-      debugger
+
         return this.value;
     }
 
@@ -35,7 +35,7 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     // will reject the number if it greater than 1,000,000
     // not very practical, but demonstrates the method.
     isCancelAfterEnd(): boolean {
-        debugger
+
         return this.value > 100000000000;
     };
 
@@ -62,7 +62,7 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     private isKeyPressedNumeric(event): boolean {
-        
+
         const charCode = this.getCharCodeFromEvent(event);
         const charStr = event.key ? event.key : String.fromCharCode(charCode);
         return this.isCharNumeric(charStr);

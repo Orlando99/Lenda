@@ -43,6 +43,17 @@
   }
 }
 
+// Buttons
+.btn-flat {
+  border-radius: 0px;
+  margin: 5px;
+  min-width: 100px;
+}
+
+.btn-secondary {
+  background-color: $black-70;
+}
+
 // Layout helpers
 .flex {
   display: flex;
