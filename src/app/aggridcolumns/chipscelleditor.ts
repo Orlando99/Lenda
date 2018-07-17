@@ -42,19 +42,19 @@ export class ChipsListEditor implements ICellEditorAngularComp {
                               };            
   }
   onItemSelect(item:any){
-      this.context.chipitemsselected(this.selectedItems);
+    //   this.context.chipitemsselected(this.selectedItems);
   }
   OnItemDeSelect(item:any){
       console.log(item);
-      this.context.chipitemsselected(this.selectedItems);
+     // this.context.chipitemsselected(this.selectedItems);
   }
   onSelectAll(items: any){
       console.log(items);
-      this.context.chipitemsselected(this.selectedItems);
+      //this.context.chipitemsselected(this.selectedItems);
   }
   onDeSelectAll(items: any){
       console.log(items);
-      this.context.chipitemsselected(this.selectedItems);
+      //this.context.chipitemsselected(this.selectedItems);
   }
 
     agInit(params: any): void {
