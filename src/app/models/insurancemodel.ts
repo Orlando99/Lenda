@@ -46,11 +46,10 @@ export class Insurance_Policy
     @JsonProperty("HasSecondaryPlans",true)
     HasSecondaryPlans:boolean=undefined;
     
-    @JsonProperty("Subpolicies", []
-)
+    @JsonProperty("Subpolicies", [])
     Subpolicies:Insurance_Subpolicy[]=[];
     
-    
+    ActionStatus:number=0;
     
 
 }
@@ -81,4 +80,5 @@ export class Insurance_Subpolicy
     FCMC:number=undefined;
     @JsonProperty("Deduct", IntConverter)
     Deduct:number=undefined;
+    ActionStatus:number=0;
 }

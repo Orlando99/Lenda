@@ -284,7 +284,7 @@ export class borrower_model
         lasteditrowindex:number;
         srccomponentedit:string;
 
-        SyncStatus: ModelStatus = {Status_Farm : status.NOCHANGE, Status_Crop_Practice : status.NOCHANGE};
+        SyncStatus: ModelStatus = {Status_Farm : status.NOCHANGE, Status_Crop_Practice : status.NOCHANGE,Status_Insurance_Policies:status.NOCHANGE};
     }
      
 
