@@ -278,8 +278,8 @@ export class borrower_model
         @JsonProperty("InsurancePolicies",ArrayConverter,true)
         InsurancePolicies :Array<Insurance_Policy>=undefined;
 
-        @JsonProperty("Loan_Marketing_Contracts",ArrayConverter,true)
-        Loan_Marketing_Contracts :Array<Loan_Marketing_Contract>=[];
+        @JsonProperty("LoanMarketingContracts",ArrayConverter,true)
+        LoanMarketingContracts :Array<Loan_Marketing_Contract>=[];
 
         lasteditrowindex:number;
         srccomponentedit:string;
