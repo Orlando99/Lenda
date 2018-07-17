@@ -17,6 +17,11 @@ export class BorrowerComponent implements OnInit {
   constructor(private localstorage:LocalStorageService,private loancalservice:LoancalculationWorker,private taoster:ToastsManager) { }
 
   ngOnInit() {
+    var loan:loan_model=this.localstorage.retrieve(environment.loankey);
+    if(loan!=null || loan!=undefined){
+      this.creditdate=loan.LoanMaster[0].Credit_Score_Date;
+      this.creditscore=loan.LoanMaster[0].Credit_Score;
+    }
   }
 
   updatecreditvalues(){
