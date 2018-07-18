@@ -119,7 +119,7 @@ import { UserArticleComponent } from './shared/layout/right-sidebar/user-article
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
 import { SpinerComponent } from './shared/spiner/spiner.component';
 import { FlowchartComponent } from './components/flowchart/flowchart.component';
-
+import { BorrowerIncomeHistoryComponent } from './components/borrower/borrower-income-history/borrower-income-history.component';
 //CROP
 import { CropapiService } from './services/crop/cropapi.service';
 
@@ -245,7 +245,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CurrencyDirective,
     PercentageDirective,
     MarketingContractsComponent,
-    CollateralReportComponent
+    CollateralReportComponent,
+    BorrowerIncomeHistoryComponent
   ],
   imports: [
     BrowserModule,
@@ -290,7 +291,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     SidebarModule.forRoot(),
     ChartsModule,
     BarRatingModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
   ],
   exports: [
     FormsModule,

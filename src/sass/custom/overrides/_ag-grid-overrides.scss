@@ -100,7 +100,8 @@
 
 .aggregaterow .aggregatecol{
   background: lightgreen !important;
-  color:white;
+  color:#1312e3;
+  cursor: not-allowed;  
 }
 
 
@@ -145,3 +146,8 @@
 //   height: 0px !important;
 //   visibility:collapse !important  
 // }
+a.disabled {
+  color: gray;
+  cursor: not-allowed;
+  text-decoration: underline;
+}

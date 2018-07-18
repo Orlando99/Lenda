@@ -1,4 +1,5 @@
-
+<div class="my-container">
+    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
@@ -27,6 +28,7 @@
         [toolPanelSuppressValues]="true"
         [toolPanelSuppressPivots]="true"
         [toolPanelSuppressPivotMode]="true"
+        [frameworkComponents]="frameworkcomponents"
         [singleClickEdit]="true"
         (cellEditingStopped)="rowvaluechanged($event)"
         [rowData]="rowData"
@@ -40,3 +42,4 @@
             <br>
     </mat-expansion-panel>
     </mat-accordion>
+</div>

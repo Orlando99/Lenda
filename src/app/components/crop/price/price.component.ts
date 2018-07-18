@@ -91,32 +91,32 @@ export class PriceComponent implements OnInit {
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Crop_Price',cellClass: 'text-right',
+      { headerName: 'Crop Price', field: 'Z_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Basis Adj', field: 'Basic_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Marketing Adj', field: 'Marketing_Adj',cellClass: 'text-right',
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       } },
-      { headerName: 'Rebate Adj', field: 'Rebate_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Adj Price', field: 'Adj_Price',cellClass: 'text-right',
+      { headerName: 'Adj Price', field: 'Z_Adj_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false,cellClass: 'text-right', },
-      { headerName: 'Contract Price', field: 'Contract_Price', editable: false ,cellClass: 'text-right',
+      { headerName: 'Contract Qty', field: '', editable: false,cellStyle: { textAlign: "right" } },
+      { headerName: 'Contract Price', field: '', editable: false ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: '% Booked', field: 'Percent_booked',cellClass: 'text-right',
+      { headerName: '% Booked', field: 'Booking_Ind', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
       } },
@@ -162,11 +162,10 @@ export class PriceComponent implements OnInit {
 
 
   synctoDb() {
-
+    this.gridApi.showLoadingOverlay();
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-
           this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
           if (res.ResCode == 1) {
             this.toaster.success("Records Synced");
@@ -176,9 +175,11 @@ export class PriceComponent implements OnInit {
           else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
+          this.gridApi.hideOverlay()
         });
       }
       else {
+        this.gridApi.hideOverlay()
         this.toaster.error("Error in Sync");
       }
     })
@@ -263,7 +264,11 @@ export class PriceComponent implements OnInit {
   // }
 
   syncenabled() {
-    return this.rowData.filter(p => p.ActionStatus != 0).length > 0
+    debugger
+    if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
+    return 'disabled';
+    else
+    return '';
   }
 
   getgridheight() {

@@ -21,10 +21,31 @@
       <app-borrower-info></app-borrower-info>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-accordion>
+    
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borrower Income History
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-borrower-income-history></app-borrower-income-history>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <app-balancesheet></app-balancesheet>
   <app-questions></app-questions>
-  <app-buyer-association></app-buyer-association>
+
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Farm Financial
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-farm-financial></app-farm-financial>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <mat-accordion>
     <mat-expansion-panel [expanded]="false">
@@ -41,12 +62,24 @@
     <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Farm Financial
+          Credit Score
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <app-farm-financial></app-farm-financial>
+      <mat-card>
+          <mat-form-field class="demo-full-width">    
+              <input [(ngModel)]="creditscore" matInput placeholder="Credit Score">    
+          </mat-form-field> 
+          <mat-form-field class="demo-full-width">    
+              <input [(ngModel)]="creditdate" matInput [matDatepicker]="picker" placeholder="Assessment Date">    
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>    
+              <mat-datepicker touchUi="true" #picker></mat-datepicker>    
+          </mat-form-field> 
+          <button (click)="updatecreditvalues()" mat-raised-button color="accent">Submit</button> 
+      </mat-card>
     </mat-expansion-panel>
   </mat-accordion>
+
+
 
 
 </div>
