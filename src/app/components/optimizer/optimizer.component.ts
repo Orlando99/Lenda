@@ -10,6 +10,7 @@ import { LoggingService } from '../../services/Logs/logging.service';
 import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from '../../../../node_modules/json2typescript';
+import { EmptyEditor } from '../../aggridfilters/emptybox';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html'
@@ -67,7 +68,14 @@ export class OptimizerComponent implements OnInit {
     { headerName: 'Excess ins', field: 'ExcessIns', editable: false },
     {
       headerName: 'Acres', field: 'Acres', editable: true,
-      valueSetter: function (value) {
+      cellEditorSelector:function (params){
+        if(params.data.ID==undefined){
+          return {
+            component: 'emptyeditor'
+          };
+        }
+      },
+       valueSetter: function (value) {
         let result = value.context.componentParent.validateacresvalue(value.data.ID,parseInt(value.newValue));
         if(result)
         {
@@ -91,6 +99,7 @@ export class OptimizerComponent implements OnInit {
     },
 
   ];
+  frameworkcomponents: { emptyeditor: typeof EmptyEditor; };
   //Generic Functions and validations
   validateacresvalue(id, newvalue: number) {
 
@@ -101,7 +110,7 @@ export class OptimizerComponent implements OnInit {
         let farm = this.loanmodel.Farms.find(p => p.Farm_ID == Cropunit.Farm_ID);
         let sumofcurrentvalues = _.sumBy(this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farmid && p.Crop_Practice_Type_Code == Cropunit.Crop_Practice_Type_Code && p.Loan_CU_ID != Cropunit.Loan_CU_ID),  function(o) { return o.CU_Acres; });
         let acres = 0
-        if (Cropunit.Crop_Practice_Type_Code = "IRR") {
+        if (Cropunit.Crop_Practice_Type_Code == "IRR") {
           acres = farm.Irr_Acres;
         }
         else {
@@ -126,7 +135,7 @@ export class OptimizerComponent implements OnInit {
       let Cropunit = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == id);
       if (Cropunit != undefined) {
         let farm = this.loanmodel.Farms.find(p => p.Farm_ID == Cropunit.Farm_ID);
-        if (Cropunit.Crop_Practice_Type_Code = "IRR") {
+        if (Cropunit.Crop_Practice_Type_Code == "IRR") {
           return farm.Irr_Acres;
         }
         else {
@@ -152,6 +161,7 @@ export class OptimizerComponent implements OnInit {
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
+    this.frameworkcomponents = { emptyeditor: EmptyEditor };
     this.context = { componentParent: this };
     // change row class contextually here
     this.rowClassRules = {
@@ -161,8 +171,21 @@ export class OptimizerComponent implements OnInit {
     };
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
+      // debugger
+      if(res!=null && res.srccomponentedit!=undefined && res.srccomponentedit!="optimizercomponent")
+      {
       this.loanmodel = res;
       this.getgriddata();
+      }
+      else{
+        this.loanmodel = res;
+        this.getgriddata();
+        this.gridApi.startEditingCell({
+          rowIndex: this.loanmodel.lasteditrowindex,
+          colKey: "Acres"
+        });
+        
+      }
     })
   }
 
@@ -200,6 +223,8 @@ export class OptimizerComponent implements OnInit {
         if (distinctrows.length > 0) {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
+          row.RC = "TotalAcres=";
+          row.ExcessIns =""+farm.Irr_Acres;
           this.rowData.push(row);
         }
       });
@@ -207,7 +232,7 @@ export class OptimizerComponent implements OnInit {
       //NIR
       this.loanmodel.Farms.forEach(farm => {
         //get distinct crops for the farm
-
+debugger
         let distinctrows = this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farm.Farm_ID && p.Crop_Practice_Type_Code == "NIR");
         distinctrows.forEach(crop => {
           let row: any = {};
@@ -228,6 +253,8 @@ export class OptimizerComponent implements OnInit {
         if (distinctrows.length > 0) {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
+          row.RC = "TotalAcres =";
+          row.ExcessIns =""+farm.NI_Acres;
           this.rowData.push(row);
         }
       });
@@ -266,11 +293,14 @@ export class OptimizerComponent implements OnInit {
   }
 
   rowvaluechanged($event) {
+    debugger
     let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
     if(oldvalue!=$event.value){
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres =parseInt($event.value);
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).ActionStatus =2;
-    this.loancalculationservice.performcalculationonloanobject(this.loanmodel, false);
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).CU_Acres =parseInt($event.value);
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).ActionStatus =2;
+      this.loanmodel.srccomponentedit="optimizercomponent";
+      this.loanmodel.lasteditrowindex=$event.rowIndex;
+      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, false);
   }
   }
 
