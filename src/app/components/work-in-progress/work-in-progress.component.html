@@ -1,6 +1,6 @@
 <div class="basic-container">
   <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Balancesheet and other data
@@ -23,6 +23,20 @@
       </div>
 
 
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<div class="basic-container">
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Collateral Report
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+ 
+         <app-collateral-report></app-collateral-report>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
