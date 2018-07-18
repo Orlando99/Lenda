@@ -383,13 +383,6 @@ background-color:white
   background-color: #f28f35 !important
 }
 
-body .mat-dialog-container {
-  width: 600px;
-  height: 100%;
-  padding: 20px 20px 20px 20px;
-  overflow: hidden;
-  box-shadow: none;
-}
 .ag-floating-bottom-container > .ag-row{
 color:white
 }
@@ -407,4 +400,12 @@ color:white
 
   .ag-header-cell-label{
     padding-top: 8px;
+  }
+
+ body  .mat-dialog-container{
+    padding: 20px 20px 20px 20px !important;
+    width: 600px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
   }

@@ -21,6 +21,17 @@
       <app-borrower-info></app-borrower-info>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-accordion>
+    
+    <mat-expansion-panel [expanded]="false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Borrower Income History
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-borrower-income-history></app-borrower-income-history>
+    </mat-expansion-panel>
+  </mat-accordion>
 
   <app-balancesheet></app-balancesheet>
   <app-questions></app-questions>
@@ -67,6 +78,8 @@
       </mat-card>
     </mat-expansion-panel>
   </mat-accordion>
+
+
 
 
 </div>
