@@ -97,32 +97,32 @@ export class PriceComponent implements OnInit {
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Crop Price', field: 'Z_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Marketing Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       } },
-      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      { headerName: 'Adj Price', field: 'Z_Adj_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Contract Qty', field: '', editable: false },
-      { headerName: 'Contract Price', field: '', editable: false ,
+      { headerName: 'Contract Qty', field: '', editable: false,cellStyle: { textAlign: "right" } },
+      { headerName: 'Contract Price', field: '', editable: false ,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: '% Booked', field: 'Booking_Ind', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: '% Booked', field: 'Booking_Ind', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
       } },

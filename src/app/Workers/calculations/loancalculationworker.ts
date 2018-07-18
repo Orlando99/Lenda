@@ -98,6 +98,8 @@ export class LoancalculationWorker {
       //STEP 1 -- BORROWER CALCULATIONS
           if (localloanobj.Borrower != null)
             localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
+          if(localloanobj.BorrowerIncomeHistory !== null)
+            localloanobj = this.borrowerworker.prepareborrowerincomehistorymodel(localloanobj);
 
       //STEP 2 -- CROP LEVEL CALCULATIONS
           if (localloanobj.CropYield != null) {

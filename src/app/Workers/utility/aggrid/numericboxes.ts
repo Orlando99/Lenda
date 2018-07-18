@@ -116,10 +116,14 @@ export function getNumericCellEditor() {
 
 export function numberValueSetter(params) {
 
-    if(params.newValue==undefined || params.newValue==null||params.newValue=="")
-    params.newValue=0;
-    var data=parseFloat(params.newValue);
-    params.data[params.colDef.field]=data;
+    if(params.newValue==undefined || params.newValue==null||params.newValue==""){
+      params.newValue=null;
+      params.data[params.colDef.field]=data;
+    }else{
+      var data=parseFloat(params.newValue);
+      params.data[params.colDef.field]=data;
+    }
+    
     return true;
   }
 

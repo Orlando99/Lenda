@@ -278,6 +278,9 @@ export class borrower_model
         @JsonProperty("InsurancePolicies",ArrayConverter,true)
         InsurancePolicies :Array<Insurance_Policy>=undefined;
 
+        @JsonProperty("BorrowerIncomeHistory", ArrayConverter,true)
+        BorrowerIncomeHistory: Borrower_Income_History[]=new Array<Borrower_Income_History>();
+
         lasteditrowindex:number;
         srccomponentedit:string;
 
@@ -331,7 +334,25 @@ export class borrower_model
 
     }
 
-
+    export class Borrower_Income_History{
+        @JsonProperty("BIH_ID", IntConverter,false)
+        BIH_ID: number=0;
+        @JsonProperty("Borrower_ID", IntConverter,false)
+        Borrower_ID: number=0;
+        @JsonProperty("Loan_Full_ID", StringConverter,false)
+        Loan_Full_ID: string='';
+        @JsonProperty("Borrower_Year", IntConverter,false)
+        Borrower_Year: number=0;
+        @JsonProperty("Borrower_Expense", IntConverter,false)
+        Borrower_Expense: number=0;
+        @JsonProperty("Borrower_Revenue", IntConverter,false)
+        Borrower_Revenue: number=0;
+        @JsonProperty("FC_Borrower_Income", IntConverter,false)
+        FC_Borrower_Income: number=0;
+        @JsonProperty("Status", IntConverter,false)
+        Status: number=0;
+    }
+    @JsonObject
     export class Loan_Crop_Practice{
         @JsonProperty("Loan_Crop_Practice_ID", IntConverter,false)
         Loan_Crop_Practice_ID: number=0;
