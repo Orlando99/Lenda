@@ -1,5 +1,5 @@
  <!-- Balance sheet-->
- <div>
+ <div *ngIf="balanceSheetConfig && balanceSheetConfig.data">
     <div class="row table-row">
       <div class="col s7 cell text-left">
         <span class="font-weight-600 section-heading">Balance sheet</span>
@@ -19,9 +19,9 @@
 
 
   <!-- Revenue-->
-  <div>
+  <div *ngIf="revenueConfig && revenueConfig.data">
     
-    <div class="row table-row">
+    <div class="row table-row" *ngIf="revenueConfig && revenueConfig.data">
       <div class="col s3 cell text-left">
         <span class="font-weight-600  section-heading"> Revenue </span>
       </div>
@@ -41,7 +41,7 @@
   </div>
 
   <!-- Collateral-->
-  <div>
+  <div *ngIf="collateralConfig && collateralConfig.data">
       <div class="row table-row">
         <div class="col s3 cell text-left">
           <span class="font-weight-600 section-heading"> Collateral </span>

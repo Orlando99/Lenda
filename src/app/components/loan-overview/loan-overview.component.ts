@@ -30,7 +30,6 @@ export class LoanOverviewComponent implements OnInit {
 
     let temp = this.route.params.subscribe(params => {
       // Defaults to 0 if no query param provided.
-      debugger
       this.loanid = (params["loan"].toString())+"-"+ (params["seq"]);
       let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
       if(this.loanid!=currentloanid)

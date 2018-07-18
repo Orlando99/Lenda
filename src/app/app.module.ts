@@ -169,6 +169,8 @@ import { BottomIconsComponent } from './components/summary/charts-visualization/
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 import { BudgetHelperService } from './components/budget/budget-helper.service';
 import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
+import { MarketingContractsComponent } from './components/collateral/marketing-contracts/marketing-contracts.component';
+import { CollateralReportComponent } from './components/work-in-progress/collateral-report/collateral-report.component';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -242,6 +244,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     ProgressChartComponent,
     CurrencyDirective,
     PercentageDirective,
+    MarketingContractsComponent,
+    CollateralReportComponent,
     BorrowerIncomeHistoryComponent
   ],
   imports: [
