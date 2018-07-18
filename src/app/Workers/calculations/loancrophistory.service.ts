@@ -18,7 +18,9 @@ export class LoancrophistoryService {
   prepare_Crop_Yield() {
     //debugger
     for (let i = 0; i < this.input.CropYield.length; i++) {
+  
       let cropyielditems = [];
+      this.years = [];
       for (let year = 1 ; year < 8; year++) {
         this.years.push(this.input.CropYield[i].CropYear - year);
       }
