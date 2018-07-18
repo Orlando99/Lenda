@@ -281,6 +281,9 @@ export class borrower_model
         @JsonProperty("LoanMarketingContracts",ArrayConverter,true)
         LoanMarketingContracts :Array<Loan_Marketing_Contract>=[];
 
+        @JsonProperty("LoanCrops",ArrayConverter,true)
+        LoanCrops :Array<Loan_Crop>=[];
+
         lasteditrowindex:number;
         srccomponentedit:string;
 
@@ -448,7 +451,7 @@ export class borrower_model
         Z_Loan_Seq_Num:string;
         Loan_Full_ID:string;
         Category: number;
-        Crop_Code: number;
+        Crop_Code: string;
         Crop_Type_Code: string;
         Assoc_Type_Code:string;
         Assoc_ID:number;
@@ -459,6 +462,22 @@ export class borrower_model
         ActionStatus : number;
     }
 
+    export class Loan_Crop{
+        Loan_Crop_ID: number;
+        Loan_Full_ID:string;
+        Crop_Code: string;
+        Crop_ID:number;
+        Crop_Type_Code:string;
+        Crop_Price:number;
+        Basic_Adj:number
+        Marketing_Adj:number;
+        Rebate_Adj:number;
+        Adj_Price:number;
+        Contract_Qty:number;
+        Contract_Price:number;
+        Percent_booked:number;
+        ActionStatus : number;
+    }
     export class loan_farmer{
         Farmer_SSN_Hash : string;
         Farmer_Last_Name : string;

@@ -230,7 +230,11 @@ export class MarketingContractsComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.localloanobject.LoanMarketingContracts.filter(p=>p.ActionStatus).length>0;
+    if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
+      return this.localloanobject.LoanMarketingContracts.filter(p=>p.ActionStatus).length>0;
+    }else{
+      return false;
+    }
   }
 
   synctoDb(){

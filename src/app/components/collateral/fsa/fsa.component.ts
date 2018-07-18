@@ -138,7 +138,7 @@ export class FSAComponent implements OnInit {
 
 
   onGridReady(params) {
-    debugger
+    
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
@@ -210,7 +210,7 @@ export class FSAComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
-    debugger
+    
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.rowData[rowIndex];

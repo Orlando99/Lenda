@@ -15,8 +15,12 @@ export function extractCropValues(mappings) {
 
 export function lookupCropValue(mappings, key) {
     if (key != null && key != undefined) {
-        let test = mappings.find(p => p.key.toLowerCase() == key.toLowerCase()).value;
-        return test
+        let crop = mappings.find(p => p.key.toLowerCase() == key.toLowerCase());
+        if(crop){
+            return crop.value;
+        }else{
+            return '';
+        }
     }
     else
         return "";
