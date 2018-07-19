@@ -35,7 +35,6 @@ export class MarketingContractsComponent implements OnInit {
   public editType;
   public gridApi;
   public columnApi;
-  public deleteAction = false;
   public pinnedBottomRowData;
 
   style = {
@@ -150,7 +149,7 @@ export class MarketingContractsComponent implements OnInit {
         
       ];
 
-      //this.context = { componentParent: this };
+      this.context = { componentParent: this };
   }
 
   ngOnInit(){
@@ -249,7 +248,6 @@ export class MarketingContractsComponent implements OnInit {
   synctoDb(){
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode == 1){
-        this.deleteAction = false;
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
           if (res.ResCode == 1) {
@@ -274,13 +272,9 @@ export class MarketingContractsComponent implements OnInit {
       this.localloanobject.LoanMarketingContracts = [];
       
     var newItem = new Loan_Marketing_Contract();
-    newItem.Contract_ID = 0
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID;
-    newItem.Price = 0;
-    newItem.Quantity = 0;
-    newItem.ActionStatus = 1;
-    var res = this.rowData.push(newItem);
-    this.localloanobject.LoanMarketingContracts.push(newItem);
+    this.rowData.push(newItem);
+    //this.localloanobject.LoanMarketingContracts.push(newItem);
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
@@ -294,9 +288,12 @@ export class MarketingContractsComponent implements OnInit {
 
     this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
     
-    if (!obj.Contract_ID) {
+    if (obj.Contract_ID == undefined) {
+      obj.Contract_ID = 0
+      obj.Price = 0;
+      obj.Quantity = 0;
       obj.ActionStatus = 1;
-      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length-1]=value.data;
+      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length]=value.data;
     }
     else {
       var rowindex=this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID==obj.Contract_ID);
@@ -311,21 +308,26 @@ export class MarketingContractsComponent implements OnInit {
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
-  // DeleteClicked(rowIndex: any) {
-  //   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-  //     if (res == true) {
-  //       var obj = this.rowData[rowIndex];
-  //       if (obj.Collateral_ID == 0) {
-  //         this.rowData.splice(rowIndex, 1);
-  //         this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-  //       }else {
-  //         this.deleteAction = true;
-  //         obj.ActionStatus = 3;
-  //       }
-  //       this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  //     }
-  //   })
-  // }
+  DeleteClicked(rowIndex: any) {
+      this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+        if (res == true) {
+          var obj = this.rowData[rowIndex];
+          if (obj.Contract_ID == 0) {
+            this.rowData.splice(rowIndex, 1);
+            let indexToDelete = this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID == obj.Contract_ID);
+            if(indexToDelete >=0){
+              this.localloanobject.LoanMarketingContracts.splice(indexToDelete, 1);
+            }
+            
+          }else {
+            obj.ActionStatus = 3;
+          }
+          this.localloanobject.srccomponentedit = undefined;
+          this.localloanobject.lasteditrowindex =undefined;
+          this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+        }
+      })
+    }
 
   getgridheight(){
     this.style.height=(30*(this.rowData.length+2)).toString()+"px";
