@@ -157,16 +157,18 @@
   }
   .ng-star-inserted {
     padding-top: 5px;
+    padding-left: 3px;
   }
   .c-token  {
-    margin-top: 5px !important;
-    &.ng-star-inserted {
+    // margin-top: 5px !important;
+    &.ng-star-inserted:first-child {
       margin-top: 0px !important;
+      // margin-top: 2px !important;
     }
   }
   .c-angle-up,
   .c-angle-down {
-    right: 8px !important;
+    right: 2px !important;
     width: 20px !important;
     height: 20px !important;
   }
