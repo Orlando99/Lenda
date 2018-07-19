@@ -14,8 +14,9 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { currencyFormatter, discFormatter, insuredFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { JsonConvert } from 'json2typescript';
 import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcountyboxes';
-import * as _ from 'lodash'
+import * as _ from 'lodash';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -50,7 +51,8 @@ export class MarketingContractsComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){
+    public loanapi:LoanApiService,
+    private marketingContractService : MarketingcontractcalculationService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -97,7 +99,7 @@ export class MarketingContractsComponent implements OnInit {
         },
         width : 100
       },
-      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:100},
+      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:70},
       { headerName: 'Buyer', field: 'Assoc_ID',   cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: this.getBuyersValue.bind(this),
         valueFormatter:  (params) => {
@@ -131,20 +133,21 @@ export class MarketingContractsComponent implements OnInit {
         }
       },
       width:100},
-      { headerName: 'Price', field: 'Price',  editable: true, width:100,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
+      { headerName: 'Price', field: 'Price',  editable: true, width:150,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
       valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right'],
+      { headerName: 'Mkt Value', field: 'Market_Value',  width:180,   cellClass: ['text-right'],
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Contract %', field: 'FC_Contract_Percent',  width:130,   cellClass: ['text-right'],
+      { headerName: 'Contract %', field: 'Contract_Per',  width:80,   cellClass: ['text-right'],
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
-      }}
-        // { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
+      }},
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
+        
       ];
 
       //this.context = { componentParent: this };
@@ -154,10 +157,6 @@ export class MarketingContractsComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
           this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
           this.localloanobject = res
-  
-          if(this.localloanobject.LoanMarketingContracts && this.localloanobject.LoanMarketingContracts.length > 0){
-            this.updateCalculation(this.localloanobject.LoanMarketingContracts);
-          }
           
           if (res.srccomponentedit == "MarketingContractComponent") {
             //if the same table invoked the change .. change only the edited row
@@ -178,7 +177,6 @@ export class MarketingContractsComponent implements OnInit {
         
         if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
           this.rowData = this.localloanobject.LoanMarketingContracts;
-          this.updateCalculation(this.localloanobject.LoanMarketingContracts);
         }else{
           this.rowData = [];
         }
@@ -294,7 +292,7 @@ export class MarketingContractsComponent implements OnInit {
   rowvaluechanged(value: any) {
     var obj : Loan_Marketing_Contract = value.data;
 
-    this.updateMktValueAndContractPer(obj);
+    this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
     
     if (!obj.Contract_ID) {
       obj.ActionStatus = 1;
@@ -311,36 +309,6 @@ export class MarketingContractsComponent implements OnInit {
     this.localloanobject.srccomponentedit = "MarketingContractComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  }
-
-  getCropContract(cropCode : string, type : string){
-    if(this.localloanobject.LoanCropUnits && this.localloanobject.CropYield && this.localloanobject.Farms){
-        let totalCUAcres = _.sumBy(this.localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type), 'CU_Acres');
-        let totalCropYield = _.sumBy(this.localloanobject.CropYield.filter(cy=>cy.CropType === cropCode  && cy.IrNI === type), 'CropYield' );
-        let totalPerProd = _.sumBy(this.localloanobject.Farms, 'Percent_Prod')  || 1;
-        return totalCUAcres * totalCropYield * totalPerProd;
-    }else{
-      return 0;
-    }
-    
-  }
-
-
-  updateCalculation(mktContracts : Array<Loan_Marketing_Contract>){
-    mktContracts.forEach(contract => {
-      this.updateMktValueAndContractPer(contract);
-    });
-  }
-  private updateMktValueAndContractPer(contract: Loan_Marketing_Contract) {
-    contract.FC_Market_Value = contract.Price * contract.Quantity;
-    let supplyQuantity = this.getCropContract(contract.Crop_Code, 'IRR') + this.getCropContract(contract.Crop_Code, 'NIR');
-
-    if(supplyQuantity){
-      contract.FC_Contract_Percent = (contract.Quantity / supplyQuantity)*100;
-    }else{
-      contract.FC_Contract_Percent = 0;
-    }
-    
   }
 
   // DeleteClicked(rowIndex: any) {

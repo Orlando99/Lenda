@@ -171,6 +171,7 @@ import { BudgetHelperService } from './components/budget/budget-helper.service';
 import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
 import { MarketingContractsComponent } from './components/collateral/marketing-contracts/marketing-contracts.component';
 import { CollateralReportComponent } from './components/work-in-progress/collateral-report/collateral-report.component';
+import { MarketingcontractcalculationService } from './Workers/calculations/marketingcontractcalculation.service';
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -356,7 +357,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     InsurancecalculationworkerService,
     AssociationcalculationworkerService,
     BudgetHelperService,
-    OverallCalculationServiceService
+    OverallCalculationServiceService,
+    MarketingcontractcalculationService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

@@ -16,6 +16,7 @@ import { LoanMasterCalculationWorkerService } from './loan-master-calculation-wo
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
 import { OverallCalculationServiceService } from './overall-calculation-service.service';
+import { MarketingcontractcalculationService } from './marketingcontractcalculation.service';
 
 
 
@@ -35,7 +36,9 @@ export class LoancalculationWorker {
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
     private associationcalculation: AssociationcalculationworkerService,
-    public logging: LoggingService
+    public logging: LoggingService,
+    private marketingContractService : MarketingcontractcalculationService
+
   ) { }
 
  //#region  OLD CODE CALCULATIONS
@@ -149,6 +152,12 @@ export class LoancalculationWorker {
         if(localloanobj.LoanMaster !==null){
           localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
           localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
+        }
+
+        // STEP 10 --- Marketing Contract Calculations
+        if(localloanobj.LoanMarketingContracts && localloanobj.LoanCrops){
+
+          this.marketingContractService.performPriceCalculation(localloanobj);
         }
 
         //TODO-SANKET : should be remove
