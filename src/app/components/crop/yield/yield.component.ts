@@ -244,6 +244,7 @@ export class YieldComponent implements OnInit {
     });
 
     Observable.forkJoin(observables).subscribe(dataArray => {
+      this.gridApi.showLoadingOverlay();
       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
@@ -255,6 +256,7 @@ export class YieldComponent implements OnInit {
         else{
           this.toaster.error("Could not fetch Loan Object from API")
         }
+        this.gridApi.hideOverlay()
         this.edits=[];
         this.addAction = false;
         this.deleteAction = false;
@@ -302,6 +304,7 @@ export class YieldComponent implements OnInit {
           }
         });
       });
+      this.gridApi.showLoadingOverlay()
       this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
@@ -314,6 +317,7 @@ export class YieldComponent implements OnInit {
           else{
             this.toaster.error("Could not fetch Loan Object from API")
           }
+          this.gridApi.hideOverlay()
           this.edits=[];
         })
       })
@@ -456,6 +460,14 @@ export class YieldComponent implements OnInit {
       this.syncYieldStatus = status.NOCHANGE;
     } 
     this.localloanobject.SyncStatus.Status_Crop_Practice = this.syncYieldStatus;  
+    
+  }
+
+  syncenabled(){
+    if(this.syncYieldStatus===0)
+    return 'disabled';
+    else
+    return ''
     
   }
 }
