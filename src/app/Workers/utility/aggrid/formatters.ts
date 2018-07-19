@@ -13,7 +13,7 @@ export function PercentageFormatter(perce) {
         return  "0 %";
     }
     else
-return perce.toString() +" %";
+return perce.toFixed(2) +" %";
 }
 
 

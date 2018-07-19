@@ -16,6 +16,7 @@ import { LoanMasterCalculationWorkerService } from './loan-master-calculation-wo
 import { LoancroppracticeworkerService } from './loancroppracticeworker.service';
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
 import { OverallCalculationServiceService } from './overall-calculation-service.service';
+import { MarketingcontractcalculationService } from './marketingcontractcalculation.service';
 import { OptimizercalculationService } from './optimizercalculationservice.service';
 import * as _ from 'lodash'
 
@@ -37,8 +38,9 @@ export class LoancalculationWorker {
     private loancroppracticeworker: LoancroppracticeworkerService,
     private insuranceworker: InsurancecalculationworkerService,
     private associationcalculation: AssociationcalculationworkerService,
-    private optimizercaluclations: OptimizercalculationService,
-    public logging: LoggingService
+    public logging: LoggingService,
+    private marketingContractService : MarketingcontractcalculationService,
+    private optimizercaluclations: OptimizercalculationService
   ) { }
 
   //#region  OLD CODE CALCULATIONS
@@ -162,6 +164,16 @@ export class LoancalculationWorker {
 
       // STEP 9 --- OPTIMIZER CALCULATIONS
 
+        // STEP 10 --- Marketing Contract Calculations
+        if(localloanobj.LoanMarketingContracts && localloanobj.LoanCrops){
+
+          this.marketingContractService.performPriceCalculation(localloanobj);
+        }
+
+        //TODO-SANKET : should be remove
+        // localloanobj =  this.budgetService.caculateTotalsBeforeStore(localloanobj);
+        // debugger;
+        //REMOVE ENDS
       if (localloanobj.LoanCropUnits != null && localloanobj.LoanCropPractices != null) {
         localloanobj = this.optimizercaluclations.performcalculations(localloanobj);
       }

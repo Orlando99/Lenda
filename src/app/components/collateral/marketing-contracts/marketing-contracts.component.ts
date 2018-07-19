@@ -14,8 +14,9 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { currencyFormatter, discFormatter, insuredFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { JsonConvert } from 'json2typescript';
 import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcountyboxes';
-import * as _ from 'lodash'
-import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import * as _ from 'lodash';
+import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -34,7 +35,6 @@ export class MarketingContractsComponent implements OnInit {
   public editType;
   public gridApi;
   public columnApi;
-  public deleteAction = false;
   public pinnedBottomRowData;
 
   style = {
@@ -50,7 +50,8 @@ export class MarketingContractsComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){
+    public loanapi:LoanApiService,
+    private marketingContractService : MarketingcontractcalculationService){
 
       this.components = { numericCellEditor: getNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -97,7 +98,7 @@ export class MarketingContractsComponent implements OnInit {
         },
         width : 100
       },
-      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:100},
+      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:70},
       { headerName: 'Buyer', field: 'Assoc_ID',   cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: this.getBuyersValue.bind(this),
         valueFormatter:  (params) => {
@@ -131,26 +132,31 @@ export class MarketingContractsComponent implements OnInit {
         }
       },
       width:100},
-      { headerName: 'Price', field: 'Price',  editable: true, width:100,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
+      { headerName: 'Price', field: 'Price',  editable: true, width:150,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
       valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right'],
-
+      { headerName: 'Mkt Value', field: 'Market_Value',  width:180,   cellClass: ['text-right'],
       valueFormatter: function (params) {
-        return PriceFormatter(params.data.Quantity * params.data.Price);
+        return PriceFormatter(params.value);
       }},
-        // { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
+      { headerName: 'Contract %', field: 'Contract_Per',  width:80,   cellClass: ['text-right'],
+      valueFormatter: function (params) {
+        return PercentageFormatter(params.value);
+      }},
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
+        
       ];
 
-      //this.context = { componentParent: this };
+      this.context = { componentParent: this };
   }
 
   ngOnInit(){
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
           this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
           this.localloanobject = res
+          
           if (res.srccomponentedit == "MarketingContractComponent") {
             //if the same table invoked the change .. change only the edited row
             this.localloanobject = res;
@@ -162,12 +168,14 @@ export class MarketingContractsComponent implements OnInit {
             
           }
           this.getgridheight();
+          this.gridApi.refreshCells();
           // this.adjustgrid();
         });
 
         this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+        
         if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
-          this.rowData = this.localloanobject.LoanMarketingContracts;
+          this.rowData = this.localloanobject.LoanMarketingContracts !== null? this.localloanobject.LoanMarketingContracts.filter(mc => { return  mc.ActionStatus !== 3 }):[];
         }else{
           this.rowData = [];
         }
@@ -240,7 +248,6 @@ export class MarketingContractsComponent implements OnInit {
   synctoDb(){
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
       if(res.ResCode == 1){
-        this.deleteAction = false;
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
           if (res.ResCode == 1) {
@@ -265,13 +272,9 @@ export class MarketingContractsComponent implements OnInit {
       this.localloanobject.LoanMarketingContracts = [];
       
     var newItem = new Loan_Marketing_Contract();
-    newItem.Contract_ID = 0
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID;
-    newItem.Price = 0;
-    newItem.Quantity = 0;
-    newItem.ActionStatus = 1;
-    var res = this.rowData.push(newItem);
-    this.localloanobject.LoanMarketingContracts.push(newItem);
+    this.rowData.push(newItem);
+    //this.localloanobject.LoanMarketingContracts.push(newItem);
     this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
@@ -281,17 +284,21 @@ export class MarketingContractsComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
+    var obj : Loan_Marketing_Contract = value.data;
 
-    obj.FC_Market_Value = obj.Price * obj.Quantity;
-    if (!obj.Contract_ID) {
+    if (obj.Contract_ID == undefined) {
+      obj.Contract_ID = 0
+      obj.Price = 0;
+      obj.Quantity = 0;
       obj.ActionStatus = 1;
-      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length-1]=value.data;
+      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
+      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length]=value.data;
     }
     else {
       var rowindex=this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID==obj.Contract_ID);
       if(obj.ActionStatus!=1)
         obj.ActionStatus = 2;
+      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
       this.localloanobject.LoanMarketingContracts[rowindex]=obj;
     }
 
@@ -301,21 +308,28 @@ export class MarketingContractsComponent implements OnInit {
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
-  // DeleteClicked(rowIndex: any) {
-  //   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-  //     if (res == true) {
-  //       var obj = this.rowData[rowIndex];
-  //       if (obj.Collateral_ID == 0) {
-  //         this.rowData.splice(rowIndex, 1);
-  //         this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-  //       }else {
-  //         this.deleteAction = true;
-  //         obj.ActionStatus = 3;
-  //       }
-  //       this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  //     }
-  //   })
-  // }
+  DeleteClicked(rowIndex: any) {
+      this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+        if (res == true) {
+          var obj = this.rowData[rowIndex];
+          if(obj){
+          if (obj.Contract_ID == 0) {
+            this.rowData.splice(rowIndex, 1);
+            let indexToDelete = this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID == obj.Contract_ID);
+            if(indexToDelete >=0){
+              this.localloanobject.LoanMarketingContracts.splice(indexToDelete, 1);
+            }
+            
+          }else {
+            obj.ActionStatus = 3;
+          }
+        }
+          this.localloanobject.srccomponentedit = undefined;
+          this.localloanobject.lasteditrowindex =undefined;
+          this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+        }
+      })
+    }
 
   getgridheight(){
     this.style.height=(30*(this.rowData.length+2)).toString()+"px";
