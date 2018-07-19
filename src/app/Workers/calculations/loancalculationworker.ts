@@ -4,6 +4,7 @@ import { observeOn } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.prod';
 import { loan_model } from '../../models/loanmodel';
 import { Borrowercalculationworker } from './borrowercalculationworker.service';
+import { Borrowerincomehistoryworker } from './borrowerincomehistoryworker.service';
 import { LoggingService } from '../../services/Logs/logging.service';
 import { LoancropunitcalculationworkerService } from './loancropunitcalculationworker.service';
 import { LoancrophistoryService } from './loancrophistory.service';
@@ -24,6 +25,7 @@ export class LoancalculationWorker {
   constructor(
     private localst: LocalStorageService,
     private borrowerworker: Borrowercalculationworker,
+    private borrowerincomehistory: Borrowerincomehistoryworker,
     private loancropunitworker: LoancropunitcalculationworkerService,
     private loancrophistoryworker: LoancrophistoryService,
     private farmcalculation: FarmcalculationworkerService,
@@ -99,7 +101,7 @@ export class LoancalculationWorker {
           if (localloanobj.Borrower != null)
             localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
           if(localloanobj.BorrowerIncomeHistory !== null)
-            localloanobj = this.borrowerworker.prepareborrowerincomehistorymodel(localloanobj);
+            localloanobj = this.borrowerincomehistory.prepareborrowerincomehistorymodel(localloanobj);
 
       //STEP 2 -- CROP LEVEL CALCULATIONS
           if (localloanobj.CropYield != null) {

@@ -264,7 +264,6 @@ export class PriceComponent implements OnInit {
   // }
 
   syncenabled() {
-    debugger
     if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
     return 'disabled';
     else

@@ -63,18 +63,19 @@ export class Borrowercalculationworker {
 
 
   prepareborrowerincomehistorymodel(input2: loan_model): loan_model {
+  
     try {
       let starttime = new Date().getTime();
-      for (let i = 0; i < input2.LoanCollateral.length; i++) {
+      for (let i = 0; i < input2.BorrowerIncomeHistory.length; i++) {
           this.prepare_fc_borrower_income(input2.BorrowerIncomeHistory[i]);
       }
 
       let endtime = new Date().getTime();
       this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return input2;
-  } catch{
+    } catch{
       return input2;
-  }
+    }
   }
 
 
