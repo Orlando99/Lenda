@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 enum ViewMode {
-    concise,
-    essential,
-    complete
+  concise,
+  essential,
+  complete,
+  extra
 };
 
 @Component({
@@ -11,21 +12,22 @@ enum ViewMode {
   styleUrls: ['./charts-visualization.component.scss']
 })
 export class ChartsVisualizationComponent implements OnInit {
-  public viewMode:number =  ViewMode.complete;
-  public viewClass: string = 'complete';
+  @Input() viewMode: number = ViewMode.complete;
+  public viewClass: string;
 
   constructor() { }
 
   ngOnInit() {
+    this.setView(this.viewMode);
   }
 
   public setView(viewMode) {
     this.viewMode = viewMode;
     if (viewMode == 0) {
       this.viewClass = 'concise';
-    } else if (viewMode ==1) {
+    } else if (viewMode == 1) {
       this.viewClass = 'essential';
-    } else if (viewMode ==2) {
+    } else if (viewMode == 2) {
       this.viewClass = 'complete';
     } else {
       this.viewClass = 'detailed';
