@@ -23,8 +23,15 @@
         <a>Essential</a>
       </button>
       <button mat-menu-item (click)="setView(2)">
-      <a>Complete</a>
-    </button>
+        <a>Complete</a>
+      </button>
+      <button mat-menu-item (click)="setView(3)">
+        <a>Extra</a>
+      </button>
     </mat-menu>
   </mat-icon>
+
+  <div *ngIf="viewMode==3" class="row p-10">
+    <app-work-in-progress-stats></app-work-in-progress-stats>
+  </div>
 </div>

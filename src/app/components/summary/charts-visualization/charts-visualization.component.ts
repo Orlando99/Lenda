@@ -25,8 +25,10 @@ export class ChartsVisualizationComponent implements OnInit {
       this.viewClass = 'concise';
     } else if (viewMode ==1) {
       this.viewClass = 'essential';
-    } else {
+    } else if (viewMode ==2) {
       this.viewClass = 'complete';
+    } else {
+      this.viewClass = 'detailed';
     }
   }
 }
