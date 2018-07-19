@@ -30,7 +30,7 @@ export class AgentComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = true;
+  
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -141,6 +141,7 @@ export class AgentComponent implements OnInit {
   }
 
   synctoDb() {
+    this.gridApi.showLoadingOverlay();	
   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
     if(res.ResCode==1){
      this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -154,9 +155,11 @@ export class AgentComponent implements OnInit {
        else{
          this.toaster.error("Could not fetch Loan Object from API")
        }
+       this.gridApi.hideOverlay()
      });
     }
     else{
+      this.gridApi.hideOverlay()
       this.toaster.error("Error in Sync");
     }
   })
@@ -208,6 +211,13 @@ export class AgentComponent implements OnInit {
       }
     })
 
+  }
+
+  syncenabled() {
+    if(this.rowData.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
+    return 'disabled';
+    else
+    return '';
   }
 
 

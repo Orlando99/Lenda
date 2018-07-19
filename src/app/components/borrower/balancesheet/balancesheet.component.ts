@@ -20,7 +20,7 @@ import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/ag
 export class BalancesheetComponent implements OnInit {
 
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = false;
+  
   // Aggrid
   public rowData = [];
   public pinnedBottomRowData = [];
@@ -216,7 +216,7 @@ export class BalancesheetComponent implements OnInit {
   // }
 
   synctoDb() {
-
+    this.gridApi.showLoadingOverlay();	
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
@@ -229,13 +229,24 @@ export class BalancesheetComponent implements OnInit {
           else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
+          this.gridApi.hideOverlay()
         });
       }
       else {
+        this.gridApi.hideOverlay()
         this.toaster.error("Error in Sync");
       }
     })
 
   }
+
+  
+ syncenabled() {
+  debugger
+  if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
+  return 'disabled';
+  else
+  return '';
+}
 
 }

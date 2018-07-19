@@ -17,6 +17,7 @@ import { LoancroppracticeworkerService } from './loancroppracticeworker.service'
 import { InsurancecalculationworkerService } from './insurancecalculationworker.service';
 import { OverallCalculationServiceService } from './overall-calculation-service.service';
 import { OptimizercalculationService } from './optimizercalculationservice.service';
+import * as _ from 'lodash'
 
 
 
@@ -131,6 +132,12 @@ export class LoancalculationWorker {
             currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
           }
         }
+        // propogations to Loan master table 
+        localloanobj.LoanMaster[0].ARM_Commitment=_.sumBy(localloanobj.LoanBudget,'ARM_Budget_Crop');
+        localloanobj.LoanMaster[0].Dist_Commitment=_.sumBy(localloanobj.LoanBudget,'Distributor_Budget_Crop');
+        localloanobj.LoanMaster[0].Third_Party_Credit=_.sumBy(localloanobj.LoanBudget,'Third_Party_Budget_Crop');
+        localloanobj.LoanMaster[0].Total_Commitment=_.sumBy(localloanobj.LoanBudget,'Total_Budget_Crop_ET');
+        localloanobj.LoanMaster[0].ActionStatus=2;
       } catch (e) {
         console.error("ERROR IN BUDGET CALCULATION" + JSON.stringify(e));
 

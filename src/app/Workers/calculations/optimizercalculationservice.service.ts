@@ -7,6 +7,7 @@ export class OptimizercalculationService {
   constructor() { }
 
   performcalculations(input: loan_model) {
+    try{
     debugger
     let distinctcrops = _.uniqBy(input.LoanCropUnits, 'Crop_Practice_ID');
     distinctcrops.forEach(element => {
@@ -15,6 +16,10 @@ export class OptimizercalculationService {
         input.LoanCropPractices.find(p => p.Crop_Practice_ID == element.Crop_Practice_ID).ActionStatus=2;
     });
     debugger
+     }
+     catch{
+       
+     }
     return input;
   }
 
