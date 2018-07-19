@@ -175,7 +175,7 @@ export class MarketingContractsComponent implements OnInit {
         this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
         
         if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
-          this.rowData = this.localloanobject.LoanMarketingContracts;
+          this.rowData = this.localloanobject.LoanMarketingContracts !== null? this.localloanobject.LoanMarketingContracts.filter(mc => { return  mc.ActionStatus !== 3 }):[];
         }else{
           this.rowData = [];
         }
@@ -286,19 +286,19 @@ export class MarketingContractsComponent implements OnInit {
   rowvaluechanged(value: any) {
     var obj : Loan_Marketing_Contract = value.data;
 
-    this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
-    
     if (obj.Contract_ID == undefined) {
       obj.Contract_ID = 0
       obj.Price = 0;
       obj.Quantity = 0;
       obj.ActionStatus = 1;
+      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
       this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length]=value.data;
     }
     else {
       var rowindex=this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID==obj.Contract_ID);
       if(obj.ActionStatus!=1)
         obj.ActionStatus = 2;
+      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
       this.localloanobject.LoanMarketingContracts[rowindex]=obj;
     }
 
@@ -312,6 +312,7 @@ export class MarketingContractsComponent implements OnInit {
       this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
         if (res == true) {
           var obj = this.rowData[rowIndex];
+          if(obj){
           if (obj.Contract_ID == 0) {
             this.rowData.splice(rowIndex, 1);
             let indexToDelete = this.localloanobject.LoanMarketingContracts.findIndex(mc=>mc.Contract_ID == obj.Contract_ID);
@@ -322,6 +323,7 @@ export class MarketingContractsComponent implements OnInit {
           }else {
             obj.ActionStatus = 3;
           }
+        }
           this.localloanobject.srccomponentedit = undefined;
           this.localloanobject.lasteditrowindex =undefined;
           this.loanserviceworker.performcalculationonloanobject(this.localloanobject);

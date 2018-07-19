@@ -37,13 +37,23 @@ export class MarketingcontractcalculationService {
   }
 
   performPriceCalculation(localloanobject : loan_model){
-    localloanobject.LoanMarketingContracts.forEach(mktContracts =>{
-      let matchingCrop = localloanobject.LoanCrops.find(loanCrops=> loanCrops.Crop_Code === mktContracts.Crop_Code);
-      if(matchingCrop){
-        matchingCrop.Percent_booked = mktContracts.Contract_Per;
-        matchingCrop.ActionStatus = 2;
+
+    localloanobject.LoanCrops.forEach(crop =>{
+      let matchingMC  = localloanobject.LoanMarketingContracts.find(mc=>mc.Crop_Code == crop.Crop_Code && mc.ActionStatus != 3);
+      if(matchingMC){
+        crop.Percent_booked = matchingMC.Contract_Per;
+      }else{
+        crop.Percent_booked = 0;
       }
-    })
+    });
+
+    // localloanobject.LoanMarketingContracts.forEach(mktContracts =>{
+    //   let matchingCrop = localloanobject.LoanCrops.find(loanCrops=> loanCrops.Crop_Code === mktContracts.Crop_Code);
+    //   if(matchingCrop){
+    //     matchingCrop.Percent_booked = mktContracts.Contract_Per;
+    //     matchingCrop.ActionStatus = 2;
+    //   }
+    // })
 
   }
 
