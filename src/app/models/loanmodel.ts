@@ -356,6 +356,8 @@ export class borrower_model
         FC_Borrower_Income: number=0;
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
+        @JsonProperty("ActionStatus", IntConverter,false)
+        ActionStatus: number=0;
     }
     @JsonObject
     export class Loan_Crop_Practice{

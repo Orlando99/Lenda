@@ -1,4 +1,7 @@
-
+<button (click)="synctoDb()" class="btn-unstyle">
+  <!-- <mat-icon [style.color] = "!syncenabled() ? 'light-gray':'green'" >publish</mat-icon> -->
+  <a  class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
+ </button>
  
       <div class="container bottom">
         <div class="row">
@@ -12,6 +15,8 @@
             [rowData]="rowData" 
             (gridReady)="onGridReady($event)"
             [columnDefs]="columnDefs" 
+            [components]="components"
+            (cellEditingStopped)="rowvaluechanged($event)"
             >
           </ag-grid-angular>
         </div>

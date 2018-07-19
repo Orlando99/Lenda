@@ -15,6 +15,8 @@ export function setDiscValue (params) {
 export function currencyFormatter (params) {
     if(params.value == '-'){
         return params.value;
+    }else if(params.value == ''){
+        return '-';
     }else{
         var withDecimals = params.value % 1;
         if(withDecimals){
