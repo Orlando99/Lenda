@@ -51,7 +51,7 @@ export class LoanbudgetComponent implements OnInit {
 
 
   ngOnInit() {
-    const totalRowHeader= 'Total'; // is used to check if the current row should be editable or not
+    const totalRowHeader = 'Total'; // is used to check if the current row should be editable or not
 
     this.columnDefs = [
 
@@ -59,52 +59,68 @@ export class LoanbudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
+          {
+            headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'], valueSetter: numberValueSetter,
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            },
+            editable: (params) => {
+              return params.data.FC_Expense_Name !== totalRowHeader + ':';
+            }
           },
-          editable : (params)=>{
-           return params.data.FC_Expense_Name !== totalRowHeader+':';
-          } },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
+          {
+            headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            },
+            editable: (params) => {
+              return params.data.FC_Expense_Name !== totalRowHeader + ':';
+            }
           },
-          editable : (params)=>{
-           return params.data.FC_Expense_Name !== totalRowHeader+':';
-          } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
+          {
+            headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            },
+            editable: (params) => {
+              return params.data.FC_Expense_Name !== totalRowHeader + ':';
+            }
           },
-          editable : (params)=>{
-           return params.data.FC_Expense_Name !== totalRowHeader+':';
-          } },
-          { headerName: totalRowHeader, field: 'Total_Budget_Acre', width: 120, editable: false, cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          {
+            headerName: totalRowHeader, field: 'Total_Budget_Acre', width: 120, editable: false, cellClass: ['text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            }
+          },
         ]
       },
       {
         headerName: "Crop Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Crop', cellClass: ['text-right'], editable: false,
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
-          { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false, cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
-          { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          {
+            headerName: 'ARM', field: 'ARM_Budget_Crop', cellClass: ['text-right'], editable: false,
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            }
+          },
+          {
+            headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false, cellClass: ['text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            }
+          },
+          {
+            headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false, cellClass: ['text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            }
+          },
+          {
+            headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, cellClass: ['text-right'],
+            valueFormatter: function (params) {
+              return PriceFormatter(params.value);
+            }
+          },
         ]
       }
     ];
@@ -119,13 +135,24 @@ export class LoanbudgetComponent implements OnInit {
 
     //TODO-SANKET can we have obsever one level up instead of for each cropPractice ?
     this.localStorageService.observe(environment.loankey).subscribe(res => {
-      this.localLoanObject = res;
+      if (this.localLoanObject.srccomponentedit === "LoanBudgetComponent" + this.cropPractice.Crop_Practice_ID) {
+        //if the same table invoked the change .. change only the edited row
+        // let budget = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
+        // this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+        // budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
+        this.rowData[this.localLoanObject.lasteditrowindex] = this.localLoanObject.LoanBudget.filter(budget => budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[this.localLoanObject.lasteditrowindex];
+        this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
+        this.gridApi.refreshCells();
+      }
+      else {
+        this.localLoanObject = res;
 
-      this.bindData(this.localLoanObject);
+        this.bindData(this.localLoanObject);
+      }
     })
 
     this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
-
+    this.rowData = [];
     this.bindData(this.localLoanObject);
 
 
@@ -140,21 +167,23 @@ export class LoanbudgetComponent implements OnInit {
   };
 
   bindData(localLoanObject: loan_model) {
+    debugger
     let lstLoanBudget = localLoanObject.LoanBudget;
-    if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
-      //if the same table invoked the change .. change only the edited row
-     // let budget = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
-      // this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
-     // budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
-      this.rowData[localLoanObject.lasteditrowindex]  = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
+    // if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
+    //   //if the same table invoked the change .. change only the edited row
+    //  // let budget = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
+    //   // this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres)[localLoanObject.lasteditrowindex];
+    //  // budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
+    //   this.rowData[localLoanObject.lasteditrowindex]  = lstLoanBudget.filter(budget=> budget.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID)[localLoanObject.lasteditrowindex];
 
-    }
-    else {
-      this.rowData = [];
-      this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(lstLoanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres):[];
-    }
+    // }
+    // else {
+    this.rowData = [];
+    this.rowData = localLoanObject.LoanCropUnits !== null ? this.budgetService.getLoanBudgetForCropPractice(lstLoanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres) : [];
+
     //this.rowData =this.budgetService.getLoanBudgetForCropPractice(loanBudget, this.cropPractice.Crop_Practice_ID, this.cropPractice.LCP_Acres);
     this.pinnedBottomRowData = this.budgetService.getTotals(this.rowData);
+    this.calculatebudgettotals();
   }
 
   onGridReady(params) {
@@ -168,23 +197,26 @@ export class LoanbudgetComponent implements OnInit {
   rowvaluechanged(value: any) {
     let budget = this.localLoanObject.LoanBudget.find(budget => budget.Loan_Budget_ID === value.data.Loan_Budget_ID);
     budget.Total_Budget_Acre = parseFloat(budget.ARM_Budget_Acre.toString()) + parseFloat(budget.Distributor_Budget_Acre.toString()) + parseFloat(budget.Third_Party_Budget_Acre.toString());
+    budget.ActionStatus = 2;
+    this.calculatebudgettotals();
 
-    for(let i = 0; i<this.localLoanObject.LoanBudget.length;i++){
-      let currentBudget =   this.localLoanObject.LoanBudget[i];
-      let cropPractice = this.localLoanObject.LoanCropPractices.find(cp=>cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+    //this shall have the last edit
+    this.localLoanObject.srccomponentedit = "LoanBudgetComponent" + this.cropPractice.Crop_Practice_ID;
+    this.localLoanObject.lasteditrowindex = value.rowIndex;
+    this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
+    
+  }
+
+  private calculatebudgettotals() {
+    for (let i = 0; i < this.localLoanObject.LoanBudget.length; i++) {
+      let currentBudget = this.localLoanObject.LoanBudget[i];
+      let cropPractice = this.localLoanObject.LoanCropPractices.find(cp => cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
       currentBudget = this.budgetService.multiplyPropsWithAcres(currentBudget, cropPractice.LCP_Acres);
     }
     //budget = this.budgetService.multiplyPropsWithAcres(budget, this.cropPractice.LCP_Acres);
     //this.localLoanObject = this.budgetService.caculateTotalsBeforeStore(this.localLoanObject);
-     budget.ActionStatus = 2;
-
     let cropPractice = this.localLoanObject.LoanCropPractices.find(cp => cp.Crop_Practice_ID === this.cropPractice.Crop_Practice_ID);
     cropPractice = this.budgetService.populateTotalsInCropPractice(cropPractice, this.localLoanObject.LoanBudget);
-
-    //this shall have the last edit
-    this.localLoanObject.srccomponentedit = "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID;
-    this.localLoanObject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
   }
 
   //   synctoDb() {

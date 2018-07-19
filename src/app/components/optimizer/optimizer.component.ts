@@ -90,8 +90,13 @@ export class OptimizerComponent implements OnInit {
         else
         {
           var el = document.getElementById('Acres_'+value.data.ID);
+          try{
           el.parentElement.parentElement.classList.add("error");
           el.parentElement.parentElement.setAttribute("title","Acres cannot exceed total acres in Farm");
+             }
+             catch{
+               
+             }
           return false;
         }
 
@@ -300,7 +305,7 @@ debugger
       this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).ActionStatus =2;
       this.loanmodel.srccomponentedit="optimizercomponent";
       this.loanmodel.lasteditrowindex=$event.rowIndex;
-      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, false);
+      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
   }
   }
 

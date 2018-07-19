@@ -23,6 +23,9 @@ export class Loan_Crop_Unit
     Crop_Code: string="";
     @JsonProperty("Crop_Practice_Type_Code", StringConverter,false)
     Crop_Practice_Type_Code: string="";
+    @JsonProperty("Crop_Practice_ID", IntConverter,false)
+    Crop_Practice_ID: number=0;
+    
     @JsonProperty("Z_Price", IntConverter,false)
     Z_Price: number=0;
     @JsonProperty("Z_Basis_Adj", IntConverter,false)

@@ -260,11 +260,10 @@ export class FarmComponent implements OnInit {
   }
 
   synctoDb() {
-
+    this.gridApi.showLoadingOverlay();	
    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
      if(res.ResCode==1){
       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-
         this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
         if (res.ResCode == 1) {
           this.toaster.success("Records Synced");
@@ -274,9 +273,11 @@ export class FarmComponent implements OnInit {
         else{
           this.toaster.error("Could not fetch Loan Object from API")
         }
+        this.gridApi.hideOverlay()
       });
      }
      else{
+      this.gridApi.hideOverlay()
        this.toaster.error("Error in Sync");
      }
    })
@@ -328,13 +329,13 @@ export class FarmComponent implements OnInit {
     this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   }
 
-  // syncenabled(){
-  //   if(this.localloanobject.Farms){
-  //     return this.localloanobject.Farms.filter(p=>p.ActionStatus!=0).length>0
-  //   }
-
-   
-  // }
+  syncenabled(){
+    
+    if(this.syncFarmStatus===0 || this.syncFarmStatus==undefined)
+      return 'disabled';
+      else
+      return '';
+  }
 
   updateSyncStatus(){
     if(this.localloanobject.Farms.filter(p=>p.ActionStatus==1 || p.ActionStatus==3).length > 0){

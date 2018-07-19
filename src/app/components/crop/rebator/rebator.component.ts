@@ -101,6 +101,8 @@ export class RebatorComponent implements OnInit {
   }
 
   synctoDb() {
+    
+ this.gridApi.showLoadingOverlay();
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
         this.deleteAction = false;
@@ -114,9 +116,11 @@ export class RebatorComponent implements OnInit {
           else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
+          this.gridApi.hideOverlay()
         });
       }
       else {
+        this.gridApi.hideOverlay()
         this.toaster.error("Error in Sync");
       }
     });
@@ -179,7 +183,10 @@ export class RebatorComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.rowData.filter(p => p.ActionStatus != 0).length > 0 || this.deleteAction
+    if(this.rowData.filter(p => p.ActionStatus != 0).length > 0 || this.deleteAction)
+    return 'disabled';
+    else
+    return '';
   }
 
   getgridheight(){
