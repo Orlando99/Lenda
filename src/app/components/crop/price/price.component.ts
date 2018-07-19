@@ -91,32 +91,32 @@ export class PriceComponent implements OnInit {
         },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Z_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
+      { headerName: 'Crop Price', field: 'Crop_Price',cellClass: 'text-right',
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Basis Adj', field: 'Z_Basis_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
+      { headerName: 'Basis Adj', field: 'Basic_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Marketing Adj', field: 'Marketing_Adj', editable: false, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj',cellClass: 'text-right',
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       } },
-      { headerName: 'Rebate Adj', field: 'Z_Rebate_Adj', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
+      { headerName: 'Rebate Adj', field: 'Rebate_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Adj Price', field: 'Z_Adj_Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,cellStyle: { textAlign: "right" },
+      { headerName: 'Adj Price', field: 'Adj_Price',cellClass: 'text-right',
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Contract Qty', field: '', editable: false,cellStyle: { textAlign: "right" } },
-      { headerName: 'Contract Price', field: '', editable: false ,cellStyle: { textAlign: "right" },
+      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false,cellClass: 'text-right', },
+      { headerName: 'Contract Price', field: 'Contract_Price', editable: false ,cellClass: 'text-right',
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: '% Booked', field: 'Booking_Ind', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" },
+      { headerName: '% Booked', field: 'Percent_booked',cellClass: 'text-right',
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
       } },
@@ -143,6 +143,7 @@ export class PriceComponent implements OnInit {
         this.rowData = this.localloanobject.LoanCrops !== null ? this.localloanobject.LoanCrops.filter(p => p.ActionStatus != 3):[];
       }
       this.getgridheight();
+      this.gridApi.refreshCells()
 
     })
     this.getdataforgrid();
@@ -264,7 +265,6 @@ export class PriceComponent implements OnInit {
   // }
 
   syncenabled() {
-    debugger
     if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
     return 'disabled';
     else
