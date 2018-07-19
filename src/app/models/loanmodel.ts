@@ -480,6 +480,8 @@ export class borrower_model
         UoM:string;
         Description_Text:string;
         ActionStatus : number;
+        FC_Market_Value : number;
+        FC_Contract_Percent : number;
     }
 
     export class Loan_Crop{

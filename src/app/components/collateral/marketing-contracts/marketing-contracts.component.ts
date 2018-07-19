@@ -136,11 +136,8 @@ export class MarketingContractsComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right'],
-
-      valueFormatter: function (params) {
-        return PriceFormatter(params.data.Quantity * params.data.Price);
-      }},
+      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right']},
+      { headerName: 'Contract %', field: 'FC_Contract_Percent',  width:130,   cellClass: ['text-right']},
         // { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
 
@@ -151,6 +148,11 @@ export class MarketingContractsComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
           this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
           this.localloanobject = res
+  
+          if(this.localloanobject.LoanMarketingContracts && this.localloanobject.LoanMarketingContracts.length > 0){
+            this.updateCalculation(this.localloanobject.LoanMarketingContracts);
+          }
+          
           if (res.srccomponentedit == "MarketingContractComponent") {
             //if the same table invoked the change .. change only the edited row
             this.localloanobject = res;
@@ -166,8 +168,10 @@ export class MarketingContractsComponent implements OnInit {
         });
 
         this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+        
         if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
           this.rowData = this.localloanobject.LoanMarketingContracts;
+          this.updateCalculation(this.localloanobject.LoanMarketingContracts);
         }else{
           this.rowData = [];
         }
@@ -281,9 +285,10 @@ export class MarketingContractsComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
+    var obj : Loan_Marketing_Contract = value.data;
 
-    obj.FC_Market_Value = obj.Price * obj.Quantity;
+    this.updateMktValueAndContractPer(obj);
+    
     if (!obj.Contract_ID) {
       obj.ActionStatus = 1;
       this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length-1]=value.data;
@@ -299,6 +304,29 @@ export class MarketingContractsComponent implements OnInit {
     this.localloanobject.srccomponentedit = "MarketingContractComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+  }
+
+  getCropContract(cropCode : string, type : string){
+    if(this.localloanobject.LoanCropUnits && this.localloanobject.CropYield && this.localloanobject.Farms){
+        let totalCUAcres = _.sumBy(this.localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type), 'CU_Acres');
+        let totalCropYield = _.sumBy(this.localloanobject.CropYield.filter(cy=>cy.CropType === cropCode  && cy.IrNI === type), 'CropYield' );
+        let totalPerProd = _.sumBy(this.localloanobject.Farms, 'Percent_Prod')  || 1;
+        return totalCUAcres * totalCropYield * totalPerProd;
+    }else{
+      return 0;
+    }
+    
+  }
+
+
+  updateCalculation(mktContracts : Array<Loan_Marketing_Contract>){
+    mktContracts.forEach(contract => {
+      this.updateMktValueAndContractPer(contract);
+    });
+  }
+  private updateMktValueAndContractPer(contract: Loan_Marketing_Contract) {
+    contract.FC_Market_Value = contract.Price * contract.Quantity;
+    contract.FC_Contract_Percent = this.getCropContract(contract.Crop_Code, 'IRR') + this.getCropContract(contract.Crop_Code, 'NIR');
   }
 
   // DeleteClicked(rowIndex: any) {
