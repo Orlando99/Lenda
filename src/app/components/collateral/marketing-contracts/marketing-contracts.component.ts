@@ -15,7 +15,7 @@ import { currencyFormatter, discFormatter, insuredFormatter } from '../../../Wor
 import { JsonConvert } from 'json2typescript';
 import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import * as _ from 'lodash'
-import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -136,8 +136,14 @@ export class MarketingContractsComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right']},
-      { headerName: 'Contract %', field: 'FC_Contract_Percent',  width:130,   cellClass: ['text-right']},
+      { headerName: 'Mkt Value', field: 'FC_Market_Value',  width:130,   cellClass: ['text-right'],
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: 'Contract %', field: 'FC_Contract_Percent',  width:130,   cellClass: ['text-right'],
+      valueFormatter: function (params) {
+        return PercentageFormatter(params.value);
+      }}
         // { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
 
@@ -164,6 +170,7 @@ export class MarketingContractsComponent implements OnInit {
             
           }
           this.getgridheight();
+          this.gridApi.refreshCells();
           // this.adjustgrid();
         });
 
@@ -326,7 +333,14 @@ export class MarketingContractsComponent implements OnInit {
   }
   private updateMktValueAndContractPer(contract: Loan_Marketing_Contract) {
     contract.FC_Market_Value = contract.Price * contract.Quantity;
-    contract.FC_Contract_Percent = this.getCropContract(contract.Crop_Code, 'IRR') + this.getCropContract(contract.Crop_Code, 'NIR');
+    let supplyQuantity = this.getCropContract(contract.Crop_Code, 'IRR') + this.getCropContract(contract.Crop_Code, 'NIR');
+
+    if(supplyQuantity){
+      contract.FC_Contract_Percent = (contract.Quantity / supplyQuantity)*100;
+    }else{
+      contract.FC_Contract_Percent = 0;
+    }
+    
   }
 
   // DeleteClicked(rowIndex: any) {

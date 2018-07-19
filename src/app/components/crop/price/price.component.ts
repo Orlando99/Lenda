@@ -143,7 +143,7 @@ export class PriceComponent implements OnInit {
         this.rowData = this.localloanobject.LoanCrops !== null ? this.localloanobject.LoanCrops.filter(p => p.ActionStatus != 3):[];
       }
       this.getgridheight();
-      this.gridApi.refreshCells()
+      this.gridApi.refreshCells();
 
     })
     this.getdataforgrid();
