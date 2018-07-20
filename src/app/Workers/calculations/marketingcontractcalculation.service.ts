@@ -42,6 +42,8 @@ export class MarketingcontractcalculationService {
       let matchingMC  = localloanobject.LoanMarketingContracts.find(mc=>mc.Crop_Code == crop.Crop_Code && mc.ActionStatus != 3);
       if(matchingMC){
         crop.Percent_booked = matchingMC.Contract_Per;
+        crop.Marketing_Adj = (crop.Contract_Price - (crop.Basic_Adj + crop.Crop_Price))*(crop.Percent_booked/100);
+        crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + crop.Marketing_Adj + crop.Rebate_Adj;
       }else{
         crop.Percent_booked = 0;
       }
