@@ -53,7 +53,7 @@ export class YieldComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '240px',
+    height: '180px',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; }; };
@@ -97,7 +97,7 @@ export class YieldComponent implements OnInit {
     };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",width:140,
+        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
@@ -154,7 +154,9 @@ export class YieldComponent implements OnInit {
         this.gridApi.refreshCells();
       }
       this.getgridheight();
+      this.gridApi.refreshCells();
     });
+    
     this.getdataforgrid();
   }
 
@@ -425,22 +427,24 @@ export class YieldComponent implements OnInit {
         this.localloanobject.CropYield.push(newItem);
         this.gridApi.setRowData(this.rowData);
 
-        this.getgridheight();
+        //this.getgridheight();
         }
     });
 
   }
 
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 1)+9).toString() + "px";
+  getgridheight(){
+    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
 
   onGridSizeChanged(Event: any) {
+
     try{
     this.gridApi.sizeColumnsToFit();
-    }
-    catch{
-    }
+  }
+  catch{
+
+  }
   }
 
   updateSyncStatus(){
