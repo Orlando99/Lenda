@@ -190,7 +190,7 @@ export class FarmsInfoComponent implements OnInit {
 
   }
   syncenabled() {
-    debugger
+     
     if(this.rowData.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
     return 'disabled';
     else

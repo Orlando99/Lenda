@@ -167,7 +167,7 @@ export class LoanbudgetComponent implements OnInit {
   };
 
   bindData(localLoanObject: loan_model) {
-    debugger
+     
     let lstLoanBudget = localLoanObject.LoanBudget;
     // if (localLoanObject.srccomponentedit === "LoanBudgetComponent"+this.cropPractice.Crop_Practice_ID) {
     //   //if the same table invoked the change .. change only the edited row

@@ -12,7 +12,6 @@ export class Loan_Crop_Unit
     Farm_ID: number=0;
     @JsonProperty("Loan_Full_ID", StringConverter,false)
     Loan_Full_ID: string='';
-    
     @JsonProperty("CU_Acres", IntConverter,false)
     CU_Acres: number=0;
     @JsonProperty("CU_APH", IntConverter,false)
@@ -25,7 +24,6 @@ export class Loan_Crop_Unit
     Crop_Practice_Type_Code: string="";
     @JsonProperty("Crop_Practice_ID", IntConverter,false)
     Crop_Practice_ID: number=0;
-    
     @JsonProperty("Z_Price", IntConverter,false)
     Z_Price: number=0;
     @JsonProperty("Z_Basis_Adj", IntConverter,false)
@@ -44,7 +42,44 @@ export class Loan_Crop_Unit
     Ins_APH: number=0;
     @JsonProperty("ActionStatus", IntConverter,false)
     ActionStatus: number=0;
-    FC_Revenue: number=0;
+     // New Properties
+     @JsonProperty("Ins_Value", IntConverter,false)
+     Ins_Value: number=0;
+     @JsonProperty("Disc_Ins_value", IntConverter)
+     Disc_Ins_value: number=0;
+     @JsonProperty("Mkt_Value", IntConverter)
+     Mkt_Value: number=0;
+     @JsonProperty("Disc_Mkt_Value", IntConverter,)
+     Disc_Mkt_Value: number=0;
+     @JsonProperty("CEI_Value", IntConverter)
+     CEI_Value: number=0;
+     @JsonProperty("Disc_CEI_Value", IntConverter)
+     Disc_CEI_Value: number=0;
+     // FC Values
+     FC_CountyID:number;
+     FC_FSN:string
+     FC_Section:string
+     FC_Rating:string;
+     Ins_APH:number;
+     FC_Ins_Unit:string;
+     FC_Ins_Policy_ID:number
+     FC_CropYield:number;
+     FC_Primary_limit:number;
+     FC_Stax:number;
+     FC_SCO:number;
+     FC_Revenue: number=0;
+     FC_Insurance_Share:number=0;
+     FC_ModifiedAPH:number=0;
+     FC_MPCIvalue:number=0;
+     FC_Disc_MPCI_value:number=0;
+     FC_Hmaxvalue:number=0;
+     FC_Disc_Hmaxvalue:number=0;
+     FC_Staxvalue:number=0;
+     FC_Disc_Staxvalue:number=0;
+     FC_Scovalue:number=0;
+     FC_Disc_Scovalue:number=0;
+     FC_Level1Perc:number=undefined;
+
 }
 
 export class Loan_Crop_Unit_FC{

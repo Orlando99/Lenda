@@ -4,6 +4,7 @@ import { observeOn } from 'rxjs/operators';
 import { environment } from '../../../environments/environment.prod';
 import { loan_model } from '../../models/loanmodel';
 import { Borrowercalculationworker } from './borrowercalculationworker.service';
+import { Borrowerincomehistoryworker } from './borrowerincomehistoryworker.service';
 import { LoggingService } from '../../services/Logs/logging.service';
 import { LoancropunitcalculationworkerService } from './loancropunitcalculationworker.service';
 import { LoancrophistoryService } from './loancrophistory.service';
@@ -27,6 +28,7 @@ export class LoancalculationWorker {
   constructor(
     private localst: LocalStorageService,
     private borrowerworker: Borrowercalculationworker,
+    private borrowerincomehistory: Borrowerincomehistoryworker,
     private loancropunitworker: LoancropunitcalculationworkerService,
     private loancrophistoryworker: LoancrophistoryService,
     private farmcalculation: FarmcalculationworkerService,
@@ -112,8 +114,10 @@ export class LoancalculationWorker {
         localloanobj = this.loancroppracticeworker.performcalculations(localloanobj);
       }
       if (localloanobj.LoanCropUnits)
+      {
         localloanobj = this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
-
+        localloanobj=this.loancropunitworker.fillFCValuesforCropunits(localloanobj);
+      }
       //STEP 3 --- FARM CALCULATIONS
       if (localloanobj.Farms != null)
         localloanobj = this.farmcalculation.prepareLoanfarmmodel(localloanobj);
@@ -135,6 +139,7 @@ export class LoancalculationWorker {
           }
         }
         // propogations to Loan master table 
+        
         localloanobj.LoanMaster[0].ARM_Commitment=_.sumBy(localloanobj.LoanBudget,'ARM_Budget_Crop');
         localloanobj.LoanMaster[0].Dist_Commitment=_.sumBy(localloanobj.LoanBudget,'Distributor_Budget_Crop');
         localloanobj.LoanMaster[0].Third_Party_Credit=_.sumBy(localloanobj.LoanBudget,'Third_Party_Budget_Crop');
@@ -172,7 +177,7 @@ export class LoancalculationWorker {
 
         //TODO-SANKET : should be remove
         // localloanobj =  this.budgetService.caculateTotalsBeforeStore(localloanobj);
-        // debugger;
+        //  ;
         //REMOVE ENDS
       if (localloanobj.LoanCropUnits != null && localloanobj.LoanCropPractices != null) {
         localloanobj = this.optimizercaluclations.performcalculations(localloanobj);
@@ -180,7 +185,7 @@ export class LoancalculationWorker {
 
       //TODO-SANKET : should be remove
       // localloanobj =  this.budgetService.caculateTotalsBeforeStore(localloanobj);
-      // debugger;
+      //  ;
       //REMOVE ENDS
 
       //   if(!localloanobj.LoanCropPractices || localloanobj.LoanCropPractices.length ===0){

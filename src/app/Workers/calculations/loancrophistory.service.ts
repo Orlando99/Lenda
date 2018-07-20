@@ -16,7 +16,7 @@ export class LoancrophistoryService {
     // }
   }
   prepare_Crop_Yield() {
-    //debugger
+    // 
     for (let i = 0; i < this.input.CropYield.length; i++) {
   
       let cropyielditems = [];

@@ -63,6 +63,7 @@ import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from './components/loan-overview/loan-overview.component';
 import { FinancialsComponent } from './components/summary/financials/financials.component';
 import { Borrowercalculationworker } from './Workers/calculations/borrowercalculationworker.service';
+import { Borrowerincomehistoryworker } from './Workers/calculations/borrowerincomehistoryworker.service';
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
@@ -174,6 +175,8 @@ import { CollateralReportComponent } from './components/work-in-progress/collate
 import { MarketingcontractcalculationService } from './Workers/calculations/marketingcontractcalculation.service';
 import { OptimizercalculationService } from './Workers/calculations/optimizercalculationservice.service';
 import { AphComponent } from './components/insurance/aph/aph.component';
+import { CropunitrecordsComponent } from './components/work-in-progress/cropunitrecords/cropunitrecords.component';
+
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -250,7 +253,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MarketingContractsComponent,
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
-    AphComponent
+    AphComponent,
+    CropunitrecordsComponent
   ],
   imports: [
     BrowserModule,
@@ -341,6 +345,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoanApiService,
     ApiService,
     Borrowercalculationworker,
+    Borrowerincomehistoryworker,
     Collateralcalculationworker,
     LoancalculationWorker,
     LoanMasterCalculationWorkerService,

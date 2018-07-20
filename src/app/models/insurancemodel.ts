@@ -37,6 +37,7 @@ export class Insurance_Policy
     @JsonProperty("Level", IntConverter)
     Level:number=undefined;
     
+   
     @JsonProperty("Price", IntConverter)
     Price:number=undefined;
     

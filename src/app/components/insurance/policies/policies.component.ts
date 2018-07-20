@@ -452,7 +452,7 @@ export class PoliciesComponent implements OnInit {
     
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-      debugger
+       
       var items = $event.data.SecInsurance.toString().split(",");
       items.forEach(element => {
         if (this.columnDefs.find(p => p.headerName.split('_')[0] == element) == undefined) {
@@ -492,7 +492,7 @@ export class PoliciesComponent implements OnInit {
         }
       
       });
-      debugger
+       
       let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
       mainobj.Subpolicies.forEach(eelement => {
         if(items.find(p=>p==eelement.Ins_Type)==undefined){

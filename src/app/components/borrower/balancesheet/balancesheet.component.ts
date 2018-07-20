@@ -94,7 +94,7 @@ export class BalancesheetComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor() };
   }
   updaterownode(index,data){
-    debugger
+     
     var rowNode = this.gridApi.getRowNode(index);
     Object.keys(data).forEach(element => {
       rowNode.setDataValue(element, data[element]);
@@ -107,7 +107,7 @@ export class BalancesheetComponent implements OnInit {
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       let rows = this.prepareviewmodel();
-      debugger
+       
       switch (this.localloanobject.srccomponentedit) {
         case 'Balancesheet-Current':
           this.updaterownode(0,rows[0]);
@@ -173,7 +173,7 @@ export class BalancesheetComponent implements OnInit {
   //Aggrid Data Preperation
   prepareviewmodel() {
     //prepare three rows here
-    debugger
+     
       let rows = [];
       if(this.localloanobject.LoanMaster){
         let loanMaster = this.localloanobject.LoanMaster[0];
@@ -242,7 +242,7 @@ export class BalancesheetComponent implements OnInit {
 
   
  syncenabled() {
-  debugger
+  
   if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
   return 'disabled';
   else

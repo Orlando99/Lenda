@@ -8,14 +8,14 @@ export class OptimizercalculationService {
 
   performcalculations(input: loan_model) {
     try{
-    debugger
+     
     let distinctcrops = _.uniqBy(input.LoanCropUnits, 'Crop_Practice_ID');
     distinctcrops.forEach(element => {
       input.LoanCropPractices.find(p => p.Crop_Practice_ID == element.Crop_Practice_ID).LCP_Acres =
         _.sumBy(input.LoanCropUnits.filter(p => p.Crop_Practice_ID == element.Crop_Practice_ID), function (o) { return o.CU_Acres; });
         input.LoanCropPractices.find(p => p.Crop_Practice_ID == element.Crop_Practice_ID).ActionStatus=2;
     });
-    debugger
+     
      }
      catch{
        
