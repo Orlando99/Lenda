@@ -17,6 +17,7 @@ import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcounty
 import * as _ from 'lodash';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -53,7 +54,7 @@ export class MarketingContractsComponent implements OnInit {
     public loanapi:LoanApiService,
     private marketingContractService : MarketingcontractcalculationService){
 
-      this.components = { numericCellEditor: getNumericCellEditor()};
+      this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
@@ -98,7 +99,7 @@ export class MarketingContractsComponent implements OnInit {
         },
         width : 100
       },
-      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:70},
+      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:70, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
       { headerName: 'Buyer', field: 'Assoc_ID',   cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: this.getBuyersValue.bind(this),
         valueFormatter:  (params) => {

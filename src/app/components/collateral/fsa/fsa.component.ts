@@ -15,6 +15,7 @@ import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 
 @Component({
   selector: 'app-fsa',
@@ -52,16 +53,16 @@ export class FSAComponent implements OnInit {
     public loanapi: LoanApiService) {
 
 
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
     this.columnDefs = [
       { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
-      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120,cellClass: 'editable-color'},
+      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color']},
       { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'] },
       { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color','text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130,cellClass: 'editable-color'},
+      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130,cellClass: 'editable-color', cellEditor: "alphaNumeric"},
       {
         headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter
         // valueGetter: function (params) {
@@ -101,7 +102,7 @@ export class FSAComponent implements OnInit {
       } else {
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
+        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !==3  }) : [];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -119,7 +120,7 @@ export class FSAComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !=3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
@@ -147,6 +148,7 @@ export class FSAComponent implements OnInit {
   }
 
   syncenabled() {
+    console.log(this.rowData);
     return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
   }
 
@@ -211,12 +213,11 @@ export class FSAComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
-    
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = this.rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);+
+          this.rowData.splice(rowIndex, 1);
           this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
         } else {
           this.deleteAction = true;
