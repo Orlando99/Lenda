@@ -97,11 +97,11 @@ export class FSAComponent implements OnInit {
       if (res.srccomponentedit == "FSAComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  })[res.lasteditrowindex];
+        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  && lc.ActionStatus !==3   })[res.lasteditrowindex];
       } else {
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
+        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"   && lc.ActionStatus !==3  }) : [];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -118,7 +118,7 @@ export class FSAComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  }) : [];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"   && lc.ActionStatus !==3  }) : [];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
