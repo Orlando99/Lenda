@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { LocalStorageService } from 'ngx-webstorage';
+
+import { environment } from '../../../../../environments/environment';
 import { chartSettings } from './../../../../chart-settings';
 import 'chart.piecelabel.js';
 
@@ -13,8 +16,8 @@ export class CashFlowComponent implements OnInit {
 
   // Doughnut
   // TODO: Replace this data with live API
-  public doughnutChartLabels: string[] = ['Seed', 'Cash Rent', 'Fertilizer', 'Herbicide', 'Harvesting', 'Fuel', 'Insecticide', 'Custom', 'Labor', 'Repairs'];
-  public doughnutChartData: number[] = [5, 10, 15, 8, 2, 14, 16, 17, 8, 15];
+  public doughnutChartLabels: string[] = [];
+  public doughnutChartData: number[] = [];
 
   public doughnutChartType: string = 'doughnut';
   public chartColors: any[] = [
@@ -38,8 +41,24 @@ export class CashFlowComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit() {
+    this.getLoanBudgetFromLocalStorage();
+  }
+
+  getLoanBudgetFromLocalStorage() {
+    let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
+    let index = 0;
+    for (let budget of loanBudgets.LoanBudget) {
+      this.doughnutChartLabels.push(budget.Loan_Budget_ID);
+      this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
+      index ++;
+      if (index > 15) {
+        break;
+      }
+    }
   }
 }
