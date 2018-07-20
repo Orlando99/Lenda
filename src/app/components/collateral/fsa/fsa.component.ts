@@ -64,7 +64,7 @@ export class FSAComponent implements OnInit {
       { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color','text-right'] },
       { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130,cellClass: 'editable-color', cellEditor: "alphaNumeric"},
       {
-        headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter
+        headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
         // valueGetter: function (params) {
         //   return setNetMktValue(params);}
       },
@@ -73,7 +73,7 @@ export class FSAComponent implements OnInit {
         pinnedRowCellRenderer: function () { return '-'; }
       },
       {
-        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", 
+        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
         // valueGetter: function (params) {
         //   return setDiscValue(params);
         // },
