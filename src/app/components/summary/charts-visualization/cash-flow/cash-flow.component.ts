@@ -18,11 +18,13 @@ export class CashFlowComponent implements OnInit {
   // TODO: Replace this data with live API
   public doughnutChartLabels: string[] = [];
   public doughnutChartData: number[] = [];
+  public generatedColors: string[] = [];
 
   public doughnutChartType: string = 'doughnut';
   public chartColors: any[] = [
     {
-      backgroundColor: chartSettings.doughnut.backgroundColors
+      backgroundColor: this.generatedColors
+      // chartSettings.doughnut.backgroundColors
     }];
 
   public chartOptions: any = {
@@ -56,11 +58,15 @@ export class CashFlowComponent implements OnInit {
       if (budget.Total_Budget_Crop_ET !== 0) {
         this.doughnutChartLabels.push(budget.Loan_Budget_ID);
         this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
+        this.generatedColors.push(this.dynamicColors());
       }
-      // index ++;
-      // if (index > 15) {
-      //   break;
-      // }
     }
+  }
+
+  dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgba(" + r + "," + g + "," + b + ", 0.85)";
   }
 }
