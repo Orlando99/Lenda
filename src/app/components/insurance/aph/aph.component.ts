@@ -112,7 +112,7 @@ export class AphComponent implements OnInit {
 
   syncenabled(){
     if(this.localloanobject && this.localloanobject.LoanCropUnits.length>0){
-      return this.localloanobject.LoanMarketingContracts.filter(p=>p.ActionStatus).length>0;
+      return this.localloanobject.LoanCropUnits.filter(p=>p.ActionStatus).length>0;
     }else{
       return false;
     }
