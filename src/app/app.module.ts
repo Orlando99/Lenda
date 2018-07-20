@@ -174,6 +174,7 @@ import { MarketingContractsComponent } from './components/collateral/marketing-c
 import { CollateralReportComponent } from './components/work-in-progress/collateral-report/collateral-report.component';
 import { MarketingcontractcalculationService } from './Workers/calculations/marketingcontractcalculation.service';
 import { OptimizercalculationService } from './Workers/calculations/optimizercalculationservice.service';
+import { AphComponent } from './components/insurance/aph/aph.component';
 import { CropunitrecordsComponent } from './components/work-in-progress/cropunitrecords/cropunitrecords.component';
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -252,6 +253,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MarketingContractsComponent,
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
+    AphComponent,
     CropunitrecordsComponent
   ],
   imports: [
