@@ -32,7 +32,7 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: string) {
-    debugger
+     
     this.localstorageservice.store(environment.loanidkey,id)
     this.route.navigateByUrl("/home/loanoverview/"+id.replace("-","/")+"/summary");
   }

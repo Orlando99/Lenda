@@ -58,7 +58,7 @@ export class ChipsListEditor implements ICellEditorAngularComp {
   }
 
     agInit(params: any): void {
-      debugger
+       
         this.params = params;
         this.context=this.params.context.componentParent;
         this.dropdownList=params.items;
@@ -72,7 +72,7 @@ export class ChipsListEditor implements ICellEditorAngularComp {
     }
 
     getValue(): any {
-      debugger
+       
        return this.selectedItems.map(p=>p.itemName).join(",");
     }
 

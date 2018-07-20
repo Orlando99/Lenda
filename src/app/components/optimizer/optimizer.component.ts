@@ -176,7 +176,7 @@ export class OptimizerComponent implements OnInit {
     };
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
-      // debugger
+      //  
       if(res!=null && res.srccomponentedit!=undefined && res.srccomponentedit!="optimizercomponent")
       {
       this.loanmodel = res;
@@ -237,7 +237,7 @@ export class OptimizerComponent implements OnInit {
       //NIR
       this.loanmodel.Farms.forEach(farm => {
         //get distinct crops for the farm
-debugger
+ 
         let distinctrows = this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farm.Farm_ID && p.Crop_Practice_Type_Code == "NIR");
         distinctrows.forEach(crop => {
           let row: any = {};
@@ -273,7 +273,7 @@ debugger
   }
 
   synctoDb() {
-    debugger
+     
     this.loading=true;
     this.loanapi.syncloanobject(this.loanmodel).subscribe(res=>{
       if(res.ResCode==1){
@@ -298,7 +298,7 @@ debugger
   }
 
   rowvaluechanged($event) {
-    debugger
+     
     let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
     if(oldvalue!=$event.value){
       this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).CU_Acres =parseInt($event.value);

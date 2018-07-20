@@ -18,11 +18,11 @@ export class FarmFinancialComponent implements OnInit {
     private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
 
   ngOnInit() {
-    debugger
+     
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       if(res!=null)
       {
-        debugger
+         
           this.localloanobj = res;
          this.binddata(this.localloanobj);
       }
