@@ -122,7 +122,7 @@ export class MarketingContractsComponent implements OnInit {
     
     },
       { headerName: 'Contract', field: 'Contract',  editable: true, width:100},
-      { headerName: 'Description', field: 'Description_Text',  editable: true, width:100},
+      { headerName: 'Description', field: 'Description_Text',  editable: true, width:100, cellClass: ['editable-color']},
       { headerName: 'Quantity', field: 'Quantity',editable: true,  cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
       valueSetter: numberValueSetter,
       valueFormatter: function (params) {
