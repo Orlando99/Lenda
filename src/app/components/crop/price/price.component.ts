@@ -232,6 +232,8 @@ export class PriceComponent implements OnInit {
     if(marketingContracts){
       obj.Contract_Price = marketingContracts.Price || 0; //
       obj.Contract_Qty = marketingContracts.Quantity || 0;
+
+      //the same caclulation is in marketing calculation service, which should be shisted to common place
       obj.Marketing_Adj = (obj.Contract_Price - (obj.Basic_Adj + obj.Crop_Price))*(obj.Percent_booked/100);
       obj.Adj_Price = obj.Crop_Price + obj.Basic_Adj + obj.Marketing_Adj + obj.Rebate_Adj;
       
