@@ -53,12 +53,14 @@ export class CashFlowComponent implements OnInit {
     let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
     let index = 0;
     for (let budget of loanBudgets.LoanBudget) {
-      this.doughnutChartLabels.push(budget.Loan_Budget_ID);
-      this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
-      index ++;
-      if (index > 15) {
-        break;
+      if (budget.Total_Budget_Crop_ET !== 0) {
+        this.doughnutChartLabels.push(budget.Loan_Budget_ID);
+        this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
       }
+      // index ++;
+      // if (index > 15) {
+      //   break;
+      // }
     }
   }
 }
