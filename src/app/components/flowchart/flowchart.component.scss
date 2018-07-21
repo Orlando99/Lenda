@@ -19,6 +19,21 @@
       width: 20px;
       height: 20px;
     }
+
+    .header {
+      fill-rule: evenodd;
+      clip-rule: evenodd;
+      fill: $primary-color;
+      stroke: #eee;
+      stroke-width: 1;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10;
+    }
+
+    .header-text {
+      fill: #fff;
+      font-size: $font-size-sm;
+    }
 }
 
 .st0 {
