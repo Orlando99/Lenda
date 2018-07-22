@@ -180,21 +180,6 @@ export class FSAComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    // var obj = value.data;
-    // if (obj.Collateral_ID == 0) {
-    //   obj.ActionStatus = 1;
-    //   this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
-    // }
-    // else {
-    //   var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
-    //   if (obj.ActionStatus != 1)
-    //     obj.ActionStatus = 2;
-    //   this.localloanobject.LoanCollateral[rowindex] = obj;
-    // }
-    // //this shall have the last edit
-    // this.localloanobject.srccomponentedit = "FSAComponent";
-    // this.localloanobject.lasteditrowindex = value.rowIndex;
-    // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
     this.collateralService.rowvaluechanged(value, this.localloanobject, "FSAComponent");
   }
 
