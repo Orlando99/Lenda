@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.prod';
 import { versions } from '../../versions';
 import { ReferenceService } from '../../services/reference/reference.service';
 

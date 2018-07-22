@@ -30,7 +30,6 @@ export class LoanOverviewComponent implements OnInit {
 
     let temp = this.route.params.subscribe(params => {
       // Defaults to 0 if no query param provided.
-
       this.loanid = (params["loan"].toString())+"-"+ (params["seq"]);
       let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
       if(this.loanid!=currentloanid)
@@ -41,8 +40,7 @@ export class LoanOverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getLoanBasicDetails();
-
+    // this.getLoanBasicDetails();
     let obj = this.localstorageservice.retrieve(environment.loankey);
     if ((obj == null || obj == undefined))
       this.getLoanBasicDetails();
@@ -68,7 +66,7 @@ export class LoanOverviewComponent implements OnInit {
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also
           this.localstorageservice.store(environment.loankey_copy, res.Data);
-
+         
         }
         else {
           this.toaster.error("Could not fetch Loan Object from API")

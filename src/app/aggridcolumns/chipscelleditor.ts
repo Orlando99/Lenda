@@ -9,9 +9,9 @@ import { startWith, map } from "rxjs/operators";
 @Component({
     selector: 'chipseditor-cell',
     template: `
-    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems"
-    [settings]="dropdownSettings"
-    (onSelect)="onItemSelect($event)"
+    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" 
+    [settings]="dropdownSettings" 
+    (onSelect)="onItemSelect($event)" 
     (onDeSelect)="OnItemDeSelect($event)"
     (onSelectAll)="onSelectAll($event)"
     (onDeSelectAll)="onDeSelectAll($event)">
@@ -32,32 +32,33 @@ export class ChipsListEditor implements ICellEditorAngularComp {
       //                     ];
       // this.selectedItems = [
       //                     ];
-      this.dropdownSettings = {
-                                singleSelection: false,
+      this.dropdownSettings = { 
+                                singleSelection: false, 
                                 text:"Select Options",
                                 selectAllText:'Select All',
                                 unSelectAllText:'UnSelect All',
                                 enableSearchFilter: true,
                                 classes:"myclass custom-class"
-                              };
+                              };            
   }
   onItemSelect(item:any){
-      this.context.chipitemsselected(this.selectedItems);
+    //   this.context.chipitemsselected(this.selectedItems);
   }
   OnItemDeSelect(item:any){
       console.log(item);
-      this.context.chipitemsselected(this.selectedItems);
+     // this.context.chipitemsselected(this.selectedItems);
   }
   onSelectAll(items: any){
       console.log(items);
-      this.context.chipitemsselected(this.selectedItems);
+      //this.context.chipitemsselected(this.selectedItems);
   }
   onDeSelectAll(items: any){
       console.log(items);
-      this.context.chipitemsselected(this.selectedItems);
+      //this.context.chipitemsselected(this.selectedItems);
   }
 
     agInit(params: any): void {
+       
         this.params = params;
         this.context=this.params.context.componentParent;
         this.dropdownList=params.items;
@@ -71,6 +72,7 @@ export class ChipsListEditor implements ICellEditorAngularComp {
     }
 
     getValue(): any {
+       
        return this.selectedItems.map(p=>p.itemName).join(",");
     }
 

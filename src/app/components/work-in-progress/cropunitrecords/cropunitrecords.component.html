@@ -1,0 +1,29 @@
+<div class="content-section">
+
+  <table>
+    <tr>
+      <th>CropUnit ID</th>
+      <th>CEI_Value</th>
+      <th>Ins_Value</th>
+      <th>Mkt_Value</th>
+      <th>MPCI Value</th>
+      <th>HMAX Value</th>
+      <th>Stax Value</th>
+      <th>Sco Value</th>
+    </tr>
+    <tr *ngFor="let record of records">
+      <td>{{record.Loan_CU_ID}}</td>
+      <td>{{record.CEI_Value}}</td>
+      <td>{{record.Ins_Value}}</td>
+      <td>{{record.Mkt_Value}}</td>
+
+      <td>{{record.FC_MPCIvalue}}</td>
+      <td>{{record.FC_Hmaxvalue}}</td>
+      <td>{{record.FC_Staxvalue}}</td>
+      <td>{{record.FC_Scovalue}}</td>
+    </tr>
+    
+    
+  </table>
+
+</div>

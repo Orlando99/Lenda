@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { borrower_model } from '../../models/loanmodel';
+import { borrower_model, borrower_income_history_model, loan_model } from '../../models/loanmodel';
 import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class Borrowercalculationworker {
   private input: borrower_model
+  private input2: Array<borrower_income_history_model>
   constructor(public logging: LoggingService) { }
 
   preparetotalassets() {
@@ -58,6 +59,28 @@ export class Borrowercalculationworker {
     catch{
       return input;
     }
+  }
+
+
+  prepareborrowerincomehistorymodel(input2: loan_model): loan_model {
+  
+    try {
+      let starttime = new Date().getTime();
+      for (let i = 0; i < input2.BorrowerIncomeHistory.length; i++) {
+          this.prepare_fc_borrower_income(input2.BorrowerIncomeHistory[i]);
+      }
+
+      let endtime = new Date().getTime();
+      this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      return input2;
+    } catch{
+      return input2;
+    }
+  }
+
+
+  prepare_fc_borrower_income(params){
+    params.FC_Borrower_Income = params.Borrower_Revenue - params.Borrower_Expense;
   }
 
 

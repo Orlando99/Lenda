@@ -14,8 +14,14 @@ import { numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes'
 import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
-import { Insurance_Policy } from '../../../models/insurancemodel';
+import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
 import { debug } from 'util';
+import { status } from '../../../models/syncstatusmodel';
+import { JsonConvert } from '../../../../../node_modules/json2typescript';
+import { ToastsManager } from '../../../../../node_modules/ng2-toastr';
+import { LoggingService } from '../../../services/Logs/logging.service';
+import { AlertifyService } from '../../../alertify/alertify.service';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
 
 @Component({
   selector: 'app-policies',
@@ -23,8 +29,8 @@ import { debug } from 'util';
   styleUrls: ['./policies.component.scss']
 })
 export class PoliciesComponent implements OnInit {
-
-
+  public syncInsuranceStatus: status;
+ 
 
   deleteunwantedcolumn(): any {
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
@@ -36,11 +42,14 @@ export class PoliciesComponent implements OnInit {
         }
       });
       if (!included) {
-        // let indexofcolumn= this.columnDefs.findIndex(p=>p.headerName.includes(element))
-        // this.columnDefs.splice(indexofcolumn,1);
-        //Delete insurance Value Columns
         _.remove(this.columnDefs, p => p.headerName.includes(element))
-
+        this.loanmodel.InsurancePolicies.forEach(function(newel){
+          
+         _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
+         newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
+           element.ActionStatus=3;
+         });
+        })
       }
     });
 
@@ -54,19 +63,27 @@ export class PoliciesComponent implements OnInit {
 
   }
 
-  declarecoldefs(){
-    this.columnDefs=[];
+  declarecoldefs() {
+    this.defaultColDef = {
+      cellClassRules: {
+        "edited-color": function(params){
+           return params.data.ActionStatus==2;
+             
+        }
+      }
+    };
+    this.columnDefs = [];
     this.columnDefs = [
       {
         headerName: 'Agent', field: 'Agent_Id', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
         valueFormatter: function (params) {
-          try{
-         return (params.context.componentParent.loanmodel as loan_model).Association.find(p=>p.Assoc_ID==params.value).Assoc_Name;
-        }
-        catch{
-          return "Select";
-        }
+          try {
+            return (params.context.componentParent.loanmodel as loan_model).Association.find(p => p.Assoc_ID == params.value).Assoc_Name;
+          }
+          catch{
+            return "Select";
+          }
         }
 
       },
@@ -143,6 +160,7 @@ export class PoliciesComponent implements OnInit {
       }
 
     ];
+  
   }
   addNumericColumn(element: string) {
 
@@ -150,7 +168,7 @@ export class PoliciesComponent implements OnInit {
       headerName: element, field: element, editable: true,
       cellEditorSelector: function (params) {
         let pos = params.colDef.headerName.lastIndexOf("_") + 1;
-       let policyname= params.colDef.headerName.substr(pos, params.colDef.headerName.length - pos)
+        let policyname = params.colDef.headerName.substr(pos, params.colDef.headerName.length - pos)
         if (policyname.length > 0) {
           if (params.data.SecInsurance.includes(policyname)) {
             return {
@@ -166,9 +184,9 @@ export class PoliciesComponent implements OnInit {
 
       },
       cellClass: function (params) {
-
+        
         let pos = params.colDef.headerName.lastIndexOf("_") + 1;
-       let policyname= params.colDef.headerName.substr(pos, params.colDef.headerName.length - pos)
+        let policyname = params.colDef.headerName.substr(pos, params.colDef.headerName.length - pos)
         if (policyname.length > 0) {
           if (!params.data.SecInsurance.includes(policyname)) {
             return 'grayedcell';
@@ -205,8 +223,8 @@ export class PoliciesComponent implements OnInit {
     }
 
     rendervalues.forEach(element => {
-      if(this.columnDefs.find(p=>p.headerName==element)==undefined)
-      this.addNumericColumn(element);
+      if (this.columnDefs.find(p => p.headerName == element) == undefined)
+        this.addNumericColumn(element);
     });
 
     return rendervalues;
@@ -250,13 +268,13 @@ export class PoliciesComponent implements OnInit {
     return { values: ['ADM', 'AFBIS', 'ARMTECH'] };
   }
   getAgents(): any {
-
+    
     let ret = this.loanobj.Association.filter(p=>p.ActionStatus!=3 && p.Assoc_Type_Code=="AGT");
     let obj: any[] = [];
-    ret.forEach((element:any) => {
-      obj.push({key:element.Assoc_ID,value:element.Assoc_Name.toString()});
+    ret.forEach((element: any) => {
+      obj.push({ key: element.Assoc_ID, value: element.Assoc_Name.toString() });
     });
-    return { values:obj};
+    return { values: obj };
   }
 
   //Properties
@@ -271,9 +289,7 @@ export class PoliciesComponent implements OnInit {
   public paginationPageSize;
   public paginationNumberFormatter;
 
-  defaultColDef = {
-
-  };
+  public defaultColDef ={};
   style = {
     marginTop: '10px',
     width: '93%',
@@ -282,11 +298,15 @@ export class PoliciesComponent implements OnInit {
   };
   public loanmodel: loan_model=null;
 
-  gridOptions: GridOptions;
+  public gridOptions=[];
   columnDefs: any[];
   constructor(
     private localstorage: LocalStorageService,
-    private loancalculationservice: LoancalculationWorker
+    private loancalculationservice: LoancalculationWorker,
+    private toaster: ToastsManager,
+              public logging: LoggingService,
+              public alertify: AlertifyService,
+              public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, numericCellEditor: NumericEditor, emptyeditor: EmptyEditor };
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
@@ -302,10 +322,11 @@ export class PoliciesComponent implements OnInit {
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
       if(res!=null){
+        
       this.loanmodel = res;
       this.declarecoldefs();
       this.getgriddata();
-    }
+      }
     })
   }
 
@@ -313,22 +334,23 @@ export class PoliciesComponent implements OnInit {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     if(this.loanmodel!=null && this.loanmodel!=undefined) //if the data is still in calculation mode and components loads before it
     {
-
+      
     this.declarecoldefs();
     this.getgriddata();
    }
+   
   }
 
   //Crops Functions
-  getcropnamebyVcropid(id:number){
-     let cropname=this.refdata.CropList.find(p=>p.Crop_And_Practice_ID==id).Crop_Name;
-     return cropname;
+  getcropnamebyVcropid(id: number) {
+    let cropname = this.refdata.CropList.find(p => p.Crop_And_Practice_ID == id).Crop_Name;
+    return cropname;
   }
 
-  getcroppracticebyVcropid(id:number){
-    let croppractice=this.refdata.CropList.find(p=>p.Crop_And_Practice_ID==id).Practice_type_code;
+  getcroppracticebyVcropid(id: number) {
+    let croppractice = this.refdata.CropList.find(p => p.Crop_And_Practice_ID == id).Practice_type_code;
     return croppractice;
- }
+  }
   //
   //
   //Grid Functions completed
@@ -337,28 +359,28 @@ export class PoliciesComponent implements OnInit {
     this.rowData = [];
 
     if (this.loanmodel != null) {
-     let insurancepolicies=this.loanmodel.InsurancePolicies;
-     insurancepolicies.forEach(item => {
+      let insurancepolicies = this.loanmodel.InsurancePolicies;
+      insurancepolicies.forEach(item => {
 
-          let row: any = {};
-          row.mainpolicyId = item.Policy_id;
-          row.Agent_Id = item.Agent_Id;
-          row.ProposedAIP = item.ProposedAIP;
-          row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
-          row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
-          row.Practice = this.getcroppracticebyVcropid(item.Crop_Practice_Id);
-          row.MPCI_Subplan = item.MPCI_Subplan;
-          row.SecInsurance = item.Subpolicies.map(p=>p.Ins_Type).join(',');
-          row.Unit = item.Unit;
-          row.Level = item.Level;
-          row.Price = item.Price;
-          row.Premium = item.Premium;
-          item.Subpolicies.forEach(policy => {
+        let row: any = {};
+        row.mainpolicyId = item.Policy_id;
+        row.Agent_Id = item.Agent_Id;
+        row.ProposedAIP = item.ProposedAIP;
+        row.ActionStatus=item.ActionStatus;
+        row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
+        row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
+        row.Practice = this.getcroppracticebyVcropid(item.Crop_Practice_Id);
+        row.MPCI_Subplan = item.MPCI_Subplan;
+        row.SecInsurance = _.uniqBy(item.Subpolicies.filter(p=>p.ActionStatus!=3),"Ins_Type").map(p => p.Ins_Type).join(',');
+        row.Unit = item.Unit;
+        row.Level = item.Level;
+        row.Price = item.Price;
+        row.Premium = item.Premium;
+        item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
 
-            var newsubcol=policy.Ins_Type.toString() + "_Subtype";
-            row[policy.Ins_Type.toString() + "_st"]=policy.Ins_SubType;
-            if(this.columnDefs.find(p=>p.headerName==newsubcol)==undefined)
-            {
+          var newsubcol = policy.Ins_Type.toString() + "_Subtype";
+          row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
+          if (this.columnDefs.find(p => p.headerName == newsubcol) == undefined) {
             this.columnDefs.push({
               headerName: newsubcol, field: policy.Ins_Type + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(policy.Ins_Type),
               cellEditorSelector: function (params) {
@@ -382,35 +404,40 @@ export class PoliciesComponent implements OnInit {
                 }
               }
             })
-            }
-           let renderedvalues =this.ShowHideColumnsonselection(policy.Ins_Type);
-
-           renderedvalues.forEach(element => {
-             let tobindcol=element.toString().replace("_"+policy.Ins_Type,"");
-              row[element]=policy[tobindcol];
-           });
+          }
+          let renderedvalues = this.ShowHideColumnsonselection(policy.Ins_Type);
+          
+          renderedvalues.forEach(element => {
+            let tobindcol = element.toString().replace("_" + policy.Ins_Type, "");
+            row[element] = policy[tobindcol];
+            row.ActionStatus=policy.ActionStatus;
           });
+        });
 
-          this.rowData.push(row);
-    })
+        this.rowData.push(row);
+      })
 
-  }
+    }
   }
 
   //DB Operations
 
   updatelocalloanobject(event: any): any {
-
-  if(event.colDef.headerName.includes("_")){
-    let pos = event.colDef.headerName.lastIndexOf("_") + 1;
-    let policyname= event.colDef.headerName.substr(pos, event.colDef.headerName.length - pos)
-     let policy=this.loanmodel.InsurancePolicies[event.rowIndex].Subpolicies.find(p=>p.Ins_Type==policyname);
-     policy[event.colDef.headerName.replace("_"+policyname,"")]=event.value;
-  }
-  else{
-    this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field]=event.value;
-  }
-   this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+    
+    if (event.colDef.headerName.includes("_")) {
+      let pos = event.colDef.headerName.lastIndexOf("_") + 1;
+      let policyname = event.colDef.headerName.substr(pos, event.colDef.headerName.length - pos)
+      let policy = this.loanmodel.InsurancePolicies[event.rowIndex].Subpolicies.find(p => p.Ins_Type == policyname);
+      policy[event.colDef.headerName.replace("_" + policyname, "")] = event.value;
+      if( policy.ActionStatus!=1 && policy.ActionStatus!=1){ 
+        policy.ActionStatus=2;
+      }
+    }
+    else {
+      this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
+      this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus=2;
+    }
+    this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
   }
 
 
@@ -419,24 +446,21 @@ export class PoliciesComponent implements OnInit {
     return false;
   }
 
-  synctoDb() {
-
-  }
+ 
 
   rowvaluechanged($event) {
-
+    
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-
+       
       var items = $event.data.SecInsurance.toString().split(",");
       items.forEach(element => {
-
         if (this.columnDefs.find(p => p.headerName.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
           this.columnDefs.push({
             headerName: element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
             cellEditorSelector: function (params) {
-
+              
               let column = params.colDef.headerName.split('_')[0];
               if (params.data.SecInsurance.includes(column)) {
                 return {
@@ -457,16 +481,34 @@ export class PoliciesComponent implements OnInit {
             }
           })
         }
+        let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+        if(mainobj.Subpolicies.find(p=>p.Ins_Type==element)==undefined){
+          let sp:Insurance_Subpolicy=new Insurance_Subpolicy();
+          sp.FK_Policy_Id=$event.data.mainpolicyId;
+          sp.ActionStatus=1;
+          sp.SubPolicy_Id=0;
+          sp.Ins_Type=element;
+          mainobj.Subpolicies.push(sp);
+        }
+      
+      });
+       
+      let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+      mainobj.Subpolicies.forEach(eelement => {
+        if(items.find(p=>p==eelement.Ins_Type)==undefined){
+           eelement.ActionStatus=3;
+        } 
       });
       //Delete unwanted Column here
-
+      
       this.deleteunwantedcolumn();
       this.gridApi.setColumnDefs(this.columnDefs);
-
+      
       this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
     //get the local loan object synced
     this.updatelocalloanobject($event);
+    this.updateSyncStatus();
   }
 
   onGridReady(params) {
@@ -476,5 +518,59 @@ export class PoliciesComponent implements OnInit {
     params.api.sizeColumnsToFit();//autoresizing
   }
   //Grid Functions End
+  synctoDb() {
+    this.loanapi.syncloanobject(this.loanmodel).subscribe(res=>{
+      if(res.ResCode==1){
+        this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
 
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    })
+
+
+  }
+
+  //update Loan Status
+  updateSyncStatus() {
+      
+     
+    if (this.checkforstatus([1,3]) ) {
+      this.syncInsuranceStatus = status.ADDORDELETE;
+    } else if (this.checkforstatus([2])) {
+      this.syncInsuranceStatus = status.EDITED;
+    } else {
+      this.syncInsuranceStatus = status.NOCHANGE;
+    }
+    this.loanmodel.SyncStatus.Status_Insurance_Policies = this.syncInsuranceStatus;
+  }
+
+  checkforstatus(statuscode:Array<number>){
+    
+    
+    var status=false;
+    statuscode.forEach(element => {
+      if(!status)
+      {
+      status = this.loanmodel.InsurancePolicies.filter(p => p.ActionStatus == element).length>0;
+      this.loanmodel.InsurancePolicies.forEach(element1 => {
+        if(!status)
+         status = element1.Subpolicies.filter(p => p.ActionStatus == element).length>0
+        
+      });
+    }
+     });
+     return status;
+  }
 }

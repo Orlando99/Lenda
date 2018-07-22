@@ -17,8 +17,20 @@ export class FinanceStatsComponent implements OnInit {
   constructor(private localstorageservice : LocalStorageService) { }
 
   ngOnInit() {
-    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
 
+    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+      this.localloanobj = res;
+      this.prepareConfig();
+    });
+
+    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    this.prepareConfig();
+    
+  }
+
+  prepareConfig(){
+
+    if(this.localloanobj && this.localloanobj.Borrower){
     this.balanceSheetConfig = {
       data : [
         {
@@ -115,6 +127,6 @@ export class FinanceStatsComponent implements OnInit {
 
       ],
       highlightRowsIndex : [2,3,5]
-    };
+    };}
   }
 }

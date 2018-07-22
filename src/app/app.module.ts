@@ -64,6 +64,7 @@ import { LoanListComponent } from "./components/loan-list/loan-list.component";
 import { LoanOverviewComponent } from './components/loan-overview/loan-overview.component';
 import { FinancialsComponent } from './components/summary/financials/financials.component';
 import { Borrowercalculationworker } from './Workers/calculations/borrowercalculationworker.service';
+import { Borrowerincomehistoryworker } from './Workers/calculations/borrowerincomehistoryworker.service';
 import { LoancalculationWorker } from './Workers/calculations/loancalculationworker';
 import { BorrowerComponent } from './components/borrower/borrower.component';
 import { BalancesheetComponent } from './components/borrower/balancesheet/balancesheet.component';
@@ -120,7 +121,7 @@ import { UserArticleComponent } from './shared/layout/right-sidebar/user-article
 import { CreateLoanComponent } from './components/create-loan/create-loan.component';
 import { SpinerComponent } from './shared/spiner/spiner.component';
 import { FlowchartComponent } from './components/flowchart/flowchart.component';
-
+import { BorrowerIncomeHistoryComponent } from './components/borrower/borrower-income-history/borrower-income-history.component';
 //CROP
 import { CropapiService } from './services/crop/cropapi.service';
 
@@ -171,6 +172,13 @@ import { ProgressChartComponent } from './components/summary/charts-visualizatio
 import { BudgetHelperService } from './components/budget/budget-helper.service';
 import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
 import { WorkInProgressStatsComponent } from './components/work-in-progress/work-in-progress-stats/work-in-progress-stats.component';
+import { MarketingContractsComponent } from './components/collateral/marketing-contracts/marketing-contracts.component';
+import { CollateralReportComponent } from './components/work-in-progress/collateral-report/collateral-report.component';
+import { MarketingcontractcalculationService } from './Workers/calculations/marketingcontractcalculation.service';
+import { OptimizercalculationService } from './Workers/calculations/optimizercalculationservice.service';
+import { AphComponent } from './components/insurance/aph/aph.component';
+import { CropunitrecordsComponent } from './components/work-in-progress/cropunitrecords/cropunitrecords.component';
+
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -244,7 +252,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     ProgressChartComponent,
     CurrencyDirective,
     PercentageDirective,
-    WorkInProgressStatsComponent
+    WorkInProgressStatsComponent,
+    MarketingContractsComponent,
+    CollateralReportComponent,
+    BorrowerIncomeHistoryComponent,
+    AphComponent,
+    CropunitrecordsComponent
   ],
   imports: [
     BrowserModule,
@@ -289,7 +302,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     SidebarModule.forRoot(),
     ChartsModule,
     BarRatingModule,
-    AngularMultiSelectModule
+    AngularMultiSelectModule,
   ],
   exports: [
     FormsModule,
@@ -335,6 +348,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoanApiService,
     ApiService,
     Borrowercalculationworker,
+    Borrowerincomehistoryworker,
     Collateralcalculationworker,
     LoancalculationWorker,
     LoanMasterCalculationWorkerService,
@@ -355,7 +369,9 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AssociationcalculationworkerService,
     BudgetHelperService,
     OverallCalculationServiceService,
-    LoginService
+    LoginService,
+    MarketingcontractcalculationService,
+    OptimizercalculationService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

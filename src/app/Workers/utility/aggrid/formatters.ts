@@ -1,4 +1,5 @@
 export function PriceFormatter(price) {
+    
     if(price==null || price==undefined)
     {
         return "$ 0";
@@ -12,7 +13,7 @@ export function PercentageFormatter(perce) {
         return  "0 %";
     }
     else
-return perce.toString() +" %";
+return perce.toFixed(2) +" %";
 }
 
 

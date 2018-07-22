@@ -39,6 +39,8 @@ export class LoanMasterCalculationWorkerService {
   }
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
+
+    if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
     let loanMaster = loanObject.LoanMaster[0];
     loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
     loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns || 1;
@@ -70,7 +72,7 @@ export class LoanMasterCalculationWorkerService {
       }
 
     }
-
+  }
     
 
     return loanObject;

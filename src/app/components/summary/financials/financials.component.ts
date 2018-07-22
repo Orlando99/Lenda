@@ -17,50 +17,17 @@ export class FinancialsComponent implements OnInit {
   private loanMaster: any;
   public allDataFetched = false;
   public rowData = [];
-  public pinnedBottomRowData=[];
-  public getRowClass;
-  private gridApi;
-  private columnApi;
+ 
   constructor(public localstorageservice: LocalStorageService, public logging: LoggingService) {
 
-    this.getRowClass = function(params) {
-      if (params.node.rowPinned) {
-        return  'ag-aggregate-row';
-      }
-    };
-
+   
   }
 
-  //region Ag grid Configuration
 
-  columnDefs = [
-    { headerName: 'Financials', field: 'Financials' },
-    { headerName: 'Assets', field: 'Assets',cellClass: ['text-right'],
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    } },
-    { headerName: 'Debt', field: 'Debt',cellClass: ['text-right'],
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    }, },
-    { headerName: 'Equity', field: 'Equity',cellClass: ['text-right'],
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    }, },
-    { headerName: 'Ratios', field: 'Ratios',cellClass: ['text-right'], },
-    { headerName: 'FICO', field: 'FICO',cellClass: ['text-right'], },
-    { headerName: 'Rating', field: 'Rating',cellClass: ['text-right'], }
-  ];
-
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.columnApi = params.columnApi;
-    this.gridApi.sizeColumnsToFit();
-    window.onresize = () => {
-        this.gridApi.sizeColumnsToFit();
-    }
-}
-  //End here
+  priceFormat(value){
+    return PriceFormatter(value);
+  }
+  
 
 
   ngOnInit() {    
@@ -98,7 +65,7 @@ export class FinancialsComponent implements OnInit {
       if(this.loanMaster)
       {  
         this.rowData=[];
-        this.pinnedBottomRowData = [];
+        
         //1st Current Financial Row
         var currentobj={Financials:'Current',Assets:this.loanMaster.Current_Assets ,Debt:this.loanMaster.Current_Liabilities ,
         Equity:(this.loanMaster.Current_Assets - this.loanMaster.Current_Liabilities) ,Ratios:(this.loanMaster.Current_Assets / this.loanMaster.Current_Liabilities).toFixed(2),FICO: this.loanMaster.Credit_Score ,Rating: "*".repeat(this.loanMaster.Borrower_Rating || 0)  }
@@ -122,11 +89,12 @@ export class FinancialsComponent implements OnInit {
         FICO:"Financials as of",
         Rating:new Date(this.loanMaster.Borrower_Financials_Date).toLocaleDateString()};
 
-        this.pinnedBottomRowData.push(Aggregateobj);
+        //this.pinnedBottomRowData.push(Aggregateobj);
+        this.rowData.push(Aggregateobj);
       }
         
   }
-           
+          
 }
 
 

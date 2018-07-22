@@ -6,7 +6,7 @@ export function lookupCountyValue(key) {
   }
 }
 export function lookupStateRefValue(key) {
-
+    
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
     if (key) {
         return refdata.StateList.find(p => p.State_ID == parseInt(key)).State_Name;
@@ -31,7 +31,7 @@ export function lookupStateValue(mappings, key) {
     }else{
         return mappings[0].value;
     }
-
+    
 }
 
 export function lookupStateValueinRefobj(key) {
@@ -39,7 +39,7 @@ export function lookupStateValueinRefobj(key) {
   if (key) {
       return refdata.StateList.find(p => p.State_ID == parseInt(key)).State_Name;
   }
-
+    
 }
 
 export function Statevaluesetter(params) {

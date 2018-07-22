@@ -5,33 +5,36 @@ import { isNumber } from "util";
 
 export function extractCropValues(mappings) {
     var obj = [];
-    mappings.forEach((element,index) => {
+    mappings.forEach((element, index) => {
 
-        if(obj.findIndex(p=>p.key==element.Crop_Code)==-1)
-        obj[obj.length] = {key:element.Crop_Code,value:element.Crop_Name}
+        if (obj.findIndex(p => p.key == element.Crop_Code) == -1)
+            obj[obj.length] = { key: element.Crop_Code, value: element.Crop_Name }
     });
     return obj;
 }
 
 export function lookupCropValue(mappings, key) {
-    if(key!=null && key!=undefined)
-    {
-    let test = mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
-    return test
+    if (key != null && key != undefined) {
+        let crop = mappings.find(p => p.key.toLowerCase() == key.toLowerCase());
+        if(crop){
+            return crop.value;
+        }else{
+            return '';
+        }
     }
     else
-    return "";
+        return "";
 }
 
 export function lookupCropValuewithoutmapping(key) {
-    try{
-    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
-    let mappings=extractCropValues(refdata.CropList)
-    return mappings.find(p=>p.key.toLowerCase()==key.toLowerCase()).value;
-}
-catch{
-return "";
-}
+    try {
+        var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
+        let mappings = extractCropValues(refdata.CropList)
+        return mappings.find(p => p.key.toLowerCase() == key.toLowerCase()).value;
+    }
+    catch{
+        return "";
+    }
 }
 
 export function Cropvaluesetter(params) {
@@ -64,25 +67,25 @@ export function cropNameValueSetter(params) {
 export function extractCropTypeValues(mappings) {
 
     var obj = [];
-    mappings.forEach((element,index) => {
+    mappings.forEach((element, index) => {
 
-        if(obj.findIndex(p=>p.key==element.Crop_Type_Code)==-1)
-        obj[obj.length] = {key:element.Crop_Type_Code,value:element.Crop_Type_Name}
+        if (obj.findIndex(p => p.key == element.Crop_Type_Code) == -1)
+            obj[obj.length] = { key: element.Crop_Type_Code, value: element.Crop_Type_Name }
     });
     return obj;
 }
 
 export function lookupCropTypeValue(key) {
-    try{
-    key=key.trim();
-    var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
-    if (key != undefined && key != "") {
+    try {
+        key = key.trim();
+        var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
+        if (key != undefined && key != "") {
             return refdata.CropList.find(p => p.Crop_Type_Code == key).Crop_Type_Name;
+        }
     }
-}
-catch{
-    return "";
-}
+    catch{
+        return "";
+    }
 }
 
 
@@ -93,7 +96,7 @@ export function CropTypevaluesetter(params) {
     for (let object of values) {
         var value = object.Crop_Type_Code;
         if (value == params.newValue) {
-            params.data[params.colDef.field] =  object.Crop_Type_Code;
+            params.data[params.colDef.field] = object.Crop_Type_Code;
         }
     }
     return true;
@@ -106,14 +109,14 @@ export function getfilteredCropType(params) {
     var allowedcroptypes = refdata.CropList.filter(p => p.Crop_Code == selectedcrop);
     return { values: extractCropTypeValues(allowedcroptypes) };
 }
- // Ends Here
+// Ends Here
 
- export function lookupCropType(mappings, key) {
-     try{
-    let test = mappings.find(p=>p.value.toLowerCase()==key.toLowerCase()).key;
-    return test
-}
-catch{
-return "";
-}
+export function lookupCropType(mappings, key) {
+    try {
+        let test = mappings.find(p => p.value.toLowerCase() == key.toLowerCase()).key;
+        return test
+    }
+    catch{
+        return "";
+    }
 }

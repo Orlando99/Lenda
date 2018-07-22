@@ -13,21 +13,27 @@ export function setDiscValue (params) {
 }
 
 export function currencyFormatter (params) {
-    var withDecimals = params.value % 1;
-    if(withDecimals){
-        var usdFormate = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2
-        });
+    if(params.value == '-'){
+        return params.value;
+    }else if(params.value == ''){
+        return '-';
     }else{
-        var usdFormate = new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0
-        });
+        var withDecimals = params.value % 1;
+        if(withDecimals){
+            var usdFormate = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            });
+        }else{
+            var usdFormate = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0
+            });
+        }
+        return usdFormate.format(params.value);
     }
-    return usdFormate.format(params.value);
    
 }
 

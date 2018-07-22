@@ -15,6 +15,7 @@ import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn'
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-buyer-association',
@@ -37,7 +38,12 @@ export class BuyerAssociationComponent implements OnInit {
   private gridApi;
   private columnApi;
   //region Ag grid Configuration
-
+  style = {
+    marginTop: '10px',
+    width: '97%',
+    height: '110px',
+    boxSizing: 'border-box'
+  };
 
   returncountylist() {
     return this.refdata.CountyList;
@@ -58,9 +64,9 @@ export class BuyerAssociationComponent implements OnInit {
               public logging: LoggingService,
               public alertify: AlertifyService,
               public loanapi:LoanApiService
-  ) {
+  ){
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -68,11 +74,11 @@ export class BuyerAssociationComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Agent', field: 'Assoc_Name',  editable: true },
+      { headerName: 'Agent', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: false },
-      { headerName: 'Location', field: 'Location',  editable: true },
-      { headerName: 'Phone', field: 'Phone', editable: true},
-      { headerName: 'Email', field: 'Email', editable: true},
+      { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
+      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Email', field: 'Email', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
@@ -80,28 +86,46 @@ export class BuyerAssociationComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-
-      if(this.localloanobject.Association!=null)
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY");
-
+      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+      this.localloanobject = res
+      
+      if (res.srccomponentedit == "BuyerAssociationComponent") {
+        //if the same table invoked the change .. change only the edited row
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] =    this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.rowData =  this.localloanobject.Association !== null?  this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY"):[];
+        
+      }
+      this.getgridheight();
+      this.gridApi.refreshCells();
+      // this.adjustgrid();
     });
 
-
-    this.getdataforgrid();
-    this.editType = "fullRow";
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    
+    if(this.localloanobject && this.localloanobject.Association.length>0){
+      this.rowData = this.localloanobject.Association !== null? this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY"):[];
+    }else{
+      this.rowData = [];
+    }
   }
+
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
-    if (this.localloanobject != null && this.localloanobject != undefined) {
+    if (this.localloanobject && this.localloanobject.Association && this.localloanobject.Association.length>0) {
       //this.localloanobject = obj;
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY");
     }
   }
 
+  getgridheight(){
+    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
+  }
 
   rowvaluechanged(value: any) {
     var obj = value.data;
@@ -116,6 +140,10 @@ export class BuyerAssociationComponent implements OnInit {
       obj.ActionStatus = 2;
       this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[rowindex]=obj;
     }
+
+    //this shall have the last edit
+    this.localloanobject.srccomponentedit = "BuyerAssociationComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 

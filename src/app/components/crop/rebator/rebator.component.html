@@ -6,22 +6,34 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled()">
-        <!-- <mat-icon [style.color] = "!syncenabled()">publish</mat-icon> -->
-        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-      </button>
+    <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 00px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
 
     <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
      <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
-
-    <div class="container bottom">
+     
+        <div class="container bottom">
       <div class="row">
-        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
-          [context]="context" [showToolPanel]="true" (gridSizeChanged)="onGridSizeChanged($event)" [frameworkComponents]="frameworkcomponents"
-          [components]="components" [singleClickEdit]="true" [defaultColDef]="defaultColDef" [rowGroupPanelShow]="true" (cellEditingStopped)="rowvaluechanged($event)"
-          [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs">
-        </ag-grid-angular>
-      </div>
+      <!-- <ag-grid-angular  [ngStyle]="style"
+      class="ag-theme-balham roboto-font"
+      [animateRows]="true"
+      [enableSorting]="true"
+      [enableFilter]="true"
+      [context]="context"
+      (gridSizeChanged)="onGridSizeChanged($event)"
+      [frameworkComponents]="frameworkcomponents"
+      [components]="components"
+      [singleClickEdit]="true"
+      (cellEditingStopped)="rowvaluechanged($event)"
+      [rowData]="rowData" 
+      (gridReady)="onGridReady($event)"
+      [columnDefs]="columnDefs"
+      [gridAutoHeight]=true>
+      </ag-grid-angular> -->
+      <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
+                (gridSizeChanged)="onGridSizeChanged($event)" [context]="context" [headerHeight]="45" [frameworkComponents]="frameworkcomponents"
+                [components]="components" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)"
+                [columnDefs]="columnDefs" [gridAutoHeight]=true></ag-grid-angular>
+      </div>  
     </div>
     <br>
   </mat-expansion-panel>

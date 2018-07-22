@@ -11,16 +11,21 @@ export class LoancrophistoryService {
   public returnables = new Array<Loan_Crop_History_FC>();
   public years = [];
   constructor(private logging: LoggingService) {
-    for (let i = 1; i < 8; i++) {
-      this.years.push(new Date().getFullYear() - i);
-    }
+    // for (let i = 1; i < 8; i++) {
+    //   this.years.push(new Date().getFullYear() - i);
+    // }
   }
   prepare_Crop_Yield() {
-
+    // 
     for (let i = 0; i < this.input.CropYield.length; i++) {
+  
       let cropyielditems = [];
+      this.years = [];
+      for (let year = 1 ; year < 8; year++) {
+        this.years.push(this.input.CropYield[i].CropYear - year);
+      }
       this.years.forEach(year => {
-        if (this.input.CropYield[i][year] != null) {
+        if (this.input.CropYield[i][year] != null && this.input.CropYield[i][year] != 0) {
           cropyielditems.push(this.input.CropYield[i][year])
         }
       });
@@ -40,7 +45,7 @@ export class LoancrophistoryService {
   }
 
   prepareLoancrophistorymodel(input: loan_model): loan_model {
-
+  
     try {
       this.input = input;
       let starttime = new Date().getMilliseconds();

@@ -38,7 +38,7 @@
 }
 
 .edited-color{
-  background-color: #f28f35 !important
+  background-color:#FEF6C9 !important
 }
 
 
@@ -48,6 +48,7 @@
 
 .ag-floating-bottom-container > .ag-row >.ag-cell{
   background-color: #66afc9;
+  color: white !important;
 }
 
 // .ag-theme-balham .ag-header-cell-label .ag-header-cell-text{
@@ -100,7 +101,8 @@
 
 .aggregaterow .aggregatecol{
   background: lightgreen !important;
-  color:white;
+  color:#1312e3;
+  cursor: not-allowed;  
 }
 
 
@@ -133,43 +135,20 @@
 
 
       .grayedcell{
-        background: gray !important
+        background: lightgray !important
       }
 
 .roboto-font{
   font-family: Roboto,"Helvetica Neue",sans-serif !important;
 }
 
-// Cuppa dropdown
-// ====
-
-.cuppa-dropdown {
-  .selected-list .c-btn {
-    min-height: 25px; // = cell height
-    padding: 0 !important;
-    box-shadow: none;
-    border: none;
-    font-size: $font-size-sm;
-  }
-  .ng-star-inserted {
-    font-size: $font-size-sm;
-    padding: 5px 0;
-  }
-  .ng-star-inserted {
-    padding-top: 5px;
-    padding-left: 3px;
-  }
-  .c-token  {
-    &.ng-star-inserted:first-child {
-      margin-top: 0px !important;
-    }
-  }
-  .c-angle-up,
-  .c-angle-down {
-    right: 2px !important;
-    width: 20px !important;
-    height: 20px !important;
-  }
+// .invisible{
+//   color: red;
+//   height: 0px !important;
+//   visibility:collapse !important  
+// }
+a.disabled {
+  color: gray;
+  cursor: not-allowed;
+  text-decoration: underline;
 }
-
-// ====

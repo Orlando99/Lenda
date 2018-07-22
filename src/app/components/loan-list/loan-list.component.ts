@@ -22,7 +22,7 @@ export class LoanListComponent implements OnInit {
   ngOnInit() {
     this.getloanlist();
   }
-
+  
   getloanlist() {
     this.loanService.getLoanList().subscribe(res => {
       if (res.ResCode == 1) {
@@ -32,7 +32,7 @@ export class LoanListComponent implements OnInit {
   }
 
   navigatetoloan(id: string) {
-
+     
     this.localstorageservice.store(environment.loanidkey,id)
     this.route.navigateByUrl("/home/loanoverview/"+id.replace("-","/")+"/summary");
   }
