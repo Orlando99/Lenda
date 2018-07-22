@@ -16,7 +16,6 @@ export class GlobalErrorHandler extends ErrorHandler {
   }
 
   handleError(error) {
-    debugger
     if (environment.isDebugModeActive) {
       console.log('==== Error handled by Global Error Handler ===');
       this.toasterService.error(error.message);

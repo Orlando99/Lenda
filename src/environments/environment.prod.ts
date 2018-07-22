@@ -11,6 +11,6 @@ export const environment = {
   referencedatakey:"refdata",
   uid:"userid",
   loanidkey:"selectedloanId",
-  isDebugModeActive: false
+  isDebugModeActive: true
 };
 
