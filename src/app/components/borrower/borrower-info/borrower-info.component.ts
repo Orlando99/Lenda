@@ -5,8 +5,11 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { loan_model, loan_borrower } from '../../../models/loanmodel';
+import { loan_model, loan_borrower, Loan_Association } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -18,15 +21,24 @@ export class BorrowerInfoComponent implements OnInit {
   localloanobj: loan_model;
   stateList: Array<any>;
   entityType = [
-    'Individual',
-    'Individual w/ Spouse',
-    'Partner',
-    'Joint',
-    'Corporation',
-    'LLC',
+    {key : 'IND', value : 'Individual'},
+    {key : 'INDWS', value : 'Individual w/ Spouse'},
+    {key : 'PRP', value : 'Partner'},
+    {key : 'JNT', value : 'Joint'},
+    {key : 'COP', value : 'Corporation'},
+    {key : 'LLC', value : 'LLC'},
   ];
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
+  public columnDefs = [];
+  public components;
+  public refdata;
+  public frameworkcomponents;
+  public context;
+  public rowData : Array<Loan_Association> = [];
+  public gridApi;
+  public columnApi;
+
   @Input('allowIndividualSave')
   allowIndividualSave: boolean;
   @Input('mode')
@@ -56,6 +68,28 @@ export class BorrowerInfoComponent implements OnInit {
     public logging: LoggingService,
     private loanApiService: LoanApiService,
     private toaster: ToastsManager) {
+
+      
+      this.components = { numericCellEditor: getNumericCellEditor()};
+      this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+      this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
+
+      this.columnDefs = [
+        { headerName: 'Name', field: 'Assoc_Name',  cellClass: 'editable-color', editable: true,width : 150},
+        { headerName: 'Contact', field: 'Contact',  cellClass: 'editable-color', editable: true,width : 150},
+        { headerName: 'Location', field: 'Location',  cellClass: 'editable-color', editable: true,width : 150},
+        { headerName: 'Phone', field: 'Phone',  cellClass: 'editable-color', editable: true,width : 150},
+        { headerName: 'Email', field: 'Email',  cellClass: 'editable-color', editable: true,width : 150},
+        { headerName: 'Co Borrower', field: 'Co Borrower',  cellClass: 'editable-color', editable: true,width : 100,
+        cellRenderer: params => {
+            return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
+        }},
+        { headerName: '', field: '', cellRenderer: "deletecolumn" },
+
+        
+      ];
+
+      this.context = { componentParent: this };
 
   }
 
@@ -137,5 +171,39 @@ export class BorrowerInfoComponent implements OnInit {
       this.toaster.error("Borrower details form doesn't seem to have data in correct format, please correct them before saving.");
     }
   }
+
+  addrow(){
+    let newAssocialtion = new Loan_Association();
+    this.rowData.push(newAssocialtion);
+  }
+
+  rowvaluechanged(value : Loan_Association){
+    if(value.Assoc_ID == undefined){
+      value.Assoc_ID = 0;
+      value.ActionStatus = 1;
+    }else{
+      value.ActionStatus =2;
+    }
+  }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.columnApi = params.columnApi;
+    
+  }
+
+  onGridSizeChanged(Event: any) {
+     this.gridApi.sizeColumnsToFit();
+  }
+
+
+  // DeleteClicked(rowIndex: any) {
+  //   let association = this.rowData[rowIndex];
+  //   if(!association.Assoc_ID){
+  //     this.rowData.splice(rowIndex,1);
+  //   }else{
+  //     this.rowData.
+  //   }
+  // }
 
 }
