@@ -13,6 +13,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 
 @Component({
   selector: 'app-storedcrop',
@@ -49,37 +50,39 @@ export class StoredCropComponent implements OnInit {
     public alertify:AlertifyService,
     public loanapi:LoanApiService){
 
-      this.components = { numericCellEditor: getNumericCellEditor()};
+      this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
+
       this.columnDefs = [
         { headerName: 'Category', field: 'Collateral_Category_Code',  editable: false, width:100},
-        { headerName: 'Description', field: 'Collateral_Description',  editable: true, width:120 },
-        { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellStyle: { textAlign: "right" }, width:90 },
-        { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:110},
+        { headerName: 'Description', field: 'Collateral_Description',  cellEditor: "alphaNumeric", editable: true, width:120, cellClass: 'editable-color'},
+        { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellClass: ['editable-color','text-right'], width:90},
+        { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'],width:110},
         
-        { headerName: 'Mkt Value', field: 'Market_Value',  editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" },width:130},
-        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, width:130},
-        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true,width:120},
-        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }
+        { headerName: 'Mkt Value', field: 'Market_Value',  editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right'],width:130},
+        { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'], width:130},
+        { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true, width:120,  cellEditor: "alphaNumeric", cellClass: ['editable-color']},
+        { headerName: 'Net Mkt Value', field: 'Net_Market_Value',  editable: false, cellEditor: "numericCellEditor",valueFormatter: currencyFormatter, cellClass: ['text-right'],
           // valueGetter: function (params) {
           //   return setNetMktValue(params);}
         },
-        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:110,
+        { headerName: 'Discount %', field: 'Disc_Value',  editable: true,cellEditor: "numericCellEditor" , valueFormatter: discFormatter, cellStyle: { textAlign: "right" },width:110,cellClass: ['editable-color','text-right'],
           pinnedRowCellRenderer: function(){ return ' ';}},
-        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellStyle: { textAlign: "right" },
+        { headerName: 'Disc Value', field: 'Disc_CEI_Value',  editable: false, cellEditor: "numericCellEditor", cellClass: ['text-right'],
           // valueGetter: function (params) {
           //   return setDiscValue(params);
           // },
           valueFormatter: currencyFormatter},
-        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,
+        { headerName: 'Insured', field: 'Insured_Flag',  editable: true, cellEditor: "selectEditor",width:100,cellClass: ['editable-color'],
           cellEditorParams:{
             values: [{'key':0, 'value':'No'}, {'key':1, 'value':'Yes'}]
           },pinnedRowCellRenderer: function(){ return ' ';},
           valueFormatter: insuredFormatter},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn",width:80,pinnedRowCellRenderer: function(){ return ' ';}}
       ];
+
 
       this.context = { componentParent: this };
   }
@@ -95,9 +98,11 @@ export class StoredCropComponent implements OnInit {
         this.localloanobject = res
         this.rowData = [];
         this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3 }):[];
+
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
+      this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
@@ -106,12 +111,11 @@ export class StoredCropComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - SCRP', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - SCP', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3 }):[];
-
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
   }
@@ -123,7 +127,7 @@ export class StoredCropComponent implements OnInit {
   }
 
   syncenabled(){
-    return this.rowData.filter(p=>p.ActionStatus!=null).length>0 || this.deleteAction
+    return this.rowData.filter(p=>p.ActionStatus != null).length>0 || this.deleteAction
   }
 
   synctoDb(){
@@ -180,7 +184,6 @@ export class StoredCropComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.LoanCollateral[rowindex]=obj;
     }
-    //this shall have the last edit
     this.localloanobject.srccomponentedit = "StoredCropComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -205,6 +208,7 @@ export class StoredCropComponent implements OnInit {
   getgridheight(){
     this.style.height=(30*(this.rowData.length+2)).toString()+"px";
   }
+
   onGridSizeChanged(Event: any) {
 
     try{
@@ -214,6 +218,7 @@ export class StoredCropComponent implements OnInit {
 
   }
   }
+
 
   computeTotal(input) {
     var total = []

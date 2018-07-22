@@ -15,6 +15,7 @@ import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropTyp
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 
 @Component({
   selector: 'app-rebator',
@@ -37,9 +38,10 @@ export class RebatorComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '240px',
+    height: '180px',
     boxSizing: 'border-box'
   };
+
   defaultColDef = {
     enableValue: true,
     enableRowGroup: true,
@@ -55,19 +57,19 @@ export class RebatorComponent implements OnInit {
     public loanapi:LoanApiService){
 
       //Aggrid Specific Code
-      this.components = { numericCellEditor: getNumericCellEditor() };
+      this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
 
       //Coldef here
       this.columnDefs = [
-        { headerName: 'Rebator', field: 'Assoc_Name',  editable: true },
-        { headerName: 'Contact', field: 'Contact',  editable: true},
-        { headerName: 'Location', field: 'Location', editable: true},
-        { headerName: 'Phone', field: 'Phone', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter},
-        { headerName: 'Email', field: 'Email',  editable: true},
-        { headerName: 'Pref Contact', field: 'Preferred_Contact_Ind',  editable: false },
-        { headerName: 'Exp Rebate', field: '',  editable: false  },
+        { headerName: 'Rebator', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
+        { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Location', field: 'Location', editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Phone', field: 'Phone', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
+        { headerName: 'Email', field: 'Email',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Pref Contact', field: 'Preferred_Contact_Ind',  editable: false},
+        { headerName: 'Exp Rebate', field: '',  editable: false},
         { headerName: 'Ins UOM', field: '',  editable: false},
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
 
@@ -78,13 +80,35 @@ export class RebatorComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
+    //   this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
+    //   this.localloanobject = res;
+    //   this.rowData=[];
+    //     this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
+    //     // this.getgridheight();
+    //     this.gridApi.refreshCells();
+    // })
+
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
-      this.localloanobject = res;
-      this.rowData=[];
-        this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
-        this.getgridheight();
-    })
+      this.localloanobject = res
+      
+      if (res.srccomponentedit == "RebatorComponent") {
+        //if the same table invoked the change .. change only the edited row
+        this.localloanobject = res;
+        this.rowData[res.lasteditrowindex] =  this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB")[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.rowData = this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
+        
+      }
+      this.getgridheight();
+      this.gridApi.refreshCells();
+      // this.adjustgrid();
+    });
+
+
     this.getdataforgrid();
 
   }
@@ -100,8 +124,7 @@ export class RebatorComponent implements OnInit {
     }
   }
 
-  synctoDb() {
-    
+synctoDb() {
  this.gridApi.showLoadingOverlay();
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
@@ -138,7 +161,7 @@ export class RebatorComponent implements OnInit {
       colKey: "Assoc_Name"
     });
     this.localloanobject.Association.push(newItem);
-    this.getgridheight();
+    // this.getgridheight();
   }
 
 
@@ -154,6 +177,9 @@ export class RebatorComponent implements OnInit {
         obj.ActionStatus = 2;
       this.localloanobject.Association[rowindex] = obj;
     }
+
+    this.localloanobject.srccomponentedit = "RebatorComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
 
   }
@@ -161,36 +187,34 @@ export class RebatorComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    // this.getgridheight();
   }
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association[rowIndex];
+        var obj = this.rowData[rowIndex];
         if (obj.Assoc_ID == 0) {
-          this.localloanobject.Association.splice(rowIndex, 1);
-
-        }
-        else {
+          this.rowData.splice(rowIndex, 1);
+          this.localloanobject.LoanCollateral.splice(this.localloanobject.Association.indexOf(obj), 1);
+        } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
-
   }
 
   syncenabled(){
-    if(this.rowData.filter(p => p.ActionStatus != 0).length > 0 || this.deleteAction)
+    if(this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
     return 'disabled';
     else
     return '';
   }
 
   getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
   }
 
   onGridSizeChanged(Event: any) {
