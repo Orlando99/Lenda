@@ -70,7 +70,7 @@ export class AphComponent implements OnInit {
       {
         headerName: 'APH', field: 'Ins_APH', editable: true, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
         cellEditorParams: (params)=> {
-          return { value : params.value || 0}
+          return { value : params.data.Ins_APH || 0}
         },
         valueSetter: numberValueSetter,
 
