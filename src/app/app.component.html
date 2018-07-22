@@ -2,7 +2,8 @@
   <layout-header>
   </layout-header>
   <app-right-sidebar></app-right-sidebar>
-  <div class="center" [hidden]="!loading">
+  <div class="center" [ngClass]="{'is-sidebar-expanded': isSidebarExpanded}" [hidden]="!loading">
+    <div class="overlay"></div>
     <div class="preloader-wrapper active">
       <div class="spinner-layer spinner-blue">
         <div class="circle-clipper left">
@@ -54,4 +55,5 @@
     </div>
   </div>
   <router-outlet [hidden]="loading"></router-outlet>
+  <layout-footer></layout-footer>
 </div>

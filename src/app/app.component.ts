@@ -26,8 +26,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     private router: Router, vcf: ViewContainerRef,
     private loanstorage: LocalStorageService,
     public layoutService: LayoutService) {
+
     this.toaster.setRootViewContainerRef(vcf);
     this.loading = true;
+    this.layoutService.isSidebarExpanded().subscribe((value) => {
+      this.isSidebarExpanded = value;
+    })
+
     router.events.subscribe((res: any) => {
       let url: string = res.url;
       if (url != undefined) {
