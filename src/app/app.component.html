@@ -1,3 +1,59 @@
 <div class="fp-webApp">
-  <router-outlet></router-outlet>
+  <layout-header *ngIf="isUserLoggedIn">
+  </layout-header>
+  <app-right-sidebar *ngIf="isUserLoggedIn"></app-right-sidebar>
+  <div class="center" [ngClass]="{'is-sidebar-expanded': isSidebarExpanded}" [hidden]="!loading">
+    <div class="overlay"></div>
+    <div class="preloader-wrapper active">
+      <div class="spinner-layer spinner-blue">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-red">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-yellow">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+
+      <div class="spinner-layer spinner-green">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <router-outlet [hidden]="loading"></router-outlet>
+  <layout-footer *ngIf="isUserLoggedIn"></layout-footer>
 </div>
