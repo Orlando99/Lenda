@@ -25,7 +25,7 @@ export class LoancrophistoryService {
         this.years.push(this.input.CropYield[i].CropYear - year);
       }
       this.years.forEach(year => {
-        if (this.input.CropYield[i][year] != null) {
+        if (this.input.CropYield[i][year] != null && this.input.CropYield[i][year] != 0) {
           cropyielditems.push(this.input.CropYield[i][year])
         }
       });

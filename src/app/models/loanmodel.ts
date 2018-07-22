@@ -176,7 +176,7 @@ export class borrower_model
         Status: number=undefined;
 
         @JsonProperty("ActionStatus", IntConverter,false)
-        ActionStatus: number=undefined;
+        ActionStatus: number=0;
 
         FC_Borrower_TotalAssets:number=0;
         FC_Borrower_TotalDebt:number=0;
@@ -231,7 +231,7 @@ export class borrower_model
         @JsonProperty("Status", IntConverter,false)
         Status: number=0;
         @JsonProperty("ActionStatus", IntConverter,false)
-        ActionStatus: number=undefined;
+        ActionStatus: number=0;
 
     }
     @JsonObject

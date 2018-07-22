@@ -88,7 +88,6 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
   }
   
   setData(params){
-
     let incomeData = [];
     let incomeHistory = params
     let years = []
@@ -149,6 +148,14 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     });
   }
 
+  syncenabled(){
+    if(this.rowData.filter(p => p.ActionStatus == 2).length == 0){
+      return 'disabled';
+    }else{
+      return '';
+    }
+  }
+
   rowvaluechanged(value: any) {
     var obj = value.data;
     var rowindex = this.localloanobject.BorrowerIncomeHistory.findIndex(lc => lc.Borrower_Year == obj.Borrower_Year);
@@ -159,13 +166,12 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
      //this shall have the last edit
     this.localloanobject.srccomponentedit = "BorrowerIncomeHistoryComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
-    
   }
 
   onGridSizeChanged(Event: any) {
-
     this.adjustgrid();
   }
+
   private adjustgrid() {
     try {
       this.gridApi.sizeColumnsToFit();
