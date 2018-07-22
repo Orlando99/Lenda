@@ -53,7 +53,7 @@ export class YieldComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '240px',
+    height: '180px',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; }; };
@@ -97,7 +97,7 @@ export class YieldComponent implements OnInit {
     };
     this.columnDefs = [
       {
-        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",width:140,
+        headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",
         cellEditorParams: {
           values: extractCropValues(this.refdata.CropList)
         },
@@ -154,7 +154,9 @@ export class YieldComponent implements OnInit {
         this.gridApi.refreshCells();
       }
       this.getgridheight();
+      this.gridApi.refreshCells();
     });
+    
     this.getdataforgrid();
   }
 
@@ -211,7 +213,6 @@ export class YieldComponent implements OnInit {
   // }
 
   synctoDb() {
-    
   if((this.addAction || this.deleteAction) && this.edits.length > 0){
     console.log('Multiple');
     let newYield = this.localloanobject.CropYield.filter(cy =>{ return cy.ActionStatus==0});
@@ -335,7 +336,6 @@ export class YieldComponent implements OnInit {
             this.toaster.success("Records Synced");
             let jsonConvert: JsonConvert = new JsonConvert();
             this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-            
           }
           else{
             this.toaster.error("Could not fetch Loan Object from API")
@@ -365,8 +365,6 @@ export class YieldComponent implements OnInit {
     //   this.edits=[];
     }
     this.syncYieldStatus = status.NOCHANGE;
-
-    
   }
 
   DeleteClicked(rowIndex: any) {
@@ -379,7 +377,6 @@ export class YieldComponent implements OnInit {
         }else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
-          
         }
         this.rowData=this.rowData.filter(cy=>{return cy.ActionStatus != 3});;
         this.updateSyncStatus();
@@ -430,16 +427,16 @@ export class YieldComponent implements OnInit {
         this.localloanobject.CropYield.push(newItem);
         this.gridApi.setRowData(this.rowData);
 
-        this.getgridheight();
+        //this.getgridheight();
         }
     });
 
   }
 
-  getgridheight() {
-
-    this.style.height = (30 * (this.rowData.length + 1)+9).toString() + "px";
+  getgridheight(){
+    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
+
   onGridSizeChanged(Event: any) {
 
     try{
@@ -449,7 +446,6 @@ export class YieldComponent implements OnInit {
 
   }
   }
-
 
   updateSyncStatus(){
     if(this.deleteAction || this.addAction){
@@ -468,14 +464,12 @@ export class YieldComponent implements OnInit {
     return 'disabled';
     else
     return ''
-    
   }
 }
-function adjustheader(): void {
 
+function adjustheader(): void {
   document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
 }
-
 
 @Component({
   selector: 'dialog-overview-example-dialog',

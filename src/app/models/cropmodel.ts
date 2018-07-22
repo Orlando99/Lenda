@@ -58,7 +58,6 @@ export class Loan_Crop_Unit
      FC_FSN:string
      FC_Section:string
      FC_Rating:string;
-     Ins_APH:number;
      FC_Ins_Unit:string;
      FC_Ins_Policy_ID:number
      FC_CropYield:number;

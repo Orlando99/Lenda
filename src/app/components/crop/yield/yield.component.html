@@ -18,7 +18,7 @@
       <div class="row">
         <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
           (gridSizeChanged)="onGridSizeChanged($event)" [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components"
-          (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs">
+          (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true>
         </ag-grid-angular>
       </div>
     </div>
