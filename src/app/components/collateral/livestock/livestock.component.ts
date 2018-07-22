@@ -99,21 +99,7 @@ export class LivestockComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - Livestock', "LocalStorage updated");
-      if (res.srccomponentedit == "LivestockComponent") {
-        //if the same table invoked the change .. change only the edited row
-        this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-      } else {
-        this.localloanobject = res
-        this.rowData = [];
-        this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }) : [];
-
-        this.pinnedBottomRowData = this.computeTotal(res);
-      }
-      this.getgridheight();
-      this.gridApi.refreshCells();
-      // this.adjustgrid();
+      this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK");
     });
 
     this.getdataforgrid();
@@ -164,56 +150,15 @@ export class LivestockComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    // if(this.localloanobject.LoanCollateral ==null)
-    //   this.localloanobject.LoanCollateral = [];
-
-    // var newItem = new Loan_Collateral();
-    // newItem.Collateral_Category_Code = "LSK";
-    // newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
-    // newItem.Disc_Value = 50;
-    // newItem.ActionStatus = 1;
-    // var res = this.rowData.push(newItem);
-    // this.localloanobject.LoanCollateral.push(newItem);
-    // this.gridApi.setRowData(this.rowData);
-    // this.gridApi.startEditingCell({
-    //   rowIndex: this.rowData.length-1,
-    //   colKey: "Collateral_Description"
-    // });
-    // this.getgridheight();
-    this.collateralService.addrow(this.gridApi, this.rowData, "LSK");
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, "LSK");
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
-    if (obj.Collateral_ID == 0) {
-      obj.ActionStatus = 1;
-      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
-    }
-    else {
-      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
-      this.localloanobject.LoanCollateral[rowindex] = obj;
-    }
-    this.localloanobject.srccomponentedit = "LivestockComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.collateralService.rowValueChanged(value, this.localloanobject, "LivestockComponent");
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
-          this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-        } else {
-          this.deleteAction = true;
-          obj.ActionStatus = 3;
-        }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-      }
-    })
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject);
   }
 
   getgridheight() {

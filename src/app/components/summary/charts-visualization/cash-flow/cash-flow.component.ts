@@ -55,7 +55,7 @@ export class CashFlowComponent implements OnInit {
     let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
     let index = 0;
     for (let budget of loanBudgets.LoanBudget) {
-      if (budget.Total_Budget_Crop_ET !== 0) {
+      if (budget.Total_Budget_Crop_ET !== 0 && budget.Crop_Practice_ID === 2) {
         this.doughnutChartLabels.push(budget.Loan_Budget_ID);
         this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
         this.generatedColors.push(this.dynamicColors());
