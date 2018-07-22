@@ -40,7 +40,7 @@ export class LivestockComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
+    // height: '110px',
     boxSizing: 'border-box'
   };
 
@@ -56,7 +56,6 @@ export class LivestockComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-
 
     this.columnDefs = [
       { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
@@ -93,7 +92,6 @@ export class LivestockComponent implements OnInit {
       { headerName: '', field: 'value', cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
     ];
 
-
     this.context = { componentParent: this };
   }
 
@@ -102,24 +100,24 @@ export class LivestockComponent implements OnInit {
       this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK");
     });
 
-    this.getdataforgrid();
+    this.getdataforgrid(this.localloanobject, "LSK");
   }
 
-  getdataforgrid() {
+  getdataforgrid(localloanobject: loan_model, categoryCode) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - LSK', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
+      localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(obj);
+      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+      this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
     }
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    this.collateralService.getgridheight();
   }
 
   syncenabled() {
@@ -127,25 +125,7 @@ export class LivestockComponent implements OnInit {
   }
 
   synctoDb() {
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.deleteAction = false;
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    });
+    this.collateralService.syncToDb(this.localloanobject);
   }
 
   //Grid Events
@@ -161,34 +141,11 @@ export class LivestockComponent implements OnInit {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject);
   }
 
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 2)).toString() + "px";
-  }
-
   onGridSizeChanged(Event: any) {
-
     try {
       this.gridApi.sizeColumnsToFit();
     }
     catch{
-
     }
-  }
-
-
-  computeTotal(input) {
-    var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = input.LoanMaster[0].FC_Market_Value_lst
-    footer.Prior_Lien_Amount = input.LoanMaster[0].FC_Lst_Prior_Lien_Amount
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Livestock
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Livestock
-    footer.Qty = input.LoanMaster[0].FC_total_Qty_lst
-    footer.Price = input.LoanMaster[0].FC_total_Price_lst
-    total.push(footer);
-    return total;
   }
 }

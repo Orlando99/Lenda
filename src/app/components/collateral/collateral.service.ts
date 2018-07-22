@@ -5,6 +5,11 @@ import { LoancalculationWorker } from '../../Workers/calculations/loancalculatio
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import { LoggingService } from '../../services/Logs/logging.service';
+import { LoanApiService } from '../../services/loan/loanapi.service';
+import { JsonConvert } from 'json2typescript';
+import { ToasterService } from '../../services/toaster.service';
+import { FsaService } from './fsa/fsa.service';
+import { LiveStockService } from './livestock/livestock.service';
 
 /**
  * Shared service for collateral
@@ -22,6 +27,10 @@ export class CollateralService {
     public logging: LoggingService,
     public loanserviceworker: LoancalculationWorker,
     public alertify: AlertifyService,
+    public loanapi: LoanApiService,
+    public toasterService: ToasterService,
+    public fsaService: FsaService,
+    public liveStockService: LiveStockService
   ) {
   }
 
@@ -33,7 +42,7 @@ export class CollateralService {
   };
 
   onInit(localloanobject: loan_model, gridApi, res, component, categoryCode) {
-    this.logging.checkandcreatelog(1, 'LoanCollateral - ' +  categoryCode, "LocalStorage updated");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
     if (res.srccomponentedit == component) {
       //if the same table invoked the change .. change only the edited row
       localloanobject = res;
@@ -41,9 +50,8 @@ export class CollateralService {
     } else {
       localloanobject = res
       this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }) : [];
-
-      this.pinnedBottomRowData = this.computeTotal(res);
+      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+      this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
     }
     this.getgridheight();
     gridApi.refreshCells();
@@ -103,6 +111,28 @@ export class CollateralService {
     })
   }
 
+  syncToDb(localloanobject: loan_model) {
+    this.loanapi.syncloanobject(localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
+        this.deleteAction = false;
+        this.loanapi.getLoanById(localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+          if (res.ResCode == 1) {
+            this.toasterService.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else {
+            this.toasterService.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else {
+        this.toasterService.error("Error in Sync");
+      }
+    });
+  }
+
   /**
    * Helper methods
    */
@@ -110,30 +140,32 @@ export class CollateralService {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
 
-  getdataforgrid(localloanobject: loan_model) {
+  getdataforgrid(localloanobject: loan_model, gridApi) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - LSK', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(obj);
+      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
+      this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
+    }
+    this.getgridheight();
+    this.adjustgrid(gridApi);
+  }
+
+  private adjustgrid(gridApi) {
+    try {
+      gridApi.sizeColumnsToFit();
+    }
+    catch {
     }
   }
 
-  computeTotal(input) {
-    var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = input.LoanMaster[0].FC_Market_Value_lst
-    footer.Prior_Lien_Amount = input.LoanMaster[0].FC_Lst_Prior_Lien_Amount
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Livestock
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Livestock
-    footer.Qty = input.LoanMaster[0].FC_total_Qty_lst
-    footer.Price = input.LoanMaster[0].FC_total_Price_lst
-    total.push(footer);
-    return total;
+  computeTotal(categoryCode, input) {
+    if (categoryCode === 'LSK') {
+      return this.liveStockService.computeTotal(input);
+    } else if (categoryCode === 'FSA') {
+      return this.fsaService.computeTotal(input);
+    }
   }
 }
