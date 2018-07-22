@@ -18,7 +18,7 @@ export class OptimizercalculationService {
      
      }
      catch{
-       
+       console.log("Error in Optimizer Calculations")
      }
     return input;
   }

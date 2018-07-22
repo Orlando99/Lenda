@@ -73,7 +73,7 @@ export class LoancropunitcalculationworkerService {
         element.FC_Ins_Policy_ID = insurancepolicy.Policy_id;
         element.FC_Ins_Unit = insurancepolicy.Unit;
         element.FC_Primary_limit = insurancepolicy.Level;
-      }
+      
 
       //Mkt Value
       try {
@@ -135,6 +135,8 @@ export class LoancropunitcalculationworkerService {
 
       }
       catch (ex) {
+        debugger
+        console.error("Error in Cropunit Calculations")
         element.Mkt_Value = 0;
       }
 
@@ -144,6 +146,7 @@ export class LoancropunitcalculationworkerService {
       }
       catch{
         element.Ins_Value = 0;
+        console.error("Error in Cropunit Calculations fro ins value")
       }
 
       //CEI Value
@@ -152,8 +155,11 @@ export class LoancropunitcalculationworkerService {
       }
       catch{
         element.CEI_Value = 0;
+        console.error("Error in Cropunit Calculations fro CEI_Value")
       }
+    }
     });
+    
     return input;
   }
 }

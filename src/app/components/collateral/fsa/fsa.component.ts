@@ -53,8 +53,6 @@ export class FSAComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
     public collateralService: CollateralService) {
-
-
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
@@ -186,6 +184,7 @@ export class FSAComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
+        debugger
         var obj = this.rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
           this.rowData.splice(rowIndex, 1);
@@ -193,8 +192,8 @@ export class FSAComponent implements OnInit {
         } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
+          this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
   }

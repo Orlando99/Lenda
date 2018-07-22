@@ -65,7 +65,6 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
         this.localloanobject = res
         this.rowData = [];
         this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-        
         this.localloanobject.BorrowerIncomeHistory = this.rowData;
         this.getgridheight();
       // this.adjustgrid();
