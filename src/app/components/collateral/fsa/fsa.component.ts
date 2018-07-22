@@ -16,6 +16,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
+import { CollateralService } from '../collateral.service';
 
 @Component({
   selector: 'app-fsa',
@@ -50,37 +51,38 @@ export class FSAComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService) {
+    public loanapi: LoanApiService,
+    public collateralService: CollateralService) {
 
 
-    this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
     this.columnDefs = [
       { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
-      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color']},
-      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'] },
-      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color','text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130,cellClass: 'editable-color', cellEditor: "alphaNumeric"},
+      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
+      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color', 'text-right'] },
+      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'text-right'] },
+      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130, cellClass: 'editable-color', cellEditor: "alphaNumeric" },
       {
         headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
         // valueGetter: function (params) {
         //   return setNetMktValue(params);}
       },
       {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color','text-right'] , width: 130,
+        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
         pinnedRowCellRenderer: function () { return '-'; }
       },
       {
-        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'],
+        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
         // valueGetter: function (params) {
         //   return setDiscValue(params);
         // },
         valueFormatter: currencyFormatter
       },
       {
-        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100,cellClass: ['editable-color'] ,
+        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100, cellClass: ['editable-color'],
         cellEditorParams: {
           values: [{ 'key': 0, 'value': 'No' }, { 'key': 1, 'value': 'Yes' }]
         }, pinnedRowCellRenderer: function () { return ' '; },
@@ -98,11 +100,11 @@ export class FSAComponent implements OnInit {
       if (res.srccomponentedit == "FSAComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"  && lc.ActionStatus !==3   })[res.lasteditrowindex];
+        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
       } else {
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"   && lc.ActionStatus !==3  }) : [];
+        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -120,7 +122,7 @@ export class FSAComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA"   && lc.ActionStatus !==3  }) : [];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
@@ -140,7 +142,6 @@ export class FSAComponent implements OnInit {
 
 
   onGridReady(params) {
-    
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
@@ -175,40 +176,26 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    if (this.localloanobject.LoanCollateral == null)
-      this.localloanobject.LoanCollateral = [];
-
-    var newItem = new Loan_Collateral();
-    newItem.Collateral_Category_Code = "FSA";
-    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
-    newItem.Disc_Value = 50;
-    newItem.ActionStatus = 1;
-    var res = this.rowData.push(newItem);
-    this.localloanobject.LoanCollateral.push(newItem);
-    this.gridApi.setRowData(this.rowData);
-    this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length - 1,
-      colKey: "Collateral_Description"
-    });
-    this.getgridheight();
+    this.collateralService.addrow(this.gridApi, this.rowData, "FSA");
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
-    if (obj.Collateral_ID == 0) {
-      obj.ActionStatus = 1;
-      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
-    }
-    else {
-      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
-      this.localloanobject.LoanCollateral[rowindex] = obj;
-    }
-    //this shall have the last edit
-    this.localloanobject.srccomponentedit = "FSAComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    // var obj = value.data;
+    // if (obj.Collateral_ID == 0) {
+    //   obj.ActionStatus = 1;
+    //   this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
+    // }
+    // else {
+    //   var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+    //   if (obj.ActionStatus != 1)
+    //     obj.ActionStatus = 2;
+    //   this.localloanobject.LoanCollateral[rowindex] = obj;
+    // }
+    // //this shall have the last edit
+    // this.localloanobject.srccomponentedit = "FSAComponent";
+    // this.localloanobject.lasteditrowindex = value.rowIndex;
+    // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.collateralService.rowvaluechanged(value, this.localloanobject, "FSAComponent");
   }
 
   DeleteClicked(rowIndex: any) {
