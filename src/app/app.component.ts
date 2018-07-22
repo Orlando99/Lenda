@@ -1,17 +1,20 @@
-import { Component, ViewContainerRef, HostListener, AfterViewInit } from '@angular/core';
+import { Component, ViewContainerRef, HostListener, AfterViewInit, OnInit } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr';
 import { LocalStorageService } from 'ngx-webstorage';
 import {
   Router, NavigationStart, NavigationCancel, NavigationEnd
 } from '@angular/router';
 import { environment } from '../environments/environment.prod';
+import { LayoutService } from './shared/layout/layout.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  providers: [LayoutService]
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit {
+  public isSidebarExpanded: boolean = true;
   title = 'LendaPlus';
   loading;
   @HostListener('window:beforeunload', ['$event'])
@@ -19,7 +22,10 @@ export class AppComponent implements AfterViewInit {
 
     //.loanstorage.clear("userid");
   }
-  constructor(private toaster: ToastsManager, private router: Router, vcf: ViewContainerRef, private loanstorage: LocalStorageService) {
+  constructor(private toaster: ToastsManager,
+    private router: Router, vcf: ViewContainerRef,
+    private loanstorage: LocalStorageService,
+    public layoutService: LayoutService) {
     this.toaster.setRootViewContainerRef(vcf);
     this.loading = true;
     router.events.subscribe((res: any) => {
@@ -35,10 +41,14 @@ export class AppComponent implements AfterViewInit {
             router.navigateByUrl("login");
           }
         }
-
       }
     })
+  }
 
+  ngOnInit() {
+    this.layoutService.isSidebarExpanded().subscribe((value) => {
+      this.isSidebarExpanded = value;
+    })
   }
 
   ngAfterViewInit() {
