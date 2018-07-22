@@ -13,6 +13,7 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
 }
 
 // Accordion overrides
+// =================
 body .mat-expansion-panel-header:hover {
   background-color: rgb(22, 76, 123) !important;
   .mat-expansion-panel-header-title,
@@ -79,3 +80,38 @@ body .mat-expansion-panel-header {
 
 
 }
+
+// ====
+
+// Dialog overrides
+// ====
+
+.mat-dialog-container {
+  min-height: 150px;
+  position: relative;
+  .mat-dialog-title {
+    background: $primary-color;
+    color: $white;
+    padding: 10px;
+    font-size: $font-size-md;
+    font-weight: normal;
+  }
+
+  .mat-dialog-content {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    &::after {
+      content: ' ';
+      display: block;
+      height: 60px;
+    }
+  }
+
+  .mat-dialog-actions {
+    margin-bottom: 0;
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+  }
+}
+//====

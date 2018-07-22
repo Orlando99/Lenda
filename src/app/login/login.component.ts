@@ -10,6 +10,7 @@ import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';
 import { ReferenceService } from '../services/reference/reference.service';
 import { Users } from '../models/commonmodels';
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'auth-page',
@@ -23,9 +24,9 @@ export class LoginComponent implements OnInit {
   isValidForm: boolean = true;
   authForm: FormGroup;
   private loggedIn: boolean;
+  private isUserLoggedIn: boolean;
   username: string;
   password: string;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -34,7 +35,8 @@ export class LoginComponent implements OnInit {
     public toastr: ToastsManager,
     public alertifyService: AlertifyService,
     public localst: LocalStorageService,
-    public referencedataapi: ReferenceService
+    public referencedataapi: ReferenceService,
+    private loginService: LoginService
   ) {
 
     this.authForm = this.fb.group({
@@ -67,13 +69,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.title = 'Test Tour of Heroes';
+
+    this.loginService.login(false);
   }
 
   login() {
-
-    let userfound=Users[this.username];
-    if(userfound!=undefined && this.username==this.password)
-     {
+    let userfound = Users[this.username];
+    if (userfound != undefined && this.username == this.password) {
+      // trigger login success
+      this.loginService.login(true);
       this.localst.store(environment.logpriority, Logpriority.Low);
       this.localst.store(environment.uid, userfound);
       this.getreferencedata();

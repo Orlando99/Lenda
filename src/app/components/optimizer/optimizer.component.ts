@@ -40,7 +40,6 @@ export class OptimizerComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '240px',
     boxSizing: 'border-box'
   };
   public loanmodel: loan_model;

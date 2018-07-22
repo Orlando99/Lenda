@@ -44,6 +44,7 @@ import { GlobalService, ApiService } from './services';
 import { SharedModule } from './shared/shared.module';
 import { AlertifyService } from './alertify/alertify.service';
 import { LoanApiService } from './services/loan/loanapi.service';
+import { LoginService } from './login/login.service';
 //END SERVICES
 
 
@@ -170,6 +171,7 @@ import { BottomIconsComponent } from './components/summary/charts-visualization/
 import { ProgressChartComponent } from './components/summary/charts-visualization/company-info/progress-chart/progress-chart.component';
 import { BudgetHelperService } from './components/budget/budget-helper.service';
 import { OverallCalculationServiceService } from './Workers/calculations/overall-calculation-service.service';
+import { WorkInProgressStatsComponent } from './components/work-in-progress/work-in-progress-stats/work-in-progress-stats.component';
 import { MarketingContractsComponent } from './components/collateral/marketing-contracts/marketing-contracts.component';
 import { CollateralReportComponent } from './components/work-in-progress/collateral-report/collateral-report.component';
 import { MarketingcontractcalculationService } from './Workers/calculations/marketingcontractcalculation.service';
@@ -250,6 +252,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     ProgressChartComponent,
     CurrencyDirective,
     PercentageDirective,
+    WorkInProgressStatsComponent,
     MarketingContractsComponent,
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
@@ -366,6 +369,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AssociationcalculationworkerService,
     BudgetHelperService,
     OverallCalculationServiceService,
+    LoginService,
     MarketingcontractcalculationService,
     OptimizercalculationService
   ],
