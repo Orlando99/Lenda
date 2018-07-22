@@ -136,6 +136,7 @@ export class LoancropunitcalculationworkerService {
       }
       catch (ex) {
         element.Mkt_Value = 0;
+        throw (ex);
       }
 
       //Insurance Value

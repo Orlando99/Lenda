@@ -10,6 +10,7 @@ export const environment = {
   logpriority:"logpriority",
   referencedatakey:"refdata",
   uid:"userid",
-  loanidkey:"selectedloanId"
+  loanidkey:"selectedloanId",
+  isDebugModeActive: false
 };
 
