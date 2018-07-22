@@ -1,7 +1,7 @@
 <div class="fp-webApp">
-  <layout-header>
+  <layout-header *ngIf="isUserLoggedIn">
   </layout-header>
-  <app-right-sidebar></app-right-sidebar>
+  <app-right-sidebar *ngIf="isUserLoggedIn"></app-right-sidebar>
   <div class="center" [ngClass]="{'is-sidebar-expanded': isSidebarExpanded}" [hidden]="!loading">
     <div class="overlay"></div>
     <div class="preloader-wrapper active">
@@ -55,5 +55,5 @@
     </div>
   </div>
   <router-outlet [hidden]="loading"></router-outlet>
-  <layout-footer></layout-footer>
+  <layout-footer *ngIf="isUserLoggedIn"></layout-footer>
 </div>

@@ -44,6 +44,7 @@ import { GlobalService, ApiService } from './services';
 import { SharedModule } from './shared/shared.module';
 import { AlertifyService } from './alertify/alertify.service';
 import { LoanApiService } from './services/loan/loanapi.service';
+import { LoginService } from './login/login.service';
 //END SERVICES
 
 
@@ -353,7 +354,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     InsurancecalculationworkerService,
     AssociationcalculationworkerService,
     BudgetHelperService,
-    OverallCalculationServiceService
+    OverallCalculationServiceService,
+    LoginService
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]
