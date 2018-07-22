@@ -95,16 +95,35 @@ export class BorrowerInfoComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.mode === 'create') {
-      this.createForm({});
-    } else {
-      this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-      if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
-        this.createForm(this.localloanobj.LoanMaster[0]);
-        this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      this.localloanobj = res;
+      //borrower info
+      if (this.mode === 'create') {
+        this.createForm({});
+      } else {
+        this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+        if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
+          this.createForm(this.localloanobj.LoanMaster[0]);
+          this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
+        }
       }
+      this.rowData = this.localloanobj.Association.filter(as=>as.ActionStatus !=3) || [];
+
+
+
+    });
+
+    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
+      this.createForm(this.localloanobj.LoanMaster[0]);
+      this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
     }
+
     this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
+
+
+
+
   }
 
 
@@ -181,6 +200,7 @@ export class BorrowerInfoComponent implements OnInit {
     if(value.Assoc_ID == undefined){
       value.Assoc_ID = 0;
       value.ActionStatus = 1;
+      
     }else{
       value.ActionStatus =2;
     }
