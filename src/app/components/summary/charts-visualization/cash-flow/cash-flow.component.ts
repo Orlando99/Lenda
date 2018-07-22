@@ -23,8 +23,9 @@ export class CashFlowComponent implements OnInit {
   public doughnutChartType: string = 'doughnut';
   public chartColors: any[] = [
     {
-      backgroundColor: this.generatedColors
-      // chartSettings.doughnut.backgroundColors
+      backgroundColor:
+      // this.generatedColors
+      chartSettings.doughnut.backgroundColors
     }];
 
   public chartOptions: any = {
