@@ -38,8 +38,6 @@ export class Loan_Crop_Unit
     Booking_Ind: number=0;
     @JsonProperty("Status", IntConverter,false)
     Status: number=0;
-    @JsonProperty("Ins_APH", IntConverter,false)
-    Ins_APH: number=0;
     @JsonProperty("ActionStatus", IntConverter,false)
     ActionStatus: number=0;
      // New Properties
