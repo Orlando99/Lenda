@@ -33,6 +33,7 @@ export class PoliciesComponent implements OnInit {
  
 
   deleteunwantedcolumn(): any {
+    debugger
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
       let included = false;
@@ -201,6 +202,11 @@ export class PoliciesComponent implements OnInit {
     if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
       rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Price_HMAX']
+      //HMAX
+    }
+    if (value == "SCO") { //these values are Suffixed rather than prefixed
+      //HMAX
+      rendervalues = ['Yield_SCO']
       //HMAX
     }
     if (value == "STAX") {
@@ -501,12 +507,13 @@ export class PoliciesComponent implements OnInit {
       });
       //Delete unwanted Column here
       
-      this.deleteunwantedcolumn();
-      this.gridApi.setColumnDefs(this.columnDefs);
+      
       
       //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
     //get the local loan object synced
+    this.deleteunwantedcolumn();
+    this.gridApi.setColumnDefs(this.columnDefs);
     this.updatelocalloanobject($event);
     this.updateSyncStatus();
   }

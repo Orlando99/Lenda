@@ -228,6 +228,13 @@ export class OthersComponent implements OnInit {
     })
   }
 
+  expansionopen()
+  {
+    setTimeout(() => {
+      adjustparentheight();
+    }, 10);
+  
+  }
   getgridheight() {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
@@ -253,3 +260,13 @@ export class OthersComponent implements OnInit {
     }
   }
 }
+function adjustparentheight(){
+  var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+  
+  elements.forEach(element => {
+   debugger
+    //find aggrid
+    var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+   });
+ }

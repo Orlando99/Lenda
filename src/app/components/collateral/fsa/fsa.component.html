@@ -1,5 +1,5 @@
 <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel  [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         FSA
@@ -15,7 +15,7 @@
      <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
 
     <div class="container bottom">
-      <div class="row">
+      <div class="row" >
         <ag-grid-angular [ngStyle]="style" 
         class="ag-theme-balham roboto-font"
         [animateRows]="true" [enableSorting]="true" 
