@@ -109,7 +109,7 @@ export class LoancropunitcalculationworkerService {
         element.Ins_Value=element.FC_MPCIvalue;
         //MPCI type only as if now--We dont have secondary 
         element.Disc_Ins_value=element.FC_Disc_MPCI_value;
-         debugger
+         
         // Insurance Sub Policies Calculations
             let subpolicies = insurancepolicy.Subpolicies;
             subpolicies.forEach(subpolicy => {

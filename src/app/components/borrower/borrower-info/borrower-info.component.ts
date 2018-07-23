@@ -10,6 +10,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
+import { AlertifyService } from '../../../alertify/alertify.service';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -21,12 +22,12 @@ export class BorrowerInfoComponent implements OnInit {
   localloanobj: loan_model;
   stateList: Array<any>;
   entityType = [
-    {key : 'IND', value : 'Individual'},
-    {key : 'INDWS', value : 'Individual w/ Spouse'},
-    {key : 'PRP', value : 'Partner'},
-    {key : 'JNT', value : 'Joint'},
-    {key : 'COP', value : 'Corporation'},
-    {key : 'LLC', value : 'LLC'},
+    { key: 'IND', value: 'Individual' },
+    { key: 'INDWS', value: 'Individual w/ Spouse' },
+    { key: 'PRP', value: 'Partner' },
+    { key: 'JNT', value: 'Joint' },
+    { key: 'COP', value: 'Corporation' },
+    { key: 'LLC', value: 'LLC' },
   ];
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
@@ -35,9 +36,12 @@ export class BorrowerInfoComponent implements OnInit {
   public refdata;
   public frameworkcomponents;
   public context;
-  public rowData : Array<Loan_Association> = [];
+  public rowData = [];
   public gridApi;
   public columnApi;
+
+  //in this case local storage Associaltion list have other rows as well, so simply lading picking the record from rowIndex won't work
+  private latestUpdatedObject;
 
   @Input('allowIndividualSave')
   allowIndividualSave: boolean;
@@ -46,7 +50,7 @@ export class BorrowerInfoComponent implements OnInit {
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() set borrowerInfo(borrowerInfo) {
-    if(borrowerInfo){
+    if (borrowerInfo) {
       let borrower = new loan_borrower();
       borrower.Borrower_First_Name = borrowerInfo.value.Farmer_First_Name ? borrowerInfo.value.Farmer_First_Name.slice() : "";
       borrower.Borrower_Last_Name = borrowerInfo.value.Farmer_Last_Name ? borrowerInfo.value.Farmer_Last_Name.slice() : "";
@@ -67,65 +71,78 @@ export class BorrowerInfoComponent implements OnInit {
     public loanserviceworker: LoancalculationWorker,
     public logging: LoggingService,
     private loanApiService: LoanApiService,
-    private toaster: ToastsManager) {
+    private toaster: ToastsManager,
+    private alertify : AlertifyService) {
 
-      
-      this.components = { numericCellEditor: getNumericCellEditor()};
-      this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-      this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
-      this.columnDefs = [
-        { headerName: 'Name', field: 'Assoc_Name',  cellClass: 'editable-color', editable: true,width : 150},
-        { headerName: 'Contact', field: 'Contact',  cellClass: 'editable-color', editable: true,width : 150},
-        { headerName: 'Location', field: 'Location',  cellClass: 'editable-color', editable: true,width : 150},
-        { headerName: 'Phone', field: 'Phone',  cellClass: 'editable-color', editable: true,width : 150},
-        { headerName: 'Email', field: 'Email',  cellClass: 'editable-color', editable: true,width : 150},
-        { headerName: 'Co Borrower', field: 'Co Borrower',  cellClass: 'editable-color', editable: true,width : 100,
-        cellRenderer: params => {
-            return `<input type='checkbox' ${params.value ? 'checked' : ''} />`;
-        }},
-        { headerName: '', field: '', cellRenderer: "deletecolumn" },
+    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
-        
-      ];
+    this.columnDefs = [
+      { headerName: 'Name', field: 'Assoc_Name', cellClass: 'editable-color', editable: true, width: 150 },
+      { headerName: 'Title', field: 'Contact', cellClass: 'editable-color', editable: true, width: 150 },
+      { headerName: 'Location', field: 'Location', cellClass: 'editable-color', editable: true, width: 150 },
+      { headerName: 'Phone', field: 'Phone', cellClass: 'editable-color', editable: true, width: 150 },
+      { headerName: 'Email', field: 'Email', cellClass: 'editable-color', editable: true, width: 150 },
+      {
+        headerName: 'Co Borrower', field: 'Is_CoBorrower', cellClass: 'editable-color', editable: true, width: 100, cellEditor: "selectEditor",
+        cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
+        valueFormatter: function (params) {
+          return params.value == 1 ? 'Yes' : 'No';
+        }
+      },
+      { headerName: '', field: '', cellRenderer: "deletecolumn" },
 
-      this.context = { componentParent: this };
+
+    ];
+
+    this.context = { componentParent: this };
 
   }
 
   ngOnInit() {
 
+
+    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
+    if (this.mode === 'create') {
+      this.createForm({});
+    } else {
+      if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
+        this.createForm(this.localloanobj.LoanMaster[0]);
+        this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
+      }
+    }
+    this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
+
+    if (this.borrowerInfoForm.value.Borrower_Entity_Type_Code) {
+      this.rowData = [];
+      this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Borrower_Entity_Type_Code }) : [];
+    }
+
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localloanobj = res;
       //borrower info
-      if (this.mode === 'create') {
-        this.createForm({});
+      if (this.localloanobj.srccomponentedit == "BorrowerInfoComponent") {
+
+        this.rowData[this.localloanobj.lasteditrowindex] = this.localloanobj.Association.find(as => { return as.ActionStatus !== 3 && as == this.latestUpdatedObject });
       } else {
-        this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-        if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
-          this.createForm(this.localloanobj.LoanMaster[0]);
-          this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
-        }
+
+        this.rowData = [];
+        this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Borrower_Entity_Type_Code }) : [];
+
       }
-      this.rowData = this.localloanobj.Association.filter(as=>as.ActionStatus !=3) || [];
-
-
+      this.localloanobj.srccomponentedit = undefined;
+      this.localloanobj.lasteditrowindex = undefined;
+      this.latestUpdatedObject = undefined;
+      this.gridApi.refreshCells();
 
     });
-
-    this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
-      this.createForm(this.localloanobj.LoanMaster[0]);
-      this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
-    }
-
-    this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
 
 
 
 
   }
-
 
   createForm(formData) {
     console.log(formData)
@@ -191,39 +208,75 @@ export class BorrowerInfoComponent implements OnInit {
     }
   }
 
-  addrow(){
+  addrow() {
+    
+
+    //TODO: Workaround of not refreshing rowData issue, otherwise not required
+    let tempRowData = this.rowData;
+    this.rowData= [];
+    tempRowData.forEach(element => {
+      this.rowData.push(element);
+    })
+
     let newAssocialtion = new Loan_Association();
     this.rowData.push(newAssocialtion);
+    
+    this.gridApi.refreshCells();
   }
 
-  rowvaluechanged(value : Loan_Association){
-    if(value.Assoc_ID == undefined){
-      value.Assoc_ID = 0;
-      value.ActionStatus = 1;
-      
-    }else{
-      value.ActionStatus =2;
+  rowvaluechanged(value) {
+    let data: Loan_Association = value.data;
+    if (data.Assoc_ID == undefined) {
+      data.Assoc_ID = 0;
+      data.ActionStatus = 1;
+      data.Assoc_Type_Code = this.borrowerInfoForm.value.Borrower_Entity_Type_Code;
+      this.localloanobj.Association.push(data);
+
+    } else if (data.Assoc_ID > 0) {
+      data.ActionStatus = 2;
     }
+
+    this.localloanobj.srccomponentedit = "BorrowerInfoComponent";
+    this.localloanobj.lasteditrowindex = value.rowIndex;
+    this.latestUpdatedObject = data;
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    
+
   }
 
   onGridSizeChanged(Event: any) {
-     this.gridApi.sizeColumnsToFit();
+    this.gridApi.sizeColumnsToFit();
   }
 
 
-  // DeleteClicked(rowIndex: any) {
-  //   let association = this.rowData[rowIndex];
-  //   if(!association.Assoc_ID){
-  //     this.rowData.splice(rowIndex,1);
-  //   }else{
-  //     this.rowData.
-  //   }
-  // }
+  DeleteClicked(rowIndex: any) {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+      if (res == true) {
+        let association: Loan_Association = this.rowData[rowIndex];
+
+        this.rowData.splice(rowIndex, 1);
+
+        if (association.Assoc_ID == 0) {
+          //Newly added, altered, stored in local db but Assoc_ID = 0
+          let localIndex = this.localloanobj.Association.findIndex(as => as == association);
+          if (localIndex >= 0) {
+            this.localloanobj.Association.splice(localIndex, 1);
+          }
+        } else if (association.Assoc_ID > 0) {
+          //already exist in db and have some proper Assoc_ID
+          let localIndex = this.localloanobj.Association.findIndex(as => as.Assoc_ID == association.Assoc_ID);
+          if (localIndex >= 0) {
+            this.localloanobj.Association.splice(localIndex, 1);
+          }
+
+        }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+      }
+    })
+  }
 
 }
