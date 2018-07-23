@@ -152,7 +152,10 @@ export class BorrowerInfoComponent implements OnInit {
 
   }
 
-
+  getTypeNameOfCB(cbTypeID){
+    let entity = this.entityType.find(et=>et.key == cbTypeID);
+    return entity ? entity.value : '';
+  }
   createForm(formData) {
     console.log(formData)
     this.borrowerInfoForm = this.fb.group({
