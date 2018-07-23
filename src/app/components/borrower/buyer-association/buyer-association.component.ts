@@ -78,7 +78,7 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: false },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
-      { headerName: 'Email', field: 'Email', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
