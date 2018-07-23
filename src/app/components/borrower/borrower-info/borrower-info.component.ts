@@ -11,6 +11,7 @@ import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericbox
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
+import { JsonConvert } from 'json2typescript';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -72,7 +73,7 @@ export class BorrowerInfoComponent implements OnInit {
     public logging: LoggingService,
     private loanApiService: LoanApiService,
     private toaster: ToastsManager,
-    private alertify : AlertifyService) {
+    private alertify : AlertifyService,public loanapi:LoanApiService) {
 
 
     this.components = { numericCellEditor: getNumericCellEditor() };
@@ -115,9 +116,9 @@ export class BorrowerInfoComponent implements OnInit {
     }
     this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
 
-    if (this.borrowerInfoForm.value.Borrower_Entity_Type_Code) {
+    if (this.borrowerInfoForm.value.Co_Borrower_ID) {
       this.rowData = [];
-      this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Borrower_Entity_Type_Code }) : [];
+      this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID }) : [];
     }
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -129,7 +130,7 @@ export class BorrowerInfoComponent implements OnInit {
       } else {
 
         this.rowData = [];
-        this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Borrower_Entity_Type_Code }) : [];
+        this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID }) : [];
 
       }
       this.localloanobj.srccomponentedit = undefined;
@@ -151,7 +152,7 @@ export class BorrowerInfoComponent implements OnInit {
       Borrower_MI: [formData.Borrower_MI || ''],
       Borrower_Last_Name: [formData.Borrower_Last_Name || '', Validators.required],
       Borrower_SSN_Hash: [formData.Borrower_SSN_Hash || '', Validators.required],
-      Borrower_Entity_Type_Code: [formData.Borrower_Entity_Type_Code || '', Validators.required],
+      Co_Borrower_ID : [formData.Co_Borrower_ID  || '', Validators.required],
       Borrower_Address: [formData.Borrower_Address || '', Validators.required],
       Borrower_City: [formData.Borrower_City || '', Validators.required],
       Borrower_State_ID: [formData.Borrower_State_ID || '', Validators.required],
@@ -194,18 +195,59 @@ export class BorrowerInfoComponent implements OnInit {
     }
   }
 
-  synctoDb() {
-    if (this.borrowerInfoForm.valid) {
-      this.loanApiService.syncloanborrower(this.loan_id, this.borrowerInfoForm.value as loan_borrower).subscribe((successResponse) => {
-        this.toaster.success("Borrower details saved successfully");
-        this.isSubmitted = true;
-      }, (errorResponse) => {
-        this.toaster.error("Error Occurered while saving borrower details");
+  onEntityTypeChange(data){
+    
+  }
 
-      });
-    } else {
-      this.toaster.error("Borrower details form doesn't seem to have data in correct format, please correct them before saving.");
-    }
+  synctoDb() {
+    // if (this.borrowerInfoForm.valid) {
+    //   this.loanApiService.syncloanborrower(this.loan_id, this.borrowerInfoForm.value as loan_borrower).subscribe((successResponse) => {
+    //     this.toaster.success("Borrower details saved successfully");
+    //     this.isSubmitted = true;
+    //   }, (errorResponse) => {
+    //     this.toaster.error("Error Occurered while saving borrower details");
+
+    //   });
+    // } else {
+    //   this.toaster.error("Borrower details form doesn't seem to have data in correct format, please correct them before saving.");
+    // }
+
+    let loanMaster = this.localloanobj.LoanMaster[0];
+    loanMaster.Borrower_First_Name = this.borrowerInfoForm.value.Borrower_First_Name;
+    loanMaster.Borrower_MI = this.borrowerInfoForm.value.Borrower_MI;
+    loanMaster.Borrower_Last_Name = this.borrowerInfoForm.value.Borrower_Last_Name;
+    loanMaster.Borrower_SSN_Hash = this.borrowerInfoForm.value.Borrower_SSN_Hash;
+    loanMaster.Co_Borrower_ID = this.borrowerInfoForm.value.Co_Borrower_ID;
+    loanMaster.Borrower_Address = this.borrowerInfoForm.value.Borrower_Address;
+    loanMaster.Borrower_City = this.borrowerInfoForm.value.Borrower_First_Name;
+    loanMaster.Borrower_State_ID = this.borrowerInfoForm.value.Borrower_State_ID;
+    loanMaster.Borrower_Zip = this.borrowerInfoForm.value.Borrower_Zip;
+    loanMaster.Borrower_Phone = this.borrowerInfoForm.value.Borrower_Phone;
+    loanMaster.Borrower_email = this.borrowerInfoForm.value.Borrower_email;
+    loanMaster.Borrower_DOB = this.borrowerInfoForm.value.Borrower_DOB;
+    loanMaster.Spouse_First_Name = this.borrowerInfoForm.value.Spouse_First_Name;
+    loanMaster.Spouse__MI = this.borrowerInfoForm.value.Spouse__MI;
+    loanMaster.Spouse_Last_name = this.borrowerInfoForm.value.Spouse_Last_name;
+    loanMaster.Spouse_Phone = this.borrowerInfoForm.value.Spouse_Phone;
+    loanMaster.Spouse_Email = this.borrowerInfoForm.value.Spouse_Email;
+    this.loanapi.syncloanobject(this.localloanobj).subscribe(res=>{
+      if(res.ResCode == 1){
+        this.loanapi.getLoanById(this.localloanobj.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else{
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    });
   }
 
   addrow() {
@@ -229,7 +271,8 @@ export class BorrowerInfoComponent implements OnInit {
     if (data.Assoc_ID == undefined) {
       data.Assoc_ID = 0;
       data.ActionStatus = 1;
-      data.Assoc_Type_Code = this.borrowerInfoForm.value.Borrower_Entity_Type_Code;
+      data.Assoc_Type_Code = this.borrowerInfoForm.value.Co_Borrower_ID;
+      data.Loan_Full_ID = this.localloanobj.Loan_Full_ID;
       this.localloanobj.Association.push(data);
 
     } else if (data.Assoc_ID > 0) {
@@ -268,10 +311,8 @@ export class BorrowerInfoComponent implements OnInit {
           }
         } else if (association.Assoc_ID > 0) {
           //already exist in db and have some proper Assoc_ID
-          let localIndex = this.localloanobj.Association.findIndex(as => as.Assoc_ID == association.Assoc_ID);
-          if (localIndex >= 0) {
-            this.localloanobj.Association.splice(localIndex, 1);
-          }
+          let localObj = this.localloanobj.Association.find(as => as.Assoc_ID == association.Assoc_ID);
+          localObj.ActionStatus=3;
 
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
