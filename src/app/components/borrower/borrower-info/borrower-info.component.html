@@ -1,7 +1,7 @@
-<button (click)="synctoDb()" *ngIf="allowIndividualSave">
-	<a class="waves-effect waves-light btn">
+
+	<a class="waves-effect waves-light btn"  (click)="synctoDb()" *ngIf="allowIndividualSave" style="margin: 0 0 10px 18px;" >
 		<i class="material-icons left">cloud</i>Publish</a>
-</button>
+
 
 
 <div class="container bottom width-auto">
@@ -101,7 +101,7 @@
 			<div class="w-100"></div>
 			<br>
 
-			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm.value.Co_Borrower_ID =='INDWS'">
+			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID =='INDWS'">
 				<div class="input-field col m3">
 					<mat-form-field>
 						<input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name">
@@ -134,22 +134,22 @@
 					</mat-form-field>
 				</div>
 
-				<div *ngIf="borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse">
 					</mat-form-field>
 				</div>
-				<div *ngIf="borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse SSN">
 					</mat-form-field>
 				</div>
-				<div *ngIf="borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Phone">
 					</mat-form-field>
 				</div>
-				<div *ngIf="borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Email">
 					</mat-form-field>
@@ -161,9 +161,9 @@
 
 	</div>
 	<!-- Table -->
-	<div class="row" *ngIf="['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
+	<div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
 		<h3>{{borrowerInfoForm.value.Co_Borrower_ID}}</h3>
-		<a (click)="addrow()" class="waves-effect waves-light btn">
+		<a (click)="addrow()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
 			<i class="material-icons left">add</i>Add</a>
 
 			<div class="container bottom">
