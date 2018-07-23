@@ -49,6 +49,11 @@ export class MarketingcontractcalculationService {
         crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + crop.Marketing_Adj + crop.Rebate_Adj;
       }else{
         crop.Percent_booked = 0;
+        crop.Contract_Price = 0;
+        crop.Contract_Qty = 0;
+        crop.Marketing_Adj =0;
+        crop.Adj_Price = 0;
+        
       }
     });
 
