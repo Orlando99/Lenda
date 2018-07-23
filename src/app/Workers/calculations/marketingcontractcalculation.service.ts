@@ -26,10 +26,25 @@ export class MarketingcontractcalculationService {
 
   getCropContract(localloanobject : loan_model, cropCode : string, type : string){
     if(localloanobject.LoanCropUnits && localloanobject.CropYield && localloanobject.Farms){
-        let totalCUAcres = _.sumBy(localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type), 'CU_Acres');
-        let totalCropYield = _.sumBy(localloanobject.CropYield.filter(cy=>cy.CropType === cropCode  && cy.IrNI === type), 'CropYield' );
-        let totalPerProd = _.sumBy(localloanobject.Farms, 'Percent_Prod')  || 1;
-        return totalCUAcres * totalCropYield * totalPerProd;
+
+      let totalCUAcres= 0;
+      let filteredCropUnits = localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type);
+      if(filteredCropUnits && filteredCropUnits.length > 0){
+        filteredCropUnits.forEach(cu=>{
+          let cuFarm = localloanobject.Farms.find(f=>f.Farm_ID == cu.Farm_ID);
+          if(cuFarm){
+            totalCUAcres += cu.CU_Acres * ((cuFarm.Percent_Prod || 100)/100);
+          }
+        })
+      }
+
+      let totalCropYield = 0
+      let selectedCY = localloanobject.CropYield.find(cy=>cy.CropType === cropCode  && cy.IrNI === type);
+      if(selectedCY){
+        totalCropYield = selectedCY.CropYield;
+      }
+
+        return totalCUAcres * totalCropYield;
     }else{
       return 0;
     }
