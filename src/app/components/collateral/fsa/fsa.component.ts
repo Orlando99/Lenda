@@ -131,6 +131,7 @@ export class FSAComponent implements OnInit {
   private adjustgrid() {
     try {
       this.gridApi.sizeColumnsToFit();
+     
     }
     catch {
     }
@@ -142,6 +143,7 @@ export class FSAComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
     this.adjustgrid();
+  
   }
 
   syncenabled() {
@@ -219,8 +221,9 @@ export class FSAComponent implements OnInit {
         } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
-          this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+          
         }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
   }
@@ -250,3 +253,4 @@ export class FSAComponent implements OnInit {
     }
   }
 }
+

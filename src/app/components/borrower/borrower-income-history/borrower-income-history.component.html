@@ -1,23 +1,22 @@
 <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
  
-      <div class="container bottom">
-        <div class="row">
-          <ag-grid-angular 
-            [ngStyle]="style" class="ag-theme-balham roboto-font" 
-            [animateRows]="true" 
-            [enableSorting]="true" 
-            [enableFilter]="true"
-            [context]="context" 
-            (gridSizeChanged)="onGridSizeChanged($event)" 
-            [rowData]="rowData" 
-            (gridReady)="onGridReady($event)"
-            [columnDefs]="columnDefs" 
-            [components]="components"
-            [toolPanelSuppressSideButtons] = true
-            [showToolPanel]="false"   
-            (cellEditingStopped)="rowvaluechanged($event)"
-            >
-          </ag-grid-angular>
-        </div>
-      </div>
-    <!-- showToolPanel Should work but dont work so work around is toolPanelSuppressSideButtons -->
+<div class="container bottom">
+  <div class="row">
+    <ag-grid-angular  [ngStyle]="style"
+      class="ag-theme-balham roboto-font"
+      [animateRows]="true"
+      [enableSorting]="true"
+      [enableFilter]="true"
+      [context]="context"
+      (gridSizeChanged)="onGridSizeChanged($event)"
+      [components]="components"
+      [singleClickEdit]="true"
+      (cellEditingStopped)="rowvaluechanged($event)"
+      [rowData]="rowData" 
+      (gridReady)="onGridReady($event)"
+      [columnDefs]="columnDefs"
+      [gridAutoHeight]=true>
+    </ag-grid-angular>
+  </div>
+</div>
+  

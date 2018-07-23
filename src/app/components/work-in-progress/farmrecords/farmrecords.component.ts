@@ -3,20 +3,20 @@ import { LocalStorageService } from '../../../../../node_modules/ngx-webstorage'
 import { environment } from '../../../../environments/environment.prod';
 
 @Component({
-  selector: 'app-cropunitrecords',
-  templateUrl: './cropunitrecords.component.html',
-  styleUrls: ['./cropunitrecords.component.scss']
+  selector: 'app-farmrecords',
+  templateUrl: './farmrecords.component.html',
+  styleUrls: ['./farmrecords.component.scss']
 })
-export class CropunitrecordsComponent implements OnInit {
+export class FarmRecordsComponent implements OnInit {
   public records = [];
   constructor(
     private localstorageservice: LocalStorageService
   ) { }
 
   ngOnInit() {
-    this.records = this.localstorageservice.retrieve(environment.loankey).LoanCropUnits;
+    this.records = this.localstorageservice.retrieve(environment.loankey).Farms;
   }
-  
+
   changeColor(params){
     if(params.ActionStatus === 3){
       return { 'background-color': 'red'};
@@ -26,5 +26,4 @@ export class CropunitrecordsComponent implements OnInit {
       return { 'background-color': 'green'};
     }
   }
-
 }
