@@ -24,6 +24,11 @@ export class CreateLoanComponent implements OnInit {
     private localstorageservice: LocalStorageService) { }
 
   ngOnInit() {
+
+    let localLoanObject = this.localstorageservice.retrieve(environment.loankey);
+    if(localLoanObject){
+      this.localstorageservice.clear(environment.loankey);
+    }
   }
   onFarmerFormValueChange(data) {
     this.farmerInfo = Object.assign(new farmer_params(), data);
