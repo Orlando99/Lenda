@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -30,7 +30,8 @@ export interface DialogData {
 @Component({
   selector: 'app-yield',
   templateUrl: './yield.component.html',
-  styleUrls: ['./yield.component.scss']
+  styleUrls: ['./yield.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class YieldComponent implements OnInit {
   public refdata: any = {};
@@ -53,7 +54,8 @@ export class YieldComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '180px',
+    //height: '180px',
+    height: '100%',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; }; };
@@ -157,7 +159,7 @@ export class YieldComponent implements OnInit {
       this.gridApi.refreshCells();
     });
     
-    this.getdataforgrid();
+    //this.getdataforgrid();
   }
 
   getdataforgrid(){
@@ -173,7 +175,11 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    //this.getgridheight();
+
+    params.api.sizeColumnsToFit();
+
+    this.getdataforgrid();
   }
 
   rowvaluechanged(value:any){
@@ -206,6 +212,7 @@ export class YieldComponent implements OnInit {
 
     this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.gridApi.sizeColumnsToFit();
   }
 
   // syncenabled(){
@@ -368,20 +375,21 @@ export class YieldComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj.ActionStatus == 1) {
-          this.rowData.splice(rowIndex, 1);
-          this.localloanobject.CropYield.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-        }else {
-          this.deleteAction = true;
-          obj.ActionStatus = 3;
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
+      res => {
+        if (res == true) {
+          var obj = this.rowData[rowIndex];
+          if (obj.ActionStatus == 1) {
+            this.rowData.splice(rowIndex, 1);
+            this.localloanobject.CropYield.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
+          }else {
+            this.deleteAction = true;
+            obj.ActionStatus = 3;
+          }
+          this.rowData=this.rowData.filter(cy=>{return cy.ActionStatus != 3});
+          this.updateSyncStatus();
+          // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         }
-        this.rowData=this.rowData.filter(cy=>{return cy.ActionStatus != 3});;
-        this.updateSyncStatus();
-        // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-      }
     })
   }
 
@@ -434,17 +442,11 @@ export class YieldComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(29*(this.rowData.length+2)).toString()+"px";
+    //this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
 
   onGridSizeChanged(Event: any) {
-
-    try{
     this.gridApi.sizeColumnsToFit();
-  }
-  catch{
-
-  }
   }
 
   updateSyncStatus(){
