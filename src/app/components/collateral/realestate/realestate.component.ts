@@ -231,6 +231,7 @@ export class RealEstateComponent implements OnInit {
     footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Real_Estate;
     footer.Disc_Value = 0;
     footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Real_Estate;
+    footer.Qty = input.LoanMaster[0].FC_total_Qty_Real_Estate;
     total.push(footer);
     return total;
   }

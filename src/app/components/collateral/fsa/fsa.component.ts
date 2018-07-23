@@ -104,7 +104,7 @@ export class FSAComponent implements OnInit {
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
-      this.gridApi.refreshCells();
+      this.gridApi  && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
