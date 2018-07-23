@@ -35,7 +35,7 @@
       <th>ActionStatus</th>
     
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Collateral_ID}}</td>
       <td>{{record.Loan_ID}}</td>
       <td>{{record.Loan_Full_ID}}</td>
@@ -66,7 +66,7 @@
       <td>{{record.Qty}}</td>
       <td>{{record.Price}}</td>
 
-      <td>{{record.ActionStatus}}</td>
+      <td >{{record.ActionStatus}}</td>
     </tr>
     
     

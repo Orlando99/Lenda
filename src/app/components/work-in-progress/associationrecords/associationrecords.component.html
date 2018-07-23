@@ -24,7 +24,7 @@
 
       <th>IsDelete</th>
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Assoc_ID}}</td>
       <td>{{record.Loan_ID}}</td>
       <td>{{record.Loan_Seq_Num}}</td>

@@ -22,7 +22,7 @@
       <th>LC_Status</th>
       <th>ActionStatus</th>
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Loan_Crop_ID}}</td>
       <td>{{record.Loan_Full_ID}}</td>
       <td>{{record.Crop_Code}}</td>

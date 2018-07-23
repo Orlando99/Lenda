@@ -17,4 +17,13 @@ export class FarmRecordsComponent implements OnInit {
     this.records = this.localstorageservice.retrieve(environment.loankey).Farms;
   }
 
+  changeColor(params){
+    if(params.ActionStatus === 3){
+      return { 'background-color': 'red'};
+    }else if(params.ActionStatus === 2){
+      return { 'background-color': 'yellow'};
+    }else if(params.ActionStatus === 1){
+      return { 'background-color': 'green'};
+    }
+  }
 }

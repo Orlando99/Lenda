@@ -34,4 +34,14 @@ export class AssociationRecordsComponent implements OnInit {
 
   }
 
+  changeColor(params){
+    if(params.ActionStatus === 3){
+      return { 'background-color': 'red'};
+    }else if(params.ActionStatus === 2){
+      return { 'background-color': 'yellow'};
+    }else if(params.ActionStatus === 1){
+      return { 'background-color': 'green'};
+    }
+  }
+
 }

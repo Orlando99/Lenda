@@ -6,7 +6,7 @@
       <th>Status_Crop_Practice</th>
       <th>Status_Insurance_Policies</th>
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Status_Farm}}</td>
       <td>{{record.Status_Crop_Practice}}</td>
       <td>{{record.Status_Crop_Practice}}</td>

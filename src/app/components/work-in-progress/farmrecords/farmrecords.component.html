@@ -29,7 +29,7 @@
       <th>ActionStatus</th>
       <th>FC_Total_Acres</th>
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Farm_ID}}</td>
       <td>{{record.Loan_Full_ID}}</td>
       <td>{{record.Farm_State_ID}}</td>
