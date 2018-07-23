@@ -96,11 +96,12 @@ export class Collateralcalculationworker {
       }
 
       computerealstateTotal(input) {
-        let collateralrealstate=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3});
+        let collateralrealstate=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3});       
         input.LoanMaster[0].FC_Market_Value_realstate = this.totalMarketValue(collateralrealstate);
         input.LoanMaster[0].FC_realstate_Prior_Lien_Amount = this.totalPriorLien(collateralrealstate);
         input.LoanMaster[0].Net_Market_Value_Real_Estate = this.totalNetMktValue(collateralrealstate);
-        input.LoanMaster[0].Disc_value_Real_Estate = this.totalDiscValue(collateralrealstate);;
+        input.LoanMaster[0].Disc_value_Real_Estate = this.totalDiscValue(collateralrealstate);
+        input.LoanMaster[0].FC_total_Qty_Real_Estate = this.totalQty(collateralrealstate);
       }
 
       computestoredcropTotal(input) {
