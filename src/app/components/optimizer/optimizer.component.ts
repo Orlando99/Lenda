@@ -20,7 +20,8 @@ export class OptimizerComponent implements OnInit {
   //Properties
   private gridApi;
   private columnApi;
-  rowData = [];
+  rowDataNIR = [];
+  rowDataIIR = [];
   public loading=false;
   public context;
   public rowClassRules;
@@ -40,7 +41,6 @@ export class OptimizerComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '240px',
     boxSizing: 'border-box'
   };
   public loanmodel: loan_model;
@@ -202,7 +202,8 @@ export class OptimizerComponent implements OnInit {
   //Grid Functions
   getgriddata() {
     //Get localstorage first
-    this.rowData = [];
+    this.rowDataIIR = [];
+    this.rowDataNIR = [];
     if (this.loanmodel != null) {
       //Start making Rows here for IRR
       this.loanmodel.Farms.forEach(farm => {
@@ -223,14 +224,14 @@ export class OptimizerComponent implements OnInit {
           row.RC = "";
           row.ExcessIns = "";
           row.Acres = crop.CU_Acres
-          this.rowData.push(row);
+          this.rowDataIIR.push(row);
         });
         if (distinctrows.length > 0) {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres=";
           row.ExcessIns =""+farm.Irr_Acres;
-          this.rowData.push(row);
+          this.rowDataIIR.push(row);
         }
       });
 
@@ -253,14 +254,14 @@ export class OptimizerComponent implements OnInit {
           row.RC = "";
           row.ExcessIns = "";
           row.Acres = crop.CU_Acres
-          this.rowData.push(row);
+          this.rowDataNIR.push(row);
         });
         if (distinctrows.length > 0) {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres =";
           row.ExcessIns =""+farm.NI_Acres;
-          this.rowData.push(row);
+          this.rowDataNIR.push(row);
         }
       });
       //End rows here
@@ -269,7 +270,10 @@ export class OptimizerComponent implements OnInit {
   }
 
   syncenabled() {
-    return true;
+    if (this.loanmodel.LoanCropUnits.filter(p=>p.ActionStatus==2).length==0)
+      return 'disabled';
+    else
+      return '';
   }
 
   synctoDb() {
@@ -297,7 +301,7 @@ export class OptimizerComponent implements OnInit {
     })
   }
 
-  rowvaluechanged($event) {
+  rowvaluechangedirr($event) {
      
     let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
     if(oldvalue!=$event.value){
@@ -309,6 +313,17 @@ export class OptimizerComponent implements OnInit {
   }
   }
 
+  rowvaluechangednir($event) {
+     
+    let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
+    if(oldvalue!=$event.value){
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).CU_Acres =parseInt($event.value);
+      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).ActionStatus =2;
+      this.loanmodel.srccomponentedit="optimizercomponent";
+      this.loanmodel.lasteditrowindex=$event.rowIndex;
+      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+  }
+  }
   onGridReady(params) { 
     this.gridApi = params.api;
     this.columnApi = params.columnApi;

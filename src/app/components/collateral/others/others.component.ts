@@ -148,7 +148,7 @@ export class OthersComponent implements OnInit {
   }
 
   syncenabled() {
-    console.log(this.rowData);
+   
     return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
   }
 

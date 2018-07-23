@@ -208,35 +208,48 @@ export class FlowchartComponent implements OnInit {
   }
 
   initTooltip() {
-    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
     let icons = this.elRef.nativeElement.querySelectorAll('.icon');
-    // Hardcoded tooltip text for demo
-    // TODO: Replace with dynamic logic once API is implemented
-    // let text = this.renderer.createText('Crop1, Crop 2, Crop 3');
     for (let icon of icons) {
       // Mouseenter event for tooltip
       icon.addEventListener('mouseover', (event) => {
-        let texts = this.getTooltipText(event);
-        this.addTooltipNodes(tooltip, texts, event);
+        this.showTooltipText(event);
       });
 
       // Mouseleave event for tooltip
       icon.addEventListener('mouseleave', (event) => {
-        tooltip.querySelectorAll('div').forEach(function (node) {
-          node.parentNode.removeChild(node);
-        });
-        this.renderer.removeClass(tooltip, 'active');
-        this.isDirty = false;
+        this.removeTooltipText(event);
       });
     }
   }
 
-  getTooltipText(event) {
-    if (event.target.parentNode.id.indexOf('farmer') !== -1) {
+  showTooltipText(event) {
+    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
+    let hoverNodeId = event.target.parentNode.id;
+    // If it is number then, find the parent
+    if (hoverNodeId === 'number') {
+      hoverNodeId = event.target.parentNode.parentNode.id;
+    }
+    let texts = this.getTooltipText(hoverNodeId);
+    this.addTooltipNodes(tooltip, texts, event);
+  }
+
+  removeTooltipText(event) {
+    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
+    tooltip.querySelectorAll('div').forEach(function (node) {
+      node.parentNode.removeChild(node);
+    });
+    this.renderer.removeClass(tooltip, 'active');
+    this.isDirty = false;
+  }
+
+  getTooltipText(hoverNodeId) {
+    // Hardcoded tooltip text for demo
+    // TODO: Replace with dynamic logic once API is implemented
+    if (hoverNodeId.indexOf('farmer') !== -1) {
       return ['Farmer 1 - 50', 'Farmer 2 - 160', 'Farmer 3 - 200'];
-    } else if (event.target.parentNode.id.indexOf('borrower') !== -1) {
+    } else if (hoverNodeId.indexOf('borrower') !== -1) {
       return ['Borrower 1 - 30', 'Borrower 2 - 60', 'Borrower 3 - 100'];
-    } else if (event.target.parentNode.id.indexOf('tree') !== -1) {
+    } else if (hoverNodeId.indexOf('tree') !== -1) {
       return ['Crop 1 - 30', 'Crop 2 - 60', 'Crop 3 - 100', 'Crop 4 - 300'];
     } else {
       return ['Misc 1 - 30', 'Misc 2 - 60', 'Misc 3 - 100'];

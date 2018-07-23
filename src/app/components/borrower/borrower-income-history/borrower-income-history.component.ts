@@ -15,6 +15,7 @@ import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
+import * as  _ from 'lodash';
 
 @Component({
   selector: 'app-borrower-income-history',
@@ -46,28 +47,37 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService) {
-    
+
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.columnDefs = [
-      { headerName: 'Year', field: 'Borrower_Year',editable: false, width: 100 },
-      { headerName: 'Revenue', field: 'Borrower_Revenue', editable: true, cellClass: 'editable-color',cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }},
+      { headerName: 'Year', field: 'Borrower_Year', editable: false, width: 100 },
+      { headerName: 'Revenue', field: 'Borrower_Revenue', editable: true, cellClass: 'editable-color', cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
       { headerName: 'Expenses', field: 'Borrower_Expense', editable: true, cellClass: 'editable-color', cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
-      { headerName: 'Income', field: 'FC_Borrower_Income',editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }}
+      { headerName: 'Income', field: 'FC_Borrower_Income', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } }
     ];
     this.context = { componentParent: this };
-    
+
   }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-        this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
-        this.localloanobject = res
-        this.rowData = [];
-        this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-        
-        this.localloanobject.BorrowerIncomeHistory = this.rowData;
-        this.getgridheight();
+      debugger
+      this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+      if (this.localloanobject.srccomponentedit == "BorrowerIncomeHistoryComponent") {
+        this.rowData[this.localloanobject.lasteditrowindex] = this.setData(this.localloanobject.BorrowerIncomeHistory)[this.localloanobject.lasteditrowindex];
+        this.gridApi.refreshCells();
+        this.localloanobject = res;
+      }
+      else {
+    
+        if (!_.isEqual(this.localloanobject.BorrowerIncomeHistory, res.BorrowerIncomeHistory)) {
+          this.rowData = [];
+          this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
+          this.localloanobject.BorrowerIncomeHistory = this.rowData;
+        }
+      }
+      this.getgridheight();
       // this.adjustgrid();
     });
     this.getdataforgrid();
@@ -77,29 +87,29 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
-    if (obj != null && obj != undefined) {      
-        this.localloanobject = obj;
-        this.rowData = [];
-        this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-        this.localloanobject.BorrowerIncomeHistory = this.rowData;
+    if (obj != null && obj != undefined) {
+      this.localloanobject = obj;
+      this.rowData = [];
+      this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
+      this.localloanobject.BorrowerIncomeHistory = this.rowData;
     }
     this.getgridheight();
     this.adjustgrid();
   }
-  
-  setData(params){
+
+  setData(params) {
     let incomeData = [];
     let incomeHistory = params
     let years = []
     this.cropYear = this.localloanobject.LoanMaster[0].Crop_Year;
 
-    for(let i=1; i<6;i++){
-        years.push(this.cropYear - i);
+    for (let i = 1; i < 6; i++) {
+      years.push(this.cropYear - i);
     };
-    
-    years.forEach(ye =>{
+
+    years.forEach(ye => {
       incomeData.push({
-        BIH_ID : 0,
+        BIH_ID: 0,
         Borrower_ID: 0,
         Loan_Full_ID: this.localloanobject.Loan_Full_ID,
         Borrower_Year: ye,
@@ -107,18 +117,19 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
         Borrower_Revenue: '',
         FC_Borrower_Income: '',
         Status: 0,
-        ActionStatus: 0})
+        ActionStatus: 0
+      })
     });
 
-    incomeData.forEach(ih =>{
+    incomeData.forEach(ih => {
       incomeHistory.forEach(id => {
-         if(ih.Borrower_Year === id.Borrower_Year){
-           ih.BIH_ID = id.BIH_ID;
-           ih.Borrower_Expense = id.Borrower_Expense;
-           ih.Borrower_Revenue = id.Borrower_Revenue;
-           ih.FC_Borrower_Income = id.FC_Borrower_Income;
-           ih.ActionStatus = id.ActionStatus;
-         }
+        if (ih.Borrower_Year === id.Borrower_Year) {
+          ih.BIH_ID = id.BIH_ID;
+          ih.Borrower_Expense = id.Borrower_Expense;
+          ih.Borrower_Revenue = id.Borrower_Revenue;
+          ih.FC_Borrower_Income = id.FC_Borrower_Income;
+          ih.ActionStatus = id.ActionStatus;
+        }
       });
     });
 
@@ -148,10 +159,10 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     });
   }
 
-  syncenabled(){
-    if(this.rowData.filter(p => p.ActionStatus == 2).length == 0){
+  syncenabled() {
+    if (this.localloanobject.BorrowerIncomeHistory.filter(p => p.ActionStatus == 2).length == 0) {
       return 'disabled';
-    }else{
+    } else {
       return '';
     }
   }
@@ -163,7 +174,7 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     this.localloanobject.BorrowerIncomeHistory[rowindex] = obj;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
 
-     //this shall have the last edit
+    //this shall have the last edit
     this.localloanobject.srccomponentedit = "BorrowerIncomeHistoryComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
   }
@@ -180,9 +191,10 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     }
   }
 
-  onGridReady(params) {  
+  onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
+    this.gridApi.showToolPanel(false);
     this.getgridheight();
     this.adjustgrid();
   }

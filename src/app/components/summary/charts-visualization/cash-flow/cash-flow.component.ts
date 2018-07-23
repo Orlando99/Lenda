@@ -1,4 +1,7 @@
 import { Component, OnInit, Input, EventEmitter } from '@angular/core';
+import { LocalStorageService } from 'ngx-webstorage';
+
+import { environment } from '../../../../../environments/environment';
 import { chartSettings } from './../../../../chart-settings';
 import 'chart.piecelabel.js';
 
@@ -13,13 +16,15 @@ export class CashFlowComponent implements OnInit {
 
   // Doughnut
   // TODO: Replace this data with live API
-  public doughnutChartLabels: string[] = ['Seed', 'Cash Rent', 'Fertilizer', 'Herbicide', 'Harvesting', 'Fuel', 'Insecticide', 'Custom', 'Labor', 'Repairs'];
-  public doughnutChartData: number[] = [5, 10, 15, 8, 2, 14, 16, 17, 8, 15];
+  public doughnutChartLabels: string[] = [];
+  public doughnutChartData: number[] = [];
+  public generatedColors: string[] = [];
 
   public doughnutChartType: string = 'doughnut';
   public chartColors: any[] = [
     {
-      backgroundColor: chartSettings.doughnut.backgroundColors
+      backgroundColor: this.generatedColors
+      // chartSettings.doughnut.backgroundColors
     }];
 
   public chartOptions: any = {
@@ -38,8 +43,30 @@ export class CashFlowComponent implements OnInit {
     }
   };
 
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit() {
+    this.getLoanBudgetFromLocalStorage();
+  }
+
+  getLoanBudgetFromLocalStorage() {
+    let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
+    let index = 0;
+    for (let budget of loanBudgets.LoanBudget) {
+      if (budget.Total_Budget_Crop_ET !== 0) {
+        this.doughnutChartLabels.push(budget.Loan_Budget_ID);
+        this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
+        this.generatedColors.push(this.dynamicColors());
+      }
+    }
+  }
+
+  dynamicColors() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    return "rgba(" + r + "," + g + "," + b + ", 0.85)";
   }
 }

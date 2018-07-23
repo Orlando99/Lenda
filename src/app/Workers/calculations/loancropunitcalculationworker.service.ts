@@ -73,9 +73,9 @@ export class LoancropunitcalculationworkerService {
         element.FC_Ins_Policy_ID = insurancepolicy.Policy_id;
         element.FC_Ins_Unit = insurancepolicy.Unit;
         element.FC_Primary_limit = insurancepolicy.Level;
-      }
-       
-      //Mkt Value 
+      
+
+      //Mkt Value
       try {
         //z price to be flipped to Adj_price
         // Ins_Aph flipped to Crop yield
@@ -103,59 +103,63 @@ export class LoancropunitcalculationworkerService {
           element.FC_ModifiedAPH = element.Ins_APH * element.Z_Price;
         }
         ///MPCI VALUES  is ins value
-        element.FC_MPCIvalue=element.FC_ModifiedAPH * element.FC_Level1Perc/100 * element.CU_Acres * element.FC_Insurance_Share/100;
-        element.FC_Disc_MPCI_value=element.FC_MPCIvalue * 85/100;
+        element.FC_MPCIvalue = element.FC_ModifiedAPH * element.FC_Level1Perc / 100 * element.CU_Acres * element.FC_Insurance_Share / 100;
+        element.FC_Disc_MPCI_value = element.FC_MPCIvalue * 85 / 100;
         //Insurance value --sum of all insurance mpci values
         element.Ins_Value=element.FC_MPCIvalue;
         //MPCI type only as if now--We dont have secondary 
         element.Disc_Ins_value=element.FC_Disc_MPCI_value;
          
         // Insurance Sub Policies Calculations
-            let subpolicies = insurancepolicy.Subpolicies;
-            subpolicies.forEach(subpolicy => {
-                if(subpolicy.Ins_Type.toLowerCase()=="hmax"){
-                  //Hmax calculations
-                   if(subpolicy.Lower_Limit !=undefined && subpolicy.Lower_Limit<=insurancepolicy.Level){
-                      let band=  subpolicy.Upper_Limit-subpolicy.Lower_Limit;
-                      let CoveragetoMPCI=subpolicy.Upper_Limit-insurancepolicy.Level;
-                      let HmaxlevelPerc=CoveragetoMPCI/100 * (CoveragetoMPCI/band) ;
-                      element.FC_Hmaxvalue=HmaxlevelPerc *(element.CU_Acres) * element.Ins_APH * element.Z_Price * element.FC_Insurance_Share/100
-                   }
-                   else{
-                    element.FC_Hmaxvalue=0;
-                   }
-                }
-                else if (subpolicy.Ins_Type.toLowerCase()=="sco")
-                {
-                  element.FC_Scovalue=0;
-                }
-                else if(subpolicy.Ins_Type.toLowerCase()=="stax")
-                {
-                  element.FC_Staxvalue=0;
-                }
-            });
+        let subpolicies = insurancepolicy.Subpolicies;
+        subpolicies.forEach(subpolicy => {
+          if (subpolicy.Ins_Type.toLowerCase() == "hmax") {
+            //Hmax calculations
+            if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+              let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+              let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+              let HmaxlevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
+              element.FC_Hmaxvalue = HmaxlevelPerc * (element.CU_Acres) * element.Ins_APH * element.Z_Price * element.FC_Insurance_Share / 100
+            }
+            else {
+              element.FC_Hmaxvalue = 0;
+            }
+          }
+          else if (subpolicy.Ins_Type.toLowerCase() == "sco") {
+            element.FC_Scovalue = 0;
+          }
+          else if (subpolicy.Ins_Type.toLowerCase() == "stax") {
+            element.FC_Staxvalue = 0;
+          }
+        });
 
       }
-      catch{
+      catch (ex) {
+        debugger
+        console.error("Error in Cropunit Calculations")
         element.Mkt_Value = 0;
       }
 
-      //Insurance Value 
+      //Insurance Value
       try {
         element.Ins_Value = element.Mkt_Value * element.FC_Primary_limit / 100;
       }
       catch{
         element.Ins_Value = 0;
+        console.error("Error in Cropunit Calculations fro ins value")
       }
 
-      //CEI Value 
+      //CEI Value
       try {
         element.CEI_Value = element.Mkt_Value - element.Ins_Value;
       }
       catch{
         element.CEI_Value = 0;
+        console.error("Error in Cropunit Calculations fro CEI_Value")
       }
+    }
     });
+    
     return input;
   }
 }

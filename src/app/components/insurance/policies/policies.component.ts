@@ -504,7 +504,7 @@ export class PoliciesComponent implements OnInit {
       this.deleteunwantedcolumn();
       this.gridApi.setColumnDefs(this.columnDefs);
       
-      this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
+      //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
     //get the local loan object synced
     this.updatelocalloanobject($event);
@@ -567,7 +567,6 @@ export class PoliciesComponent implements OnInit {
       this.loanmodel.InsurancePolicies.forEach(element1 => {
         if(!status)
          status = element1.Subpolicies.filter(p => p.ActionStatus == element).length>0
-        
       });
     }
      });

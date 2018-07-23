@@ -120,8 +120,10 @@ export class BalancesheetComponent implements OnInit {
         break;
       
         default:
+        this.localloanobject.LoanMaster[0].ActionStatus=0;
         this.rowData = rows;
-          break;
+
+        break;
       }
       this.localloanobject.srccomponentedit = undefined;
       if(this.gridApi!=undefined){
@@ -165,6 +167,7 @@ export class BalancesheetComponent implements OnInit {
     property=financetype+"_Liabilities";
   }
   this.localloanobject.LoanMaster[0][property]=parseFloat(event.value);
+  this.localloanobject.LoanMaster[0].ActionStatus=2;
   this.localloanobject.srccomponentedit = "Balancesheet-"+financetypeOriginal;
   this.logging.checkandcreatelog(3,'BalanceSheet',"Field Edited -"+property);
   this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -243,7 +246,7 @@ export class BalancesheetComponent implements OnInit {
   
  syncenabled() {
   
-  if(this.rowData.filter(p => p.ActionStatus != 0).length == 0)
+  if(!(this.localloanobject.LoanMaster[0].ActionStatus == 2))
   return 'disabled';
   else
   return '';

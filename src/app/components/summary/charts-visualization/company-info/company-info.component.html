@@ -1,5 +1,5 @@
 <!-- Complete View -->
-<div class="section-one row-section complete" *ngIf="viewMode==2">
+<div class="section-one row-section complete" *ngIf="viewMode == 2 || viewMode == 3">
   <div class="right-align">
     <bar-rating [readOnly]="true" [theme]="'stars'" [(rate)]="starsCount" [max]="5"></bar-rating>
   </div>

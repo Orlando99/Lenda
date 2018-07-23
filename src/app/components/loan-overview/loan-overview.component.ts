@@ -58,7 +58,6 @@ export class LoanOverviewComponent implements OnInit {
       let loaded = false;
       this.localstorageservice.clear(environment.loankey);
       this.loanservice.getLoanById(this.loanid).subscribe(res => {
-        console.log(res)
         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
         if (res.ResCode == 1) {
 
