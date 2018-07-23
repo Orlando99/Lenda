@@ -51,33 +51,44 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.columnDefs = [
-      { headerName: 'Year', field: 'Borrower_Year', editable: false, width: 100 },
-      { headerName: 'Revenue', field: 'Borrower_Revenue', editable: true, cellClass: 'editable-color', cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
-      { headerName: 'Expenses', field: 'Borrower_Expense', editable: true, cellClass: 'editable-color', cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } },
-      { headerName: 'Income', field: 'FC_Borrower_Income', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" } }
+      { headerName: 'Year', field: 'Borrower_Year',editable: false, width: 100 },
+      { headerName: 'Revenue', field: 'Borrower_Revenue', editable: true, cellClass: ['editable-color','text-right'],cellEditor: "numericCellEditor", valueFormatter: currencyFormatter},
+      { headerName: 'Expenses', field: 'Borrower_Expense', editable: true, cellClass: ['editable-color','text-right'], cellEditor: "numericCellEditor", valueFormatter: currencyFormatter },
+      { headerName: 'Income', field: 'FC_Borrower_Income',editable: false, valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }}
     ];
     this.context = { componentParent: this };
 
   }
 
   ngOnInit() {
+    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
+    //     this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+    //     this.localloanobject = res
+    //     this.rowData = [];
+    //     this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
+    //     this.localloanobject.BorrowerIncomeHistory = this.rowData;
+    //     this.getgridheight();
+    //   // this.adjustgrid();
+    // });
+    ///
+
+    /////////////
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      debugger
       this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
-      if (this.localloanobject.srccomponentedit == "BorrowerIncomeHistoryComponent") {
-        this.rowData[this.localloanobject.lasteditrowindex] = this.setData(this.localloanobject.BorrowerIncomeHistory)[this.localloanobject.lasteditrowindex];
-        this.gridApi.refreshCells();
+      this.localloanobject = res
+      
+      if (res.srccomponentedit == "BorrowerIncomeHistoryComponent") {
+        //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-      }
-      else {
-    
-        if (!_.isEqual(this.localloanobject.BorrowerIncomeHistory, res.BorrowerIncomeHistory)) {
-          this.rowData = [];
-          this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-          this.localloanobject.BorrowerIncomeHistory = this.rowData;
-        }
+        this.rowData[res.lasteditrowindex] =  this.setData(this.localloanobject.BorrowerIncomeHistory)[res.lasteditrowindex];
+      }else{
+        this.localloanobject = res
+        this.rowData = [];
+        this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
+        this.localloanobject.BorrowerIncomeHistory = this.rowData;
       }
       this.getgridheight();
+      this.gridApi.refreshCells();
       // this.adjustgrid();
     });
     this.getdataforgrid();

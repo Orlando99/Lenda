@@ -1,0 +1,51 @@
+<div style="overflow: auto;">
+
+  <table>
+    <tr>
+      <th>Contract_ID</th>
+      <th>Z_Loan_ID</th>
+      <th>Z_Loan_Seq_Num</th>
+      <th>Loan_Full_ID</th>
+
+      <th>Category</th>
+      <th>Crop_Code</th>
+      <th>Crop_Type_Code</th>
+      <th>Assoc_Type_Code</th>
+
+      <th>Assoc_ID</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Market_Value</th>
+
+      <th>Contract_Per</th>
+      <th>Description_Text</th>
+      <th>Status</th>
+      <th>ActionStatus</th>
+    </tr>
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
+      <td>{{record.Contract_ID}}</td>
+      <td>{{record.Z_Loan_ID}}</td>
+      <td>{{record.Z_Loan_Seq_Num}}</td>
+      <td>{{record.Loan_Full_ID}}</td>
+
+      <td>{{record.Category}}</td>
+      <td>{{record.Crop_Code}}</td>
+      <td>{{record.Crop_Type_Code}}</td>
+      <td>{{record.Assoc_Type_Code}}</td>
+
+      <td>{{record.Assoc_ID}}</td>
+      <td>{{record.Quantity}}</td>
+      <td>{{record.Price}}</td>
+      <td>{{record.Market_Value}}</td>
+
+      <td>{{record.Contract_Per}}</td>
+      <td>{{record.Description_Text}}</td>
+      <td>{{record.Status}}</td>
+      <td>{{record.ActionStatus}}</td>
+
+    </tr>
+    
+    
+  </table>
+
+</div>

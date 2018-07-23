@@ -192,8 +192,9 @@ export class FSAComponent implements OnInit {
         } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
-          this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+          
         }
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })
   }

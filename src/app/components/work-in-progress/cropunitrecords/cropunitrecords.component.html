@@ -11,7 +11,7 @@
       <th>Stax Value</th>
       <th>Sco Value</th>
     </tr>
-    <tr *ngFor="let record of records">
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Loan_CU_ID}}</td>
       <td>{{record.CEI_Value}}</td>
       <td>{{record.Ins_Value}}</td>
