@@ -105,17 +105,18 @@ export class BorrowerInfoComponent implements OnInit {
   ngOnInit() {
 
 
+    if (this.mode === 'create') {
+      this.createForm({});
+    }
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobj) {
-      if (this.mode === 'create') {
-        this.createForm({});
-      }
-      else {
+      
+      
         if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
           this.createForm(this.localloanobj.LoanMaster[0]);
           this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
         }
-      }
+      
       this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
       if (this.borrowerInfoForm.value.Co_Borrower_ID) {
         this.rowData = [];
