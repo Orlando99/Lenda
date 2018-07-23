@@ -164,7 +164,7 @@ export class FarmComponent implements OnInit {
         headerName: 'Perm to Ins', field: 'Permission_To_Insure', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
         valueFormatter: function (params) {
-          return params.value === 1 ? 'Yes' : 'No';
+          return params.value == 1 ? 'Yes' : 'No';
         }, width: 72
       },
       {

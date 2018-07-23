@@ -3,6 +3,10 @@ import { loan_farmer, loan_borrower, loan_model } from '../../models/loanmodel';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment.prod';
+import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
+import { JsonConvert } from 'json2typescript';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-create-loan',
@@ -15,9 +19,16 @@ export class CreateLoanComponent implements OnInit {
   farmerSuccessCallback;
   useFarmer;
   borrowerInfo: borrower_params = new borrower_params();
-  constructor(private loanApiService: LoanApiService, private toaster: ToastsManager, private route : Router) { }
+  constructor(private loanApiService: LoanApiService, private toaster: ToastsManager, private route : Router,
+    private loancalculationservice: LoancalculationWorker,
+    private localstorageservice: LocalStorageService) { }
 
   ngOnInit() {
+
+    let localLoanObject = this.localstorageservice.retrieve(environment.loankey);
+    if(localLoanObject){
+      this.localstorageservice.clear(environment.loankey);
+    }
   }
   onFarmerFormValueChange(data) {
     this.farmerInfo = Object.assign(new farmer_params(), data);
@@ -46,10 +57,25 @@ export class CreateLoanComponent implements OnInit {
 
     if (this.farmerInfo.valid && this.borrowerInfo.valid) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
-        this.toaster.success("Farmer details saved successfully");
+        this.toaster.success("Details saved successfully, navigating to Loan Dashboard...");
         this.farmerInfo.successCallback && this.farmerInfo.successCallback();
         this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();
-        this.route.navigateByUrl("/home/loanoverview/"+successResponse.Data.replace("-","/")+"/farm");
+        this.loanApiService.getLoanById(successResponse.Data).subscribe(res => {
+         
+          if (res.ResCode == 1) {
+  
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+            //we are making a copy of it also
+            this.localstorageservice.store(environment.loankey_copy, res.Data);
+            this.route.navigateByUrl("/home/loanoverview/"+successResponse.Data.replace("-","/")+"/borrower");
+          }
+          else {
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+          
+        });
+        
       }, (errorResponse) => {
         this.toaster.error("Error Occurered while saving Farmer details");
 

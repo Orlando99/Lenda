@@ -106,10 +106,10 @@ export class LoancropunitcalculationworkerService {
         element.FC_MPCIvalue = element.FC_ModifiedAPH * element.FC_Level1Perc / 100 * element.CU_Acres * element.FC_Insurance_Share / 100;
         element.FC_Disc_MPCI_value = element.FC_MPCIvalue * 85 / 100;
         //Insurance value --sum of all insurance mpci values
-        element.Ins_Value = element.FC_MPCIvalue;
-        //MPCI type only as if now--We dont have secondary
-        element.Disc_Ins_value = element.FC_Disc_MPCI_value;
-        debugger
+        element.Ins_Value=element.FC_MPCIvalue;
+        //MPCI type only as if now--We dont have secondary 
+        element.Disc_Ins_value=element.FC_Disc_MPCI_value;
+         
         // Insurance Sub Policies Calculations
         let subpolicies = insurancepolicy.Subpolicies;
         subpolicies.forEach(subpolicy => {
