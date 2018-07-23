@@ -13,9 +13,11 @@
             (gridReady)="onGridReady($event)"
             [columnDefs]="columnDefs" 
             [components]="components"
+            [toolPanelSuppressSideButtons] = true
+            [showToolPanel]="false"   
             (cellEditingStopped)="rowvaluechanged($event)"
             >
           </ag-grid-angular>
         </div>
       </div>
-  
+    <!-- showToolPanel Should work but dont work so work around is toolPanelSuppressSideButtons -->

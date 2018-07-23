@@ -6,6 +6,8 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./work-in-progress.component.scss']
 })
 export class WorkInProgressComponent implements OnInit {
+  public exceptionList=[];
+  public conditionList=[];
   constructor() { }
 
   ngOnInit() {

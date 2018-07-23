@@ -567,7 +567,6 @@ export class PoliciesComponent implements OnInit {
       this.loanmodel.InsurancePolicies.forEach(element1 => {
         if(!status)
          status = element1.Subpolicies.filter(p => p.ActionStatus == element).length>0
-        
       });
     }
      });
