@@ -133,6 +133,7 @@ export class FSAComponent implements OnInit {
   private adjustgrid() {
     try {
       this.gridApi.sizeColumnsToFit();
+     
     }
     catch {
     }
@@ -144,6 +145,7 @@ export class FSAComponent implements OnInit {
     this.columnApi = params.columnApi;
     this.getgridheight();
     this.adjustgrid();
+  
   }
 
   syncenabled() {
@@ -224,3 +226,4 @@ export class FSAComponent implements OnInit {
     }
   }
 }
+
