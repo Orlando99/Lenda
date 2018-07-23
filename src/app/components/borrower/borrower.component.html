@@ -21,6 +21,28 @@
       <app-borrower-info [allowIndividualSave]=true></app-borrower-info>
     </mat-expansion-panel>
   </mat-accordion>
+
+  <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Credit Score
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-card>
+            <mat-form-field class="demo-full-width">    
+                <input [(ngModel)]="creditscore" matInput placeholder="Credit Score">    
+            </mat-form-field> 
+            <mat-form-field class="demo-full-width">    
+                <input [(ngModel)]="creditdate" matInput [matDatepicker]="picker" placeholder="Assessment Date">    
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>    
+                <mat-datepicker touchUi="true" #picker></mat-datepicker>    
+            </mat-form-field> 
+            <button (click)="updatecreditvalues()" mat-raised-button color="accent">Submit</button> 
+        </mat-card>
+      </mat-expansion-panel>
+    </mat-accordion>
+
   <mat-accordion>
     
     <mat-expansion-panel [expanded]="true">
@@ -58,26 +80,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Credit Score
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-card>
-          <mat-form-field class="demo-full-width">    
-              <input [(ngModel)]="creditscore" matInput placeholder="Credit Score">    
-          </mat-form-field> 
-          <mat-form-field class="demo-full-width">    
-              <input [(ngModel)]="creditdate" matInput [matDatepicker]="picker" placeholder="Assessment Date">    
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>    
-              <mat-datepicker touchUi="true" #picker></mat-datepicker>    
-          </mat-form-field> 
-          <button (click)="updatecreditvalues()" mat-raised-button color="accent">Submit</button> 
-      </mat-card>
-    </mat-expansion-panel>
-  </mat-accordion>
+ 
 
 
 

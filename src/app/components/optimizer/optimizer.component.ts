@@ -67,7 +67,7 @@ export class OptimizerComponent implements OnInit {
     { headerName: 'RC', field: 'RC', editable: false },
     { headerName: 'Excess ins', field: 'ExcessIns', editable: false },
     {
-      headerName: 'Acres', field: 'Acres', editable: true,
+      headerName: 'Acres', field: 'Acres',  cellClass: 'editable-color', editable: true,
       cellEditorSelector:function (params){
         if(params.data.ID==undefined){
           return {

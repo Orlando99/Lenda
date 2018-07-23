@@ -154,6 +154,7 @@ synctoDb() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.ActionStatus = 1;
+    newItem.Assoc_Type_Code = "REB";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -167,7 +168,9 @@ synctoDb() {
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    if (obj.Assoc_ID == 0) {
+    
+    if (!obj.Assoc_ID) {
+      obj.Assoc_ID = 0;
       obj.ActionStatus = 1;
       this.localloanobject.Association[this.localloanobject.Association.length - 1] = value.data;
     }
@@ -207,10 +210,11 @@ synctoDb() {
   }
 
   syncenabled(){
-    if(this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
-    return 'disabled';
-    else
+    if( this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
+
     return '';
+    else
+    return 'disabled';
   }
 
   getgridheight(){

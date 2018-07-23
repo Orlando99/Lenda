@@ -16,7 +16,6 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
-import { CollateralService } from '../collateral.service';
 
 @Component({
   selector: 'app-fsa',
@@ -51,8 +50,7 @@ export class FSAComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService,
-    public collateralService: CollateralService) {
+    public loanapi: LoanApiService) {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
@@ -106,7 +104,7 @@ export class FSAComponent implements OnInit {
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
-      this.gridApi.refreshCells();
+      this.gridApi  && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
@@ -176,11 +174,40 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addrow(this.gridApi, this.rowData, "FSA");
+    
+    var newItem = new Loan_Collateral();
+    newItem.Collateral_Category_Code = "FSA";
+    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.Disc_Value = 50;
+    newItem.ActionStatus = 1;
+
+    var res = this.rowData.push(newItem);
+    this.localloanobject.LoanCollateral.push(newItem);
+    this.gridApi.setRowData(this.rowData);
+    this.gridApi.startEditingCell({
+      rowIndex: this.rowData.length - 1,
+      colKey: "Collateral_Description"
+    });
+    this.getgridheight();
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowvaluechanged(value, this.localloanobject, "FSAComponent");
+
+    var obj = value.data;
+    if (obj.Collateral_ID == 0) {
+      obj.ActionStatus = 1;
+      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
+    } else {
+      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+      if (obj.ActionStatus != 1)
+        obj.ActionStatus = 2;
+        this.localloanobject.LoanCollateral[rowindex] = obj;
+    }
+    // this shall have the last edit
+    this.localloanobject.srccomponentedit = "FSAComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   DeleteClicked(rowIndex: any) {

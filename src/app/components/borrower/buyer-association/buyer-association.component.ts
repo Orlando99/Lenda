@@ -78,7 +78,7 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: false },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
-      { headerName: 'Email', field: 'Email', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
     ///
@@ -92,11 +92,11 @@ export class BuyerAssociationComponent implements OnInit {
       if (res.srccomponentedit == "BuyerAssociationComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] =    this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[res.lasteditrowindex];
+        this.rowData[res.lasteditrowindex] =    this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY")[res.lasteditrowindex];
       }else{
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.rowData =  this.localloanobject.Association !== null?  this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY"):[];
+        this.rowData = this.rowData =  this.localloanobject.Association !== null?  this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY"):[];
         
       }
       this.getgridheight();
@@ -107,7 +107,7 @@ export class BuyerAssociationComponent implements OnInit {
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     
     if(this.localloanobject && this.localloanobject.Association.length>0){
-      this.rowData = this.localloanobject.Association !== null? this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY"):[];
+      this.rowData = this.localloanobject.Association !== null? this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY"):[];
     }else{
       this.rowData = [];
     }
@@ -119,7 +119,7 @@ export class BuyerAssociationComponent implements OnInit {
     //if (obj != null && obj != undefined) {
     if (this.localloanobject && this.localloanobject.Association && this.localloanobject.Association.length>0) {
       //this.localloanobject = obj;
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY");
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY");
     }
   }
 
@@ -129,16 +129,16 @@ export class BuyerAssociationComponent implements OnInit {
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    if (obj.ActionStatus == undefined) {
+    if (!obj.Assoc_ID) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY").length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY")[rowIndex]=value.data;
+      var length=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY").length;
+      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="BUY")[length - 1]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[rowindex]=obj;
+      this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY")[rowindex]=obj;
     }
 
     //this shall have the last edit
@@ -176,6 +176,7 @@ export class BuyerAssociationComponent implements OnInit {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="BUY";
+    newItem.Assoc_ID = 0;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -183,17 +184,18 @@ export class BuyerAssociationComponent implements OnInit {
       colKey: "Assoc_Name"
     });
     this.localloanobject.Association.push(newItem);
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY")[rowIndex];
+        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY")[rowIndex];
         if (obj.Assoc_ID == 0) {
-          this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="BUY").splice(rowIndex, 1);
+          this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="BUY").splice(rowIndex, 1);
         }
         else {
-          obj.ActionStatus = -1;
+          obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
