@@ -1,9 +1,6 @@
 <div class="basic-container">
   <span class="page-title"> Create Loan</span>
-  <button (click)="onSave($event)" >
-      <!-- <mat-icon>publish</mat-icon> -->
-      <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-    </button>
+ 
 
 
   <h3>Farmer</h3>
@@ -12,4 +9,8 @@
   <h3>Borrower</h3>
   <mat-checkbox [(ngModel)]="useFarmer" (ngModelChange)="useFarmerChange($event)">Use Farmer Information</mat-checkbox>
   <app-borrower-info [borrowerInfo]="farmerInfoCopy" [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info>
+
+    <a class="waves-effect waves-light btn" (click)="onSave($event)" style="margin-bottom: 50px">Save and Continue</a>
+
+  <br/>
 </div>

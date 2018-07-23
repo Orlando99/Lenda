@@ -1,161 +1,191 @@
 
-      <button (click)="synctoDb()" *ngIf="allowIndividualSave" [disabled]="!borrowerInfoForm.dirty || isSubmitted">
-        <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-      </button>
+	<a class="waves-effect waves-light btn"  (click)="synctoDb()" *ngIf="allowIndividualSave" style="margin: 0 0 10px 18px;" >
+		<i class="material-icons left">cloud</i>Publish</a>
 
 
-      <div class="container bottom width-auto">
-        <div *ngIf="borrowerInfoForm" class="row">
-          <form [formGroup]="borrowerInfoForm">
-            <div class="input-field col m3">
 
-              <mat-form-field>
-                <input matInput placeholder="First Name" formControlName="Borrower_First_Name">
-              </mat-form-field>
-            </div>
-            <div class="input-field col m1">
+<div class="container bottom width-auto">
+	<div *ngIf="borrowerInfoForm" class="row">
+		<form [formGroup]="borrowerInfoForm">
+			<div class="input-field col m3">
 
-              <mat-form-field>
-                <input matInput placeholder="Middle Initial" formControlName="Borrower_MI">
-              </mat-form-field>
-            </div>
-            <div class="input-field col m3">
+				<mat-form-field>
+					<input matInput placeholder="First Name" formControlName="Borrower_First_Name">
+				</mat-form-field>
+			</div>
+			<div class="input-field col m1">
 
-              <mat-form-field>
-                <input matInput placeholder="Last Name" formControlName="Borrower_Last_Name">
-              </mat-form-field>
-            </div>
-            <div class="input-field col m2">
+				<mat-form-field>
+					<input matInput placeholder="Middle Initial" formControlName="Borrower_MI">
+				</mat-form-field>
+			</div>
+			<div class="input-field col m3">
 
-              <mat-form-field>
-                <input matInput placeholder="SSN" formControlName="Borrower_SSN_Hash">
-              </mat-form-field>
-            </div>
+				<mat-form-field>
+					<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name">
+				</mat-form-field>
+			</div>
+			<div class="input-field col m2">
 
-            <div class="input-field col m2">
+				<mat-form-field>
+					<input matInput placeholder="SSN" formControlName="Borrower_SSN_Hash">
+				</mat-form-field>
+			</div>
 
-                <mat-form-field>
-                  <mat-select placeholder="Entity Type" formControlName="Borrower_Entity_Type_Code">
-                    <mat-option *ngFor="let type of entityType" [value]="type" >
-                      {{ type }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            </div>
+			<div class="input-field col m2">
 
-            <div class="input-field col m4">
+				<mat-form-field>
+					<mat-select placeholder="Entity Type" formControlName="Co_Borrower_ID" (selectionChange)="onEntityTypeChange($event)">
+						<mat-option *ngFor="let type of entityType" [value]="type.key">
+							{{ type.value }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
 
-              <mat-form-field>
-                <input matInput placeholder="Address" formControlName="Borrower_Address">
-              </mat-form-field>
-            </div>
+			<div class="input-field col m4">
 
-            <div class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="City" formControlName="Borrower_City">
-              </mat-form-field>
-            </div>
+				<mat-form-field>
+					<input matInput placeholder="Address" formControlName="Borrower_Address">
+				</mat-form-field>
+			</div>
+
+			<div class="input-field col m2">
+				<mat-form-field>
+					<input matInput placeholder="City" formControlName="Borrower_City">
+				</mat-form-field>
+			</div>
 
 
-            <div class="input-field col m2">
-              <mat-form-field id="forceStyle">
-                <mat-select placeholder="State" formControlName="Borrower_State_ID">
-                  <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev" >
-                    {{ state.State_Name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="Zip" formControlName="Borrower_Zip"  pattern="^\d{5}(?:[-\s]\d{4})?$">
-                <mat-error *ngIf="borrowerInfoForm.get('Borrower_Zip').hasError('pattern') && !borrowerInfoForm.get('Borrower_Zip').hasError('required')">
-                  Please enter a valid zip code
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="input-field col m3">
-              <mat-form-field>
-                <input matInput placeholder="Phone  [(123)123-1234]" formControlName="Borrower_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
-                <mat-error *ngIf="borrowerInfoForm.get('Borrower_Phone').hasError('pattern') && !borrowerInfoForm.get('Borrower_Phone').hasError('required')">
-                  Please enter a valid phone no
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="input-field col m3">
-              <mat-form-field>
-                <input matInput placeholder="Email" formControlName="Borrower_email">
-                <mat-error *ngIf="borrowerInfoForm.get('Borrower_email').hasError('email') && !borrowerInfoForm.get('Borrower_email').hasError('required')">
-                  Please enter a valid email
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="DOB Or Incorporation  [mm/dd/yyyy]" formControlName="Borrower_DOB" pattern="^(0?[1-9]|1[0-2])/(0?[1-9]|1[0-9]|2[0-9]|3[01])/\d{4}$">
-                <mat-error *ngIf="borrowerInfoForm.get('Borrower_DOB').hasError('pattern') && !borrowerInfoForm.get('Borrower_DOB').hasError('required')">
-                  Please enter a valid DOB
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div class="w-100"></div>
-            <br>
+			<div class="input-field col m2">
+				<mat-form-field id="forceStyle">
+					<mat-select placeholder="State" formControlName="Borrower_State_ID">
+						<mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
+							{{ state.State_Name }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+			<div class="input-field col m2">
+				<mat-form-field>
+					<input matInput placeholder="Zip" formControlName="Borrower_Zip" pattern="^\d{5}(?:[-\s]\d{4})?$">
+					<mat-error *ngIf="borrowerInfoForm.get('Borrower_Zip').hasError('pattern') && !borrowerInfoForm.get('Borrower_Zip').hasError('required')">
+						Please enter a valid zip code
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="input-field col m3">
+				<mat-form-field>
+					<input matInput placeholder="Phone  [(123)123-1234]" formControlName="Borrower_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
+					<mat-error *ngIf="borrowerInfoForm.get('Borrower_Phone').hasError('pattern') && !borrowerInfoForm.get('Borrower_Phone').hasError('required')">
+						Please enter a valid phone no
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="input-field col m3">
+				<mat-form-field>
+					<input matInput placeholder="Email" formControlName="Borrower_email">
+					<mat-error *ngIf="borrowerInfoForm.get('Borrower_email').hasError('email') && !borrowerInfoForm.get('Borrower_email').hasError('required')">
+						Please enter a valid email
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="input-field col m2">
+				<mat-form-field>
+					<input matInput placeholder="DOB Or Incorporation  [mm/dd/yyyy]" formControlName="Borrower_DOB" pattern="^(0?[1-9]|1[0-2])/(0?[1-9]|1[0-9]|2[0-9]|3[01])/\d{4}$">
+					<mat-error *ngIf="borrowerInfoForm.get('Borrower_DOB').hasError('pattern') && !borrowerInfoForm.get('Borrower_DOB').hasError('required')">
+						Please enter a valid DOB
+					</mat-error>
+				</mat-form-field>
+			</div>
+			<div class="w-100"></div>
+			<br>
 
-            <div style="float:left;padding-top:50px">
-            <div class="input-field col m3">
-              <mat-form-field>
-                <input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name">
-              </mat-form-field>
-            </div>
-            <div class="input-field col m3">
-              <mat-form-field>
-                <input matInput placeholder="Spouse Middle Initial" formControlName="Spouse__MI">
-              </mat-form-field>
-            </div>
-            <div class="input-field col m3">
-                <mat-form-field>
-                  <input matInput placeholder="Spouse Last Name" formControlName="Spouse_Last_name">
-                </mat-form-field>
-              </div>
-              <div class="input-field col m3">
-                <mat-form-field>
-                  <input matInput placeholder="Spouse Phone [(123)123-1234]" formControlName="Spouse_Phone"  pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
-                  <mat-error *ngIf="borrowerInfoForm.get('Spouse_Phone').hasError('pattern') && !borrowerInfoForm.get('Spouse_Phone').hasError('required')">
-                    Please enter a valid phone no
-                  </mat-error>
-                </mat-form-field>
-              </div>
-              <div class="input-field col m3">
-                <mat-form-field>
-                  <input matInput placeholder="Spouse Email" formControlName="Spouse_Email">
-                  <mat-error *ngIf="borrowerInfoForm.get('Spouse_Email').value && borrowerInfoForm.get('Spouse_Email').hasError('email')">
-                    Please enter a valid email
-                  </mat-error>
-                </mat-form-field>
-              </div>
+			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID =='INDWS'">
+				<div class="input-field col m3">
+					<mat-form-field>
+						<input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name">
+					</mat-form-field>
+				</div>
+				<div class="input-field col m3">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Middle Initial" formControlName="Spouse__MI">
+					</mat-form-field>
+				</div>
+				<div class="input-field col m3">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Last Name" formControlName="Spouse_Last_name">
+					</mat-form-field>
+				</div>
+				<div class="input-field col m3">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Phone [(123)123-1234]" formControlName="Spouse_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
+						<mat-error *ngIf="borrowerInfoForm.get('Spouse_Phone').hasError('pattern') && !borrowerInfoForm.get('Spouse_Phone').hasError('required')">
+							Please enter a valid phone no
+						</mat-error>
+					</mat-form-field>
+				</div>
+				<div class="input-field col m3">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Email" formControlName="Spouse_Email">
+						<mat-error *ngIf="borrowerInfoForm.get('Spouse_Email').value && borrowerInfoForm.get('Spouse_Email').hasError('email')">
+							Please enter a valid email
+						</mat-error>
+					</mat-form-field>
+				</div>
 
-            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="Spouse">
-              </mat-form-field>
-            </div>
-            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="Spouse SSN">
-              </mat-form-field>
-            </div>
-            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="Spouse Phone">
-              </mat-form-field>
-            </div>
-            <div *ngIf="borrowerInfoForm.value.Borrower_Entity_Type_Code === 'Individual w/ Spouse'" class="input-field col m2">
-              <mat-form-field>
-                <input matInput placeholder="Spouse Email">
-              </mat-form-field>
-            </div>
-          </div>
-          </form>
-        </div>
-      </div>
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+					<mat-form-field>
+						<input matInput placeholder="Spouse">
+					</mat-form-field>
+				</div>
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+					<mat-form-field>
+						<input matInput placeholder="Spouse SSN">
+					</mat-form-field>
+				</div>
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Phone">
+					</mat-form-field>
+				</div>
+				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
+					<mat-form-field>
+						<input matInput placeholder="Spouse Email">
+					</mat-form-field>
+				</div>
+			</div>
 
+
+		</form>
+
+	</div>
+	<!-- Table -->
+	<div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
+		<h3>{{borrowerInfoForm.value.Co_Borrower_ID}}</h3>
+		<a (click)="addrow()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
+			<i class="material-icons left">add</i>Add</a>
+
+			<div class="container bottom">
+				<div class="row">
+				<ag-grid-angular  [ngStyle]="style"
+				class="ag-theme-balham roboto-font"
+				[animateRows]="true"
+				[enableSorting]="true"
+				[enableFilter]="true"
+				[context]="context"
+				(gridSizeChanged)="onGridSizeChanged($event)"
+				[frameworkComponents]="frameworkcomponents"
+				[components]="components"
+				[singleClickEdit]="true"
+				(cellEditingStopped)="rowvaluechanged($event)"
+				[rowData]="rowData" 
+				(gridReady)="onGridReady($event)"
+				[columnDefs]="columnDefs"
+				[gridAutoHeight]=true>
+				</ag-grid-angular>
+				</div>
+		
+			  </div>  
+	</div>
+</div>
