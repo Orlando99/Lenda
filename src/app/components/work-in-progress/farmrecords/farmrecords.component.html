@@ -1,0 +1,71 @@
+<div style="overflow: auto;">
+
+  <table>
+    <tr>
+      <th>Farm ID</th>
+      <th>Loan_Full_ID</th>
+      <th>Farm_State_ID</th>
+      <th>Farm_County_ID</th>
+      <th>FSN</th>
+      <th>Percent_Prod</th>
+      <th>Section</th>
+      <th>Rated</th>
+      <th>Owned</th>
+      <th>Rent_UOM</th>
+      <th>Landowner</th>
+      <th>Share_Rent</th>
+      <th>Cash_Rent_Total</th>
+      <th>Cash_Rent_Per_Acre</th>
+      <th>Cash_Rent_Due_Date</th>
+      <th>Cash_Rent_Paid</th>
+      <th>Permission_To_Insure</th>
+      <th>Cash_Rent_Waived</th>
+      <th>Cash_Rent_Waived_Amount</th>
+      <th>Irr_Acres</th>
+      <th>NI_Acres</th>
+      <th>Crop_share_Detail_Indicator</th>
+      <th>Status</th>
+      <th>IsDelete</th>
+      <th>ActionStatus</th>
+      <th>FC_Total_Acres</th>
+    </tr>
+    <tr *ngFor="let record of records">
+      <td>{{record.Farm_ID}}</td>
+      <td>{{record.Loan_Full_ID}}</td>
+      <td>{{record.Farm_State_ID}}</td>
+      <td>{{record.Farm_County_ID}}</td>
+
+      <td>{{record.FSN}}</td>
+      <td>{{record.Percent_Prod}}</td>
+      <td>{{record.Section}}</td>
+      <td>{{record.Rated}}</td>
+
+      <td>{{record.Owned}}</td>
+      <td>{{record.Rent_UOM}}</td>
+      <td>{{record.Landowner}}</td>
+      <td>{{record.Share_Rent}}</td>
+
+      <td>{{record.Cash_Rent_Total}}</td>
+      <td>{{record.Cash_Rent_Per_Acre}}</td>
+      <td>{{record.Cash_Rent_Due_Date}}</td>
+      <td>{{record.Cash_Rent_Paid}}</td>
+
+      <td>{{record.Permission_To_Insure}}</td>
+      <td>{{record.Cash_Rent_Waived}}</td>
+      <td>{{record.Cash_Rent_Waived}}</td>
+      <td>{{record.Irr_Acres}}</td>
+
+      <td>{{record.NI_Acres}}</td>
+      <td>{{record.Crop_share_Detail_Indicator}}</td>
+      <td>{{record.Status}}</td>
+      <td>{{record.IsDelete}}</td>
+
+      <td>{{record.ActionStatus}}</td>
+      <td>{{record.FC_Total_Acres}}</td>
+
+    </tr>
+    
+    
+  </table>
+
+</div>

@@ -1,0 +1,51 @@
+<div style="overflow: auto;">
+
+  <table>
+    <tr>
+      <th>Loan_Crop_ID</th>
+      <th>Loan_Full_ID</th>
+      <th>Crop_Code</th>
+      <th>Crop_ID</th>
+
+      <th>Crop_Type_Code</th>
+      <th>Crop_Price</th>
+      <th>Basic_Adj</th>
+      <th>Marketing_Adj</th>
+
+      <th>Rebate_Adj</th>
+      <th>Adj_Price</th>
+      <th>Contract_Qty</th>
+      <th>Contract_Price</th>
+      
+      <th>Percent_booked</th>
+      <th>IsDelete</th>
+      <th>LC_Status</th>
+      <th>ActionStatus</th>
+    </tr>
+    <tr *ngFor="let record of records">
+      <td>{{record.Loan_Crop_ID}}</td>
+      <td>{{record.Loan_Full_ID}}</td>
+      <td>{{record.Crop_Code}}</td>
+      <td>{{record.Crop_Code}}</td>
+
+      <td>{{record.Crop_Type_Code}}</td>
+      <td>{{record.Crop_Price}}</td>
+      <td>{{record.Basic_Adj}}</td>
+      <td>{{record.Marketing_Adj}}</td>
+
+      <td>{{record.Rebate_Adj}}</td>
+      <td>{{record.Adj_Price}}</td>
+      <td>{{record.Contract_Qty}}</td>
+      <td>{{record.Contract_Price}}</td>
+
+      <td>{{record.Percent_booked}}</td>
+      <td>{{record.IsDelete}}</td>
+      <td>{{record.LC_Status}}</td>
+      <td>{{record.ActionStatus}}</td>
+
+    </tr>
+    
+    
+  </table>
+
+</div>
