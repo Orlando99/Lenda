@@ -151,9 +151,6 @@ export class BorrowerInfoComponent implements OnInit {
 
   }
 
-  initialize() {
-  
-  }
 
   createForm(formData) {
     console.log(formData)
