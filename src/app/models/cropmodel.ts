@@ -74,6 +74,7 @@ export class Loan_Crop_Unit
      FC_Staxvalue:number=0;
      FC_Disc_Staxvalue:number=0;
      FC_Scovalue:number=0;
+     FC_HmaxPremium:number=0;
      FC_Disc_Scovalue:number=0;
      Ins_APH:number=0
      FC_Level1Perc:number=undefined;

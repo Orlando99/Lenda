@@ -8,12 +8,9 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled()">
-        <!-- <mat-icon [style.color] = "!syncenabled()">publish</mat-icon> -->
-          <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-      </button>
+      <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
 
-
+      <h3>   Irrigated Crops</h3>
       <div class="container bottom">
         <div class="row">
         <ag-grid-angular  [ngStyle]="style"
@@ -30,8 +27,8 @@
         [toolPanelSuppressPivotMode]="true"
         [frameworkComponents]="frameworkcomponents"
         [singleClickEdit]="true"
-        (cellEditingStopped)="rowvaluechanged($event)"
-        [rowData]="rowData"
+        (cellEditingStopped)="rowvaluechangedirr($event)"
+        [rowData]="rowDataIIR"
         (gridReady)="onGridReady($event)"
         [columnDefs]="columnDefs"
         [defaultColDef]="defaultColDef"
@@ -40,6 +37,33 @@
         </div>
       </div>
             <br>
+            <h3>    Non-Irrigated Crops</h3>
+            <div class="container bottom">
+              <div class="row">
+              <ag-grid-angular  [ngStyle]="style"
+               class="ag-theme-balham roboto-font"
+              [animateRows]="true"
+              [enableSorting]="false"
+              [enableFilter]="true"
+              [showToolPanel]="false"
+              [context]="context"
+              [toolPanelSuppressRowGroups]="true"
+              [rowClassRules]="rowClassRules"
+              [toolPanelSuppressValues]="true"
+              [toolPanelSuppressPivots]="true"
+              [toolPanelSuppressPivotMode]="true"
+              [frameworkComponents]="frameworkcomponents"
+              [singleClickEdit]="true"
+              (cellEditingStopped)="rowvaluechangednir($event)"
+              [rowData]="rowDataNIR"
+              (gridReady)="onGridReady($event)"
+              [columnDefs]="columnDefs"
+              [defaultColDef]="defaultColDef"
+              [gridAutoHeight]=true>
+              </ag-grid-angular>
+              </div>
+            </div>
+                  <br>
     </mat-expansion-panel>
     </mat-accordion>
 </div>

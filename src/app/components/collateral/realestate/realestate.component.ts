@@ -124,6 +124,7 @@ export class RealEstateComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
+    adjustparentheight();
   }
 
   syncenabled(){
@@ -206,13 +207,13 @@ export class RealEstateComponent implements OnInit {
   }
 
   getgridheight(){
-    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
+    //this.style.height=(30*(this.rowData.length+2)).toString()+"px";
   }
 
   onGridSizeChanged(Event: any) {
-
     try{
     this.gridApi.sizeColumnsToFit();
+    adjustparentheight();
   }
   catch{
 
@@ -230,7 +231,26 @@ export class RealEstateComponent implements OnInit {
     footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Real_Estate;
     footer.Disc_Value = 0;
     footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Real_Estate;
+    footer.Qty = input.LoanMaster[0].FC_total_Qty_Real_Estate;
     total.push(footer);
     return total;
   }
+
+  expansionopen()
+  {
+    setTimeout(() => {
+      adjustparentheight();
+    }, 10);
+  
+  }
 }
+function adjustparentheight(){
+  var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+  
+  elements.forEach(element => {
+   debugger
+    //find aggrid
+    var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+   });
+ }

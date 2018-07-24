@@ -14,13 +14,11 @@ import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
-import { CollateralService } from '../collateral.service';
 
 @Component({
   selector: 'app-livestock',
   templateUrl: './livestock.component.html',
   styleUrls: ['./livestock.component.scss'],
-  providers: [CollateralService]
 })
 export class LivestockComponent implements OnInit {
   public refdata: any = {};
@@ -44,6 +42,7 @@ export class LivestockComponent implements OnInit {
     boxSizing: 'border-box'
   };
 
+  
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
@@ -51,7 +50,7 @@ export class LivestockComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    public collateralService: CollateralService) {
+    ) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -164,23 +163,21 @@ export class LivestockComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    // if(this.localloanobject.LoanCollateral ==null)
-    //   this.localloanobject.LoanCollateral = [];
-
-    // var newItem = new Loan_Collateral();
-    // newItem.Collateral_Category_Code = "LSK";
-    // newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
-    // newItem.Disc_Value = 50;
-    // newItem.ActionStatus = 1;
-    // var res = this.rowData.push(newItem);
-    // this.localloanobject.LoanCollateral.push(newItem);
-    // this.gridApi.setRowData(this.rowData);
-    // this.gridApi.startEditingCell({
-    //   rowIndex: this.rowData.length-1,
-    //   colKey: "Collateral_Description"
-    // });
-    // this.getgridheight();
-    this.collateralService.addrow(this.gridApi, this.rowData, "LSK");
+   
+    var newItem = new Loan_Collateral();
+    newItem.Collateral_Category_Code = "LSK";
+    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
+    newItem.Disc_Value = 50;
+    newItem.ActionStatus = 1;
+    var res = this.rowData.push(newItem);
+    this.localloanobject.LoanCollateral.push(newItem);
+    this.gridApi.setRowData(this.rowData);
+    this.gridApi.startEditingCell({
+      rowIndex: this.rowData.length-1,
+      colKey: "Collateral_Description"
+    });
+    this.getgridheight();
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   rowvaluechanged(value: any) {
@@ -230,7 +227,13 @@ export class LivestockComponent implements OnInit {
     }
   }
 
-
+  expansionopen()
+  {
+    setTimeout(() => {
+      adjustparentheight();
+    }, 10);
+  
+  }
   computeTotal(input) {
     var total = []
     var footer = new Loan_Collateral();
@@ -247,3 +250,13 @@ export class LivestockComponent implements OnInit {
     return total;
   }
 }
+function adjustparentheight(){
+  var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+  
+  elements.forEach(element => {
+   debugger
+    //find aggrid
+    var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+   });
+ }

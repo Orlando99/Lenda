@@ -127,7 +127,7 @@ export class LoancalculationWorker {
 
       //STEP 5 --- BUDGET CALCULATIONS
       try {
-
+        if(localloanobj.LoanBudget && localloanobj.LoanBudget.length > 0){
         for (let i = 0; i < localloanobj.LoanBudget.length; i++) {
           let currentBudget = localloanobj.LoanBudget[i];
           let cropPractice = localloanobj.LoanCropPractices.find(cp => cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
@@ -145,6 +145,7 @@ export class LoancalculationWorker {
         localloanobj.LoanMaster[0].Third_Party_Credit=_.sumBy(localloanobj.LoanBudget,'Third_Party_Budget_Crop');
         localloanobj.LoanMaster[0].Total_Commitment=_.sumBy(localloanobj.LoanBudget,'Total_Budget_Crop_ET');
         localloanobj.LoanMaster[0].ActionStatus=2;
+      }
       } catch (e) {
         console.error("ERROR IN BUDGET CALCULATION" + JSON.stringify(e));
 
