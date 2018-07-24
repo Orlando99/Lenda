@@ -129,7 +129,7 @@ export class YieldComponent implements OnInit {
     });
 
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right'});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
 

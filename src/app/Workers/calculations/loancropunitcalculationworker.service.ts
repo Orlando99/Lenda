@@ -58,6 +58,32 @@ export class LoancropunitcalculationworkerService {
     }
   }
 
+  calculateAPHForCropYield(localLoanObject : loan_model){
+    let cropYields = localLoanObject.CropYield;
+    if(cropYields){
+      cropYields.forEach(cy => {
+        let sumOfAcresIntoAPH=0;
+          let sumOfAcres=0;
+        let cropUnits = localLoanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cy.CropType && cu.Crop_Practice_Type_Code == cy.IrNI);
+        if(cropUnits){
+          
+          cropUnits.forEach(cu=>{
+            sumOfAcresIntoAPH += cu.CU_Acres * cu.Ins_APH;
+            sumOfAcres += cu.CU_Acres;
+          });
+        }
+
+        if(sumOfAcres && sumOfAcresIntoAPH){
+          cy.APH = sumOfAcresIntoAPH/sumOfAcres;
+          cy.APH = parseFloat(cy.APH.toFixed(2));
+        }else{
+          cy.APH = 0;
+        }
+        
+      });
+    }
+    return localLoanObject;
+  }
   fillFCValuesforCropunits(input: loan_model) {
     input.LoanCropUnits.forEach(element => {
       let farm = input.Farms.find(p => p.Farm_ID == element.Farm_ID);
@@ -109,11 +135,11 @@ export class LoancropunitcalculationworkerService {
           element.Ins_Value = element.FC_MPCIvalue;
           //MPCI type only as if now--We dont have secondary 
           element.Disc_Ins_value = element.FC_Disc_MPCI_value;
-          debugger
+          
           // Insurance Sub Policies Calculations
           let subpolicies = insurancepolicy.Subpolicies;
           subpolicies.forEach(subpolicy => {
-            debugger
+            
             if (subpolicy.Ins_Type.toLowerCase() == "hmax") {
               //Hmax calculations
               if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
@@ -156,7 +182,7 @@ export class LoancropunitcalculationworkerService {
 
         }
         catch (ex) {
-          debugger
+          
           console.error("Error in Cropunit Calculations")
           element.Mkt_Value = 0;
         }
