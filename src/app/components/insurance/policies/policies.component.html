@@ -12,6 +12,7 @@
         <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
        </button>
 
+<<<<<<< HEAD
           <ag-grid-angular  
             [ngStyle]="style"
             class="ag-theme-balham roboto-font"
@@ -38,6 +39,31 @@
             [paginationNumberFormatter]="paginationNumberFormatter"
             [columnDefs]="columnDefs"
             [defaultColDef]="defaultColDef">
+=======
+          <ag-grid-angular  [ngStyle]="style"
+          class="ag-theme-balham"
+         [animateRows]="true"
+         [enableSorting]="false"
+         [enableFilter]="true"
+         [components]="components"
+         [frameworkComponents]="frameworkcomponents"
+         [showToolPanel]="false"
+         [toolPanelSuppressRowGroups]="true"
+         [rowClassRules]="rowClassRules"
+         [toolPanelSuppressValues]="true"
+         [toolPanelSuppressPivots]="true"
+         [toolPanelSuppressPivotMode]="true"
+         [singleClickEdit]="true"
+         (cellEditingStopped)="rowvaluechanged($event)"
+         [rowData]="rowData" 
+         [context]="context"
+         (gridReady)="onGridReady($event)"
+         [pagination]="true"
+         [paginationPageSize]="paginationPageSize"
+         [paginationNumberFormatter]="paginationNumberFormatter"
+         [columnDefs]="columnDefs"
+         [defaultColDef]="defaultColDef">
+>>>>>>> master
          </ag-grid-angular>
 
         </mat-expansion-panel>

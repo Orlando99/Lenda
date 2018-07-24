@@ -117,6 +117,7 @@ export class LoancalculationWorker {
       {
         localloanobj = this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
         localloanobj=this.loancropunitworker.fillFCValuesforCropunits(localloanobj);
+        localloanobj = this.loancropunitworker.calculateAPHForCropYield(localloanobj);
       }
       //STEP 3 --- FARM CALCULATIONS
       if (localloanobj.Farms != null)
