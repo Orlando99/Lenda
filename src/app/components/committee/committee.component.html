@@ -18,13 +18,13 @@
             <div class="input-field col">
 
               <mat-form-field>
-                <input matInput placeholder="Due Date (mm/dd/yyyy)" formControlName="Maturity_Date">
+                <input matInput placeholder="Due Date (mm/dd/yyyy)" formControlName="Maturity_Date" (blur)="updateLocalStorage()">
               </mat-form-field>
             </div>
             <div class="input-field col m8">
 
               <mat-form-field>
-                <input matInput placeholder="Origination Fee (%)" type="number" formControlName="Orgination_Fee_Percent">
+                <input matInput placeholder="Origination Fee (%)" type="number" formControlName="Orgination_Fee_Percent" (blur)="updateLocalStorage()">
               </mat-form-field>
               
             </div>
@@ -35,7 +35,7 @@
 
             <div class="input-field col m8">
               <mat-form-field>
-                <input matInput placeholder="Service Fee (%)"  type="number" formControlName="Service_Fee_Percent">
+                <input matInput placeholder="Service Fee (%)"  type="number" formControlName="Service_Fee_Percent" (blur)="updateLocalStorage()">
               </mat-form-field>
               
             </div>
@@ -45,7 +45,7 @@
 
             <div class="input-field col m8">
               <mat-form-field>
-                <input matInput placeholder="Interest (%)"  type="number" formControlName="Rate_Percent" >
+                <input matInput placeholder="Interest (%)"  type="number" formControlName="Rate_Percent" (blur)="updateLocalStorage()" >
               </mat-form-field>
             </div>
             <div class="col m4" style="margin-top: 25px">

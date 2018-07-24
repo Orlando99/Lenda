@@ -88,8 +88,8 @@ export class CommitteeComponent implements OnInit {
     }
   }
 
-  synctoDb() {
 
+  updateLocalStorage(){
     let loanMaster = this.localloanobj.LoanMaster[0];
     loanMaster.Maturity_Date = this.committeeForm.value.Maturity_Date;
     loanMaster.Orgination_Fee_Percent = this.committeeForm.value.Orgination_Fee_Percent
@@ -98,6 +98,12 @@ export class CommitteeComponent implements OnInit {
     loanMaster.Service_Fee_Amount = this.committeeForm.value.Service_Fee_Amount
     loanMaster.Rate_Percent = this.committeeForm.value.Rate_Percent;
     loanMaster.Rate_Percent_Value = this.committeeForm.value.Rate_Percent_Value;
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+  }
+
+  synctoDb() {
+
+    this.updateLocalStorage();
 
     this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
       if (res.ResCode == 1) {
