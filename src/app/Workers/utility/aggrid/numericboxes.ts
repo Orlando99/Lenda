@@ -101,7 +101,7 @@ export function getNumericCellEditor() {
     NumericCellEditor.prototype.isCancelAfterEnd = function () { };
     NumericCellEditor.prototype.getValue = function () {
       
-      return this.eInput.value;
+      return this.eInput.value==""?0:this.eInput.value;
     };
     NumericCellEditor.prototype.focusIn = function () {
       var eInput = this.getGui();

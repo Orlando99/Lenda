@@ -457,7 +457,7 @@ export class PoliciesComponent implements OnInit {
       {
         replacer = "Ins_SubType";
       }
-      let policy = this.loanmodel.InsurancePolicies[event.rowIndex].Subpolicies.find(p => p.Ins_Type == policyname);
+      let policy = this.loanmodel.InsurancePolicies[event.rowIndex].Subpolicies.find(p => p.Ins_Type == policyname && p.ActionStatus!=3);
       if(isNaN(event.value))
       policy[replacer] = event.value;
       else
@@ -516,7 +516,7 @@ export class PoliciesComponent implements OnInit {
           })
         }
         let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
-        if(mainobj.Subpolicies.find(p=>p.Ins_Type==element)==undefined){
+        if(mainobj.Subpolicies.find(p=>p.Ins_Type==element && p.ActionStatus!=3)==undefined){
           let sp:Insurance_Subpolicy=new Insurance_Subpolicy();
           sp.FK_Policy_Id=$event.data.mainpolicyId;
           sp.ActionStatus=1;
