@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../../../../../environments/environment';
 import { chartSettings } from './../../../../../chart-settings';
 
 @Component({
@@ -8,12 +10,23 @@ import { chartSettings } from './../../../../../chart-settings';
   styleUrls: ['./commitment-chart.component.scss']
 })
 export class CommitmentChartComponent implements OnInit {
+  private info = {
+    armCommitment: '',
+    distCommitment: '',
+    totalCommitment: '',
+    excessIns: '313095',
+    excessInsPercent: 0
+  };
+
   armCommit = chartSettings.commitmentExcessIns.armCommit;
   excessIns = chartSettings.commitmentExcessIns.excessIns;
 
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit() {
+    this.getCommitment();
     // Set bars
     this.setChart('#arm', 0, 100, chartSettings.commitmentExcessIns.armCommit, 10);
     this.setChart('#dist', 100, 200, chartSettings.commitmentExcessIns.distCommit, 10);
@@ -46,6 +59,16 @@ export class CommitmentChartComponent implements OnInit {
       .attr('width', rangeEnd - rangeStart)
       .attr('height', 15)
       .attr('fill', color);
+  }
+
+  getCommitment() {
+    let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
+    this.info.armCommitment = loanMaster.ARM_Commitment;
+    this.info.distCommitment = loanMaster.Dist_Commitment;
+    this.info.totalCommitment = loanMaster.ARM_Commitment + loanMaster.Dist_Commitment;
+    // TODO: Get excessin value from local storage
+    let excessInsPercent: any = parseFloat(this.info.excessIns) * 100 / parseFloat(this.info.totalCommitment);
+    this.info.excessInsPercent = excessInsPercent.toFixed(2);
   }
 
   setGrid(item, color, translateX) {

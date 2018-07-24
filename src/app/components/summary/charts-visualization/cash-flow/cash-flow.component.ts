@@ -13,6 +13,11 @@ import 'chart.piecelabel.js';
 export class CashFlowComponent implements OnInit {
   @Input() viewMode;
   @Input() viewClass;
+  private info = {
+    budget: '',
+    cashFlow: '',
+    breakEven: ''
+  };
 
   // Doughnut
   // TODO: Replace this data with live API
@@ -50,6 +55,15 @@ export class CashFlowComponent implements OnInit {
 
   ngOnInit() {
     this.getLoanBudgetFromLocalStorage();
+    this.getLoanSummary();
+  }
+
+  getLoanSummary() {
+    let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
+    this.info.budget = loanMaster.Total_Commitment;
+    this.info.cashFlow = loanMaster.Cash_Flow_Amount;
+    // TOOD: Replace with real value form local storage
+    this.info.breakEven = '--';
   }
 
   getLoanBudgetFromLocalStorage() {
