@@ -443,7 +443,7 @@ export class PoliciesComponent implements OnInit {
         row.Price = item.Price;
         row.Premium = item.Premium;
         item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
-           debugger
+          //debugger
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {

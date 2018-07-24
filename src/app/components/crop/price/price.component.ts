@@ -279,17 +279,7 @@ export class PriceComponent implements OnInit {
     this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
   }
   onGridSizeChanged(Event: any) {
-<<<<<<< HEAD
     //this.gridApi.sizeColumnsToFit();
-=======
-
-    try{
-      this.gridApi.sizeColumnsToFit();
-    }
-    catch{
-
-    }
->>>>>>> master
   }
 
   onColumnhiderequested(event,header:string){
