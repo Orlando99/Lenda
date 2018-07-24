@@ -58,6 +58,32 @@ export class LoancropunitcalculationworkerService {
     }
   }
 
+  calculateAPHForCropYield(localLoanObject : loan_model){
+    let cropYields = localLoanObject.CropYield;
+    if(cropYields){
+      cropYields.forEach(cy => {
+        let sumOfAcresIntoAPH=0;
+          let sumOfAcres=0;
+        let cropUnits = localLoanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cy.CropType && cu.Crop_Practice_Type_Code == cy.IrNI);
+        if(cropUnits){
+          
+          cropUnits.forEach(cu=>{
+            sumOfAcresIntoAPH += cu.CU_Acres * cu.Ins_APH;
+            sumOfAcres += cu.CU_Acres;
+          });
+        }
+
+        if(sumOfAcres && sumOfAcresIntoAPH){
+          cy.APH = sumOfAcresIntoAPH/sumOfAcres;
+          cy.APH = parseFloat(cy.APH.toFixed(2));
+        }else{
+          cy.APH = 0;
+        }
+        
+      });
+    }
+    return localLoanObject;
+  }
   fillFCValuesforCropunits(input: loan_model) {
     input.LoanCropUnits.forEach(element => {
       let farm = input.Farms.find(p => p.Farm_ID == element.Farm_ID);

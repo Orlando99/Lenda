@@ -24,6 +24,7 @@ import { CollateralComponent } from "./components/collateral/collateral.componen
 import {FlowchartComponent} from './components/flowchart/flowchart.component';
 import { CustomentryComponent } from "./components/customentry/customentry.component";
 import { OptimizerComponent } from "./components/optimizer/optimizer.component";
+import { CommitteeComponent } from "./components/committee/committee.component";
 
 
 const appRoutes: Routes = [
@@ -52,6 +53,7 @@ const appRoutes: Routes = [
         { path: 'insurance', component: InsuranceComponent },
         { path: 'budget', component: BudgetComponent },
         { path: 'collateral', component: CollateralComponent },
+        { path: 'committee', component: CommitteeComponent },
         { path: 'work-in-progress', component: WorkInProgressComponent },
         { path: 'custom-entry', component: CustomentryComponent },
         { path: 'optimizer', component: OptimizerComponent },
