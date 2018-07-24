@@ -183,18 +183,9 @@ synctoDb() {
     // this.getgridheight();
   }
 
-
-<<<<<<< HEAD
   rowvaluechanged(params: any) {
     var obj = params.data;
     if (obj.Assoc_ID == 0) {
-=======
-  rowvaluechanged(value: any) {
-    var obj = value.data;
-    
-    if (!obj.Assoc_ID) {
-      obj.Assoc_ID = 0;
->>>>>>> origin
       obj.ActionStatus = 1;
       this.localloanobject.Association[this.localloanobject.Association.length - 1] = obj;
     }
@@ -242,18 +233,10 @@ synctoDb() {
   }
 
   syncenabled(){
-<<<<<<< HEAD
     if (this.isArrayEqual(this.rowData, this.savedData)){
       return 'disabled';
     } else 
       return '';
-=======
-    if( this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
-
-    return '';
-    else
-    return 'disabled';
->>>>>>> origin
   }
 
   getgridheight(){
