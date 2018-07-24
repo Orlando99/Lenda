@@ -57,11 +57,23 @@ export class CashFlowComponent implements OnInit {
     let index = 0;
     for (let budget of loanBudgets.LoanBudget) {
       if (budget.Total_Budget_Crop_ET !== 0 && budget.Crop_Practice_ID === 2) {
-        this.doughnutChartLabels.push(budget.Loan_Budget_ID);
+        this.doughnutChartLabels.push(
+          this.getBudgetExpenseType(budget.Expense_Type_ID)
+        );
         this.doughnutChartData.push(budget.Total_Budget_Crop_ET);
         this.generatedColors.push(this.dynamicColors());
       }
     }
+  }
+
+  getBudgetExpenseType(expenseType) {
+    let budgetExpenseTypes = this.localStorageService.retrieve(environment.referencedatakey);
+    for (let type of budgetExpenseTypes.BudgetExpenseType) {
+      if (type.Budget_Expense_Type_ID === expenseType) {
+        return type.Budget_Expense_Name;
+      }
+    }
+    return 'UNDEFINED';
   }
 
   dynamicColors() {
