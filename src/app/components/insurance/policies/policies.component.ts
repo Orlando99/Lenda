@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupStateValue, Statevaluesetter, getfilteredcounties, Countyvaluesetter, lookupStateValueinRefobj } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -15,7 +15,6 @@ import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
-import { debug } from 'util';
 import { status } from '../../../models/syncstatusmodel';
 import { JsonConvert } from '../../../../../node_modules/json2typescript';
 import { ToastsManager } from '../../../../../node_modules/ng2-toastr';
@@ -26,14 +25,15 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 @Component({
   selector: 'app-policies',
   templateUrl: './policies.component.html',
-  styleUrls: ['./policies.component.scss']
+  styleUrls: ['./policies.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
  
 
   deleteunwantedcolumn(): any {
-    debugger
+    // debugger
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
       let included = false;
@@ -76,7 +76,11 @@ export class PoliciesComponent implements OnInit {
     this.columnDefs = [];
     this.columnDefs = [
       {
-        headerName: 'Agent', field: 'Agent_Id', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        headerName: 'Agent', 
+        field: 'Agent_Id', 
+        cellClass: 'editable-color', 
+        editable: true, 
+        cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
         valueFormatter: function (params) {
           try {
@@ -86,28 +90,41 @@ export class PoliciesComponent implements OnInit {
             return "Select";
           }
         }
-
       },
       {
-        headerName: 'Proposed AIP', field: 'ProposedAIP', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'Proposed AIP', 
+        field: 'ProposedAIP', 
+        cellClass: 'editable-color', 
+        editable: true, 
+        cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
-
       },
       {
-        headerName: 'County | State', field: 'StateandCountry'
+        headerName: 'County | State', 
+        field: 'StateandCountry'
       },
       {
-        headerName: 'Crop', field: 'CropName'
+        headerName: 'Crop', 
+        field: 'CropName'
       },
       {
-        headerName: 'Practice', field: 'Practice'
+        headerName: 'Practice', 
+        field: 'Practice'
       },
       {
-        headerName: 'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'SubPlanType', 
+        field: 'MPCI_Subplan', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "agSelectCellEditor",
         cellEditorParams: this.GetPlanSubType('MPCI')
       },
       {
-        headerName: 'Options', field: 'SecInsurance', cellClass: 'editable-color', editable: true, cellEditor: "chipeditor",
+        headerName: 'Options', 
+        field: 'SecInsurance', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "chipeditor",
         cellEditorParams: {
           items: [
             { "id": 1, "itemName": "STAX" },
@@ -126,15 +143,30 @@ export class PoliciesComponent implements OnInit {
         // }
       },
       {
-        headerName: 'Unit', field: 'Unit', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: { values: [{ key: 1, value: 'EU' }, { key: 2, value: 'BU' }, { key: 2, value: 'EP' }, { key: 2, value: 'OU' }] },
+        headerName: 'Unit', 
+        field: 'Unit', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "selectEditor",
+        cellEditorParams: { 
+          values: [
+            { key: 1, value: 'EU' }, 
+            { key: 2, value: 'BU' }, 
+            { key: 2, value: 'EP' }, 
+            { key: 2, value: 'OU' }
+          ] 
+        },
         valueFormatter: function (params) {
           let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
           return selected ? selected.value : undefined;
         }
       },
       {
-        headerName: 'Level', field: 'Level', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
+        headerName: 'Level', 
+        field: 'Level', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
           return PercentageFormatter(params.value);
         },
@@ -148,13 +180,23 @@ export class PoliciesComponent implements OnInit {
         }
       },
       {
-        headerName: 'Price', field: 'Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Price', 
+        field: 'Price', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "numericCellEditor", 
+        valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
       },
       {
-        headerName: 'Premium', field: 'Premium', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Premium', 
+        field: 'Premium', 
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "numericCellEditor", 
+        valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }

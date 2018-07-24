@@ -49,6 +49,7 @@ export class AphComponent implements OnInit {
       {
         headerName: 'Crop', field: 'Crop_Code',
         valueFormatter: (params) => {
+          console.log(params);
           let matchedCrop = this.refdata.Crops.find(crp=>crp.Crop_Code == params.data.Crop_Code);
           return matchedCrop ? matchedCrop.Crop_Name || '' : '';
         },
@@ -97,7 +98,7 @@ export class AphComponent implements OnInit {
           this.localloanobject.srccomponentedit = undefined;
           this.localloanobject.lasteditrowindex = undefined;
         }
-        else if (this.localloanobject.LoanCropUnits) {
+        else if (this.localloanobject && this.localloanobject.LoanCropUnits) {
 
           this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
         } else {
