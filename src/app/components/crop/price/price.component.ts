@@ -281,11 +281,11 @@ export class PriceComponent implements OnInit {
   onGridSizeChanged(Event: any) {
 
     try{
-    //this.gridApi.sizeColumnsToFit();
-  }
-  catch{
+      this.gridApi.sizeColumnsToFit();
+    }
+    catch{
 
-  }
+    }
   }
 
   onColumnhiderequested(event,header:string){
