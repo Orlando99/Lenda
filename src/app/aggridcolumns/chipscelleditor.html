@@ -1,0 +1,17 @@
+<ng-select
+    #ngSelect
+    [items]="dropdownList"
+    bindLabel="itemName"
+    bindValue="itemName"
+    [multiple]="true"
+    [closeOnSelect]="false"
+    appendTo="body"
+    [(ngModel)]="selectedItems">
+    <ng-template ng-header-tmp>
+        <input (change)="this.changeAll($event)" type="checkbox">All
+    </ng-template>
+    <ng-template ng-option-tmp let-item="item">
+        <input [checked]="selectedItems.indexOf(item.itemName) > -1" type="checkbox">
+        {{item.itemName}}
+    </ng-template>
+</ng-select>

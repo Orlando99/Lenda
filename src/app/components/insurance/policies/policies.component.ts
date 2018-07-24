@@ -26,7 +26,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
   selector: 'app-policies',
   templateUrl: './policies.component.html',
   styleUrls: ['./policies.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
@@ -123,6 +123,7 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Options', 
         field: 'SecInsurance', 
         cellClass: ['editable-color'], 
+        autoHeight: true,
         editable: true, 
         cellEditor: "chipeditor",
         cellEditorParams: {
@@ -341,7 +342,7 @@ export class PoliciesComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '93%',
-    height: '240px',
+    height: '366px',
 
   };
   public loanmodel: loan_model=null;
@@ -384,7 +385,7 @@ export class PoliciesComponent implements OnInit {
     {
       
     this.declarecoldefs();
-    this.getgriddata();
+
    }
    
   }
@@ -565,6 +566,7 @@ export class PoliciesComponent implements OnInit {
     this.columnApi = params.columnApi;
 
     params.api.sizeColumnsToFit();//autoresizing
+    this.getgriddata();
   }
   //Grid Functions End
   synctoDb() {
@@ -620,5 +622,14 @@ export class PoliciesComponent implements OnInit {
     }
      });
      return status;
+  }
+
+  onGridSizeChanged(params) {
+    params.api.sizeColumnsToFit();
+    params.api.resetRowHeights();
+  }
+
+  onGridScroll(params) {
+    //params.api.stopEditing();
   }
 }

@@ -49,7 +49,6 @@ export class AphComponent implements OnInit {
       {
         headerName: 'Crop', field: 'Crop_Code',
         valueFormatter: (params) => {
-          console.log(params);
           let matchedCrop = this.refdata.Crops.find(crp=>crp.Crop_Code == params.data.Crop_Code);
           return matchedCrop ? matchedCrop.Crop_Name || '' : '';
         },
