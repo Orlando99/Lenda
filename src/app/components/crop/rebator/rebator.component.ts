@@ -192,8 +192,9 @@ synctoDb() {
     else {
       var rowindex = this.localloanobject.Association.findIndex(as => as.Assoc_ID == obj.Assoc_ID);
       if (obj.ActionStatus != 1){
+        obj.ActionStatus = 2;  
         if (params.value != this.localloanobject.Association[rowindex][params.colDef.field]){
-          obj.ActionStatus = 2;          
+          this.localloanobject.Association[rowindex][params.colDef.field] = params.value;        
         }
       }
        
@@ -225,6 +226,7 @@ synctoDb() {
         if (obj.ActionStatus != 1) {
           this.localloanobject.Association[index].ActionStatus = 3;
         } else {
+          this.localloanobject.Association.splice(index, 1);
           this.localloanobject.LoanCollateral.splice(this.localloanobject.Association.indexOf(obj), 1);
         }
 
