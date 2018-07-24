@@ -3,7 +3,7 @@
       Risk Cushion
     </span>
   <p class="risk-return-value">
-    <span>$ {{ info.riskCushionAmount }}</span>
+    <span>$ {{ info.riskCushionAmount | number: '2.' }}</span>
     <span>{{ info.riskCushionPercent }}%</span>
   </p>
 </div>
