@@ -24,28 +24,34 @@
             <div class="input-field col m8">
 
               <mat-form-field>
-                <input matInput placeholder="Origination Fee (%)" formControlName="Orgination_Fee_Percent">
-              </mat-form-field>
-              
-            </div>
-            <div class="col m4" style="margin-top: 25px">{{committeeForm.value.Orgination_Fee_Amount || '$ 0' }}</div>
-
-
-            <div class="input-field col m8">
-              <mat-form-field>
-                <input matInput placeholder="Service Fee (%)" formControlName="Service_Fee_Percent">
+                <input matInput placeholder="Origination Fee (%)" type="number" formControlName="Orgination_Fee_Percent">
               </mat-form-field>
               
             </div>
             <div class="col m4" style="margin-top: 25px">
-                {{committeeForm.value.Service_Fee_Amount || '$ 0' }}
+              {{committeeForm.value.Orgination_Fee_Amount ? '$ '+committeeForm.value.Orgination_Fee_Amount : '$ 0' }}
             </div>
 
-            <div class="input-field col">
+
+            <div class="input-field col m8">
               <mat-form-field>
-                <input matInput placeholder="Interest (%)" formControlName="Rate_Percent">
+                <input matInput placeholder="Service Fee (%)"  type="number" formControlName="Service_Fee_Percent">
+              </mat-form-field>
+              
+            </div>
+            <div class="col m4" style="margin-top: 25px">
+                {{committeeForm.value.Service_Fee_Amount ? '$ '+committeeForm.value.Service_Fee_Amount : '$ 0' }}
+            </div>
+
+            <div class="input-field col m8">
+              <mat-form-field>
+                <input matInput placeholder="Interest (%)"  type="number" formControlName="Rate_Percent" >
               </mat-form-field>
             </div>
+            <div class="col m4" style="margin-top: 25px">
+                {{ committeeForm.value.Rate_Percent_Value ? '$ '+committeeForm.value.Rate_Percent_Value : '$ 0' }}
+            </div>
+
           </form>
         </div>
       </div>

@@ -17,7 +17,7 @@ export class CommitteeComponent implements OnInit {
 
   public committeeForm: FormGroup;
   localloanobj: loan_model;
-  isFormUpdated: boolean =false;
+  isFormUpdated: boolean = false;
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     private loanapi: LoanApiService,
@@ -31,7 +31,7 @@ export class CommitteeComponent implements OnInit {
 
       if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
         this.createForm(this.localloanobj.LoanMaster[0]);
-        
+
       }
 
     }
@@ -42,7 +42,7 @@ export class CommitteeComponent implements OnInit {
         this.localloanobj = res;
         if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
           this.createForm(this.localloanobj.LoanMaster[0]);
-          
+
         }
       }
 
@@ -51,20 +51,31 @@ export class CommitteeComponent implements OnInit {
   }
 
   createForm(formData) {
+
     this.committeeForm = this.fb.group({
-      Maturity_Date: [formData.Maturity_Date ? this.formatDate(formData.Maturity_Date ) : '',],
+      Maturity_Date: [formData.Maturity_Date ? this.formatDate(formData.Maturity_Date) : '',],
       Orgination_Fee_Percent: [formData.Orgination_Fee_Percent || 0],
       Orgination_Fee_Amount: [formData.Orgination_Fee_Amount || 0],
       Service_Fee_Percent: [formData.Service_Fee_Percent || 0],
       Service_Fee_Amount: [formData.Service_Fee_Amount || 0],
-      Rate_Percent :  [formData.Rate_Percent || 0],
+      Rate_Percent: [formData.Rate_Percent || 0],
+      Rate_Percent_Value: [formData.Rate_Percent_Value || 0],
     });
     this.onChanges();
   }
 
   onChanges(): void {
     this.committeeForm.valueChanges.subscribe(val => {
-      this.isFormUpdated=true;
+      this.isFormUpdated = true;
+      let loanMaster = this.localloanobj.LoanMaster[0];
+    if (loanMaster) {
+      this.committeeForm.value.Orgination_Fee_Amount = (this.committeeForm.value.Orgination_Fee_Percent / 100) * (loanMaster.ARM_Commitment || 0);
+      this.committeeForm.value.Service_Fee_Amount = (this.committeeForm.value.Service_Fee_Percent / 100) * (loanMaster.ARM_Commitment || 0);
+      this.committeeForm.value.Rate_Percent_Value = (this.committeeForm.value.Rate_Percent / 100) * ((loanMaster.ARM_Commitment || 0) + (loanMaster.Dist_Commitment || 0));
+      this.committeeForm.value.Orgination_Fee_Amount = parseFloat(this.committeeForm.value.Orgination_Fee_Amount.toFixed(2));
+      this.committeeForm.value.Service_Fee_Amount = parseFloat(this.committeeForm.value.Service_Fee_Amount.toFixed(2));
+      this.committeeForm.value.Rate_Percent_Value = parseFloat(this.committeeForm.value.Rate_Percent_Value.toFixed(2));
+    }
     });
   }
 
@@ -77,7 +88,7 @@ export class CommitteeComponent implements OnInit {
     }
   }
 
-  synctoDb(){
+  synctoDb() {
 
     let loanMaster = this.localloanobj.LoanMaster[0];
     loanMaster.Maturity_Date = this.committeeForm.value.Maturity_Date;
@@ -86,6 +97,7 @@ export class CommitteeComponent implements OnInit {
     loanMaster.Service_Fee_Percent = this.committeeForm.value.Service_Fee_Percent
     loanMaster.Service_Fee_Amount = this.committeeForm.value.Service_Fee_Amount
     loanMaster.Rate_Percent = this.committeeForm.value.Rate_Percent;
+    loanMaster.Rate_Percent_Value = this.committeeForm.value.Rate_Percent_Value;
 
     this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
       if (res.ResCode == 1) {
