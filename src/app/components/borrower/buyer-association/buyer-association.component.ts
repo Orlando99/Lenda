@@ -74,8 +74,8 @@ export class BuyerAssociationComponent implements OnInit {
 
     this.columnDefs = [
 
-      { headerName: 'Agent', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
-      { headerName: 'Agency', field: 'Assoc_Type_Code',  editable: false },
+      { headerName: 'Buyer', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
+      { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
       { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
