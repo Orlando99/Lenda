@@ -10,8 +10,10 @@ import { environment } from '../../../../../environments/environment';
 export class CompanyInfoComponent implements OnInit {
   @Input() viewMode:number;
   private info = {
-    firstName: '',
-    lastName: '',
+    borrwerFirstName: '',
+    borrowerLastName: '',
+    farmerFirstName: '',
+    farmerLastName: '',
     loanFullId: ''
   }
 
@@ -28,8 +30,10 @@ export class CompanyInfoComponent implements OnInit {
   getCompanyInfo() {
     let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
     let loanMaster = loanBudgets.LoanMaster[0];
-    this.info.firstName = loanMaster.Borrower_First_Name;
-    this.info.lastName = loanMaster.Borrower_Last_Name;
+    this.info.borrwerFirstName = loanMaster.Borrower_First_Name;
+    this.info.borrowerLastName = loanMaster.Borrower_Last_Name;
+    this.info.farmerFirstName = loanMaster.Farmer_First_Name;
+    this.info.farmerLastName = loanMaster.Farmer_Last_Name;
     this.info.loanFullId = loanMaster.Loan_Full_ID;
   }
 }

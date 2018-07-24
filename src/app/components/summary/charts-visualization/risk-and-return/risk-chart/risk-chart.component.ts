@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { LocalStorageService } from 'ngx-webstorage';
 import * as d3 from 'd3';
 import { chartSettings } from './../../../../../chart-settings';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'app-risk-chart',
@@ -9,8 +11,18 @@ import { chartSettings } from './../../../../../chart-settings';
 })
 export class RiskChartComponent implements OnInit {
   @Input() viewMode;
+  private info = {
+    riskCushionAmount: '',
+    riskCushionPercent: '',
+    returnPercent: '',
+    // TODO: Replace with real value for black and red diamond
+    blackDiamond: 300,
+    redDiamond: 400
+  };
 
-  constructor() { }
+  constructor(
+    private localStorageService: LocalStorageService
+  ) { }
 
   ngOnInit() {
     // Set bar
@@ -20,6 +32,14 @@ export class RiskChartComponent implements OnInit {
     this.setChart('#returnSecond', 300, 400, chartSettings.riskAndReturns.returnDarkGreen);
     // Set diamond
     this.setValues();
+    this.getRiskReturnValuesFromLocalStorage();
+  }
+
+  getRiskReturnValuesFromLocalStorage() {
+    let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
+    this.info.riskCushionAmount = loanMaster.Risk_Cushion_Amount;
+    this.info.riskCushionPercent = loanMaster.Risk_Cushion_Percent;
+    this.info.returnPercent = loanMaster.Return_Percent;
   }
 
   setChart(item, rangeStart, rangeEnd, color) {
@@ -58,8 +78,8 @@ export class RiskChartComponent implements OnInit {
       .data(symbolTypes)
       .enter()
       .append('path')
-      .attr('transform', function (d, i) {
-        return 'translate(' + 300 + ', 25)';
+      .attr('transform', (d, i) => {
+        return 'translate(' + this.info.blackDiamond + ', 25)';
       })
       .attr('d', function (d) {
         symbolGenerator
@@ -73,8 +93,8 @@ export class RiskChartComponent implements OnInit {
       .data(symbolTypes)
       .enter()
       .append('path')
-      .attr('transform', function (d, i) {
-        return 'translate(' + 400 + ', 5)';
+      .attr('transform', (d, i) => {
+        return 'translate(' + this.info.redDiamond + ', 5)';
       })
       .attr('d', function (d) {
         symbolGenerator
