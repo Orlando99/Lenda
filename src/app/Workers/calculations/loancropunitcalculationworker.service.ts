@@ -109,11 +109,11 @@ export class LoancropunitcalculationworkerService {
           element.Ins_Value = element.FC_MPCIvalue;
           //MPCI type only as if now--We dont have secondary 
           element.Disc_Ins_value = element.FC_Disc_MPCI_value;
-          debugger
+          
           // Insurance Sub Policies Calculations
           let subpolicies = insurancepolicy.Subpolicies;
           subpolicies.forEach(subpolicy => {
-            debugger
+            
             if (subpolicy.Ins_Type.toLowerCase() == "hmax") {
               //Hmax calculations
               if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
@@ -156,7 +156,7 @@ export class LoancropunitcalculationworkerService {
 
         }
         catch (ex) {
-          debugger
+          
           console.error("Error in Cropunit Calculations")
           element.Mkt_Value = 0;
         }

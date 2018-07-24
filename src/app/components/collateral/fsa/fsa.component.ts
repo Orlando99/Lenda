@@ -213,7 +213,7 @@ export class FSAComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        debugger
+        
         var obj = this.rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
           this.rowData.splice(rowIndex, 1);

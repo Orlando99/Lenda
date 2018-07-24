@@ -100,6 +100,7 @@ export function getNumericCellEditor() {
     };
     NumericCellEditor.prototype.isCancelAfterEnd = function () { };
     NumericCellEditor.prototype.getValue = function () {
+      
       return this.eInput.value;
     };
     NumericCellEditor.prototype.focusIn = function () {
@@ -115,9 +116,9 @@ export function getNumericCellEditor() {
   }
 
 export function numberValueSetter(params) {
-
+     
     if(params.newValue==undefined || params.newValue==null||params.newValue==""){
-      params.newValue='';
+      params.newValue=0;
     }else{
       var data=parseFloat(params.newValue);
       params.data[params.colDef.field]=data;
