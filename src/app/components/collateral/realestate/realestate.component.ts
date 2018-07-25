@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral} from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -48,7 +48,8 @@ export class RealEstateComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify:AlertifyService,
-    public loanapi:LoanApiService){
+    public loanapi:LoanApiService,
+    private hostElement: ElementRef){
 
       this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -124,7 +125,7 @@ export class RealEstateComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    adjustparentheight();
+    this.adjustparentheight();
   }
 
   syncenabled(){
@@ -213,7 +214,7 @@ export class RealEstateComponent implements OnInit {
   onGridSizeChanged(Event: any) {
     try{
     this.gridApi.sizeColumnsToFit();
-    adjustparentheight();
+    this.adjustparentheight();
   }
   catch{
 
@@ -239,18 +240,20 @@ export class RealEstateComponent implements OnInit {
   expansionopen()
   {
     setTimeout(() => {
-      adjustparentheight();
+      this.adjustparentheight();
     }, 10);
   
   }
+
+  adjustparentheight(){
+
+    var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
+   // var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+    
+   elementInHost.forEach(element => {
+      //find aggrid
+      var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+       element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+     });
+   }
 }
-function adjustparentheight(){
-  var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
-  
-  elements.forEach(element => {
-   debugger
-    //find aggrid
-    var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
-     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
-   });
- }
