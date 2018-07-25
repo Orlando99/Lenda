@@ -4,6 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
 import { environment } from '../../../../environments/environment.prod';
 import { ValueType } from '../shared/cell-value/cell-value.component';
+import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 
 @Component({
   selector: 'app-farm-financial',
@@ -15,7 +16,8 @@ export class FarmFinancialComponent implements OnInit {
   data: any;
   localloanobj: loan_model;
   constructor(private localstorageservice: LocalStorageService,
-    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
+    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService,
+    private loanCalculationWorker : LoancalculationWorker) { }
 
   ngOnInit() {
      
@@ -50,8 +52,8 @@ export class FarmFinancialComponent implements OnInit {
       let ffStateData = this.getStateData(entities,farmFinancialRatingValues,ffStaticValue);
       let ffRatingObject = this.getRatingData(entities,farmFinancialRatingValues,ffStaticValue);
       let ffRatingData = ffRatingObject.ffRatingValues;
-      let ffRatingTotal = ffRatingObject.totalRatings;
-
+      let ffRatingTotal = ffRatingObject.totalRatings? parseFloat(ffRatingObject.totalRatings.toFixed(1)) : 0;
+      
       this.data = {
         liquidityAnalysis: [
           {
@@ -147,6 +149,9 @@ export class FarmFinancialComponent implements OnInit {
           }
         ]
       };
+
+      this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating = ffRatingTotal;
+      this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj,false);
     }
   }
 
