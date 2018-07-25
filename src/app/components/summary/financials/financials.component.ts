@@ -36,7 +36,7 @@ export class FinancialsComponent implements OnInit {
       {
         this.loanMaster = res.LoanMaster[0];       
       // log
-      this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'financials', "LocalStorage updated");
      
        this.allDataFetched = true;       
        this.prepareviewmodel();
@@ -48,7 +48,7 @@ export class FinancialsComponent implements OnInit {
   getdataforgrid() {
 
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'financials', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'financials', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.loanMaster = obj.LoanMaster[0];
       this.allDataFetched = true;

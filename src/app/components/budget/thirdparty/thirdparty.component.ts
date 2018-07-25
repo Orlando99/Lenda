@@ -90,7 +90,7 @@ export class ThirdpartyComponent implements OnInit {
   ngOnInit() {  
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
       if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
         this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
@@ -102,7 +102,7 @@ export class ThirdpartyComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
     }

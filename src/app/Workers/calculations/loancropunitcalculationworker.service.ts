@@ -50,7 +50,7 @@ export class LoancropunitcalculationworkerService {
       this.prepare_crops_estimatedinterest();
       this.prepare_crops_totalcashflow();
       let endtime = new Date().getMilliseconds();
-      this.logging.checkandcreatelog(3, 'CalculationforCropunit', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
+      this.logging.checkandcreatelog(3, 'Calc_CropUnit_1', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
       return this.input;
     }
     catch{
@@ -59,6 +59,7 @@ export class LoancropunitcalculationworkerService {
   }
 
   calculateAPHForCropYield(localLoanObject : loan_model){
+    let starttime = new Date().getTime();
     let cropYields = localLoanObject.CropYield;
     if(cropYields){
       cropYields.forEach(cy => {
@@ -82,9 +83,13 @@ export class LoancropunitcalculationworkerService {
         
       });
     }
+
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_CropUnit_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return localLoanObject;
   }
   fillFCValuesforCropunits(input: loan_model) {
+    let starttime = new Date().getTime();
     input.LoanCropUnits.forEach(element => {
       let farm = input.Farms.find(p => p.Farm_ID == element.Farm_ID);
       if (farm != undefined && farm != null) {
@@ -179,7 +184,7 @@ export class LoancropunitcalculationworkerService {
                 element.FC_Staxvalue = 0;
             }
           });
-
+          
         }
         catch (ex) {
           
@@ -206,7 +211,8 @@ export class LoancropunitcalculationworkerService {
         }
       }
     });
-
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_CropUnit_3', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return input;
   }
 }

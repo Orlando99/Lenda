@@ -138,7 +138,7 @@ export class YieldComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-      this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
+      // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       
       if (res.srccomponentedit == "YieldComponent") {
         //if the same table invoked the change .. change only the edited row
@@ -160,7 +160,7 @@ export class YieldComponent implements OnInit {
 
   getdataforgrid(){
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
       this.localloanobject=obj;

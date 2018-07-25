@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { loan_model } from '../../models/loanmodel';
-
+import { LoggingService } from '../../services/Logs/logging.service';
 @Injectable()
 export class OverallCalculationServiceService {
 
-  constructor() { }
+  constructor(public logging: LoggingService) { }
 
   balancesheet_calc(loanObject: loan_model) {
-
+    let starttime = new Date().getTime();
     if(loanObject.LoanMaster && loanObject.LoanMaster.length > 0){
     let loanMaster = loanObject.LoanMaster[0];
 
@@ -31,6 +31,9 @@ export class OverallCalculationServiceService {
     loanMaster.Total_Liabilities = loanMaster.Current_Liabilities + loanMaster.Inter_Liabilities +  loanMaster.Fixed_Liabilities;
     loanMaster.Total_Disc_Net_Worth = loanMaster.Current_Disc_Net_Worth + loanMaster.Inter_Disc_Net_Worth +  loanMaster.Fixed_Disc_Net_Worth;
   }
+  
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_BalanceSheet_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return loanObject;
   }
 

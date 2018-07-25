@@ -17,7 +17,7 @@ export class Borrowerincomehistoryworker {
       }
 
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(3, 'Calc_BorrowIncome_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return this.input;
     } catch{
       return this.input;

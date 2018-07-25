@@ -158,7 +158,7 @@ export class MarketingContractsComponent implements OnInit {
 
   ngOnInit(){
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-          this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
+          // this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
           this.localloanobject = res
           
           if (res.srccomponentedit == "MarketingContractComponent") {

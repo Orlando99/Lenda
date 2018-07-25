@@ -86,7 +86,7 @@ export class BuyerAssociationComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
       this.localloanobject = res
       
       if (res.srccomponentedit == "BuyerAssociationComponent") {
@@ -115,7 +115,7 @@ export class BuyerAssociationComponent implements OnInit {
 
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject && this.localloanobject.Association && this.localloanobject.Association.length>0) {
       //this.localloanobject = obj;

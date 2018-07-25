@@ -100,7 +100,7 @@ export class LoancalculationWorker {
       console.log("Calculation Started");
       let starttime = new Date().getTime();
       console.log(starttime);
-      this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
+      // this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
 
       //STEP 1 -- BORROWER CALCULATIONS
       if (localloanobj.Borrower != null)
@@ -250,7 +250,7 @@ export class LoancalculationWorker {
     this.localst.store(environment.loankey, localloanobj);
     if (recalculate) {
       console.log("object updated");
-      this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
+      // this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
     }
     else
       console.log("object updated without calculations");

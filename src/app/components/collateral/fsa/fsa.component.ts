@@ -92,7 +92,7 @@ export class FSAComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage updated");
       if (res.srccomponentedit == "FSAComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
@@ -114,7 +114,7 @@ export class FSAComponent implements OnInit {
   getdataforgrid() {
 
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];

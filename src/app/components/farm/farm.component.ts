@@ -189,7 +189,7 @@ export class FarmComponent implements OnInit {
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       if (res != null) {
-        this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
+        // this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage updated");
         this.localloanobject = res;
         if (res.Farms && res.srccomponentedit == "FarmComponent") {
           this.rowData[res.lasteditrowindex] = this.localloanobject.Farms.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
@@ -213,7 +213,7 @@ export class FarmComponent implements OnInit {
   }
   getdataforgrid() {
     let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanFarms', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       if (obj.Farms) {
