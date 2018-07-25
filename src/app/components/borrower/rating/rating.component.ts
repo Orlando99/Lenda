@@ -103,9 +103,15 @@ export class RatingComponent implements OnInit {
 
           },
           {
+            text: 'Insurace Threshold',
+            value: this.loanMasterCaculationWorker.getInsuranceThresholdValue(loanObject),
+            staticValues: this.loanMasterCaculationWorker.getInsuranceThresholdStaticValue(loanObject),
+            valueType : ValueType.AMOUNT,
+          },
+          {
             text: 'Max Crop Loan',
             value: this.loanMasterCaculationWorker.getMaxCropLoanValue(loanObject),
-            staticValues: this.loanMasterCaculationWorker.getMaxCropLoanStaticValues(loanObject),
+            staticValues: this.loanMasterCaculationWorker.getMaxCropStaticValue(loanObject),
             valueType : ValueType.AMOUNT,
             hightlightRow: true
           },
@@ -114,7 +120,7 @@ export class RatingComponent implements OnInit {
           {
             text: 'Max Amount Constant',
             value: '',
-            staticValues: [1000000, 500000, '-', '-', '-'],
+            staticValues: this.loanMasterCaculationWorker.maxAmountConstant,
             valueType : ValueType.AMOUNT,
           },
           {
@@ -131,7 +137,7 @@ export class RatingComponent implements OnInit {
           },
           {
             text: 'Ag-Pro Max Addition',
-            value: '',
+            value: '-',
             staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(loanObject),
             valueType : ValueType.AMOUNT,
             hightlightRow: true

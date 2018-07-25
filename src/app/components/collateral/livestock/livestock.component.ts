@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -50,6 +50,7 @@ export class LivestockComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
+    private hostElement: ElementRef
     ) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
@@ -230,7 +231,7 @@ export class LivestockComponent implements OnInit {
   expansionopen()
   {
     setTimeout(() => {
-      adjustparentheight();
+      this.adjustparentheight();
     }, 10);
   
   }
@@ -249,14 +250,17 @@ export class LivestockComponent implements OnInit {
     total.push(footer);
     return total;
   }
+
+  adjustparentheight(){
+
+    var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
+    //var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+    
+    elementInHost.forEach(element => {
+    
+      //find aggrid
+      var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+       element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+     });
+   }
 }
-function adjustparentheight(){
-  var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
-  
-  elements.forEach(element => {
-   
-    //find aggrid
-    var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
-     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
-   });
- }

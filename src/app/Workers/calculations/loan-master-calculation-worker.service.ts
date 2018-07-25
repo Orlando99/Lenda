@@ -19,6 +19,7 @@ export class LoanMasterCalculationWorkerService {
   incomeConstant: Array<number> = [100, 90, 90, 90, 90];
   insuranceConstant: Array<number> = [115, 100, 100, 100, 100];
   discNetWorthConstant: Array<number> = [100, 100, 100, 100, 100];
+  maxAmountConstant : Array<any> = [1000000, 500000, '-','-','-'];
   // borrower rating ends
 
   //farm financial
@@ -99,8 +100,8 @@ export class LoanMasterCalculationWorkerService {
   }
   getRevanueThresholdValue(loanObject: loan_model) {
     let loanMaster = loanObject.LoanMaster[0];
-    let temp = loanMaster.Net_Market_Value_Crops || 0 + loanMaster.Net_Market_Value_Stored_Crops || 0 + loanMaster.Net_Market_Value_FSA || 0 + loanMaster.Net_Market_Value_Livestock || 0 +
-      loanMaster.Net_Market_Value__Other || 0;
+    let temp = (loanMaster.Net_Market_Value_Crops || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0 )+ (loanMaster.Net_Market_Value_Livestock || 0) +
+      (loanMaster.Net_Market_Value__Other || 0);
     return temp;
 
   }
@@ -111,21 +112,35 @@ export class LoanMasterCalculationWorkerService {
   }
 
 
-  getMaxCropLoanValue(loanObject: loan_model) {
+  getInsuranceThresholdValue(loanObject: loan_model) {
     let loanMaster = loanObject.LoanMaster[0];
-    return loanMaster.Net_Market_Value_Insurance || 0 + loanMaster.Net_Market_Value_Stored_Crops || 0 + loanMaster.Net_Market_Value_FSA || 0 + loanMaster.Net_Market_Value_Livestock || 0 +
-      loanMaster.Net_Market_Value__Other || 0;
+    let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
+      (loanMaster.Net_Market_Value__Other || 0);
+    return tValue;
+  }
+
+  getInsuranceThresholdStaticValue(loanObject: loan_model) {
+    let maxCropLoanValue = this.getInsuranceThresholdValue(loanObject);
+    return this.insuranceConstant.map((val, index) => Math.round(maxCropLoanValue * val / 100));
+  }
+
+  getMaxCropStaticValue(loanObject: loan_model){
+    let rtStaticValue = this.getRevanueThresholdStaticValues(loanObject);
+    let itStaticValue = this.getInsuranceThresholdStaticValue(loanObject);
+    return rtStaticValue.map((values,index)=>Math.min(rtStaticValue[index], itStaticValue[index]))
 
   }
 
-  getMaxCropLoanStaticValues(loanObject: loan_model) {
-    let maxCropLoanValue = this.getMaxCropLoanValue(loanObject);
-    return this.insuranceConstant.map((val, index) => Math.round(maxCropLoanValue * val / 100));
+  getMaxCropLoanValue(loanObject: loan_model){
+    let borrowerRating = loanObject.LoanMaster[0].Borrower_Rating;
+    let mcStaticValue = this.getMaxCropStaticValue(loanObject);
+    return borrowerRating>=1 && borrowerRating<=5 ? mcStaticValue[ 5 - parseInt(borrowerRating)] : 0;
+
   }
 
   getDiscNetWorthValue(loanObject: loan_model) {
     let loanMaster = loanObject.LoanMaster[0];
-    return loanMaster.Net_Worth_Disc_Amount;
+    return loanMaster.Total_Disc_Net_Worth;
   }
 
   getDiscWorthStaticValue(loanObject: loan_model) {
@@ -134,24 +149,68 @@ export class LoanMasterCalculationWorkerService {
   }
 
   getAgProMaxAdditionStaticValue(loanObject: loan_model) {
-    let maxCropStaticValues = this.getMaxCropLoanStaticValues(loanObject);
     let discNetWorthStaticValue = this.getDiscWorthStaticValue(loanObject);
-    return [Math.min(maxCropStaticValues[0], discNetWorthStaticValue[0]), Math.min(maxCropStaticValues[1], discNetWorthStaticValue[1]), '-', '-', '-']
+    return [Math.min( this.maxAmountConstant[0], discNetWorthStaticValue[0]), Math.min(this.maxAmountConstant[0], discNetWorthStaticValue[1]), '-', '-', '-']
   }
 
 
-  getRating(ratio: number, params: Array<any>, possible: number) {
+  getRating(ratio: number, params: Array<any>) {
+    let operator = params[2];
+    let stable = params[1];
+    let strong = params[0];
+    let possible = this.getPossible(ratio, params);
+
+    if (operator === '>') {
+      return (ratio - stable) / (strong - stable) * possible;
+    } else {
+      return (stable - ratio) / (stable - strong) * possible;
+    }
+  }
+
+
+  getPossible(ratio: number, params: Array<any>){
     let operator = params[2];
     let stable = params[1];
     let strong = params[0];
 
     if (operator === '>') {
-      return (ratio - stable) / (strong - stable) * possible * 100;
+      return ratio < stable ? -1 : 1;
     } else {
-      return (stable - ratio) / (stable - strong) * possible * 100;
+      return ratio > stable? -1 : 1;
     }
   }
 
+  getState(ratio: number, params: Array<any>){
+    let operator = params[2];
+    let stable = params[1];
+    let strong = params[0];
+
+    if (operator === '>') {
+      if(ratio >= strong){
+        return STATE.STRONG;
+      }else if(ratio < strong && ratio >=stable){
+        return STATE.STABLE
+      }else{
+        return STATE.WEAK;
+      }
+    } else {
+      if(ratio <= strong){
+        return STATE.STRONG;
+      }else if(ratio > strong && ratio <=stable){
+        return STATE.STABLE
+      }else{
+        return STATE.WEAK;
+      }
+    }
+  }
+
+
+}
+
+export enum STATE{
+  STRONG='strong',
+  STABLE = 'stable',
+  WEAK ='weak',
 
 }
 

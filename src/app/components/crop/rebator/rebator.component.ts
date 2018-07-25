@@ -165,6 +165,8 @@ synctoDb() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.ActionStatus = 1;
+    newItem.Preferred_Contact_Ind = 1;
+
     newItem.Assoc_Type_Code = "REB";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
