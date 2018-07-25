@@ -124,9 +124,9 @@ export class AgentComponent implements OnInit {
 
 
   rowvaluechanged(value: any) {
-debugger
+
     var obj = value.data;
-    if (obj.ActionStatus == undefined || obj.ActionStatus == 0) {
+    if (obj.Assoc_ID==0 || obj.Assoc_ID==undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
       var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT").length;
@@ -215,7 +215,7 @@ debugger
   }
 
   syncenabled() {
-    if(this.rowData.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
+    if(this.localloanobject.Association.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
     return 'disabled';
     else
     return '';

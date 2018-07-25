@@ -3,7 +3,7 @@
       Commitment
     </span>
   <p class="risk-return-value">
-    $ 403,256
+    $ {{ info.totalCommitment }}
   </p>
 </div>
 <div class="col s6 complete">
@@ -11,7 +11,7 @@
       Excess Ins
     </span>
   <p class="risk-return-value">
-    77.6%
+    {{ info.excessInsPercent }}%
   </p>
 </div>
 <div class="col s12 complete">
@@ -31,9 +31,9 @@
     <g id="dist"></g>
     <g id="excess"></g>
     <!-- Bar Texts -->
-    <text x="30" y="21" font-family="roboto" font-size="10px" fill="#fff">$188,635</text>
-    <text x="130" y="21" font-family="roboto" font-size="10px" fill="#fff">$214,621</text>
-    <text x="250" y="36" font-family="roboto" font-size="10px" fill="#000">$313,095</text>
+    <text x="30" y="21" font-family="roboto" font-size="10px" fill="#fff">${{ info.armCommitment }}</text>
+    <text x="130" y="21" font-family="roboto" font-size="10px" fill="#fff">${{ info.distCommitment }}</text>
+    <text x="250" y="36" font-family="roboto" font-size="10px" fill="#000">${{ info.excessIns }}</text>
     <!-- Legends -->
     <rect width="10" height="10" x="15" y="50" [ngStyle]="{'fill': armCommit}" />
     <text x="30" y="60" font-family="roboto" font-size="11px" fill="#bbb">ARM Commit Dist Commit</text>

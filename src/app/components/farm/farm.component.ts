@@ -330,7 +330,7 @@ export class FarmComponent implements OnInit {
   }
 
   syncenabled() {
-    debugger
+    
     if (this.syncFarmStatus === 0 || this.syncFarmStatus == undefined)
       return 'disabled';
     else

@@ -12,7 +12,7 @@ enum ViewMode {
   styleUrls: ['./charts-visualization.component.scss']
 })
 export class ChartsVisualizationComponent implements OnInit {
-  @Input() viewMode: number = ViewMode.complete;
+  @Input() viewMode: number = ViewMode.extra;
   public viewClass: string;
 
   constructor() { }
