@@ -140,7 +140,7 @@ export class LoanMasterCalculationWorkerService {
 
   getDiscNetWorthValue(loanObject: loan_model) {
     let loanMaster = loanObject.LoanMaster[0];
-    return loanMaster.Net_Worth_Disc_Amount;
+    return loanMaster.Total_Disc_Net_Worth;
   }
 
   getDiscWorthStaticValue(loanObject: loan_model) {

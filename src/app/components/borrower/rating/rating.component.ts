@@ -137,7 +137,7 @@ export class RatingComponent implements OnInit {
           },
           {
             text: 'Ag-Pro Max Addition',
-            value: '',
+            value: '-',
             staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(loanObject),
             valueType : ValueType.AMOUNT,
             hightlightRow: true
