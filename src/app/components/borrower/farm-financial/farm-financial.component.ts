@@ -150,8 +150,10 @@ export class FarmFinancialComponent implements OnInit {
         ]
       };
 
-      this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating = ffRatingTotal;
-      this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj,false);
+      if(this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating != ffRatingTotal){
+        this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating = ffRatingTotal;        
+        this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj,false);
+      }
     }
   }
 
