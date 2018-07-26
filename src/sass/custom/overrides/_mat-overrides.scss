@@ -140,7 +140,7 @@ body .mat-expansion-panel-header {
     }
 
     .mat-content {
-      border-bottom: 1px solid $primary-color;
+      border-bottom: 1px dotted $primary-color;
       padding-bottom: 1px;
     }
   }
