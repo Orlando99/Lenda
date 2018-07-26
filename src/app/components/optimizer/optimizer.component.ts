@@ -3,7 +3,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment';
 import { loan_model } from '../../models/loanmodel';
 import * as _ from "lodash";
-import { lookupCountyValue, lookupStateValue, lookupStateRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
+import { lookupCountyValue, lookupStateValue, lookupStateRefValue, extractStateValues, lookupStateAbvRefValue, lookupCountyRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from '../../../../node_modules/ng2-toastr';
 import { LoggingService } from '../../services/Logs/logging.service';
@@ -25,6 +25,7 @@ export class OptimizerComponent implements OnInit {
   public loading=false;
   public context;
   public rowClassRules;
+  private refdata;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined) {
@@ -48,15 +49,10 @@ export class OptimizerComponent implements OnInit {
     { headerName: 'CropunitRecord', field: 'ID', hide: true },
     { headerName: 'Irr/NI', field: 'Practice', editable: false },
     {
-      headerName: 'State', field: 'State', editable: false,
-      valueFormatter: function (params) {
-        return lookupStateRefValue(params.value);
-      }
+      headerName: 'State', field: 'State', editable: false
     },
     {
-      headerName: 'County', field: 'County', valueFormatter: function (params) {
-        return lookupCountyValue(params.value);
-      }, editable: false
+      headerName: 'County', field: 'County', editable: false
     },
     { headerName: '% Prod.', field: 'Prodpercentage', editable: false },
     { headerName: 'Landlord', field: 'Landlord', editable: false },
@@ -195,6 +191,7 @@ export class OptimizerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     this.getgriddata();
   }
@@ -214,8 +211,8 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "IRR";
-          row.State = farm.Farm_State_ID;
-          row.County = farm.Farm_County_ID;
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
           row.Prodpercentage = "80%";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
@@ -244,8 +241,8 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "NIR";
-          row.State = farm.Farm_State_ID;
-          row.County = farm.Farm_County_ID;
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
           row.Prodpercentage = "80%";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
