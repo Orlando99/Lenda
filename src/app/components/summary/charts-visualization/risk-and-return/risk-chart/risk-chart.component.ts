@@ -64,7 +64,7 @@ export class RiskChartComponent implements OnInit {
         return 'translate(0, 10)';
       })
       .attr('width', 100)
-      .attr('height', 10)
+      .attr('height', 15)
       .attr('fill', color);
   }
 
@@ -82,13 +82,13 @@ export class RiskChartComponent implements OnInit {
       .enter()
       .append('path')
       .attr('transform', (d, i) => {
-        return 'translate(-200, 25)';
+        return 'translate(-200, 30)';
       })
       .transition()
       .duration(1500)
       .ease(d3.easeLinear)
       .attr('transform', (d, i) => {
-        return 'translate(' + this.info.blackDiamond + ', 25)';
+        return 'translate(' + this.info.blackDiamond + ', 30)';
       })
       .attr('d', function (d) {
         symbolGenerator
