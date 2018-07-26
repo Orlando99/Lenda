@@ -129,7 +129,7 @@ export class YieldComponent implements OnInit {
     });
 
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right'});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
 
@@ -144,8 +144,6 @@ export class YieldComponent implements OnInit {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
         this.rowData[res.lasteditrowindex] = this.localloanobject.CropYield.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
-        
-       
         this.gridApi.refreshCells();
       }
       else {

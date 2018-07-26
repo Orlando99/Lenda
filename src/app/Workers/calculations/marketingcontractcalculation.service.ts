@@ -26,10 +26,25 @@ export class MarketingcontractcalculationService {
 
   getCropContract(localloanobject : loan_model, cropCode : string, type : string){
     if(localloanobject.LoanCropUnits && localloanobject.CropYield && localloanobject.Farms){
-        let totalCUAcres = _.sumBy(localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type), 'CU_Acres');
-        let totalCropYield = _.sumBy(localloanobject.CropYield.filter(cy=>cy.CropType === cropCode  && cy.IrNI === type), 'CropYield' );
-        let totalPerProd = _.sumBy(localloanobject.Farms, 'Percent_Prod')  || 1;
-        return totalCUAcres * totalCropYield * totalPerProd;
+
+      let totalCUAcres= 0;
+      let filteredCropUnits = localloanobject.LoanCropUnits.filter(lcu=>lcu.Crop_Code === cropCode && lcu.Crop_Practice_Type_Code === type);
+      if(filteredCropUnits && filteredCropUnits.length > 0){
+        filteredCropUnits.forEach(cu=>{
+          let cuFarm = localloanobject.Farms.find(f=>f.Farm_ID == cu.Farm_ID);
+          if(cuFarm){
+            totalCUAcres += cu.CU_Acres * ((cuFarm.Percent_Prod || 100)/100);
+          }
+        })
+      }
+
+      let totalCropYield = 0
+      let selectedCY = localloanobject.CropYield.find(cy=>cy.CropType === cropCode  && cy.IrNI === type);
+      if(selectedCY){
+        totalCropYield = selectedCY.CropYield;
+      }
+
+        return totalCUAcres * totalCropYield;
     }else{
       return 0;
     }
@@ -46,9 +61,15 @@ export class MarketingcontractcalculationService {
         crop.Contract_Qty = matchingMC.Quantity;
         //the same caclulation is in price component, which should be shisted to common place
         crop.Marketing_Adj = (crop.Contract_Price - (crop.Basic_Adj + crop.Crop_Price))*(crop.Percent_booked/100);
-        crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + crop.Marketing_Adj + crop.Rebate_Adj;
+        crop.Marketing_Adj = crop.Marketing_Adj ? parseFloat(crop.Marketing_Adj.toFixed(2)) : 0;
+        crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + (crop.Marketing_Adj ||0) + crop.Rebate_Adj;
       }else{
         crop.Percent_booked = 0;
+        crop.Contract_Price = 0;
+        crop.Contract_Qty = 0;
+        crop.Marketing_Adj =0;
+        crop.Adj_Price = 0;
+        
       }
     });
 

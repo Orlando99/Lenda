@@ -99,7 +99,10 @@ export class MarketingContractsComponent implements OnInit {
         },
         width : 100
       },
-      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:70, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Crop Type', field: 'Crop_Type_Code',  editable: true, width:100, cellEditor: "alphaNumeric", cellClass: 'editable-color',
+      cellEditorParams: (params)=> {
+        return { value : params.data.Crop_Type_Code || ''}
+      },},
       { headerName: 'Buyer', field: 'Assoc_ID',   cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
       cellEditorParams: this.getBuyersValue.bind(this),
         valueFormatter:  (params) => {
@@ -142,7 +145,7 @@ export class MarketingContractsComponent implements OnInit {
       valueFormatter: function (params) {
         return PriceFormatter(params.value);
       }},
-      { headerName: 'Contract %', field: 'Contract_Per',  width:80,   cellClass: ['text-right'],
+      { headerName: 'Contract %', field: 'Contract_Per',  width:100,   cellClass: ['text-right'],
       valueFormatter: function (params) {
         return PercentageFormatter(params.value);
       }},

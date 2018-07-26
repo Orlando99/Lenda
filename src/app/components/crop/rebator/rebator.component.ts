@@ -16,6 +16,7 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
+import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-rebator',
@@ -59,7 +60,7 @@ export class RebatorComponent implements OnInit {
       //Aggrid Specific Code
       this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-      this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
+      this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
       //Coldef here
       this.columnDefs = [
@@ -67,10 +68,20 @@ export class RebatorComponent implements OnInit {
         { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
         { headerName: 'Location', field: 'Location', editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
         { headerName: 'Phone', field: 'Phone', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
-        { headerName: 'Email', field: 'Email',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Email', field: 'Email',  editable: true, cellClass: ['editable-color']},
         { headerName: 'Pref Contact', field: 'Preferred_Contact_Ind',  editable: false},
-        { headerName: 'Exp Rebate', field: '',  editable: false},
-        { headerName: 'Ins UOM', field: '',  editable: false},
+        { headerName: 'Exp Rebate', field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
+        cellEditorParams: (params)=> {
+          return { value : params.data.Amount || 0}
+        },
+        valueFormatter: function (params) {
+          return PriceFormatter(params.value);
+        }
+      },
+        { headerName: 'Ins UOM', field: 'Ins_UOM',valueFormatter: function (params) {
+          return 'bu';
+        }
+        },
         { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
 
       ];
@@ -154,6 +165,9 @@ synctoDb() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.ActionStatus = 1;
+    newItem.Preferred_Contact_Ind = 1;
+
+    newItem.Assoc_Type_Code = "REB";
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -167,7 +181,9 @@ synctoDb() {
 
   rowvaluechanged(value: any) {
     var obj = value.data;
-    if (obj.Assoc_ID == 0) {
+    
+    if (!obj.Assoc_ID) {
+      obj.Assoc_ID = 0;
       obj.ActionStatus = 1;
       this.localloanobject.Association[this.localloanobject.Association.length - 1] = value.data;
     }
@@ -187,7 +203,7 @@ synctoDb() {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    // this.getgridheight();
+     // this.getgridheight();
   }
 
   DeleteClicked(rowIndex: any) {
@@ -207,10 +223,11 @@ synctoDb() {
   }
 
   syncenabled(){
-    if(this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
-    return 'disabled';
-    else
+    if( this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
+
     return '';
+    else
+    return 'disabled';
   }
 
   getgridheight(){

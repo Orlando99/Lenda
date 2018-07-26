@@ -126,7 +126,7 @@ export class AgentComponent implements OnInit {
   rowvaluechanged(value: any) {
 
     var obj = value.data;
-    if (obj.ActionStatus == undefined) {
+    if (obj.Assoc_ID==0 || obj.Assoc_ID==undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
       var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT").length;
@@ -134,6 +134,7 @@ export class AgentComponent implements OnInit {
     }
     else {
       var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      if(obj.ActionStatus!=1)
       obj.ActionStatus = 2;
       this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT")[rowindex]=obj;
     }
@@ -214,7 +215,7 @@ export class AgentComponent implements OnInit {
   }
 
   syncenabled() {
-    if(this.rowData.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
+    if(this.localloanobject.Association.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
     return 'disabled';
     else
     return '';

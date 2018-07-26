@@ -181,6 +181,15 @@ import { CropunitrecordsComponent } from './components/work-in-progress/cropunit
 import { GlobalErrorHandler } from './services/global-error-handler.service';
 import { ToasterService } from './services/toaster.service';
 
+//RECORDS
+import { FarmRecordsComponent } from './components/work-in-progress/farmrecords/farmrecords.component';
+import { LoanCropsRecordsComponent } from './components/work-in-progress/loancroprecords/loancroprecords.component';
+import { AssociationRecordsComponent } from './components/work-in-progress/associationrecords/associationrecords.component';
+import { LoanMarketingRecordsComponent } from './components/work-in-progress/loanmarketingrecords/loanmarketingrecords.component';
+import { SyncStatusComponent } from './components/work-in-progress/syncstatus/syncstatus.component';
+import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
+import { CommitteeComponent } from './components/committee/committee.component';
+
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -259,7 +268,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
     AphComponent,
-    CropunitrecordsComponent
+    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent
+
   ],
   imports: [
     BrowserModule,

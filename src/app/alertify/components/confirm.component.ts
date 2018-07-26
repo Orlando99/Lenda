@@ -15,6 +15,13 @@ export class ConfirmComponent {
   ) { }
 
   onOkClick(): void {
+    
+    this.dialogRef.afterClosed().subscribe(res=>{
+      //console.error(res)
+    })
+    this.dialogRef.beforeClose().subscribe(res=>{
+      //console.error(res)
+    })
     this.dialogRef.close();
     this.onDataRecieved.emit(true);
   }

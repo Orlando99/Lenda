@@ -38,8 +38,6 @@ export class Loan_Crop_Unit
     Booking_Ind: number=0;
     @JsonProperty("Status", IntConverter,false)
     Status: number=0;
-    @JsonProperty("Ins_APH", IntConverter,false)
-    Ins_APH: number=0;
     @JsonProperty("ActionStatus", IntConverter,false)
     ActionStatus: number=0;
      // New Properties
@@ -76,7 +74,33 @@ export class Loan_Crop_Unit
      FC_Staxvalue:number=0;
      FC_Disc_Staxvalue:number=0;
      FC_Scovalue:number=0;
+     FC_HmaxPremium:number=0;
      FC_Disc_Scovalue:number=0;
+     //Ramp
+     FC_Rampvalue:number=0;
+     FC_RampPremium:number=0;
+     FC_Disc_Rampvalue:number=0;
+     //ICE
+     FC_Icevalue:number=0;
+     FC_IcePremium:number=0;
+     FC_Disc_Icevalue:number=0;
+     //
+     //ABC
+     FC_Abcvalue:number=0;
+     FC_AbcPremium:number=0;
+     FC_Disc_Abcvalue:number=0;
+     //
+     //PCI
+     FC_Pcivalue:number=0;
+     FC_PciPremium:number=0;
+     FC_Disc_Pcivalue:number=0;
+     //
+     //CropHail
+     FC_Crophailvalue:number=0;
+     FC_CrophailPremium:number=0;
+     FC_Disc_Crophailvalue:number=0;
+     //
+     Ins_APH:number=0
      FC_Level1Perc:number=undefined;
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -50,7 +50,8 @@ export class OthersComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService) {
+    public loanapi: LoanApiService,
+    private hostElement: ElementRef) {
 
 
     this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor() };
@@ -148,7 +149,7 @@ export class OthersComponent implements OnInit {
   }
 
   syncenabled() {
-    console.log(this.rowData);
+   
     return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
   }
 
@@ -228,6 +229,13 @@ export class OthersComponent implements OnInit {
     })
   }
 
+  expansionopen()
+  {
+    setTimeout(() => {
+      this.adjustparentheight();
+    }, 10);
+  
+  }
   getgridheight() {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
@@ -252,4 +260,17 @@ export class OthersComponent implements OnInit {
       return total;
     }
   }
+
+  adjustparentheight(){
+
+    var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
+    //var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
+    
+    elementInHost.forEach(element => {
+     debugger
+      //find aggrid
+      var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+       element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+     });
+   }
 }

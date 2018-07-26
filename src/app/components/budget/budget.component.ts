@@ -68,19 +68,19 @@ export class BudgetComponent implements OnInit {
       {
         headerName: "Per Acre Budget",
         children: [
-          { headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellClass: ['text-right'],
+          { headerName: 'ARM', field: 'ARM_Budget_Acre',hide:true, width: 120, cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           }},
-          { headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120,cellClass: ['text-right'],
+          { headerName: 'Distributer', field: 'Distributor_Budget_Acre',hide:true, width: 120,cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
-          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120,cellClass: ['text-right'],
+          { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',hide:true, width: 120,cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
-          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120,cellClass: ['text-right'], editable: false,
+          { headerName: 'Total', field: 'Total_Budget_Acre', width: 120,hide:true,cellClass: ['text-right'], editable: false,
           valueFormatter: function (params) {
             return PriceFormatter(params.value);
           } },
@@ -89,6 +89,7 @@ export class BudgetComponent implements OnInit {
       {
         headerName: "Crop Budget",
         children: [
+          { headerName: 'Additional Credit Notes', field: '',editable:true, width: 240, cellClass: ['text-right']},
           { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false,cellClass: ['text-right'],
           valueFormatter: function (params) {
             return PriceFormatter(params.value);

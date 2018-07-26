@@ -147,8 +147,7 @@ export class EquipmentComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-    console.log(this.rowData);
+  syncenabled() {    
     return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
   }
 

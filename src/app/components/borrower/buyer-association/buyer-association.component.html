@@ -2,10 +2,10 @@
 <div class="basic-container">
 
   <mat-accordion>
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="!!(rowData && rowData.length)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Buyer
+          Buyer 
         </mat-panel-title>
       </mat-expansion-panel-header>
 
@@ -24,7 +24,6 @@
         [enableSorting]="true"
         [enableFilter]="true"
         [context]="context"
-        (gridSizeChanged)="onGridSizeChanged($event)"
         [frameworkComponents]="frameworkcomponents"
         [components]="components"
         [singleClickEdit]="true"

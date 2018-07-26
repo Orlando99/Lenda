@@ -1,0 +1,75 @@
+<div style="overflow: auto;">
+
+  <table>
+    <tr>
+      <th>Collateral_ID</th>
+      <th>Loan_ID</th>
+      <th>Loan_Full_ID</th>
+      <th>Loan_Seq_Num</th>
+
+      <th>Collateral_Category_Code</th>
+      <th>Collateral_Type_Code</th>
+      <th>Collateral_Sub_Type_Code</th>
+      <th>Collateral_Description</th>
+
+      <th>Insurance_Category_Code</th>
+      <th>Insurance_Type_Code</th>
+      <th>Insurance_Sub_Type_Code</th>
+      <th>Market_Value</th>
+
+      <th>Prior_Lien_Amount</th>
+      <th>Net_Market_Value</th>
+      <th>Disc_Value</th>
+      <th>Insurance_Value</th>
+
+      <th>Insurance_Disc_Value</th>
+      <th>Disc_CEI_Value</th>
+      <th>Lien_Holder</th>
+      <th>Status</th>
+
+      <th>IsDelete</th>
+      <th>Insured_Flag</th>
+      <th>Qty</th>
+      <th>Price</th>
+
+      <th>ActionStatus</th>
+    
+    </tr>
+    <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
+      <td>{{record.Collateral_ID}}</td>
+      <td>{{record.Loan_ID}}</td>
+      <td>{{record.Loan_Full_ID}}</td>
+      <td>{{record.Loan_Seq_Num}}</td>
+
+      <td>{{record.Collateral_Category_Code}}</td>
+      <td>{{record.Collateral_Type_Code}}</td>
+      <td>{{record.Collateral_Sub_Type_Code}}</td>
+      <td>{{record.Collateral_Description}}</td>
+
+      <td>{{record.Insurance_Category_Code}}</td>
+      <td>{{record.Insurance_Type_Code}}</td>
+      <td>{{record.Insurance_Sub_Type_Code}}</td>
+      <td>{{record.Market_Value}}</td>
+
+      <td>{{record.Prior_Lien_Amount}}</td>
+      <td>{{record.Net_Market_Value}}</td>
+      <td>{{record.Disc_Value}}</td>
+      <td>{{record.Insurance_Value}}</td>
+
+      <td>{{record.Insurance_Disc_Value}}</td>
+      <td>{{record.Disc_CEI_Value}}</td>
+      <td>{{record.Lien_Holder}}</td>
+      <td>{{record.Status}}</td>
+
+      <td>{{record.IsDelete}}</td>
+      <td>{{record.Insured_Flag}}</td>
+      <td>{{record.Qty}}</td>
+      <td>{{record.Price}}</td>
+
+      <td >{{record.ActionStatus}}</td>
+    </tr>
+    
+    
+  </table>
+
+</div>
