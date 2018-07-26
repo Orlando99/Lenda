@@ -23,7 +23,7 @@ import { FsaService } from './fsa.service';
   selector: 'app-fsa',
   templateUrl: './fsa.component.html',
   styleUrls: ['./fsa.component.scss'],
-  providers: [FsaService]
+  providers: [FsaService, CollateralService]
 })
 export class FSAComponent implements OnInit {
   public refdata: any = {};
