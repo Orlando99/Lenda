@@ -59,7 +59,7 @@ export class CommitteeComponent implements OnInit {
       Service_Fee_Percent: [formData.Service_Fee_Percent || 0],
       Service_Fee_Amount: [formData.Service_Fee_Amount || 0],
       Rate_Percent: [formData.Rate_Percent || 0],
-      Rate_Percent_Value: [formData.Rate_Percent_Value || 0],
+      Rate_Fee_Amount: [formData.Rate_Fee_Amount || 0],
     });
     this.onChanges();
   }
@@ -71,10 +71,11 @@ export class CommitteeComponent implements OnInit {
     if (loanMaster) {
       this.committeeForm.value.Orgination_Fee_Amount = (this.committeeForm.value.Orgination_Fee_Percent / 100) * (loanMaster.ARM_Commitment || 0);
       this.committeeForm.value.Service_Fee_Amount = (this.committeeForm.value.Service_Fee_Percent / 100) * (loanMaster.ARM_Commitment || 0);
-      this.committeeForm.value.Rate_Percent_Value = (this.committeeForm.value.Rate_Percent / 100) * ((loanMaster.ARM_Commitment || 0) + (loanMaster.Dist_Commitment || 0));
+      //LoanMaster.Dist_Commitment+(LoanMaster.Rate_Percent*(LoanMaster.Estimated_Days/365)*LoanMaster_Dist_Commitment)+( LoanMaster.Rate_Percent*(LoanMaster.Estimated_Days/365)*LoanMaster_ARM_Commitment))
+      this.committeeForm.value.Rate_Fee_Amount = ((this.committeeForm.value.Rate_Percent / 100) * (225/365) * (loanMaster.Dist_Commitment || 0) ) + ((this.committeeForm.value.Rate_Percent / 100) * (225/365) * (loanMaster.ARM_Commitment || 0));
       this.committeeForm.value.Orgination_Fee_Amount = parseFloat(this.committeeForm.value.Orgination_Fee_Amount.toFixed(2));
       this.committeeForm.value.Service_Fee_Amount = parseFloat(this.committeeForm.value.Service_Fee_Amount.toFixed(2));
-      this.committeeForm.value.Rate_Percent_Value = parseFloat(this.committeeForm.value.Rate_Percent_Value.toFixed(2));
+      this.committeeForm.value.Rate_Fee_Amount = parseFloat(this.committeeForm.value.Rate_Fee_Amount.toFixed(2));
     }
     });
   }
@@ -97,7 +98,7 @@ export class CommitteeComponent implements OnInit {
     loanMaster.Service_Fee_Percent = this.committeeForm.value.Service_Fee_Percent
     loanMaster.Service_Fee_Amount = this.committeeForm.value.Service_Fee_Amount
     loanMaster.Rate_Percent = this.committeeForm.value.Rate_Percent;
-    loanMaster.Rate_Percent_Value = this.committeeForm.value.Rate_Percent_Value;
+    loanMaster.Rate_Fee_Amount = this.committeeForm.value.Rate_Fee_Amount;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
   }
 

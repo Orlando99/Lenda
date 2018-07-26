@@ -4,6 +4,7 @@ import { environment } from '../../../environments/environment.prod';
 
 @Injectable()
 export class LoanMasterCalculationWorkerService {
+ 
 
   //borrower Rating
   borrowerRatingstaticValues: any = {
@@ -79,6 +80,32 @@ export class LoanMasterCalculationWorkerService {
     return loanObject;
   }
 
+  performDashboardCaclulation(localLoanObject : loan_model): any {
+    if(localLoanObject.LoanMaster[0]){
+      let loanMaster = localLoanObject.LoanMaster[0];
+      loanMaster.Risk_Cushion_Amount = loanMaster.Disc_value_Insurance +loanMaster.Disc_CEI_Value + (0 + loanMaster.Ag_Pro_Requested_Credit) - 
+                                      (loanMaster.ARM_Commitment  + loanMaster.Dist_Commitment+ loanMaster.Rate_Fee_Amount);
+      loanMaster.Risk_Cushion_Amount = parseFloat(loanMaster.Risk_Cushion_Amount.toFixed(2)); 
+
+      loanMaster.Risk_Cushion_Percent =(loanMaster.Risk_Cushion_Amount/loanMaster.ARM_Commitment)*100;
+      loanMaster.Risk_Cushion_Percent = parseFloat(loanMaster.Risk_Cushion_Percent.toFixed(1));
+      
+      loanMaster.Return_Percent = (( loanMaster.Orgination_Fee_Amount + loanMaster.Service_Fee_Amount +
+                                    (loanMaster.Rate_Percent * (255/365) * loanMaster.ARM_Commitment)
+                                  )/loanMaster.ARM_Commitment)*100;
+      loanMaster.Return_Percent = parseFloat(loanMaster.Return_Percent.toFixed(1)); 
+      
+      
+      loanMaster.Cash_Flow_Amount = this.getRevanueThresholdValue(localLoanObject) -  (loanMaster.Total_Commitment + loanMaster.Dist_Commitment+ loanMaster.Rate_Fee_Amount);
+      loanMaster.Cash_Flow_Amount = parseFloat(loanMaster.Cash_Flow_Amount.toFixed(2)); 
+
+      loanMaster.Break_Even_Percent = ((loanMaster.ARM_Commitment + loanMaster.Dist_Commitment + loanMaster.Rate_Fee_Amount)/
+                                      this.getRevanueThresholdValue(localLoanObject))*100;
+      loanMaster.Break_Even_Percent = parseFloat(loanMaster.Break_Even_Percent.toFixed(1)); 
+
+    }
+    return localLoanObject;
+  }
 
   getRatingRequirement(rating: number) {
     if (rating > 5 || rating < 1) {

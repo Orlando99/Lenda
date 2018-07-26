@@ -2,7 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import * as d3 from 'd3';
 import { chartSettings } from './../../../../../chart-settings';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment.prod';
+import { loan_model } from '../../../../../models/loanmodel';
+import { PriceFormatter } from '../../../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-risk-chart',
@@ -11,6 +13,7 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class RiskChartComponent implements OnInit {
   @Input() viewMode;
+  localLoanObject : loan_model;
   public info = {
     riskCushionAmount: '',
     riskCushionPercent: '',
@@ -25,7 +28,21 @@ export class RiskChartComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getRiskReturnValuesFromLocalStorage();
+    this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
+    if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+      this.getRiskReturnValuesFromLocalStorage(this.localLoanObject.LoanMaster[0]);
+    }
+
+    this.localStorageService.observe(environment.loankey).subscribe(res=>{
+      if(res){
+        this.localLoanObject = res;
+        if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+          this.getRiskReturnValuesFromLocalStorage(this.localLoanObject.LoanMaster[0]);
+        }
+      }
+
+    })
+    //this.getRiskReturnValuesFromLocalStorage();
   }
 
   ngAfterViewInit() {
@@ -35,14 +52,20 @@ export class RiskChartComponent implements OnInit {
     this.setChart('#returnFirst', 200, 300, chartSettings.riskAndReturns.returnLightGreen);
     this.setChart('#returnSecond', 300, 400, chartSettings.riskAndReturns.returnDarkGreen);
     // Set diamond
+
     this.setValues();
+   
+
+    
+    
   }
 
-  getRiskReturnValuesFromLocalStorage() {
-    let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
-    this.info.riskCushionAmount = loanMaster.Risk_Cushion_Amount;
+  getRiskReturnValuesFromLocalStorage(loanMaster) {
+   
+    this.info.riskCushionAmount = loanMaster.Risk_Cushion_Amount ? PriceFormatter(loanMaster.Risk_Cushion_Amount) : '$ 0';
     this.info.riskCushionPercent = loanMaster.Risk_Cushion_Percent;
     this.info.returnPercent = loanMaster.Return_Percent;
+
   }
 
   setChart(item, rangeStart, rangeEnd, color) {

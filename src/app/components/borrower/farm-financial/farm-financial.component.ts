@@ -169,12 +169,12 @@ export class FarmFinancialComponent implements OnInit {
     farmFinancialRatingValues.ROA = ((loanMaster.Cash_Flow_Amount/loanMaster.Total_Assets)*100);
     farmFinancialRatingValues.operatingProfit = ((loanMaster.Cash_Flow_Amount/this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject))*100);
     farmFinancialRatingValues.operatingByExpRev = ((loanMaster.Total_Commitment + 
-                                                  (loanMaster.Rate_Percent/100 * (255/365)*  loanMaster.Dist_Commitment)+
-                                                  (loanMaster.Rate_Percent/100 * (255/365)*  loanMaster.ARM_Commitment)) /
+                                                  (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.Dist_Commitment)+
+                                                  (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.ARM_Commitment)) /
                                                   this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject))*100;
     if(loanMaster.Cash_Flow_Amount){
-      farmFinancialRatingValues.interestByCashFlow =  (((loanMaster.Rate_Percent/100 * (255/365)*  loanMaster.Dist_Commitment)+
-                                                    (loanMaster.Rate_Percent/100 * (255/365)*  loanMaster.ARM_Commitment))/
+      farmFinancialRatingValues.interestByCashFlow =  (((loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.Dist_Commitment)+
+                                                    (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.ARM_Commitment))/
                                                     loanMaster.Cash_Flow_Amount)*100;
     }else{
       farmFinancialRatingValues.interestByCashFlow =0;
