@@ -24,16 +24,27 @@ export class CompanyInfoComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.localStorageService.observe(environment.loankey).subscribe(p=>{
+      let loanMaster = p.LoanMaster[0];
+      this.info.borrwerFirstName = loanMaster.Borrower_First_Name;
+      this.info.borrowerLastName = loanMaster.Borrower_Last_Name;
+      this.info.farmerFirstName = loanMaster.Farmer_First_Name;
+      this.info.farmerLastName = loanMaster.Farmer_Last_Name;
+      this.info.loanFullId = loanMaster.Loan_Full_ID;
+    })
     this.getCompanyInfo();
   }
 
   getCompanyInfo() {
     let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
+    if(loanBudgets!=null && loanBudgets!=undefined)
+    {
     let loanMaster = loanBudgets.LoanMaster[0];
     this.info.borrwerFirstName = loanMaster.Borrower_First_Name;
     this.info.borrowerLastName = loanMaster.Borrower_Last_Name;
     this.info.farmerFirstName = loanMaster.Farmer_First_Name;
     this.info.farmerLastName = loanMaster.Farmer_Last_Name;
     this.info.loanFullId = loanMaster.Loan_Full_ID;
+  }
   }
 }

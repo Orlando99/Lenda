@@ -25,7 +25,7 @@ import { CollateralService } from '../collateral.service';
 export class LivestockComponent implements OnInit {
   public refdata: any = {};
   public columnDefs = [];
-  private localloanobject: loan_model = new loan_model();
+  public localloanobject: loan_model = new loan_model();
 
   public rowData = [];
   public components;

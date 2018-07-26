@@ -190,13 +190,16 @@ export class LoancropunitcalculationworkerService {
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "ice") {
               subpolicy.Upper_Limit=95;
+              subpolicy.Lower_Limit=85;
                     switch (subpolicy.Ins_SubType) {
                         case "BY":
                         subpolicy.Upper_Limit=90;
                         subpolicy.Lower_Limit=80;
+                        subpolicy.Deduct=10;
                         break;
                         case "BR":
-                        
+                        subpolicy.Upper_Limit=90;
+                        subpolicy.Deduct=10;
                         break;
                         case "CY":
                         
