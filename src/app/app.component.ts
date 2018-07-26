@@ -23,8 +23,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   public beforeunloadHandler($event) {
     //.loanstorage.clear("userid");
   }
-  constructor(private toaster: ToastsManager,
-    private router: Router, vcf: ViewContainerRef,
+  constructor(
+    private toaster: ToastsManager,
+    private router: Router,
+    vcf: ViewContainerRef,
     private loanstorage: LocalStorageService,
     public layoutService: LayoutService,
     public loginService: LoginService) {
