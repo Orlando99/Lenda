@@ -151,7 +151,7 @@ export class LoancropunitcalculationworkerService {
                 let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
                 let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                 let HmaxlevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
-                element.FC_HmaxPremium = 0;
+                element.FC_HmaxPremium = subpolicy.Premium;
                 element.FC_Hmaxvalue = ((HmaxlevelPerc * element.Ins_APH * element.Z_Price) - element.FC_HmaxPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
               }
               else {
@@ -164,8 +164,7 @@ export class LoancropunitcalculationworkerService {
               if (insurancepolicy.Level < subpolicy.Upper_Limit) {
                 let liability = element.Z_Price * subpolicy.Yield;
                 let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                //premium is not included in Calculation
-                element.FC_Scovalue = CoveragetoMPCI / 100 * liability * element.CU_Acres * element.FC_Insurance_Share / 100;
+                element.FC_Scovalue = ((CoveragetoMPCI / 100 * liability)-subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
               }
               else
                 element.FC_Scovalue = 0;
@@ -174,14 +173,56 @@ export class LoancropunitcalculationworkerService {
               //Starts here
               subpolicy.Upper_Limit = 90;
               if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                // 1 is protection factor not yet added and 100 is STAXYield_PCT
-                let liability = element.Z_Price * subpolicy.Yield * 1 * 100/100;
+                let liability = element.Z_Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct/100;
                 let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                //premium is not included in Calculation
-                element.FC_Staxvalue = CoveragetoMPCI / 100 * liability * element.CU_Acres * element.FC_Insurance_Share / 100;
+                element.FC_Staxvalue = ((CoveragetoMPCI / 100 * liability)-subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
               }
               else
                 element.FC_Staxvalue = 0;
+            }
+            else if (subpolicy.Ins_Type.toLowerCase() == "ramp") {
+              if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                let RamplevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Price_Pct/100;
+                element.FC_RampPremium = subpolicy.Premium;
+                // not using Liability as if now in calculation
+                element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+              }
+              else {
+                element.FC_Rampvalue = 0;
+              }
+            }
+            else if (subpolicy.Ins_Type.toLowerCase() == "ice") {
+              subpolicy.Upper_Limit=95;
+                    switch (subpolicy.Ins_SubType) {
+                        case "BY":
+                        subpolicy.Upper_Limit=90;
+                        subpolicy.Lower_Limit=80;
+                        break;
+                        case "BR":
+                        
+                        break;
+                        case "CY":
+                        
+                        break;
+                        case "RR":
+                        
+                        break;
+                        
+                    }
+              
+              if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                let icelevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
+                element.FC_RampPremium = subpolicy.Premium;
+                // not using Liability as if now in calculation
+                element.FC_Rampvalue = ((icelevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+              }
+              else {
+                element.FC_Rampvalue = 0;
+              }
             }
           });
           

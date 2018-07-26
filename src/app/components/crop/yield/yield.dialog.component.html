@@ -1,16 +1,28 @@
 <h2 mat-dialog-title>Add New Crop</h2>
 <div mat-dialog-content>
-  <mat-select placeholder="Crop" [(ngModel)]= data.selected.crop>
+  <mat-select placeholder="Crop" [(ngModel)]=d ata.selected.crop>
     <mat-option *ngFor="let crop of data.crops" [value]="crop">
       {{crop.Crop_Name+' '+crop.Practice_type_code}}
     </mat-option>
   </mat-select>
 </div>
-<div mat-dialog-actions>
+
+ <div class="alertModal modal-footer">
+  <div class="mat-footer-inner">
+    <button class="mat-raised-button alertifybtndone green modal-trigger" (click)="onNoClick()">
+      Cancel
+    </button>
+    <button class="alertifybtncancel btn-outline modal-close modal-cancel mat-raised-button"  [mat-dialog-close]="data.selected">
+      OK
+    </button>
+  </div>
+ </div>
+
+<!-- <div mat-dialog-actions>
   <button class="waves-effect waves-light btn btn-flat btn-secondary" (click)="onNoClick()">
       Cancel
   </button>
   <button class="waves-effect waves-light btn btn-flat" [mat-dialog-close]="data.selected">
       OK
-  </button>
-</div>
+  </button> -->
+<!-- </div> -->

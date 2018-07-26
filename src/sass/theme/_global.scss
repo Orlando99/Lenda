@@ -17,3 +17,7 @@ body {
 .basic-container {
   padding: 0px;
 }
+
+a.disabled {
+  text-decoration: unset !important;
+}

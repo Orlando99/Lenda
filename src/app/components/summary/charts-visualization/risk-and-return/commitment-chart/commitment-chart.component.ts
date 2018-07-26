@@ -10,7 +10,7 @@ import { chartSettings } from './../../../../../chart-settings';
   styleUrls: ['./commitment-chart.component.scss']
 })
 export class CommitmentChartComponent implements OnInit {
-  public info = {
+  private info = {
     armCommitment: '',
     distCommitment: '',
     totalCommitment: '',
@@ -19,6 +19,7 @@ export class CommitmentChartComponent implements OnInit {
   };
 
   armCommit = chartSettings.commitmentExcessIns.armCommit;
+  distCommit = chartSettings.commitmentExcessIns.distCommit;
   excessIns = chartSettings.commitmentExcessIns.excessIns;
 
   constructor(
