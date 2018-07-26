@@ -11,7 +11,7 @@ import { environment } from '../../../../../../environments/environment';
 })
 export class RiskChartComponent implements OnInit {
   @Input() viewMode;
-  private info = {
+  public info = {
     riskCushionAmount: '',
     riskCushionPercent: '',
     returnPercent: '',
