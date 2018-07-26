@@ -3,7 +3,7 @@ import { loan_model } from '../../models/loanmodel';
 import { Loan_Crop_Unit } from '../../models/cropmodel';
 import { forEach } from '@angular/router/src/utils/collection';
 import { LoggingService } from '../../services/Logs/logging.service';
-
+import * as _ from 'lodash';
 @Injectable()
 export class LoancropunitcalculationworkerService {
   public input: loan_model;
@@ -58,28 +58,28 @@ export class LoancropunitcalculationworkerService {
     }
   }
 
-  calculateAPHForCropYield(localLoanObject : loan_model){
+  calculateAPHForCropYield(localLoanObject: loan_model) {
     let cropYields = localLoanObject.CropYield;
-    if(cropYields){
+    if (cropYields) {
       cropYields.forEach(cy => {
-        let sumOfAcresIntoAPH=0;
-          let sumOfAcres=0;
-        let cropUnits = localLoanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cy.CropType && cu.Crop_Practice_Type_Code == cy.IrNI);
-        if(cropUnits){
-          
-          cropUnits.forEach(cu=>{
+        let sumOfAcresIntoAPH = 0;
+        let sumOfAcres = 0;
+        let cropUnits = localLoanObject.LoanCropUnits.filter(cu => cu.Crop_Code == cy.CropType && cu.Crop_Practice_Type_Code == cy.IrNI);
+        if (cropUnits) {
+
+          cropUnits.forEach(cu => {
             sumOfAcresIntoAPH += cu.CU_Acres * cu.Ins_APH;
             sumOfAcres += cu.CU_Acres;
           });
         }
 
-        if(sumOfAcres && sumOfAcresIntoAPH){
-          cy.APH = sumOfAcresIntoAPH/sumOfAcres;
+        if (sumOfAcres && sumOfAcresIntoAPH) {
+          cy.APH = sumOfAcresIntoAPH / sumOfAcres;
           cy.APH = parseFloat(cy.APH.toFixed(2));
-        }else{
+        } else {
           cy.APH = 0;
         }
-        
+
       });
     }
     return localLoanObject;
@@ -135,105 +135,207 @@ export class LoancropunitcalculationworkerService {
           element.Ins_Value = element.FC_MPCIvalue;
           //MPCI type only as if now--We dont have secondary 
           element.Disc_Ins_value = element.FC_Disc_MPCI_value;
-          
+
           // Insurance Sub Policies Calculations
           let subpolicies = insurancepolicy.Subpolicies;
+          element.FC_Icevalue=0;
+          element.FC_Staxvalue=0;
+          element.FC_Scovalue=0;
+          element.FC_Hmaxvalue=0;
+          element.FC_Abcvalue=0;
+          element.FC_Pcivalue=0;
+          element.FC_Rampvalue=0;
+          element.FC_Crophailvalue=0;
           subpolicies.forEach(subpolicy => {
             
             if (subpolicy.Ins_Type.toLowerCase() == "hmax") {
               //Hmax calculations
-              if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
-                let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
-                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                let HmaxlevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
-                element.FC_HmaxPremium = subpolicy.Premium;
-                element.FC_Hmaxvalue = ((HmaxlevelPerc * element.Ins_APH * element.Z_Price) - element.FC_HmaxPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+              try {
+                if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                  let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  let HmaxlevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
+                  element.FC_HmaxPremium = subpolicy.Premium;
+                  let deduct_pct = 0;
+                  let deduct_amt = 0; // these are hardcoded values and will be aded to Db soon
+                  // using insurance aph instead of CU_APH
+                  element.FC_Hmaxvalue = ((((HmaxlevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * element.Z_Price) - element.FC_HmaxPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                }
+                else {
+                  element.FC_Hmaxvalue = 0;
+                }
               }
-              else {
+              catch{
                 element.FC_Hmaxvalue = 0;
               }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "sco") {
               //Starts here
               subpolicy.Upper_Limit = 86;
-              if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                let liability = element.Z_Price * subpolicy.Yield;
-                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                element.FC_Scovalue = ((CoveragetoMPCI / 100 * liability)-subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+              try {
+                if (insurancepolicy.Level < subpolicy.Upper_Limit) {
+                  let liability = element.Z_Price * subpolicy.Yield;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  element.FC_Scovalue = ((CoveragetoMPCI / 100 * liability) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+                }
+                else
+                  element.FC_Scovalue = 0;
               }
-              else
+              catch{
                 element.FC_Scovalue = 0;
+              }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "stax") {
               //Starts here
-              subpolicy.Upper_Limit = 90;
-              if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                let liability = element.Z_Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct/100;
-                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                element.FC_Staxvalue = ((CoveragetoMPCI / 100 * liability)-subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+              try {
+                subpolicy.Upper_Limit = 90;
+                if (insurancepolicy.Level < subpolicy.Upper_Limit) {
+                  let liability = element.Z_Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct / 100;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  element.FC_Staxvalue = ((CoveragetoMPCI / 100 * liability) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+                }
+                else
+                  element.FC_Staxvalue = 0;
               }
-              else
+              catch{
                 element.FC_Staxvalue = 0;
+              }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "ramp") {
-              if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
-                let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
-                let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                let RamplevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Price_Pct/100;
-                element.FC_RampPremium = subpolicy.Premium;
-                // not using Liability as if now in calculation
-                element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+
+              try {
+                if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                  let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  let RamplevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Price_Pct / 100;
+                  element.FC_RampPremium = subpolicy.Premium;
+                  // not using Liability as if now in calculation
+                  element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                }
+                else {
+                  element.FC_Rampvalue = 0;
+                }
               }
-              else {
+              catch{
                 element.FC_Rampvalue = 0;
               }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "ice") {
-              subpolicy.Upper_Limit=95;
-              subpolicy.Lower_Limit=85;
-                    switch (subpolicy.Ins_SubType) {
-                        case "BY":
-                        subpolicy.Upper_Limit=90;
-                        subpolicy.Lower_Limit=80;
-                        subpolicy.Deduct=10;
-                        break;
-                        case "BR":
-                        subpolicy.Upper_Limit=90;
-                        subpolicy.Deduct=10;
-                        break;
-                        case "CY":
-                        
-                        break;
-                        case "RR":
-                        
-                        break;
-                        
-                    }
-              
-              if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+              subpolicy.Upper_Limit = 95;
+              subpolicy.Lower_Limit = 85;
+              try {
+                let deduct_pct = 5;
+                let deduct_amt = 0;
+                switch (subpolicy.Ins_SubType) {
+                  case "BY":
+                    subpolicy.Upper_Limit = 90;
+                    subpolicy.Lower_Limit = 80;
+                    deduct_pct = 10;
+                    if (element.Crop_Code.toLowerCase() == "crn") //hardcoded values for Soy and Corn
+                      deduct_amt = 10;
+                    if (element.Crop_Code.toLowerCase() == "soy") //hardcoded values for Soy and Corn
+                      deduct_amt = 6;
+                    break;
+                  case "BR":
+                    subpolicy.Upper_Limit = 90;
+                    subpolicy.Lower_Limit = 80;
+                    deduct_pct = 10;
+                    if (element.Crop_Code.toLowerCase() == "crn") //hardcoded values for Soy and Corn
+                      deduct_amt = 10;
+                    if (element.Crop_Code.toLowerCase() == "soy") //hardcoded values for Soy and Corn
+                      deduct_amt = 6;
+                    break;
+                  case "CY":
+                    if (element.Crop_Code.toLowerCase() == "crn") //hardcoded values for Soy and Corn
+                      deduct_amt = 5;
+                    if (element.Crop_Code.toLowerCase() == "soy") //hardcoded values for Soy and Corn
+                      deduct_amt = 3;
+                    break;
+                  case "RR":
+                    if (element.Crop_Code.toLowerCase() == "crn") //hardcoded values for Soy and Corn
+                      deduct_amt = 5;
+                    if (element.Crop_Code.toLowerCase() == "soy") //hardcoded values for Soy and Corn
+                      deduct_amt = 3;
+                    break;
+                }
+                //User inputs Processing here
+                if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                  let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  let icelevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Yield_Pct / 100 * subpolicy.Price_Pct / 100;
+                  element.FC_IcePremium = subpolicy.Premium;
+                  // not using Liability as if now in calculation
+                  element.FC_Icevalue = ((((icelevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * element.Z_Price) - element.FC_IcePremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                }
+                else {
+                  element.FC_Icevalue = 0;
+                }
+              }
+              catch{
+                element.FC_Icevalue = 0;
+              }
+            }
+            else if (subpolicy.Ins_Type.toLowerCase() == "abc") {
+              try {
+                if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
+                  let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
+                  let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
+                  let AbclevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
+                  element.FC_AbcPremium = subpolicy.Premium;
+                  // not using Liability as if now in calculation and change zprice to insadjusted price
+                  element.FC_Abcvalue = ((AbclevelPerc * element.Ins_APH * element.Z_Price) - element.FC_AbcPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                }
+                else {
+                  element.FC_Abcvalue = 0;
+                }
+              }
+              catch{
+                element.FC_Abcvalue = 0;
+              }
+            }
+            else if (subpolicy.Ins_Type.toLowerCase() == "pci") {
+
+              try {
+                let array = [1, 2, 3, 4, 5];
+                let iccvalue = _.sumBy(input.LoanBudget.filter(p => p.Crop_Practice_ID == element.Crop_Practice_ID && array.includes(p.Expense_Type_ID)), "Total_Budget_Acre");
+                let liability = iccvalue + subpolicy.FCMC;
+                element.FC_Pcivalue = (liability - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+              }
+              catch{
+                element.FC_Pcivalue = 0;
+              }
+            }
+            else if (subpolicy.Ins_Type.toLowerCase() == "crophail") {
+
+              try {
                 let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
                 let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
-                let icelevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
-                element.FC_RampPremium = subpolicy.Premium;
-                // not using Liability as if now in calculation
-                element.FC_Rampvalue = ((icelevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                let crophaillevelpct = CoveragetoMPCI * (CoveragetoMPCI / band) * subpolicy.Price_Pct;
+                if (subpolicy.Ins_SubType == "Basic") {
+                  element.FC_Crophailvalue = (subpolicy.Liability - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+                }
+                if (subpolicy.Ins_SubType == "Prod Plan" || subpolicy.Ins_SubType == "Comp Plan") {
+                  let deduct_pct = 0;
+                  element.FC_Crophailvalue = ((element.Ins_APH * element.Z_Price * (element.FC_Level1Perc - deduct_pct)) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+                }
               }
-              else {
-                element.FC_Rampvalue = 0;
+              catch{
+                element.FC_Crophailvalue = 0;
               }
             }
           });
 
         }
         catch (ex) {
-          
+
           console.error("Error in Cropunit Calculations")
           element.Mkt_Value = 0;
         }
 
         //Insurance Value
         try {
-          element.Ins_Value = element.Mkt_Value * element.FC_Primary_limit / 100;
+          debugger
+          element.Ins_Value = element.Ins_Value + element.FC_Icevalue + element.FC_Hmaxvalue +element.FC_Crophailvalue +element.FC_Scovalue +element.FC_Staxvalue + element.FC_Abcvalue + element.FC_Rampvalue+element.FC_Pcivalue;
         }
         catch{
           element.Ins_Value = 0;
@@ -243,14 +345,20 @@ export class LoancropunitcalculationworkerService {
         //CEI Value
         try {
           element.CEI_Value = element.Mkt_Value - element.Ins_Value;
+          if(element.CEI_Value<0){
+            element.CEI_Value=0;
+          }
         }
         catch{
           element.CEI_Value = 0;
           console.error("Error in Cropunit Calculations fro CEI_Value")
         }
+      
       }
     });
 
+      //Loan Master
+      input.LoanMaster[0].Net_Market_Value_Insurance=_.sumBy(input.LoanCropUnits,"Ins_Value");
     return input;
   }
 }
