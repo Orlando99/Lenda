@@ -10,7 +10,7 @@ import { chartSettings } from './../../../../../chart-settings';
   styleUrls: ['./commitment-chart.component.scss']
 })
 export class CommitmentChartComponent implements OnInit {
-  private info = {
+  public info = {
     armCommitment: '',
     distCommitment: '',
     totalCommitment: '',
