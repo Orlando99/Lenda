@@ -19,6 +19,7 @@ export class CommitmentChartComponent implements OnInit {
   };
 
   armCommit = chartSettings.commitmentExcessIns.armCommit;
+  distCommit = chartSettings.commitmentExcessIns.distCommit;
   excessIns = chartSettings.commitmentExcessIns.excessIns;
 
   constructor(
