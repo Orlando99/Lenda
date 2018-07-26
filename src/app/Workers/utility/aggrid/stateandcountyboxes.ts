@@ -12,6 +12,13 @@ export function lookupStateRefValue(key) {
         return refdata.StateList.find(p => p.State_ID == parseInt(key)).State_Name;
     }
   }
+
+  export function lookupStateAbvRefValue(key,refData) {
+    if (key) {
+        let state =refData.StateList.find(p => p.State_ID == parseInt(key));
+        return state ? state.State_Abbrev : '';
+    }
+  }
 // States
 //
 
@@ -67,6 +74,13 @@ export function extractCountyValues(mappings) {
     });
     return obj;
 }
+
+export function lookupCountyRefValue(key,refData) {
+    if (key) {
+        let county =refData.CountyList.find(p => p.County_ID == parseInt(key));
+        return county ? county.County_Name : '';
+    }
+  }
 
 
 
