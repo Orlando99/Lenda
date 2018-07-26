@@ -91,7 +91,7 @@ export class LoanMasterCalculationWorkerService {
       loanMaster.Risk_Cushion_Percent = parseFloat(loanMaster.Risk_Cushion_Percent.toFixed(1));
       
       loanMaster.Return_Percent = (( loanMaster.Orgination_Fee_Amount + loanMaster.Service_Fee_Amount +
-                                    (loanMaster.Rate_Percent * (255/365) * loanMaster.ARM_Commitment)
+                                    (loanMaster.Rate_Percent * (225/365) * loanMaster.ARM_Commitment)
                                   )/loanMaster.ARM_Commitment)*100;
       loanMaster.Return_Percent = parseFloat(loanMaster.Return_Percent.toFixed(1)); 
       
