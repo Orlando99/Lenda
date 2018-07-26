@@ -166,14 +166,6 @@ export class PoliciesComponent implements OnInit {
   addNumericColumn(element: string) {
     
     let header=element;
-    if(element.includes("Yield"))
-    {
-       header="Yield_PCT"
-    }
-    if(element.includes("Price"))
-    {
-      header="Price_PCT"
-    }
     this.columnDefs.push({
       headerName: header,pickfield:element,field: element, editable: true,
       cellEditorSelector: function (params) {
@@ -210,7 +202,7 @@ export class PoliciesComponent implements OnInit {
     let rendervalues = [];
     if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Price_HMAX','Premium_HMAX']
+      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Deduct_HMAX','Premium_HMAX']
       //HMAX
     }
     if (value == "SCO") { //these values are Suffixed rather than prefixed
@@ -219,7 +211,7 @@ export class PoliciesComponent implements OnInit {
       //HMAX
     }
     if (value == "STAX") {
-      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Premium_STAX']
+      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Yield_Pct_STAX','Premium_STAX','Prot_Factor_STAX']
     }
     if (value == "RAMP") {
       rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_RAMP', 'Liability_RAMP','Premium_RAMP']
