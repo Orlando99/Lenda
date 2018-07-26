@@ -1,11 +1,11 @@
 <div class="row-section" *ngIf="viewMode == 2 || viewMode == 3">
   <div>
     <span class="header-label">Budget</span>
-    <span class="header-value">$ {{ info.budget }}</span>
+    <span class="header-value">{{ info.budget }}</span>
   </div>
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
   </div>
   <div>
     <span class="header-label">Break Even</span>
@@ -21,11 +21,11 @@
 <div class="row-section" *ngIf="viewMode == 1">
   <div>
     <span class="header-label">Budget</span>
-    <span class="header-value">$ {{ info.budget }}</span>
+    <span class="header-value">{{ info.budget }}</span>
   </div>
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
   </div>
   <div>
     <span class="header-label">Break Even</span>
@@ -38,7 +38,7 @@
 <div class="row-section concise" *ngIf="viewMode == 0">
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
   </div>
   <app-bottom-icons [viewMode]="viewMode"></app-bottom-icons>
 </div>

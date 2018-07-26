@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import { chartSettings } from './../../../../../chart-settings';
 import { environment } from '../../../../../../environments/environment.prod';
 import { loan_model } from '../../../../../models/loanmodel';
+import { PriceFormatter } from '../../../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-risk-chart',
@@ -56,7 +57,7 @@ export class RiskChartComponent implements OnInit {
 
   getRiskReturnValuesFromLocalStorage(loanMaster) {
    
-    this.info.riskCushionAmount = loanMaster.Risk_Cushion_Amount;
+    this.info.riskCushionAmount = loanMaster.Risk_Cushion_Amount ? PriceFormatter(loanMaster.Risk_Cushion_Amount) : '$ 0';
     this.info.riskCushionPercent = loanMaster.Risk_Cushion_Percent;
     this.info.returnPercent = loanMaster.Return_Percent;
 

@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../../environments/environment';
 import { chartSettings } from './../../../../../chart-settings';
+import { PriceFormatter } from '../../../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-commitment-chart',
@@ -14,7 +15,7 @@ export class CommitmentChartComponent implements OnInit {
     armCommitment: '',
     distCommitment: '',
     totalCommitment: '',
-    excessIns: '313095',
+    excessIns: '',
     excessInsPercent: 0
   };
 
@@ -63,12 +64,15 @@ export class CommitmentChartComponent implements OnInit {
 
   getCommitment() {
     let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
-    this.info.armCommitment = loanMaster.ARM_Commitment;
-    this.info.distCommitment = loanMaster.Dist_Commitment;
-    this.info.totalCommitment = loanMaster.ARM_Commitment + loanMaster.Dist_Commitment;
+    this.info.armCommitment = loanMaster.ARM_Commitment ? PriceFormatter(loanMaster.ARM_Commitment) : '$ 0';
+    this.info.distCommitment = loanMaster.Dist_Commitment ? PriceFormatter(loanMaster.ARM_Commitment) : '$ 0';
+    let totalCmt = loanMaster.ARM_Commitment + loanMaster.Dist_Commitment;
+    this.info.totalCommitment = totalCmt ? PriceFormatter(totalCmt) : '$ 0';
     // TODO: Get excessin value from local storage
-    let excessInsPercent: any = parseFloat(this.info.excessIns) * 100 / parseFloat(this.info.totalCommitment);
-    this.info.excessInsPercent = excessInsPercent.toFixed(2);
+    let excessIns = 313095;
+    this.info.excessIns = excessIns ? PriceFormatter(excessIns) : '$ 0';
+    let excessInsPercent: any = (excessIns) * 100 / parseFloat(totalCmt);
+    this.info.excessInsPercent = excessInsPercent.toFixed(1);
   }
 
   setGrid(item, color, translateX) {

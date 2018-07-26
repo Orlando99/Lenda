@@ -5,6 +5,7 @@ import { environment } from '../../../../../environments/environment';
 import { chartSettings } from './../../../../chart-settings';
 import 'chart.piecelabel.js';
 import { loan_model } from '../../../../models/loanmodel';
+import { PriceFormatter } from '../../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-cash-flow',
@@ -76,8 +77,8 @@ export class CashFlowComponent implements OnInit {
   }
 
   getLoanSummary(loanMaster) {
-    this.info.budget = loanMaster.Total_Commitment;
-    this.info.cashFlow = loanMaster.Cash_Flow_Amount;
+    this.info.budget = loanMaster.Total_Commitment ? PriceFormatter(loanMaster.Total_Commitment) : '$ 0';
+    this.info.cashFlow = loanMaster.Cash_Flow_Amount ? PriceFormatter(loanMaster.Cash_Flow_Amount) : '$ 0';
     // TOOD: Replace with real value form local storage
     this.info.breakEven = loanMaster.Break_Even_Percent;
   }
