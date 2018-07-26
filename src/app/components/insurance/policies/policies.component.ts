@@ -104,7 +104,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'MPCI types',pickfield:'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.GetPlanSubType('MPCI')
+        cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
         headerName: 'SecInsPlan',pickfield:'SecInsPlan', field: 'SecInsurance', cellClass: 'editable-color', editable: true, cellEditor: "chipeditor",
@@ -166,14 +166,6 @@ export class PoliciesComponent implements OnInit {
   addNumericColumn(element: string) {
     
     let header=element;
-    if(element.includes("Yield"))
-    {
-       header="Yield_PCT"
-    }
-    if(element.includes("Price"))
-    {
-      header="Price_PCT"
-    }
     this.columnDefs.push({
       headerName: header,pickfield:element,field: element, editable: true,
       cellEditorSelector: function (params) {
@@ -210,22 +202,22 @@ export class PoliciesComponent implements OnInit {
     let rendervalues = [];
     if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Price_HMAX','Premium_HMAX']
+      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Deduct_HMAX','Premium_HMAX','Price_Pct']
       //HMAX
     }
     if (value == "SCO") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Yield_SCO','Premium_SCO']
+      rendervalues = ['Yield_SCO','Premium_SCO','Upper_Limit_SCO']
       //HMAX
     }
     if (value == "STAX") {
-      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Premium_STAX']
+      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Yield_Pct_STAX','Premium_STAX','Prot_Factor_STAX']
     }
     if (value == "RAMP") {
-      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_RAMP', 'Liability_RAMP','Premium_RAMP']
+      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_Pct_RAMP', 'Liability_RAMP','Premium_RAMP']
     }
     if (value == "ICE") {
-      rendervalues = ['Yield_ICE', 'Price_ICE','Premium_ICE']
+      rendervalues = ['Lower_Level_ICE','Premium_ICE','Deduct_ICE','Upper_Level_ICE']
     }
     if (value == "ABC") {
       rendervalues = ['Upper_Limit_ABC', 'Lower_Limit_ABC','Premium_ABC']
@@ -234,7 +226,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['FCMC_PCI','Premium_PCI']
     }
     if (value == "CROPHAIL") {
-      rendervalues = ['Upper_Limit_CROPHAIL', 'Deduct_CROPHAIL', 'Price_CROPHAIL', 'Liability_CROPHAIL','Premium_CROPHAIL']
+      rendervalues = ['Upper_Limit_CROPHAIL', 'Deduct_CROPHAIL', 'Price_Pct_CROPHAIL', 'Liability_CROPHAIL','Premium_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
@@ -267,18 +259,15 @@ export class PoliciesComponent implements OnInit {
     if (type == "PCI") {
       return { values: [] };
     }
+    if (type == "CROPHAIL") {
+      return { values: ['Basic', 'Prod Plan', 'Comp Plan'] };
+    }
   }
 
   
-  GetPlanSubType(type: string): any {
+  GetMPCIPlanSubType(type: string): any {
     if (type == "MPCI") {
       return { values: ['CAT', 'YP', 'RP-HPE', 'RP', 'ARH'] };
-    }
-    if (type == "HMAX") {
-      return { values: ['STANDARD', 'X1', 'MAXRP'] };
-    }
-    if (type == "STAX") {
-      return { values: [] };
     }
   }
   getAIPs(): any {

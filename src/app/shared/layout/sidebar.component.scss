@@ -34,7 +34,8 @@ mat-sidenav  {
   }
 
   .mat-list-item-focus,
-  .mat-list-item .active {
+  .mat-list-item .active,
+  .mat-list-item.active {
     background: $sidebar-selected-bg-color;
     .flaticon {
       color: $nav-hover-color;

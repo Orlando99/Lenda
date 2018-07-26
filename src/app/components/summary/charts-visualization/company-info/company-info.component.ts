@@ -9,7 +9,7 @@ import { loan_model } from '../../../../models/loanmodel';
   styleUrls: ['./company-info.component.scss']
 })
 export class CompanyInfoComponent implements OnInit {
-  @Input() viewMode:number;
+  @Input() viewMode: number;
   private info = {
     borrwerFirstName: '',
     borrowerLastName: '',
@@ -19,7 +19,7 @@ export class CompanyInfoComponent implements OnInit {
   }
 
   public starsCount: number = 3.5;
-  localLoanObject : loan_model;
+  localLoanObject: loan_model;
 
   constructor(
     private localStorageService: LocalStorageService
@@ -28,14 +28,14 @@ export class CompanyInfoComponent implements OnInit {
   ngOnInit() {
 
     this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
-    if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+    if (this.localLoanObject && this.localLoanObject.LoanMaster[0]) {
       this.getCompanyInfo(this.localLoanObject.LoanMaster[0]);
     }
 
-    this.localStorageService.observe(environment.loankey).subscribe(res=>{
-      if(res){
+    this.localStorageService.observe(environment.loankey).subscribe(res => {
+      if (res) {
         this.localLoanObject = res;
-        if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+        if (this.localLoanObject && this.localLoanObject.LoanMaster[0]) {
           this.getCompanyInfo(this.localLoanObject.LoanMaster[0]);
         }
       }
@@ -51,3 +51,4 @@ export class CompanyInfoComponent implements OnInit {
     this.info.loanFullId = loanMaster.Loan_Full_ID;
   }
 }
+

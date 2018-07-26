@@ -76,6 +76,30 @@ export class Loan_Crop_Unit
      FC_Scovalue:number=0;
      FC_HmaxPremium:number=0;
      FC_Disc_Scovalue:number=0;
+     //Ramp
+     FC_Rampvalue:number=0;
+     FC_RampPremium:number=0;
+     FC_Disc_Rampvalue:number=0;
+     //ICE
+     FC_Icevalue:number=0;
+     FC_IcePremium:number=0;
+     FC_Disc_Icevalue:number=0;
+     //
+     //ABC
+     FC_Abcvalue:number=0;
+     FC_AbcPremium:number=0;
+     FC_Disc_Abcvalue:number=0;
+     //
+     //PCI
+     FC_Pcivalue:number=0;
+     FC_PciPremium:number=0;
+     FC_Disc_Pcivalue:number=0;
+     //
+     //CropHail
+     FC_Crophailvalue:number=0;
+     FC_CrophailPremium:number=0;
+     FC_Disc_Crophailvalue:number=0;
+     //
      Ins_APH:number=0
      FC_Level1Perc:number=undefined;
 

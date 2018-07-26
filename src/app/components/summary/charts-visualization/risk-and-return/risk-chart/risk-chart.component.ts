@@ -28,14 +28,6 @@ export class RiskChartComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Set bar
-    this.setChart('#risk', 0, 100, chartSettings.riskAndReturns.riskBg);
-    this.setChart('#cushion', 100, 200, chartSettings.riskAndReturns.cushionBg);
-    this.setChart('#returnFirst', 200, 300, chartSettings.riskAndReturns.returnLightGreen);
-    this.setChart('#returnSecond', 300, 400, chartSettings.riskAndReturns.returnDarkGreen);
-    // Set diamond
-
-    this.setValues();
     this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
     if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
       this.getRiskReturnValuesFromLocalStorage(this.localLoanObject.LoanMaster[0]);
@@ -50,6 +42,19 @@ export class RiskChartComponent implements OnInit {
       }
 
     })
+    //this.getRiskReturnValuesFromLocalStorage();
+  }
+
+  ngAfterViewInit() {
+    // Set bar
+    this.setChart('#risk', 0, 100, chartSettings.riskAndReturns.riskBg);
+    this.setChart('#cushion', 100, 200, chartSettings.riskAndReturns.cushionBg);
+    this.setChart('#returnFirst', 200, 300, chartSettings.riskAndReturns.returnLightGreen);
+    this.setChart('#returnSecond', 300, 400, chartSettings.riskAndReturns.returnDarkGreen);
+    // Set diamond
+
+    this.setValues();
+   
 
     
     
@@ -82,7 +87,7 @@ export class RiskChartComponent implements OnInit {
         return 'translate(0, 10)';
       })
       .attr('width', 100)
-      .attr('height', 10)
+      .attr('height', 15)
       .attr('fill', color);
   }
 
@@ -100,7 +105,13 @@ export class RiskChartComponent implements OnInit {
       .enter()
       .append('path')
       .attr('transform', (d, i) => {
-        return 'translate(' + this.info.blackDiamond + ', 25)';
+        return 'translate(-200, 30)';
+      })
+      .transition()
+      .duration(1500)
+      .ease(d3.easeLinear)
+      .attr('transform', (d, i) => {
+        return 'translate(' + this.info.blackDiamond + ', 30)';
       })
       .attr('d', function (d) {
         symbolGenerator
@@ -114,6 +125,11 @@ export class RiskChartComponent implements OnInit {
       .data(symbolTypes)
       .enter()
       .append('path')
+      .attr('transform', (d, i) => {
+        return 'translate(-200, 5)';
+      })
+      .transition()
+      .duration(1750)
       .attr('transform', (d, i) => {
         return 'translate(' + this.info.redDiamond + ', 5)';
       })

@@ -21,6 +21,7 @@ export class CommitmentChartComponent implements OnInit {
   };
   localLoanObject : loan_model;
   armCommit = chartSettings.commitmentExcessIns.armCommit;
+  distCommit = chartSettings.commitmentExcessIns.distCommit;
   excessIns = chartSettings.commitmentExcessIns.excessIns;
 
   constructor(
