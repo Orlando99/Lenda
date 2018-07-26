@@ -38,7 +38,7 @@ export class RealEstateComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
+    // height: '110px',
     boxSizing: 'border-box'
   };
 
@@ -61,7 +61,7 @@ export class RealEstateComponent implements OnInit {
         { headerName: 'Description', field: 'Collateral_Description',  cellEditor: "alphaNumeric", editable: true, width:120, cellClass: 'editable-color'},
         { headerName: 'Qty', field: 'Qty',  editable: true, cellEditor: "numericCellEditor" , valueFormatter: numberFormatter, cellClass: ['editable-color','text-right'], width:90},
         { headerName: 'Price', field: 'Price',  editable: true ,cellEditor: "numericCellEditor" ,valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'],width:110},
-        
+
         { headerName: 'Mkt Value', field: 'Market_Value',  editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right'],width:130},
         { headerName: 'Prior Lien', field: 'Prior_Lien_Amount',  editable: true,cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'], width:130},
         { headerName: 'Lienholder', field: 'Lien_Holder',  editable: true, width:120,  cellEditor: "alphaNumeric", cellClass: ['editable-color']},
@@ -158,7 +158,7 @@ export class RealEstateComponent implements OnInit {
   addrow() {
     if(this.localloanobject.LoanCollateral ==null)
       this.localloanobject.LoanCollateral = [];
-      
+
     var newItem = new Loan_Collateral();
     newItem.Collateral_Category_Code = "RET";
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
@@ -242,14 +242,14 @@ export class RealEstateComponent implements OnInit {
     setTimeout(() => {
       this.adjustparentheight();
     }, 10);
-  
+
   }
 
   adjustparentheight(){
 
     var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
    // var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
-    
+
    elementInHost.forEach(element => {
       //find aggrid
       var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
