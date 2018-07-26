@@ -56,17 +56,20 @@ export class CashFlowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getLoanBudgetFromLocalStorage();
+    
 
     this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
-    if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+    if(this.localLoanObject && this.localLoanObject.LoanMaster[0] && this.localLoanObject.LoanBudget){
+      this.getLoanBudgetFromLocalStorage(this.localLoanObject.LoanBudget);
       this.getLoanSummary(this.localLoanObject.LoanMaster[0]);
+
     }
 
     this.localStorageService.observe(environment.loankey).subscribe(res=>{
       if(res){
         this.localLoanObject = res;
-        if(this.localLoanObject && this.localLoanObject.LoanMaster[0]){
+        if(this.localLoanObject && this.localLoanObject.LoanMaster[0] && this.localLoanObject.LoanBudget){
+          this.getLoanBudgetFromLocalStorage(this.localLoanObject.LoanBudget);
           this.getLoanSummary(this.localLoanObject.LoanMaster[0]);
         }
       }
@@ -83,10 +86,10 @@ export class CashFlowComponent implements OnInit {
     this.info.breakEven = loanMaster.Break_Even_Percent;
   }
 
-  getLoanBudgetFromLocalStorage() {
-    let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
+  getLoanBudgetFromLocalStorage(loanBudgets) {
+    
     let index = 0;
-    for (let budget of loanBudgets.LoanBudget) {
+    for (let budget of loanBudgets) {
       if (budget.Total_Budget_Crop_ET !== 0 && budget.Crop_Practice_ID === 2) {
         this.doughnutChartLabels.push(
           this.getBudgetExpenseType(budget.Expense_Type_ID)
