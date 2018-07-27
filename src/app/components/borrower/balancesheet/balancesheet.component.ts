@@ -108,7 +108,7 @@ export class BalancesheetComponent implements OnInit {
       this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
-      this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
+      this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials? true : false;
       this.Financials_Date =  this.getFinancilaDate();
       
       let rows = this.prepareviewmodel();
@@ -160,7 +160,7 @@ export class BalancesheetComponent implements OnInit {
 
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
+      this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials ? true : false;
       this.Financials_Date =  this.getFinancilaDate();
     }
     this.rowData = this.prepareviewmodel();
@@ -245,7 +245,7 @@ export class BalancesheetComponent implements OnInit {
     this.localloanobject.LoanMaster[0].Financials_Date = this.formatDate(this.Financials_Date);
     this.localloanobject.Borrower.Borrower_CPA_Financials = this.formatDate(this.Financials_Date);
 
-    this.localloanobject.LoanMaster[0].CPA_Prepared_Financials = this.CPA_Prepared_Financials;
+    this.localloanobject.LoanMaster[0].CPA_Prepared_Financials = this.CPA_Prepared_Financials ? 1 : 0;
     this.localloanobject.Borrower.CPA_Prepared_Financials = this.CPA_Prepared_Financials;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
