@@ -207,17 +207,17 @@ export class PoliciesComponent implements OnInit {
     }
     if (value == "SCO") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Yield_SCO','Premium_SCO','Upper_Limit_SCO']
+      rendervalues = ['Upper_Limit_SCO','Yield_SCO','Premium_SCO']
       //HMAX
     }
     if (value == "STAX") {
-      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Yield_Pct_STAX','Premium_STAX','Prot_Factor_STAX']
+      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Prot_Factor_STAX','Yield_Pct_STAX','Premium_STAX']
     }
     if (value == "RAMP") {
       rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_Pct_RAMP', 'Liability_RAMP','Premium_RAMP']
     }
     if (value == "ICE") {
-      rendervalues = ['Lower_Level_ICE','Premium_ICE','Deduct_ICE','Upper_Level_ICE']
+      rendervalues = ['Upper_Level_ICE','Lower_Level_ICE','Premium_ICE','Deduct_ICE']
     }
     if (value == "ABC") {
       rendervalues = ['Upper_Limit_ABC', 'Lower_Limit_ABC','Premium_ABC']
@@ -226,7 +226,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['FCMC_PCI','Premium_PCI']
     }
     if (value == "CROPHAIL") {
-      rendervalues = ['Upper_Limit_CROPHAIL', 'Deduct_CROPHAIL', 'Price_Pct_CROPHAIL', 'Liability_CROPHAIL','Premium_CROPHAIL']
+      rendervalues = ['Upper_Limit_CROPHAIL','Price_Pct_CROPHAIL', 'Liability_CROPHAIL', 'Deduct_CROPHAIL','Premium_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
