@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
@@ -16,12 +16,13 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
+import * as _ from 'lodash';
 import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
-
 @Component({
   selector: 'app-rebator',
   templateUrl: './rebator.component.html',
-  styleUrls: ['./rebator.component.scss']
+  styleUrls: ['./rebator.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class RebatorComponent implements OnInit {
   public refdata: any = {};
@@ -29,19 +30,22 @@ export class RebatorComponent implements OnInit {
   private localloanobject: loan_model = new loan_model();
   // Aggrid
   public rowData = [];
+  public savedData = [];
   public components;
   public context;
   public frameworkcomponents;
   public editType;
   private gridApi;
   private columnApi;
-  public deleteAction=false;
+
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '180px',
+    height: '100%',
     boxSizing: 'border-box'
   };
+
+  @ViewChild("myGrid") gridEl: ElementRef;
 
   defaultColDef = {
     enableValue: true,
@@ -49,7 +53,8 @@ export class RebatorComponent implements OnInit {
     enablePivot: true
   };
   //region Ag grid Configuration
-  constructor(public localstorageservice: LocalStorageService,
+  constructor(
+    public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public cropunitservice: CropapiService,
     private toaster: ToastsManager,
@@ -111,16 +116,17 @@ export class RebatorComponent implements OnInit {
       }else{
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.rowData = this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
+        this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
         
       }
-      this.getgridheight();
+      this.savedData = _.cloneDeep(this.rowData);
+      //this.getgridheight();
       this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
 
-    this.getdataforgrid();
+
 
   }
 
@@ -131,15 +137,24 @@ export class RebatorComponent implements OnInit {
       this.localloanobject = obj;
       this.rowData=[];
       this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
-
+      this.rowData = this.rowData.map(row=>{ row.ActionStatus=0; return row;});
+      this.savedData = _.cloneDeep(this.rowData);
+      //this.getgridheight();
     }
   }
 
 synctoDb() {
  this.gridApi.showLoadingOverlay();
+    let observables = [];
+    observables.push(this.loanapi.syncloanobject(this.localloanobject));
+    
+    this.rowData.forEach(row=>{
+      if (row.ActionStatus == 1) observables.push( this.cropunitservice.addLoanAssociation(row));
+      if (row.ActionStatus == 2) observables.push( this.cropunitservice.updateLoanAssociation(row));
+    });
+
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
       if (res.ResCode == 1) {
-        this.deleteAction = false;
         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
           this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
           if (res.ResCode == 1) {
@@ -150,11 +165,11 @@ synctoDb() {
           else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
-          this.gridApi.hideOverlay()
+          this.gridApi.hideOverlay();
         });
       }
       else {
-        this.gridApi.hideOverlay()
+        this.gridApi.hideOverlay();
         this.toaster.error("Error in Sync");
       }
     });
@@ -169,78 +184,88 @@ synctoDb() {
 
     newItem.Assoc_Type_Code = "REB";
     var res = this.rowData.push(newItem);
-    this.gridApi.updateRowData({ add: [newItem] });
+
+    //this.gridApi.updateRowData({ add: [newItem] });
+    this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
       colKey: "Assoc_Name"
     });
+    
     this.localloanobject.Association.push(newItem);
     // this.getgridheight();
   }
 
-
-  rowvaluechanged(value: any) {
-    var obj = value.data;
-    
-    if (!obj.Assoc_ID) {
-      obj.Assoc_ID = 0;
+  rowvaluechanged(params: any) {
+    var obj = params.data;
+    if (obj.Assoc_ID == 0) {
       obj.ActionStatus = 1;
-      this.localloanobject.Association[this.localloanobject.Association.length - 1] = value.data;
+      this.localloanobject.Association[this.localloanobject.Association.length - 1] = obj;
     }
     else {
       var rowindex = this.localloanobject.Association.findIndex(as => as.Assoc_ID == obj.Assoc_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
+      if (obj.ActionStatus != 1){
+        obj.ActionStatus = 2;  
+        if (params.value != this.localloanobject.Association[rowindex][params.colDef.field]){
+          this.localloanobject.Association[rowindex][params.colDef.field] = params.value;        
+        }
+      }
+       
       this.localloanobject.Association[rowindex] = obj;
     }
 
     this.localloanobject.srccomponentedit = "RebatorComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.localloanobject.lasteditrowindex = params.rowIndex;
 
+    //this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-     // this.getgridheight();
+
+    params.api.sizeColumnsToFit();
+    this.getdataforgrid();
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
+      res => {
       if (res == true) {
         var obj = this.rowData[rowIndex];
-        if (obj.Assoc_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
-          this.localloanobject.LoanCollateral.splice(this.localloanobject.Association.indexOf(obj), 1);
+        this.rowData.splice(rowIndex, 1);
+        this.gridApi.setRowData(this.rowData);
+        let index = this.localloanobject.Association.findIndex(as=>as==obj);
+        if (obj.ActionStatus != 1) {
+          this.localloanobject.Association[index].ActionStatus = 3;
         } else {
-          this.deleteAction = true;
-          obj.ActionStatus = 3;
+          this.localloanobject.Association.splice(index, 1);
+          this.localloanobject.LoanCollateral.splice(this.localloanobject.Association.indexOf(obj), 1);
         }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+
       }
     })
   }
 
   syncenabled(){
-    if( this.rowData.filter(p => p.ActionStatus !== 0).length > 0 || this.deleteAction)
-
-    return '';
-    else
-    return 'disabled';
+    if (this.isArrayEqual(this.rowData, this.savedData)){
+      return 'disabled';
+    } else 
+      return '';
   }
 
   getgridheight(){
-    this.style.height=(30*(this.rowData.length+2)).toString()+"px";
+    //this.style.height=(29 * (this.rowData.length + 2) ).toString()+"px";
   }
 
-  onGridSizeChanged(Event: any) {
+  onGridSizeChanged(params) {
+    params.api.sizeColumnsToFit();
+    params.api.resetRowHeights();
+  }
 
-    try{
-    this.gridApi.sizeColumnsToFit();
-  }
-  catch{
 
-  }
-  }
+  isArrayEqual(x, y) {
+    if (x.length != y.length ) return false;
+    return _(x).differenceWith(y, _.isEqual).isEmpty() ;
+  };
 }
