@@ -129,7 +129,8 @@ export class LoanMasterCalculationWorkerService {
     let loanMaster = loanObject.LoanMaster[0];
     let temp = (loanMaster.Net_Market_Value_Crops || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0 )+ (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return temp;
+      //temp = parseFloat(temp.toFixed(2));
+    return Math.round(temp);
 
   }
 
@@ -143,7 +144,8 @@ export class LoanMasterCalculationWorkerService {
     let loanMaster = loanObject.LoanMaster[0];
     let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return tValue;
+    //tValue = parseFloat(tValue.toFixed(2));
+    return Math.round(tValue);
   }
 
   getInsuranceThresholdStaticValue(loanObject: loan_model) {
@@ -202,7 +204,7 @@ export class LoanMasterCalculationWorkerService {
      let strong = params[0];
     let state = this.getState(ratio,params);
     if (state === STATE.WEAK) {
-      return -1;
+      return 1;
     } else {
       return 1;
     }

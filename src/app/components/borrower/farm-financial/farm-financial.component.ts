@@ -223,9 +223,12 @@ export class FarmFinancialComponent implements OnInit {
       totalRatings += ffRatingValues[entity];
     });
 
+    let possibleObj = this.getPossibleData(entities,farmFinancialRatingValues,ffStaticValue);
+    let totalPossible = possibleObj.totalPossibles;
+
     return {
       ffRatingValues : ffRatingValues,
-      totalRatings : totalRatings
+      totalRatings : parseFloat((totalRatings/totalPossible).toFixed(1))
     }
   }
 }
