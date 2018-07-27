@@ -109,7 +109,8 @@ export class BalancesheetComponent implements OnInit {
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
-      this.Financials_Date = this.localloanobject.LoanMaster[0].Financials_Date || '';
+      this.Financials_Date =  this.getFinancilaDate();
+      
       let rows = this.prepareviewmodel();
        
       switch (this.localloanobject.srccomponentedit) {
@@ -137,6 +138,22 @@ export class BalancesheetComponent implements OnInit {
     })
     this.getdataforgrid();
   }
+  private getFinancilaDate() {
+    let date = this.localloanobject.LoanMaster[0].Financials_Date || '';
+    if (date) {
+      date = this.formatDate(date);
+      if (date == '1/1/1900') {
+        return  '';
+      }
+      else {
+        return  date;
+      }
+    }
+    else {
+      return  '';
+    }
+  }
+
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage retrieved");
@@ -144,7 +161,7 @@ export class BalancesheetComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
-      this.Financials_Date = this.formatDate(this.localloanobject.LoanMaster[0].Financials_Date);
+      this.Financials_Date =  this.getFinancilaDate();
     }
     this.rowData = this.prepareviewmodel();
    
