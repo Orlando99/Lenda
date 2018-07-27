@@ -47,6 +47,7 @@ export class PoliciesComponent implements OnInit {
         this.loanmodel.InsurancePolicies.forEach(function(newel){
           
          _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
+         debugger
          newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
            element.ActionStatus=3;
          });
@@ -473,10 +474,11 @@ export class PoliciesComponent implements OnInit {
 
   rowvaluechanged($event) {
     
+    var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
        
-      var items = $event.data.SecInsurance.toString().split(",");
+      
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
@@ -516,18 +518,19 @@ export class PoliciesComponent implements OnInit {
       
       });
        
-      let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
-      mainobj.Subpolicies.forEach(eelement => {
-        if(items.find(p=>p==eelement.Ins_Type)==undefined){
-           eelement.ActionStatus=3;
-        } 
-      });
+     
+      
       //Delete unwanted Column here
-      
-      
+     
       
       //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
+    let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+    mainobj.Subpolicies.forEach(eelement => {
+      if(items.find(p=>p==eelement.Ins_Type)==undefined){
+         eelement.ActionStatus=3;
+      }
+    });
     //get the local loan object synced
     this.deleteunwantedcolumn();
     this.gridApi.setColumnDefs(this.columnDefs);
