@@ -63,7 +63,7 @@ export function getNumericCellEditor() {
       //   }
       // });
 
-      this.eInput.value = isCharNumeric(params.charPress) ? params.charPress : params.value;
+      this.eInput.value = (isCharNumeric(params.charPress) ? params.charPress : params.value)==undefined ?0:(isCharNumeric(params.charPress) ? params.charPress : params.value);
       var that = this;
       this.eInput.addEventListener("keypress", function(event) {
 

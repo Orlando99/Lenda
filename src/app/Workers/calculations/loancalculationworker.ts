@@ -166,6 +166,7 @@ export class LoancalculationWorker {
       // STEP 8 --- MASTER CALCULATIONS
       if (localloanobj.LoanMaster !== null) {
         localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+        localloanobj = this.loanMasterCalcualtions.performDashboardCaclulation(localloanobj);
         localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
       }
 

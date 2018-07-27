@@ -4,6 +4,7 @@ import { loan_model } from '../../../models/loanmodel';
 import { environment } from '../../../../environments/environment.prod';
 import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
 import { ValueType } from '../shared/cell-value/cell-value.component';
+import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 
 @Component({
   selector: 'app-rating',
@@ -13,9 +14,11 @@ import { ValueType } from '../shared/cell-value/cell-value.component';
 export class RatingComponent implements OnInit {
 
   data: any={};
+  agProReqCredit : number;
   localloanobj: loan_model;
   constructor(private localstorageservice: LocalStorageService,
-    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
+    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService,
+    private loanCalculationWorker : LoancalculationWorker) { }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
@@ -27,9 +30,11 @@ export class RatingComponent implements OnInit {
     })
 
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
-    if(this.localloanobj!=null && this.localloanobj!=undefined)
-    this.binddata(this.localloanobj);
-
+    if(this.localloanobj!=null && this.localloanobj!=undefined){
+      this.binddata(this.localloanobj);
+      this.agProReqCredit = this.localloanobj.LoanMaster[0].Ag_Pro_Requested_Credit;
+    }
+    
   }
 
 
@@ -137,7 +142,7 @@ export class RatingComponent implements OnInit {
           },
           {
             text: 'Ag-Pro Max Addition',
-            value: '-',
+            value: '-', // when changing it to som real value, Make sure to consider in LoanMasterCalculationWorkerService.performDashboardCaclulation
             staticValues: this.loanMasterCaculationWorker.getAgProMaxAdditionStaticValue(loanObject),
             valueType : ValueType.AMOUNT,
             hightlightRow: true
@@ -159,6 +164,12 @@ export class RatingComponent implements OnInit {
     borrowerRatingValues.yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
     borrowerRatingValues.farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
     return borrowerRatingValues;  
+  }
+
+  updateLocalStorage(){
+    
+    this.localloanobj.LoanMaster[0].Ag_Pro_Requested_Credit = this.agProReqCredit || 0;
+    this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj);
   }
 }
 
