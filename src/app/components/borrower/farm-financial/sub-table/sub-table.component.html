@@ -8,7 +8,7 @@
       <app-cell-value [value]="isNumeric(row.staticValues[0]) ? row.staticValues[0].toFixed(1) : row.staticValues[0]" [valueType]="row.staticValueType" [backgroundHighlight]="highlightLastRow &&  rowTable.length==rowInd+1"></app-cell-value>
       <app-cell-value  [value]="isNumeric(row.staticValues[1]) ? row.staticValues[1].toFixed(1) : row.staticValues[1]" [valueType]="row.staticValueType" [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1"></app-cell-value>
       <app-cell-value [value]="row.staticValues[2]" [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1" ></app-cell-value>
-      <app-cell-value [backgroundGreen]="row.state == 'strong'" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [valueType]="1" [backgroundHighlight]="highlightLastRow && rowTable.length==rowInd+1"></app-cell-value>
+      <app-cell-value [backgroundGreen]="(row.state == 'strong') || (highlightLastRow  && rowTable.length==rowInd+1)" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [valueType]="1" [backgroundHighlight]="highlightLastRow && rowTable.length==rowInd+1"></app-cell-value>
       <app-cell-value  [value]="row.possible && row.possible.toFixed(2)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1"></app-cell-value>
 
     </div>
