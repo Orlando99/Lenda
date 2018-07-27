@@ -44,8 +44,8 @@ export class LoanMasterCalculationWorkerService {
 
     if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
     let loanMaster = loanObject.LoanMaster[0];
-    loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
-    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns || 1;
+    //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
+    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns ||1;
     //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
     loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
     

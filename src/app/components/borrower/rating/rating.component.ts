@@ -171,6 +171,18 @@ export class RatingComponent implements OnInit {
     this.localloanobj.LoanMaster[0].Ag_Pro_Requested_Credit = this.agProReqCredit || 0;
     this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj);
   }
+
+  isUnachievedRating(rating){
+    if(this.localloanobj && this.localloanobj.LoanMaster){
+      if(rating > this.localloanobj.LoanMaster[0].Borrower_Rating){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
 }
 
  class BorrowerRatingParams {
