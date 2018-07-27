@@ -3,10 +3,12 @@
       <div class="col cell text-left" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " >{{row.text}}</div>
     </div>
     <div class="col m9">
-      <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [value]="row.value && row.value.toFixed(2)"></app-cell-value>
+      <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [value]="row.value && (row.valueType==1 ? row.value.toFixed(1) :row.value.toFixed(2)) "></app-cell-value>
 
-      <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="isNumeric(val) ? val.toFixed(2) : val" ></app-cell-value>
-      <app-cell-value [backgroundGreen]="row.state == 'strong'" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " ></app-cell-value>
+      <app-cell-value [value]="isNumeric(row.staticValues[0]) ? row.staticValues[0].toFixed(1) : row.staticValues[0]" [valueType]="row.staticValueType" ></app-cell-value>
+      <app-cell-value  [value]="isNumeric(row.staticValues[1]) ? row.staticValues[1].toFixed(1) : row.staticValues[1]" [valueType]="row.staticValueType" ></app-cell-value>
+      <app-cell-value [value]="row.staticValues[2]"  ></app-cell-value>
+      <app-cell-value [backgroundGreen]="row.state == 'strong'" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [valueType]="1" ></app-cell-value>
       <app-cell-value  [value]="row.possible && row.possible.toFixed(2)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " ></app-cell-value>
 
     </div>

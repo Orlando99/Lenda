@@ -82,6 +82,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.debtByAssets,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.debtByAssets,
+            staticValueType : ValueType.PERCENTAGE,
 
           },
           {
@@ -92,6 +93,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.equityByAssets,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.equityByAssets,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Debt/Equity',
@@ -101,6 +103,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.debtByEquity,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.debtByEquity,
+            staticValueType : ValueType.PERCENTAGE,
           }],
           profitabilityAnalysis : [{
             text: 'ROA',
@@ -109,7 +112,8 @@ export class FarmFinancialComponent implements OnInit {
             possible : ffPossibleData.ROA,
             rating : ffRatingData.ROA,
             valueType : ValueType.PERCENTAGE,
-            state : ffStateData.ROA
+            state : ffStateData.ROA,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Operating Profit',
@@ -119,6 +123,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.operatingProfit,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.operatingProfit,
+            staticValueType : ValueType.PERCENTAGE,
           }],
           financialEfficiency : [{
             text: ' Operating Exp / Rev',
@@ -128,6 +133,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.operatingByExpRev,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.operatingByExpRev,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Interest/Cashflow',
@@ -137,6 +143,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingData.interestByCashFlow,
             valueType : ValueType.PERCENTAGE,
             state : ffStateData.interestByCashFlow,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Total Farm Financial Rating',
@@ -146,6 +153,7 @@ export class FarmFinancialComponent implements OnInit {
             rating : ffRatingTotal,
             valueType : ValueType.PERCENTAGE,
             state : '',
+            staticValueType : ValueType.PERCENTAGE,
           }
         ]
       };
