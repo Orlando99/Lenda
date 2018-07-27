@@ -1,15 +1,21 @@
 <div class="row-section" *ngIf="viewMode == 2 || viewMode == 3">
   <div>
     <span class="header-label">Budget</span>
-    <span class="header-value">$ {{ info.budget }}</span>
+    <span class="header-value">{{ info.budget }}</span>
   </div>
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
+    <!-- // Varun changes -->
+    <!--  <span class="header-value">$ {{ info.budget | number: '2.' }}</span>
+  </div>
+  <div>
+    <span class="header-label">Cash Flow</span>
+    <span class="header-value">$ {{ info.cashFlow | number: '2.' }}</span> -->
   </div>
   <div>
     <span class="header-label">Break Even</span>
-    <span class="header-value">{{ info.breakEven }}</span>
+    <span class="header-value">{{ info.breakEven }} % </span>
   </div>
   <div class="budget-doughnut">
     <canvas baseChart [colors]="chartColors" [options]="chartOptions" [data]="doughnutChartData" [labels]="doughnutChartLabels"
@@ -21,15 +27,20 @@
 <div class="row-section" *ngIf="viewMode == 1">
   <div>
     <span class="header-label">Budget</span>
-    <span class="header-value">$ {{ info.budget }}</span>
+    <span class="header-value">{{ info.budget }}</span>
   </div>
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
+    <!-- <span class="header-value">$ {{ info.budget | number: '2.' }}</span>
+  </div>
+  <div>
+    <span class="header-label">Cash Flow</span>
+    <span class="header-value">$ {{ info.cashFlow | number: '2.' }}</span> -->
   </div>
   <div>
     <span class="header-label">Break Even</span>
-    <span class="header-value">{{ info.breakEven }}</span>
+    <span class="header-value">{{ info.breakEven }}% </span>
   </div>
   <app-progress-chart [viewMode]="viewMode"></app-progress-chart>
 </div>
@@ -38,7 +49,8 @@
 <div class="row-section concise" *ngIf="viewMode == 0">
   <div>
     <span class="header-label">Cash Flow</span>
-    <span class="header-value">$ {{ info.cashFlow }}</span>
+    <span class="header-value">{{ info.cashFlow }}</span>
+    <!--    <span class="header-value">$ {{ info.cashFlow | number: '2.' }}</span> -->
   </div>
   <app-bottom-icons [viewMode]="viewMode"></app-bottom-icons>
 </div>

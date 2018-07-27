@@ -71,16 +71,16 @@ export class Insurance_Subpolicy
     Upper_Limit:number=undefined;
     @JsonProperty("Lower_Limit", IntConverter)
     Lower_Limit:number=undefined;
-    @JsonProperty("Price", IntConverter)
-    Price:number=undefined;
+    @JsonProperty("Price_Pct", IntConverter)
+    Price_Pct:number=undefined;
+    @JsonProperty("Yield_Pct", IntConverter)
+    Yield_Pct:number=undefined;
     @JsonProperty("Premium", IntConverter)
     Premium:number=undefined;
-    @JsonProperty("Custom1", IntConverter)
-    Custom1:number=undefined;
-    @JsonProperty("Custom2", IntConverter)
-    Custom2:number=undefined;
-    @JsonProperty("Custom3", IntConverter)
-    Custom3:number=undefined;
+    @JsonProperty("Prot_Factor", IntConverter)
+    Prot_Factor:number=undefined;
+    @JsonProperty("Wind", IntConverter)
+    Wind:number=undefined;
     @JsonProperty("Yield", IntConverter)
     Yield:number=undefined;
     @JsonProperty("Liability", IntConverter)

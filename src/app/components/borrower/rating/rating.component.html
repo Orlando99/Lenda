@@ -1,4 +1,4 @@
-<div class="container bottom width-auto" >
+<div class="container bottom width-auto">
 
   <div class="bottom" *ngIf="data.partOne!=undefined">
     <div class="row">
@@ -7,10 +7,9 @@
           <div class="col cell text-left" [class.font-weight-600]="rowInd===0">{{row.text}}</div>
         </div>
         <div class="col m9">
-          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value"
-            [backgroundGreen]="rowInd === data.partOne.length-1"></app-cell-value>
+          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value" [backgroundGreen]="rowInd === data.partOne.length-1"></app-cell-value>
 
-          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [colorRed]="rowInd===1"></app-cell-value>
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [colorRed]="rowInd===1 && isUnachievedRating(5-i)"></app-cell-value>
 
         </div>
       </ng-container>
@@ -25,11 +24,9 @@
           <div class="cell text-left" [class.background-highlight]="row.hightlightRow">{{row.text}}</div>
         </div>
         <div class="col m9">
-          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value"
-            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value" [backgroundHighlight]="row.hightlightRow"></app-cell-value>
 
-          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [valueType]="row.valueType" 
-            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [valueType]="row.valueType" [backgroundHighlight]="row.hightlightRow"></app-cell-value>
 
         </div>
       </ng-container>
@@ -48,15 +45,22 @@
         </div>
         <div class="col m9">
 
-          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value"
-            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+          <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value" [backgroundHighlight]="row.hightlightRow"></app-cell-value>
 
-          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [valueType]="row.valueType" 
-            [backgroundHighlight]="row.hightlightRow"></app-cell-value>
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [valueType]="row.valueType" [backgroundHighlight]="row.hightlightRow"></app-cell-value>
 
         </div>
       </ng-container>
-
+      <div style="margin-top:5px">
+        <div class="col m2 cell text-left font-weight-600" style="margin-top:15px">
+          Ag-Pro Requested Credit $
+        </div>
+        <div class="input-field col m3">
+          <mat-form-field>
+            <input matInput type="number" [(ngModel)]="agProReqCredit" name="AG_PRO_Requested_Credit" (blur)="updateLocalStorage()">
+          </mat-form-field>
+        </div>
+      </div>
 
     </div>
 

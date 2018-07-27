@@ -13,6 +13,9 @@ export class SubTableComponent implements OnInit {
   @Input('rowTable')
   rowTable : Array<any>;
 
+  @Input('highlightLastRow')
+  highlightLastRow : boolean;
+
   ngOnInit() {
 
     console.log(this.rowTable);

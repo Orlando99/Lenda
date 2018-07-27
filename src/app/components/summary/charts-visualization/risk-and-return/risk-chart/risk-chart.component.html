@@ -3,8 +3,11 @@
       Risk Cushion
     </span>
   <p class="risk-return-value">
-    <span>$ {{ info.riskCushionAmount }}</span>
+    <span>{{ info.riskCushionAmount }}</span>
     <span>{{ info.riskCushionPercent }}%</span>
+      <!-- varun -->
+    <!--    <span>$ {{ info.riskCushionAmount | number: '.0-0' }}</span>
+    <span>{{ info.riskCushionPercent | number: '.1-1' }}%</span> -->
   </p>
 </div>
 <div class="col s6" *ngIf="viewMode!=0">
@@ -12,7 +15,8 @@
       Return
     </span>
   <p class="risk-return-value">
-    {{ info.returnPercent }}%
+    <!-- {{ info.returnPercent | number: '.1-1' }}% -->
+    {{ info.returnPercent}} %
   </p>
 </div>
 
@@ -36,6 +40,7 @@
       Risk Cushion
     </span>
   <span class="risk-return-value">
+    <!-- <span>{{ info.riskCushionPercent | number: '.1-1' }}%</span> -->
     <span>{{ info.riskCushionPercent }}%</span>
   </span>
 </div>
@@ -44,6 +49,7 @@
       Return
     </span>
   <span class="risk-return-value">
-    {{ info.returnPercent }}%
+    <!-- {{ info.returnPercent | number: '.1-1' }}% -->
+    <span>{{ info.riskCushionPercent }}%</span>
   </span>
 </div>

@@ -68,7 +68,7 @@ export class FinancialsComponent implements OnInit {
         
         //1st Current Financial Row
         var currentobj={Financials:'Current',Assets:this.loanMaster.Current_Assets ,Debt:this.loanMaster.Current_Liabilities ,
-        Equity:(this.loanMaster.Current_Assets - this.loanMaster.Current_Liabilities) ,Ratios:(this.loanMaster.Current_Assets / this.loanMaster.Current_Liabilities).toFixed(2),FICO: this.loanMaster.Credit_Score ,Rating: "*".repeat(this.loanMaster.Borrower_Rating || 0)  }
+        Equity:(this.loanMaster.Current_Assets - this.loanMaster.Current_Liabilities) ,Ratios:(this.loanMaster.Current_Assets / this.loanMaster.Current_Liabilities *100).toFixed(1)+ '%',FICO: this.loanMaster.Credit_Score ,Rating: "*".repeat(this.loanMaster.Borrower_Rating || 0)  }
         this.rowData.push(currentobj);
 
         //1st Intermediate Financial Row
@@ -85,9 +85,9 @@ export class FinancialsComponent implements OnInit {
         //Last Aggregate Row
         var Aggregateobj={Financials:'Total Financials',Assets:this.loanMaster.Total_Assets,Debt:this.loanMaster.Total_Liabilities,
         Equity:this.loanMaster.Total_Disc_Net_Worth,
-        Ratios:(this.loanMaster.Total_Liabilities / this.loanMaster.Total_Assets ).toFixed(2)+' % Debt/Equity',
+        Ratios:(this.loanMaster.Total_Liabilities / this.loanMaster.Total_Assets *100 ).toFixed(1)+' % Debt/Equity',
         FICO:"Financials as of",
-        Rating:new Date(this.loanMaster.Borrower_Financials_Date).toLocaleDateString()};
+        Rating:new Date(this.loanMaster.Financials_Date).toLocaleDateString()};
 
         //this.pinnedBottomRowData.push(Aggregateobj);
         this.rowData.push(Aggregateobj);

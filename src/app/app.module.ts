@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -178,6 +178,8 @@ import { MarketingcontractcalculationService } from './Workers/calculations/mark
 import { OptimizercalculationService } from './Workers/calculations/optimizercalculationservice.service';
 import { AphComponent } from './components/insurance/aph/aph.component';
 import { CropunitrecordsComponent } from './components/work-in-progress/cropunitrecords/cropunitrecords.component';
+import { GlobalErrorHandler } from './services/global-error-handler.service';
+import { ToasterService } from './services/toaster.service';
 
 //RECORDS
 import { FarmRecordsComponent } from './components/work-in-progress/farmrecords/farmrecords.component';
@@ -309,7 +311,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor, ChipsListEditor, EmptyEditor]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
@@ -383,7 +385,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     OverallCalculationServiceService,
     LoginService,
     MarketingcontractcalculationService,
-    OptimizercalculationService
+    OptimizercalculationService,
+    ToasterService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

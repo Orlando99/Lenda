@@ -27,6 +27,9 @@ export class SummaryComponent implements OnInit {
     })
     this.getdataforgrid();
   }
+  getCurrentDate(){
+    return new Date();
+  }
   getdataforgrid(){
 
     let obj:any=this.localstorageservice.retrieve(environment.loankey);

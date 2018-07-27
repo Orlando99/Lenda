@@ -47,6 +47,7 @@ export class PoliciesComponent implements OnInit {
         this.loanmodel.InsurancePolicies.forEach(function(newel){
           
          _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
+         debugger
          newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
            element.ActionStatus=3;
          });
@@ -112,12 +113,8 @@ export class PoliciesComponent implements OnInit {
         field: 'Practice'
       },
       {
-        headerName: 'SubPlanType', 
-        field: 'MPCI_Subplan', 
-        cellClass: ['editable-color'], 
-        editable: true, 
-        cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.GetPlanSubType('MPCI')
+        headerName: 'MPCI types',pickfield:'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
         headerName: 'Options', 
@@ -213,14 +210,6 @@ export class PoliciesComponent implements OnInit {
   addNumericColumn(element: string) {
     
     let header=element;
-    if(element.includes("Yield"))
-    {
-       header="Yield_PCT"
-    }
-    if(element.includes("Price"))
-    {
-      header="Price_PCT"
-    }
     this.columnDefs.push({
       headerName: header,pickfield:element,field: element, editable: true,
       cellEditorSelector: function (params) {
@@ -257,22 +246,22 @@ export class PoliciesComponent implements OnInit {
     let rendervalues = [];
     if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Price_HMAX','Premium_HMAX']
+      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Deduct_HMAX','Premium_HMAX','Price_Pct_HMAX']
       //HMAX
     }
     if (value == "SCO") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Yield_SCO','Premium_SCO']
+      rendervalues = ['Upper_Limit_SCO','Yield_SCO','Premium_SCO']
       //HMAX
     }
     if (value == "STAX") {
-      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Premium_STAX']
+      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Prot_Factor_STAX','Yield_Pct_STAX','Premium_STAX']
     }
     if (value == "RAMP") {
-      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_RAMP', 'Liability_RAMP','Premium_RAMP']
+      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_Pct_RAMP', 'Liability_RAMP','Premium_RAMP']
     }
     if (value == "ICE") {
-      rendervalues = ['Yield_ICE', 'Price_ICE','Premium_ICE']
+      rendervalues = ['Upper_Level_ICE','Lower_Level_ICE','Premium_ICE','Deduct_ICE']
     }
     if (value == "ABC") {
       rendervalues = ['Upper_Limit_ABC', 'Lower_Limit_ABC','Premium_ABC']
@@ -281,7 +270,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['FCMC_PCI','Premium_PCI']
     }
     if (value == "CROPHAIL") {
-      rendervalues = ['Upper_Limit_CROPHAIL', 'Deduct_CROPHAIL', 'Price_CROPHAIL', 'Liability_CROPHAIL','Premium_CROPHAIL']
+      rendervalues = ['Upper_Limit_CROPHAIL','Price_Pct_CROPHAIL', 'Liability_CROPHAIL', 'Deduct_CROPHAIL','Premium_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
@@ -314,18 +303,15 @@ export class PoliciesComponent implements OnInit {
     if (type == "PCI") {
       return { values: [] };
     }
+    if (type == "CROPHAIL") {
+      return { values: ['Basic', 'Prod Plan', 'Comp Plan'] };
+    }
   }
 
   
-  GetPlanSubType(type: string): any {
+  GetMPCIPlanSubType(type: string): any {
     if (type == "MPCI") {
       return { values: ['CAT', 'YP', 'RP-HPE', 'RP', 'ARH'] };
-    }
-    if (type == "HMAX") {
-      return { values: ['STANDARD', 'X1', 'MAXRP'] };
-    }
-    if (type == "STAX") {
-      return { values: [] };
     }
   }
   getAIPs(): any {
@@ -530,10 +516,11 @@ export class PoliciesComponent implements OnInit {
 
   rowvaluechanged($event) {
     
+    var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
        
-      var items = $event.data.SecInsurance.toString().split(",");
+      
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
@@ -573,18 +560,19 @@ export class PoliciesComponent implements OnInit {
       
       });
        
-      let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
-      mainobj.Subpolicies.forEach(eelement => {
-        if(items.find(p=>p==eelement.Ins_Type)==undefined){
-           eelement.ActionStatus=3;
-        } 
-      });
+     
+      
       //Delete unwanted Column here
-      
-      
+     
       
       //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
+    let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+    mainobj.Subpolicies.forEach(eelement => {
+      if(items.find(p=>p==eelement.Ins_Type)==undefined){
+         eelement.ActionStatus=3;
+      }
+    });
     //get the local loan object synced
     this.deleteunwantedcolumn();
     this.gridApi.setColumnDefs(this.columnDefs);
