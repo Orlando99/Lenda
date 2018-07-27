@@ -1,10 +1,80 @@
 <div class="basic-container">
-    <app-buyer-association></app-buyer-association>
-    <app-fsa></app-fsa>
-     <app-livestock></app-livestock>
-    <app-storedcrop></app-storedcrop>
-    <app-equipment></app-equipment>
-    <app-realestate></app-realestate>
-    <app-others></app-others>
-    <app-marketing-contracts></app-marketing-contracts>
+  <div class="page-header">
+    <span class="text">Collateral</span>
+    <mat-icon mat-list-icon class="corner-right">
+      <i class="flaticon material-icons" mat-button [matMenuTriggerFor]="settings">
+      settings
+    </i>
+      <mat-menu #settings="matMenu" class="collateral-context-menu">
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>LienHolder</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>Buyer</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>Guarantor</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>Collateral Data</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>FSA</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" />
+          <span>Livestock</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" />
+          <span>Stored Crop</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" />
+          <span>Equipment</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" />
+          <span>Real Estate</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" />
+          <span>Other</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>Contacts</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()">
+          <input type="checkbox" checked="checked"  />
+          <span>Cross Collateral</span>
+        </label>
+      </mat-menu>
+    </mat-icon>
+  </div>
+  <br />
+  <app-buyer-association></app-buyer-association>
+  <app-fsa></app-fsa>
+  <app-livestock></app-livestock>
+  <app-storedcrop></app-storedcrop>
+  <app-equipment></app-equipment>
+  <app-realestate></app-realestate>
+  <app-others></app-others>
+  <app-marketing-contracts></app-marketing-contracts>
 </div>

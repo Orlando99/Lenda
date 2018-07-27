@@ -90,11 +90,6 @@ body .mat-expansion-panel-header {
             -webkit-transform: scaleX(1);
             transform: scaleX(1);
         }
-
-        .mat-expansion-panel-header-title,
-        .mat-expansion-indicator::after {
-            color: $nav-hover-color;
-        }
     }
 
     .mat-expansion-panel-header-title {
@@ -106,7 +101,7 @@ body .mat-expansion-panel-header {
             height: 4px;
             bottom: -2px;
             left: 0;
-            background-color: $nav-hover-color;
+            background-color: $primary-color;
             visibility: hidden;
             -webkit-transform: scaleX(0);
             transform: scaleX(0);
@@ -215,3 +210,20 @@ body .mat-expansion-panel-header {
 }
 
 //====
+
+// Context Menu override
+// ==
+// Collateral Page
+
+.collateral-context-menu .mat-menu-content {
+  padding: 5px 10px !important;
+  label {
+    display: block;
+    font-size: $base-font-size;
+    padding: 2px 0;
+    span {
+      margin-left: 5px;
+    }
+  }
+}
+// ====
