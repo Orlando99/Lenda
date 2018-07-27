@@ -4,3 +4,19 @@ table {
 tfoot{
     background: lightgreen
 }
+td{
+    padding: 5px;
+}
+th{
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+}
+.background-highlight{
+    background-color: #66afc9;
+    font-weight: 600;
+  }
+
+  tr td:not(:first-child) {
+    text-align: right;
+}

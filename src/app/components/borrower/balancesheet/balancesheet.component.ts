@@ -109,7 +109,7 @@ export class BalancesheetComponent implements OnInit {
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
-      this.Financials_Date = this.localloanobject.LoanMaster[0].Financials_Date;
+      this.Financials_Date = this.localloanobject.LoanMaster[0].Financials_Date || '';
       let rows = this.prepareviewmodel();
        
       switch (this.localloanobject.srccomponentedit) {
@@ -144,7 +144,7 @@ export class BalancesheetComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;
-      this.Financials_Date = this.localloanobject.LoanMaster[0].Financials_Date;
+      this.Financials_Date = this.formatDate(this.localloanobject.LoanMaster[0].Financials_Date);
     }
     this.rowData = this.prepareviewmodel();
    
@@ -225,12 +225,20 @@ export class BalancesheetComponent implements OnInit {
   //   });
   // }
   updateLocalStorage(){
-    this.localloanobject.LoanMaster[0].Financials_Date = this.Financials_Date;
-    this.localloanobject.Borrower.Borrower_CPA_Financials = this.Financials_Date;
+    this.localloanobject.LoanMaster[0].Financials_Date = this.formatDate(this.Financials_Date);
+    this.localloanobject.Borrower.Borrower_CPA_Financials = this.formatDate(this.Financials_Date);
 
     this.localloanobject.LoanMaster[0].CPA_Prepared_Financials = this.CPA_Prepared_Financials;
     this.localloanobject.Borrower.CPA_Prepared_Financials = this.CPA_Prepared_Financials;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+  }
+  formatDate(strDate) {
+    if (strDate) {
+      var date = new Date(strDate);
+      return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+    } else {
+      return '';
+    }
   }
   synctoDb() {
     this.gridApi.showLoadingOverlay();	
