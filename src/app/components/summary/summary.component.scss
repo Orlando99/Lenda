@@ -7,3 +7,28 @@ p:nth-child(2) {
 p:nth-child(3) {
     font-size:11px
 }
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align: left;
+
+}
+.text-center{
+    text-align: center;
+}
+
+.header-color{
+    color: green;
+}
+.block{
+    display: block;
+}
+.block-header{
+    font-weight: 600;
+    margin-top: 5px;
+}
+.clear-bottom-margin{
+    margin-bottom: 0px;
+}
+

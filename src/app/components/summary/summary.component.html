@@ -11,8 +11,124 @@
         </mat-expansion-panel-header>
         <!-- <app-spiner *ngIf="loading"></app-spiner> -->
         <div *ngIf="allDataFetched" class="container">
-          <div class="row">
-            <div class="col s3 no-padding">
+          <div class="section clear-bottom-margin">
+            <div class="row header-color">
+              <div class="col m2 text-left">{{ getCurrentDate() | date:'MM/dd/yyyy HH:mm' }} </div>
+              <div class="col m8 text-center" style="font-size: 1.2em">Ag Resource Management</div>
+              <div class="col m2 text-right">{{localborrowerobject.Crop_Year + ' Crop Loan' }}</div>
+            </div>
+            <div class="row header-color">
+                <div class="col m2 text-left">Cash Basis </div>
+                <div class="col m8 text-center" style="font-size: 1.8em">Crop Loan Summary</div>
+                <div class="col m2 text-right">{{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_MI}} {{localborrowerobject.Borrower_Last_Name}}</div>
+            </div>
+            <div class="row clear-bottom-margin">
+              <div class="col m3">
+                <div class="block-header"> Applicant </div>
+                <span class="block"> {{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_MI}} {{localborrowerobject.Borrower_Last_Name}} </span>
+                <span class="block">{{ localborrowerobject.Borrower_Address}}</span>
+                <span class="block">{{localborrowerobject.Borrower_City}} {{ localborrowerobject.Borrower_Zip}}</span>
+                <span class="block">{{ localborrowerobject.Borrower_Phone}}</span>
+                <span class="block">{{ localborrowerobject.Borrower_Email || 'john@gmail.com'}}</span>
+                
+              </div>
+              <div class="col m3">
+                <div class="block-header"> Co-Applicant </div>
+                <span class="block"> {{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_MI}} {{localborrowerobject.Borrower_Last_Name}} </span>
+                <span class="block">{{ localborrowerobject.Borrower_Address}}</span>
+                <span class="block">{{localborrowerobject.Borrower_City}} {{ localborrowerobject.Borrower_Zip}}</span>
+                <span class="block">{{ localborrowerobject.Borrower_Phone}}</span>
+                <span class="block">{{ localborrowerobject.Borrower_Email || 'john@gmail.com'}}</span>
+                
+              </div>
+              <div class="col m2">
+                <div class="block">
+                  <div class="block-header">
+                      Loan Officer
+                  </div>
+                  <span class="block">
+                      Kent Williams 
+                  </span>
+                </div>
+                <div class="block">
+                    <div class="block-header">
+                        Application Date 
+                    </div>
+                    <span class="block">
+                        {{localborrowerobject.Application_Date | date : 'MM/dd/yyyy' }}
+                    </span>
+                </div>
+                <div class="block">
+                    <div class="block-header">
+                        ARM Location
+                    </div>
+                    <span class="block">
+                        Kent Williams 
+                    </span>
+                  </div>
+                <div class="block">
+                    <div class="block-header">
+                        Loan Type
+                    </div>
+                    <span class="block">
+                        {{ localborrowerobject.Loan_Type_Code || 'Ag-Input (CPS)'}}
+                    </span>
+                  </div>
+              </div>
+              <div class="col m2">
+                  <div class="block">
+                      <div class="block-header">
+                          ARM Commitment
+                      </div>
+                      <span class="block text-center">
+                          {{ localborrowerobject.ARM_Commitment | currency}}
+                      </span>
+                    </div>
+                    <div class="block">
+                        <div class="block-header">
+                            Dist Commitment 
+                        </div>
+                        <span class="block text-center">
+                            {{ localborrowerobject.Dist_Commitment | currency}}
+                        </span>
+                    </div>
+              </div>
+              <div class="col m2">
+                  <div class="block">
+                      <div class="block-header">
+                          Interest Rate
+                      </div>
+                      <span class="block">
+                          {{ localborrowerobject.Rate_Percent}} %
+                      </span>
+                    </div>
+                    <div class="block">
+                        <div class="block-header">
+                            Loan Orig. Fee
+                        </div>
+                        <span class="block">
+                            {{ localborrowerobject.Orgination_Fee_Percent}} %
+                        </span>
+                    </div>
+                  <div class="block">
+                      <div class="block-header">
+                          Loan Srvc. Fee
+                      </div>
+                      <span class="block">
+                          {{ localborrowerobject.Service_Fee_Percent}} %
+                      </span>
+                    </div>
+                  <div class="block">
+                      <div class="block-header">
+                          Maturity Date
+                      </div>
+                      <span class="block">
+                          {{ localborrowerobject.Maturity_Date | date : 'MM/dd/yyyy'}}
+                      </span>
+                  </div>
+              </div>
+            </div>
+            <!-- <div class="col s3 no-padding">
               <div class="section">
                 <h4>Applicant</h4>
                 <p>{{localborrowerobject.Borrower_First_Name}} {{localborrowerobject.Borrower_Last_Name}} <br><br> {{localborrowerobject.Borrower_Address}}
@@ -68,11 +184,11 @@
                 <p> {{localborrowerobject.Maturity_Date | date:'MM/dd/yyyy'}}
                 </p>
               </div>
-            </div>
+            </div> -->
 
           </div>
           <h3>LOAN COMMENT</h3>
-          <div class="row">
+          <div class="row" style="margin-bottom: 0px">
             <p>type comment here. loan comment editable until recommended. committee comment default is "urgent" but can be
               changed to "passive" at any time. analyst comment default is "passive" but can be changed to "urgent" at any
               time. any committee comment can be checked as "watchlist". watchlist comments automatically add management

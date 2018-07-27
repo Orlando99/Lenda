@@ -84,7 +84,7 @@ export class CommitmentChartComponent implements OnInit {
 
   getCommitment(loanMaster) {
     this.info.armCommitment = loanMaster.ARM_Commitment ? PriceFormatter(loanMaster.ARM_Commitment) : '$ 0';
-    this.info.distCommitment = loanMaster.Dist_Commitment ? PriceFormatter(loanMaster.ARM_Commitment) : '$ 0';
+    this.info.distCommitment = loanMaster.Dist_Commitment ? PriceFormatter(loanMaster.Dist_Commitment) : '$ 0';
     let totalCmt = loanMaster.ARM_Commitment + loanMaster.Dist_Commitment;
     this.info.totalCommitment = totalCmt ? PriceFormatter(totalCmt) : '$ 0';
     // TODO: Get excessin value from local storage

@@ -334,7 +334,7 @@ export class LoancropunitcalculationworkerService {
 
         //Insurance Value
         try {
-          debugger
+          
           element.Ins_Value = element.Ins_Value + element.FC_Icevalue + element.FC_Hmaxvalue +element.FC_Crophailvalue +element.FC_Scovalue +element.FC_Staxvalue + element.FC_Abcvalue + element.FC_Rampvalue+element.FC_Pcivalue;
         }
         catch{

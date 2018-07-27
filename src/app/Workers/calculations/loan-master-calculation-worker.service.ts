@@ -28,8 +28,8 @@ export class LoanMasterCalculationWorkerService {
     currentRatio: [1.50, 1.00, '>'],
     workingCapital: [0.50, 0.20, '>'],
     debtByAssets: [30.0, 70.0, '<'],
-    debtByEquity: [70.0, 30.0, '>'],
-    equityByAssets: [42.0, 230.0, '<'],
+    debtByEquity: [42.0, 230.0, '<'],
+    equityByAssets: [70.0, 30.0, '>'],
     ROA: [12.0, 3.0, '>'],
     operatingProfit: [25.0, 10.0, '>'],
     operatingByExpRev: [75.0, 85.0, '<'],
@@ -44,13 +44,13 @@ export class LoanMasterCalculationWorkerService {
 
     if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
     let loanMaster = loanObject.LoanMaster[0];
-    loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
-    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns || 1;
-    loanObject.Borrower.Borrower_CPA_financials = loanObject.Borrower.Borrower_CPA_financials || 1;
+    //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
+    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns ||1;
+    //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
     loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
     
     let FICOScore = loanMaster.Credit_Score;
-    let CPAFiancial = loanObject.Borrower.Borrower_CPA_financials ? 'Yes' : 'No';
+    let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
     let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
     let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
     let judgement = loanMaster.Judgement ? 'Yes' : 'No';
@@ -129,7 +129,8 @@ export class LoanMasterCalculationWorkerService {
     let loanMaster = loanObject.LoanMaster[0];
     let temp = (loanMaster.Net_Market_Value_Crops || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0 )+ (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return temp;
+      //temp = parseFloat(temp.toFixed(2));
+    return Math.round(temp);
 
   }
 
@@ -143,7 +144,8 @@ export class LoanMasterCalculationWorkerService {
     let loanMaster = loanObject.LoanMaster[0];
     let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return tValue;
+    //tValue = parseFloat(tValue.toFixed(2));
+    return Math.round(tValue);
   }
 
   getInsuranceThresholdStaticValue(loanObject: loan_model) {
@@ -182,28 +184,29 @@ export class LoanMasterCalculationWorkerService {
 
 
   getRating(ratio: number, params: Array<any>) {
-    let operator = params[2];
+    //let operator = params[2];
     let stable = params[1];
     let strong = params[0];
+    let state = this.getState(ratio,params);
     let possible = this.getPossible(ratio, params);
 
-    if (operator === '>') {
-      return (ratio - stable) / (strong - stable) * possible;
+    if (state == STATE.WEAK) {
+      return ((ratio - stable) / (strong - stable) * possible)*100;
     } else {
-      return (stable - ratio) / (stable - strong) * possible;
+      return ((stable - ratio) / (stable - strong) * possible)*100;
     }
   }
 
 
   getPossible(ratio: number, params: Array<any>){
-    let operator = params[2];
-    let stable = params[1];
-    let strong = params[0];
-
-    if (operator === '>') {
-      return ratio < stable ? -1 : 1;
+    // let operator = params[2];
+     let stable = params[1];
+     let strong = params[0];
+    let state = this.getState(ratio,params);
+    if (state === STATE.WEAK) {
+      return 1;
     } else {
-      return ratio > stable? -1 : 1;
+      return 1;
     }
   }
 

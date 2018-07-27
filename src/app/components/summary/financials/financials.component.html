@@ -24,7 +24,7 @@
   
               <tbody>
                 
-                <tr *ngFor="let row of rowData">
+                <tr *ngFor="let row of rowData, let rowIndex=index" [ngClass]="rowIndex == rowData.length-1 ? 'background-highlight':''">
                   <td class="title">{{row.Financials}}</td>
                   <td>{{priceFormat(row.Assets)}}</td>
                   <td>{{priceFormat(row.Debt)}}</td>
