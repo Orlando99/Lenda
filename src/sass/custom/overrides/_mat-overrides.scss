@@ -90,6 +90,11 @@ body .mat-expansion-panel-header {
             -webkit-transform: scaleX(1);
             transform: scaleX(1);
         }
+
+        .mat-expansion-panel-header-title,
+        .mat-expansion-indicator::after {
+            color: $nav-hover-color;
+        }
     }
 
     .mat-expansion-panel-header-title {
@@ -101,7 +106,7 @@ body .mat-expansion-panel-header {
             height: 4px;
             bottom: -2px;
             left: 0;
-            background-color: $primary-color;
+            background-color: $nav-hover-color;
             visibility: hidden;
             -webkit-transform: scaleX(0);
             transform: scaleX(0);
