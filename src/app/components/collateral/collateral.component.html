@@ -3,78 +3,78 @@
     <span class="text">Collateral</span>
     <mat-icon mat-list-icon class="corner-right">
       <i class="flaticon material-icons" mat-button [matMenuTriggerFor]="settings">
-      settings
-    </i>
+        settings
+      </i>
       <mat-menu #settings="matMenu" class="collateral-context-menu">
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.lineHolder.isDisabled" [checked]="pageSettings.lineHolder.isActive" (change)="pageSettings.lineHolder.isActive = !pageSettings.lineHolder.isActive"  />
           <span>LienHolder</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.buyer.isDisabled" [checked]="pageSettings.buyer.isActive" (change)="pageSettings.buyer.isActive = !pageSettings.buyer.isActive"  />
           <span>Buyer</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.guarantor.isDisabled" [checked]="pageSettings.guarantor.isActive" (change)="pageSettings.guarantor.isActive = !pageSettings.guarantor.isActive"  />
           <span>Guarantor</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.guarantor.isDisabled" [checked]="pageSettings.guarantor.isActive" (change)="pageSettings.guarantor.isActive = !pageSettings.guarantor.isActive"  />
           <span>Collateral Data</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.fsa.isDisabled" [checked]="pageSettings.fsa.isActive" (change)="pageSettings.fsa.isActive = !pageSettings.fsa.isActive"  />
           <span>FSA</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" />
+          <input type="checkbox" [disabled]="pageSettings.livestock.isDisabled" [checked]="pageSettings.livestock.isActive" (change)="pageSettings.livestock.isActive = !pageSettings.livestock.isActive" />
           <span>Livestock</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" />
+          <input type="checkbox" [disabled]="pageSettings.storedCrop.isDisabled" [checked]="pageSettings.storedCrop.isActive" (change)="pageSettings.storedCrop.isActive = !pageSettings.storedCrop.isActive" />
           <span>Stored Crop</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" />
+          <input type="checkbox" [disabled]="pageSettings.equipment.isDisabled" [checked]="pageSettings.equipment.isActive" (change)="pageSettings.equipment.isActive = !pageSettings.equipment.isActive" />
           <span>Equipment</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" />
+          <input type="checkbox" [disabled]="pageSettings.realestate.isDisabled" [checked]="pageSettings.realestate.isActive" (change)="pageSettings.realestate.isActive = !pageSettings.realestate.isActive" />
           <span>Real Estate</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" />
+          <input type="checkbox" [disabled]="pageSettings.other.isDisabled" [checked]="pageSettings.other.isActive" (change)="pageSettings.other.isActive = !pageSettings.other.isActive" />
           <span>Other</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.contacts.isDisabled" [checked]="pageSettings.contacts.isActive" (change)="pageSettings.contacts.isActive = !pageSettings.contacts.isActive"  />
           <span>Contacts</span>
         </label>
 
         <label (click)="$event.stopPropagation()">
-          <input type="checkbox" checked="checked"  />
+          <input type="checkbox" [disabled]="pageSettings.crossCollateral.isDisabled" [checked]="pageSettings.crossCollateral.isActive" (change)="pageSettings.crossCollateral.isActive = !pageSettings.crossCollateral.isActive"  />
           <span>Cross Collateral</span>
         </label>
       </mat-menu>
     </mat-icon>
   </div>
   <br />
-  <app-buyer-association></app-buyer-association>
-  <app-fsa></app-fsa>
-  <app-livestock></app-livestock>
-  <app-storedcrop></app-storedcrop>
-  <app-equipment></app-equipment>
-  <app-realestate></app-realestate>
-  <app-others></app-others>
+  <app-buyer-association *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
+  <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
+  <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
+  <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
+  <app-equipment *ngIf="pageSettings.equipment.isActive"></app-equipment>
+  <app-realestate *ngIf="pageSettings.realestate.isActive"></app-realestate>
+  <app-others *ngIf="pageSettings.other.isActive"></app-others>
   <app-marketing-contracts></app-marketing-contracts>
 </div>
