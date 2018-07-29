@@ -10,12 +10,15 @@ export class RangebarComponent implements OnInit {
   @Input() strong;
   @Input() stable;
   @Input() weak;
-  @Input() value;
+  @Input() value = 0;
+  public valuePercent;
   constructor() { }
 
   ngOnInit() {
+    this.calculateValuePercentage();
   }
 
-  ngAfterViewInit() {
+  calculateValuePercentage() {
+    this.valuePercent = `${this.value * 100 / Math.abs(this.strong - this.weak)}%`;
   }
 }
