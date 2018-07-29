@@ -21,3 +21,19 @@ body {
 a.disabled {
   text-decoration: unset !important;
 }
+
+.svg-container {
+	display: inline-block;
+	position: relative;
+	width: 100% !important;
+	padding-bottom: 100% !important;
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+.svg-content {
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	left: 10px;
+}
