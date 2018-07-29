@@ -189,6 +189,7 @@ import { LoanMarketingRecordsComponent } from './components/work-in-progress/loa
 import { SyncStatusComponent } from './components/work-in-progress/syncstatus/syncstatus.component';
 import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
 import { CommitteeComponent } from './components/committee/committee.component';
+import { RangebarComponent } from './ui-components/rangebar/rangebar.component';
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
@@ -268,7 +269,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
     AphComponent,
-    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent
+    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent, RangebarComponent
 
   ],
   imports: [

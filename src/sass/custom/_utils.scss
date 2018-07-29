@@ -23,8 +23,16 @@
   padding: 10px;
 }
 
+.p-15 {
+  padding: 15px;
+}
+
 .p-tb-10 {
   padding: 10px 0;
+}
+
+.p-lr-10 {
+  padding: 0 10px;
 }
 
 .w-100 {
@@ -69,6 +77,10 @@
 // Layout helpers
 .flex {
   display: flex;
+}
+
+.flex-center {
+  align-content: center;
 }
 
 // Custom style for flat style input

@@ -1,0 +1,22 @@
+@import "./../../../sass/theme/variables";
+
+.rangebar {
+  padding: 0 20px;
+  transform: translate(0, -40px);
+}
+
+.text {
+  transform: translate(-15px, -20px);
+  font-size: $base-font-size;
+  font-weight: bold;
+  fill: $primary-color;
+}
+
+.text-val {
+  transform: translate(-6px, 20px);
+  font-size: $font-size-sm;
+}
+
+.main-value {
+  transform: translate(-4px, -10px);
+}
