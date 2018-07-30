@@ -1,31 +1,26 @@
 import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
+import { SvgTooltipService } from './../../ui-components/svg-tooltip/svg-tooltip.service';
 declare var $;
 
 @Component({
   selector: 'app-flowchart',
   templateUrl: './flowchart.component.html',
-  styleUrls: ['./flowchart.component.scss']
+  styleUrls: ['./flowchart.component.scss'],
+  providers: [SvgTooltipService]
 })
 export class FlowchartComponent implements OnInit {
-  private textElements = [];
-  private lineBreaks = [];
-  private isDirty;
   constructor(
-    private renderer: Renderer2,
     private localstorage: LocalStorageService,
-    private elRef: ElementRef) {
+    public elRef: ElementRef,
+    private svgTooltipService: SvgTooltipService) {
     this.localstorage.observe(environment.loankey).subscribe(res => {
       if (res != undefined && res != null) {
         var data = this.localstorage.retrieve(environment.loankey).DashboardStats;
         this.buildChart(data);
       }
     })
-  }
-
-  ngAfterViewInit() {
-    this.initTooltip();
   }
 
   ngOnInit() {
@@ -199,86 +194,14 @@ export class FlowchartComponent implements OnInit {
     }, 2000);
   }
 
+  ngAfterViewInit() {
+    this.svgTooltipService.initTooltip(this.elRef.nativeElement.querySelectorAll('.icon'));
+  }
+
   buildChart(data) {
     console.log(data.length);
     for (var i = 0; i < data.length; i++) {
       document.querySelector('#' + data[i].title + '> #number > text').textContent = data[i].number;
-      (document.querySelector('#' + data[i].title + '> #icon') as any).style.fill = data[i].color;
-    }
-  }
-
-  initTooltip() {
-    let icons = this.elRef.nativeElement.querySelectorAll('.icon');
-    for (let icon of icons) {
-      // Mouseenter event for tooltip
-      icon.addEventListener('mouseover', (event) => {
-        this.showTooltipText(event);
-      });
-
-      // Mouseleave event for tooltip
-      icon.addEventListener('mouseleave', (event) => {
-        this.removeTooltipText(event);
-      });
-    }
-  }
-
-  showTooltipText(event) {
-    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
-    let hoverNodeId = event.target.parentNode.id;
-    // If it is number then, find the parent
-    if (hoverNodeId === 'number') {
-      hoverNodeId = event.target.parentNode.parentNode.id;
-    }
-    let texts = this.getTooltipText(hoverNodeId);
-    this.addTooltipNodes(tooltip, texts, event);
-  }
-
-  removeTooltipText(event) {
-    let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
-    tooltip.querySelectorAll('div').forEach(function (node) {
-      node.parentNode.removeChild(node);
-    });
-    this.renderer.removeClass(tooltip, 'active');
-    this.isDirty = false;
-  }
-
-  getTooltipText(hoverNodeId) {
-    // Hardcoded tooltip text for demo
-    // TODO: Replace with dynamic logic once API is implemented
-    if (hoverNodeId.indexOf('farmer') !== -1) {
-      return ['Farmer 1 - 50', 'Farmer 2 - 160', 'Farmer 3 - 200'];
-    } else if (hoverNodeId.indexOf('borrower') !== -1) {
-      return ['Borrower 1 - 30', 'Borrower 2 - 60', 'Borrower 3 - 100'];
-    } else if (hoverNodeId.indexOf('tree') !== -1) {
-      return ['Crop 1 - 30', 'Crop 2 - 60', 'Crop 3 - 100', 'Crop 4 - 300'];
-    } else {
-      return ['Misc 1 - 30', 'Misc 2 - 60', 'Misc 3 - 100'];
-    }
-  }
-
-  addTooltipNodes(tooltip, texts, event) {
-    if (!this.isDirty) {
-      this.textElements = [];
-      this.lineBreaks = [];
-      let parentElement = this.renderer.createElement('div');
-      this.renderer.addClass(tooltip, 'active');
-      this.renderer.setStyle(tooltip, 'left', event.pageX + 'px');
-      for (let item of texts) {
-        let text = this.renderer.createText(item);
-        let lineBreak = this.renderer.createElement('br');
-        this.textElements.push(text);
-
-        this.lineBreaks.push(lineBreak);
-        this.renderer.appendChild(parentElement, text);
-        this.renderer.appendChild(
-          parentElement,
-          lineBreak
-        );
-        this.renderer.appendChild(tooltip, parentElement);
-        this.renderer.setStyle(tooltip, 'height', 30 * this.textElements.length + 'px');
-        this.renderer.setStyle(tooltip, 'top', event.pageY - (50 + 20 * this.textElements.length) + 'px');
-      }
-      this.isDirty = true;
     }
   }
 }
