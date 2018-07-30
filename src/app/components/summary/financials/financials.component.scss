@@ -7,3 +7,16 @@ tfoot{
 td:not(.title){
     text-align: right;
 }
+td{
+    padding: 5px;
+}
+th{
+    padding: 5px;
+    text-transform: uppercase;
+    text-align: center;
+}
+.background-highlight{
+    background-color: #dce6f1;
+    font-weight: 600;
+  }
+

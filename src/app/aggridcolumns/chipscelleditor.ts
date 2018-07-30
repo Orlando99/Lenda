@@ -1,82 +1,70 @@
-import {AfterViewInit, Component, ViewChild, ViewContainerRef, ElementRef, ViewChildren} from "@angular/core";
+import {AfterViewInit, Component, ViewChild, ViewContainerRef, ElementRef, ViewChildren, HostListener} from "@angular/core";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {ICellEditorAngularComp} from "ag-grid-angular";
 import { FormControl } from "@angular/forms";
 import { MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
+import { NgSelectComponent } from "../../../node_modules/@ng-select/ng-select";
 
 @Component({
     selector: 'chipseditor-cell',
-    template: `
-    <angular2-multiselect [data]="dropdownList" [(ngModel)]="selectedItems" 
-    [settings]="dropdownSettings" 
-    (onSelect)="onItemSelect($event)" 
-    (onDeSelect)="OnItemDeSelect($event)"
-    (onSelectAll)="onSelectAll($event)"
-    (onDeSelectAll)="onDeSelectAll($event)">
-</angular2-multiselect>
-
-    `,
-    styles:[`
-    `]
+    templateUrl: './chipscelleditor.html',
+    styleUrls: ['./chipscelleditor.scss']
 })
 export class ChipsListEditor implements ICellEditorAngularComp {
-  dropdownList = [];
-  selectedItems = [];
-  dropdownSettings = {};
-  context:any;
-  params: any;
-  ngOnInit(){
-      // this.dropdownList = [
-      //                     ];
-      // this.selectedItems = [
-      //                     ];
-      this.dropdownSettings = { 
-                                singleSelection: false, 
-                                text:"Select Options",
-                                selectAllText:'Select All',
-                                unSelectAllText:'UnSelect All',
-                                enableSearchFilter: true,
-                                classes:"myclass custom-class"
-                              };            
-  }
-  onItemSelect(item:any){
-    //   this.context.chipitemsselected(this.selectedItems);
-  }
-  OnItemDeSelect(item:any){
-      console.log(item);
-     // this.context.chipitemsselected(this.selectedItems);
-  }
-  onSelectAll(items: any){
-      console.log(items);
-      //this.context.chipitemsselected(this.selectedItems);
-  }
-  onDeSelectAll(items: any){
-      console.log(items);
-      //this.context.chipitemsselected(this.selectedItems);
-  }
+    dropdownList = [];
+    selectedItems = [];
+    context:any;
+    params: any;
+    previousWidth = 0;
+    @ViewChild('ngSelect') selectEL: NgSelectComponent;
+
+    ngOnInit(){
+        window.addEventListener('scroll', this.scroll, true);
+    }
+    ngOnDestroy() {
+        window.removeEventListener('scroll', this.scroll, true);
+    }
+
+    ngAfterViewInit() {
+        // setTimeout(() => {
+            this.selectEL.focus();
+            this.selectEL.open();
+        // })
+    }
+
+    scroll = ():void => {
+    };
+
 
     agInit(params: any): void {
-       
+        params.eGridCell.style.height = "auto";
+        this.previousWidth = params.eGridCell.style.width;
+        console.log(parseInt(this.previousWidth + ""));
+        if ( parseInt(this.previousWidth + "") < 300) params.eGridCell.style.width = "300px";
         this.params = params;
-        this.context=this.params.context.componentParent;
-        this.dropdownList=params.items;
-        let values=params.value.toString().split(',');
-        values.forEach(element => {
-            let item=this.dropdownList.find(p=>p.itemName==element);
-            if(item!=undefined){
-                this.selectedItems.push(item);
-            }
-        });
+        this.context = this.params.context.componentParent;
+        this.dropdownList = params.items;
+        if (params.value !="") this.selectedItems=params.value.toString().split(',');
     }
 
     getValue(): any {
-       
-       return this.selectedItems.map(p=>p.itemName).join(",");
+        this.params.eGridCell.style.width = this.previousWidth;
+
+        if (this.selectedItems.length == 0) return "";
+        return this.selectedItems.join(",");
     }
 
     isPopup(): boolean {
-        return true;
+        return false;
+    }
+
+    changeAll(event){
+        if (event.srcElement.checked) {
+            this.selectedItems = this.dropdownList.map(p=>p.itemName);
+        } else {
+            this.selectedItems = [];
+        }
     }
 }

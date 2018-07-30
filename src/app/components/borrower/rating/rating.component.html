@@ -9,7 +9,7 @@
         <div class="col m9">
           <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [value]="row.value" [backgroundGreen]="rowInd === data.partOne.length-1"></app-cell-value>
 
-          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [colorRed]="rowInd===1"></app-cell-value>
+          <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="val" [colorRed]="rowInd===1 && isUnachievedRating(5-i)"></app-cell-value>
 
         </div>
       </ng-container>

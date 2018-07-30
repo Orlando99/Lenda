@@ -196,6 +196,8 @@ export class borrower_model
         FC_Borrower_Intermediate_Discvalue:number=0;
         FC_Borrower_Fixed_Discvalue:number=0;
         FC_Borrower_Total_Discvalue:number=0;
+        Borrower_CPA_Financials : string;
+        CPA_Prepared_Financials:boolean;
         App_Logpriority:Logpriority=Logpriority.VeryHigh;
 
     }

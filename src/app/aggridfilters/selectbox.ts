@@ -8,11 +8,14 @@ import { isNumber } from "util";
     selector: 'editor-cell',
     template: `
     <div fxLayout="row" class="grid-actions">
-    <select [ngStyle]="style" (change)="change($event.target.value)" [value]="selectedValue">
-      <option *ngFor="let value of values" [value]="value.key">{{value.value}}</option>
-  </select>
-  </div>
-    `
+        <select [ngStyle]="style" (change)="change($event.target.value)" [value]="selectedValue">
+        <option *ngFor="let value of values" [value]="value.key">{{value.value}}</option>
+    </select>
+    </div>
+    `,
+    styles:[`
+        position: absolute;
+    `]
 })
 export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     private params: any;
@@ -52,7 +55,7 @@ export class SelectEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     isPopup(): boolean {
-        return true;
+        return false;
     }
 
     change(event:any){

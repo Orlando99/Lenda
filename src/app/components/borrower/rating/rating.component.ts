@@ -157,7 +157,7 @@ export class RatingComponent implements OnInit {
     let borrowerRatingValues = new BorrowerRatingParams();
     borrowerRatingValues.borrowerRating = "*".repeat(loanMaster.Borrower_Rating || 0);
     borrowerRatingValues.FICOScore = loanMaster.Credit_Score;
-    borrowerRatingValues.CPAFiancial = loanObject.Borrower.Borrower_CPA_financials ? 'Yes' : 'No';
+    borrowerRatingValues.CPAFiancial = loanMaster.CPA_Prepared_Financials ? 'Yes' : 'No'; //pulling the data from loan master instead of borrower
     borrowerRatingValues.threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
     borrowerRatingValues.bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
     borrowerRatingValues.judgement = loanMaster.Judgement ? 'Yes' : 'No';
@@ -170,6 +170,18 @@ export class RatingComponent implements OnInit {
     
     this.localloanobj.LoanMaster[0].Ag_Pro_Requested_Credit = this.agProReqCredit || 0;
     this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj);
+  }
+
+  isUnachievedRating(rating){
+    if(this.localloanobj && this.localloanobj.LoanMaster){
+      if(rating > this.localloanobj.LoanMaster[0].Borrower_Rating){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
   }
 }
 

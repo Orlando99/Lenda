@@ -34,7 +34,7 @@ import { MatCardModule, MatSnackBarModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
-
+import { NgSelectModule } from '@ng-select/ng-select';
 
 //ENDS MATERIAL COMPONENTS
 
@@ -190,6 +190,7 @@ import { SyncStatusComponent } from './components/work-in-progress/syncstatus/sy
 import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
 import { CommitteeComponent } from './components/committee/committee.component';
 
+
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
 @NgModule({
@@ -276,6 +277,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     BrowserAnimationsModule,
     HttpModule,
     HttpClientModule,
+    NgSelectModule,
     SharedModule,
     FormsModule,
     MatButtonModule,

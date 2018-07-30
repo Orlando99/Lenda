@@ -79,8 +79,8 @@ export class Insurance_Subpolicy
     Premium:number=undefined;
     @JsonProperty("Prot_Factor", IntConverter)
     Prot_Factor:number=undefined;
-    @JsonProperty("Wind", Boolean)
-    Wind:Boolean=undefined;
+    @JsonProperty("Wind", IntConverter)
+    Wind:number=undefined;
     @JsonProperty("Yield", IntConverter)
     Yield:number=undefined;
     @JsonProperty("Liability", IntConverter)

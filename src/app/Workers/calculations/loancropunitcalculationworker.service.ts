@@ -339,7 +339,7 @@ export class LoancropunitcalculationworkerService {
 
         //Insurance Value
         try {
-          debugger
+          
           element.Ins_Value = element.Ins_Value + element.FC_Icevalue + element.FC_Hmaxvalue +element.FC_Crophailvalue +element.FC_Scovalue +element.FC_Staxvalue + element.FC_Abcvalue + element.FC_Rampvalue+element.FC_Pcivalue;
         }
         catch{
@@ -363,11 +363,9 @@ export class LoancropunitcalculationworkerService {
     });
     
 
-    //Loan Master
-    input.LoanMaster[0].Net_Market_Value_Insurance=_.sumBy(input.LoanCropUnits,"Ins_Value");
-    
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_CropUnit_3', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      //Loan Master
+      input.LoanMaster[0].Net_Market_Value_Insurance=_.sumBy(input.LoanCropUnits,"Ins_Value");
+      
     return input;
   }
 }

@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="row table-row"  *ngIf="data!=undefined && data.financialEfficiency!=undefined">
-        <app-sub-table [rowTable]="data.financialEfficiency"></app-sub-table>
+        <app-sub-table [rowTable]="data.financialEfficiency" [highlightLastRow]="true"></app-sub-table>
       </div>
   </div>
  
