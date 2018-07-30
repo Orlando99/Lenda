@@ -97,20 +97,15 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-<<<<<<< HEAD
         field: 'ProposedAIP', 
         headerTooltip: 'ProposedAIP',
         cellRenderer: 'columnTooltip',
-=======
-        field: 'ProposedAIP',pickfield:'ProposedAIP',  
->>>>>>> 421c91100e98e99c154111932a8d856108c28d77
         cellClass: 'editable-color', 
         editable: true, 
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
       {
-<<<<<<< HEAD
         headerName: 'County | State', 
         headerTooltip: 'County | State',
         cellRenderer: 'columnTooltip',
@@ -136,33 +131,13 @@ export class PoliciesComponent implements OnInit {
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.GetPlanSubType('MPCI')
+        cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
         headerName: 'Options', 
         headerTooltip: 'Options',
         field: 'SecInsurance', 
         cellRenderer: 'columnTooltip',
-=======
-        headerName: 'County | State',pickfield:'StateandCountry', 
-        field: 'StateandCountry'
-      },
-      {
-        headerName: 'Crop',pickfield:'CropName',  
-        field: 'CropName'
-      },
-      {
-        headerName: 'Practice',pickfield:'Practice', 
-        field: 'Practice'
-      },
-      {
-        headerName: 'MPCI types',pickfield:'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.GetMPCIPlanSubType('MPCI')
-      },
-      {
-        headerName: 'Options', 
-        field: 'SecInsurance',pickfield:'SecInsurance',  
->>>>>>> 421c91100e98e99c154111932a8d856108c28d77
         cellClass: ['editable-color'], 
         autoHeight: true,
         editable: true, 
@@ -228,13 +203,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Price', 
-<<<<<<< HEAD
         headerTooltip: 'Price',
         field: 'Price', 
         cellRenderer: 'columnTooltip',
-=======
-        field: 'Price', pickfield:'Price',
->>>>>>> 421c91100e98e99c154111932a8d856108c28d77
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -245,13 +216,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Premium', 
-<<<<<<< HEAD
         headerTooltip: 'Premium',
         field: 'Premium', 
         cellRenderer: 'columnTooltip',
-=======
-        field: 'Premium',  pickfield:'Premium',
->>>>>>> 421c91100e98e99c154111932a8d856108c28d77
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -419,17 +386,12 @@ export class PoliciesComponent implements OnInit {
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
-<<<<<<< HEAD
     this.frameworkcomponents = { 
       chipeditor: ChipsListEditor, 
       selectEditor: SelectEditor, 
       numericCellEditor: NumericEditor, 
       emptyeditor: EmptyEditor,
       columnTooltip: AgGridTooltipComponent };
-=======
-    this.components={ numericCellEditor: getNumericCellEditor()}
-    this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, emptyeditor: EmptyEditor };
->>>>>>> 421c91100e98e99c154111932a8d856108c28d77
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanobj = this.localstorage.retrieve(environment.loankey);
     this.context = { componentParent: this };
