@@ -1,9 +1,9 @@
 <div>
   <svg viewBox="0 0 100% 10" height="100px" preserveAspectRatio="xMinYMin meet" class="w-100 rangebar">
     <g id="value"></g>
-    <text class="text" x="20%" y="50%">Strong</text>
-    <text class="text" x="50%" y="50%">Stable</text>
-    <text class="text" x="80%" y="50%">Weak</text>
+    <text class="text success" x="20%" y="50%">Strong</text>
+    <text class="text warning" x="50%" y="50%">Stable</text>
+    <text class="text alert" x="80%" y="50%">Weak</text>
     <text class="text-val" x="5" y="50%">{{ strong | number:'.1-1' }}</text>
     <text class="text-val" x="50%" y="50%">{{ stable | number:'.1-1' }}</text>
     <text class="text-val" x="100%" y="50%">{{ weak | number:'.1-1' }}</text>
@@ -15,3 +15,4 @@
     <rect class="main-value" fill="#164c7b" [attr.x]="valuePercent" y="50%" width="10" height="20" />
   </svg>
 </div>
+<app-svg-tooltip></app-svg-tooltip>

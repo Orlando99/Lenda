@@ -8,14 +8,16 @@ export class SvgTooltipService {
   private textElements = [];
   private lineBreaks = [];
   private isDirty;
-  // private elRef;
+  private type;
 
   constructor(
     private elRef: ElementRef,
     private renderer: Renderer2
   ) { }
 
-  initTooltip(targetElements) {
+  initTooltip(targetElements, type) {
+    this.type = type;
+
     for (let icon of targetElements) {
       // Mouseenter event for tooltip
       icon.addEventListener('mouseover', (event) => {
@@ -31,8 +33,16 @@ export class SvgTooltipService {
 
   showTooltipText(event) {
     let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
+    // Flowchart specific
+    // TODO: Move this out of this component
+    // ===
     let hoverNodeId = event.target.parentNode.parentNode.id;
     let texts = this.getTooltipText(hoverNodeId);
+
+    if (this.type === 'range') {
+      texts = ['Current Value: <<value>>', 'Strong: << Strong value >>'];
+    }
+    // ===
     this.addTooltipNodes(tooltip, texts, event);
   }
 

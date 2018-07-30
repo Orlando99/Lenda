@@ -195,7 +195,7 @@ export class FlowchartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.svgTooltipService.initTooltip(this.elRef.nativeElement.querySelectorAll('.icon'));
+    this.svgTooltipService.initTooltip(this.elRef.nativeElement.querySelectorAll('.icon'), 'flowchart');
   }
 
   buildChart(data) {

@@ -1,5 +1,17 @@
 @import "./../../../sass/theme/variables";
 
+.success {
+  fill: #28a745 !important;
+}
+
+.warning {
+  fill: #ffc107 !important;
+}
+
+.alert {
+  fill: #dc3545 !important;
+}
+
 .rangebar {
   padding: 0 20px;
   transform: translate(0, -40px);
@@ -8,7 +20,7 @@
 .text {
   transform: translate(-15px, -20px);
   font-size: $base-font-size;
-  font-weight: bold;
+  // font-weight: bold;
   fill: $primary-color;
 }
 

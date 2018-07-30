@@ -1,10 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
+import { SvgTooltipService } from './../svg-tooltip/svg-tooltip.service';
 import * as d3 from 'd3';
 
 @Component({
   selector: 'app-rangebar',
   templateUrl: './rangebar.component.html',
-  styleUrls: ['./rangebar.component.scss']
+  styleUrls: ['./rangebar.component.scss'],
+  providers: [SvgTooltipService]
 })
 export class RangebarComponent implements OnInit {
   @Input() strong;
@@ -12,10 +14,17 @@ export class RangebarComponent implements OnInit {
   @Input() weak;
   @Input() value = 0;
   public valuePercent;
-  constructor() { }
+  constructor(
+    public svgTooltipService: SvgTooltipService,
+    public elRef: ElementRef
+  ) { }
 
   ngOnInit() {
     this.calculateValuePercentage();
+  }
+
+  ngAfterViewInit() {
+    this.svgTooltipService.initTooltip(this.elRef.nativeElement.querySelectorAll('.main-value'), 'range');
   }
 
   calculateValuePercentage() {
