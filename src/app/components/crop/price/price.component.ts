@@ -16,6 +16,8 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
+import { GridPanel } from '../../../../../node_modules/ag-grid';
 
 @Component({
   selector: 'app-price',
@@ -36,13 +38,11 @@ export class PriceComponent implements OnInit {
   private columnApi;
   style = {
     width: '100%',
-    height: '240px',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; },width : number };
   stylesidebar={
     width: '95%',
-    height: '240px'
   };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
@@ -142,7 +142,7 @@ export class PriceComponent implements OnInit {
         this.rowData = [];
         this.rowData = this.localloanobject.LoanCrops !== null ? this.localloanobject.LoanCrops.filter(p => p.ActionStatus != 3):[];
       }
-      this.getgridheight();
+      //this.getgridheight();
       this.gridApi.refreshCells();
 
     })
@@ -246,7 +246,8 @@ export class PriceComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    setgriddefaults(this.gridApi,this.columnApi);
+    //this.getgridheight();
     //auto width and no scroll
   }
   // DeleteClicked(rowIndex: any) {
@@ -273,11 +274,11 @@ export class PriceComponent implements OnInit {
     return '';
   }
 
-  getgridheight() {
+  // getgridheight() {
 
-    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
-    this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
-  }
+  //   this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+  //   this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
+  // }
   onGridSizeChanged(Event: any) {
     //this.gridApi.sizeColumnsToFit();
   }
@@ -288,7 +289,4 @@ export class PriceComponent implements OnInit {
     //this.gridApi.sizeColumnsToFit();
   }
 }
-function adjustheader(): void {
 
-  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
-}

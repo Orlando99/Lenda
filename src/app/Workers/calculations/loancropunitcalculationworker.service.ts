@@ -360,6 +360,7 @@ export class LoancropunitcalculationworkerService {
       //Loan Master
       input.LoanMaster[0].Net_Market_Value_Insurance=_.sumBy(input.LoanCropUnits,"Ins_Value");
       
+      
     return input;
   }
 }

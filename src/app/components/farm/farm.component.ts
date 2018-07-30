@@ -20,6 +20,7 @@ import { PriceFormatter, PercentageFormatter, numberWithOneDecPrecValueFormatter
 import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanumericboxes';
 import { getDateCellEditor, getDateValue, formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
 import { ModelStatus, status } from '../../models/syncstatusmodel';
+import { setgriddefaults } from '../../aggriddefinations/aggridoptions';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -46,7 +47,6 @@ export class FarmComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '93%',
-    height: '240px',
     boxSizing: 'border-box'
   };
 
@@ -58,7 +58,7 @@ export class FarmComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    setgriddefaults(this.gridApi,this.columnApi);
     //params.api.sizeColumnsToFit();
   }
   //End here
@@ -90,8 +90,8 @@ export class FarmComponent implements OnInit {
         valueFormatter: function (params) {
           return lookupStateValue(params.colDef.cellEditorParams.values, parseInt(params.value));
         },
-        valueSetter: Statevaluesetter,
-        width: 70
+        valueSetter: Statevaluesetter
+        
       },
       {
         headerName: 'County', field: 'Farm_County_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
@@ -112,8 +112,8 @@ export class FarmComponent implements OnInit {
             params.data['Rentperc'] = 100 - parseFloat(params.newValue);
           }
           return true;
-        },
-        width: 70
+        }
+        
       },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
@@ -158,14 +158,14 @@ export class FarmComponent implements OnInit {
           else {
             return PercentageFormatter(0);
           }
-        }, width: 70
+        }
       },
       {
         headerName: 'Perm to Ins', field: 'Permission_To_Insure', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
         valueFormatter: function (params) {
           return params.value == 1 ? 'Yes' : 'No';
-        }, width: 72
+        }
       },
       {
         headerName: 'IR Acres', field: 'Irr_Acres', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
@@ -181,9 +181,7 @@ export class FarmComponent implements OnInit {
       },
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
-    this.defaultColDef = {
-      width: 100
-    };
+    
   }
 
   ngOnInit() {
@@ -206,7 +204,7 @@ export class FarmComponent implements OnInit {
     });
 
 
-    this.getgridheight();
+  
     if (this.localloanobject != null && this.localloanobject != undefined)
       this.getdataforgrid();
     //this.editType = "fullRow";
@@ -297,7 +295,7 @@ export class FarmComponent implements OnInit {
       rowIndex: this.rowData.length - 1,
       colKey: "Farm_State_ID"
     });
-    this.getgridheight();
+  
   }
 
   DeleteClicked(rowIndex: any, data) {
@@ -319,14 +317,14 @@ export class FarmComponent implements OnInit {
         this.localloanobject.lasteditrowindex = undefined;
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
-      this.getgridheight();
+    
     })
 
   }
 
   getgridheight() {
 
-    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+    // this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   }
 
   syncenabled() {

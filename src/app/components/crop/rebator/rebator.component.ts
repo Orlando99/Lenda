@@ -18,6 +18,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import * as _ from 'lodash';
 import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 @Component({
   selector: 'app-rebator',
   templateUrl: './rebator.component.html',
@@ -41,7 +42,6 @@ export class RebatorComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '100%',
     boxSizing: 'border-box'
   };
 
@@ -96,15 +96,6 @@ export class RebatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
-    //   this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
-    //   this.localloanobject = res;
-    //   this.rowData=[];
-    //     this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
-    //     // this.getgridheight();
-    //     this.gridApi.refreshCells();
-    // })
-
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
       this.localloanobject = res
@@ -223,8 +214,8 @@ synctoDb() {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
-    params.api.sizeColumnsToFit();
+    setgriddefaults(this.gridApi,this.columnApi);
+    // params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
 
@@ -259,7 +250,7 @@ synctoDb() {
   }
 
   onGridSizeChanged(params) {
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
     params.api.resetRowHeights();
   }
 
