@@ -33,12 +33,13 @@ export class SvgTooltipService {
 
   showTooltipText(event) {
     let tooltip = this.elRef.nativeElement.querySelector('.tooltip');
-    // Flowchart specific
-    // TODO: Move this out of this component
+    // TODO: Move this logic out of this component
     // ===
     let hoverNodeId = event.target.parentNode.parentNode.id;
     let texts = this.getTooltipText(hoverNodeId);
 
+    // Hardcoded tooltip value for Range
+    // TODO: Remove these and make it dynamic
     if (this.type === 'range') {
       texts = ['Current Value: <<value>>', 'Strong: << Strong value >>'];
     }
