@@ -8,7 +8,7 @@
     appendTo="body"
     [(ngModel)]="selectedItems">
     <ng-template ng-header-tmp>
-        <input (change)="this.changeAll($event)" type="checkbox">All
+        <input (change)="changeAll($event)" type="checkbox">All
     </ng-template>
     <ng-template ng-option-tmp let-item="item">
         <input [checked]="selectedItems.indexOf(item.itemName) > -1" type="checkbox">
