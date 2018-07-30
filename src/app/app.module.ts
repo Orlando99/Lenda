@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -178,6 +178,8 @@ import { MarketingcontractcalculationService } from './Workers/calculations/mark
 import { OptimizercalculationService } from './Workers/calculations/optimizercalculationservice.service';
 import { AphComponent } from './components/insurance/aph/aph.component';
 import { CropunitrecordsComponent } from './components/work-in-progress/cropunitrecords/cropunitrecords.component';
+import { GlobalErrorHandler } from './services/global-error-handler.service';
+import { ToasterService } from './services/toaster.service';
 
 //RECORDS
 import { FarmRecordsComponent } from './components/work-in-progress/farmrecords/farmrecords.component';
@@ -187,6 +189,8 @@ import { LoanMarketingRecordsComponent } from './components/work-in-progress/loa
 import { SyncStatusComponent } from './components/work-in-progress/syncstatus/syncstatus.component';
 import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
 import { AgGridTooltipComponent } from './aggridcolumns/tooltip/tooltip.component';
+import { CommitteeComponent } from './components/committee/committee.component';
+
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
 
@@ -266,10 +270,9 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
     AphComponent,
-    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent,
+    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent,
 
-    AgGridTooltipComponent
-
+    AgGridTooltipComponent,
   ],
   imports: [
     BrowserModule,
@@ -386,7 +389,12 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     OverallCalculationServiceService,
     LoginService,
     MarketingcontractcalculationService,
-    OptimizercalculationService
+    OptimizercalculationService,
+    ToasterService,
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    }
   ],
   entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]

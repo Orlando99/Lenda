@@ -8,19 +8,19 @@
       <i class="material-icons">
         person
       </i>
-      <span class="title">Matthew West Farms, LLC</span>
+      <span class="title">{{ info.farmerLastName }}, {{ info.farmerFirstName }}</span>
     </div>
     <div class="flex">
       <i class="material-icons">
         group
       </i>
-      <span class="title">West, Matthew D.</span>
+      <span class="title">{{ info.borrowerLastName }}, {{ info.borrwerFirstName }}</span>
     </div>
   </div>
   <div>
     <div class="chart-wrapper">
       <span class="extra-info">
-        Loan 0037037-001
+        Loan {{ info.loanFullId }}
       </span><br />
       <span class="extra-info">
         Ag-Input (CPS)
@@ -39,19 +39,19 @@
     <div class="title">
       <i class="material-icons">
         person
-      </i> Matthew West Farms, LLC
+      </i> {{ info.farmerLastName }}, {{ info.farmerFirstName }}
     </div>
   </div>
   <div class="title">
     <i class="material-icons">
         group
       </i>
-    <span class="title">West, Matthew D.</span>
+    <span class="title">{{ info.borrowerLastName }}, {{ info.borrwerFirstName }}</span>
   </div>
   <div>
     <div class="chart-wrapper">
       <span class="extra-info">
-        Loan 0037037-001
+        Loan {{ info.loanFullId }}
       </span><br />
       <span class="extra-info">
         Ag-Input (CPS)
@@ -71,7 +71,7 @@
     <div class="title">
       <i class="material-icons">
         person
-      </i> Matthew West Farms, LLC
+      </i> {{ info.farmerLastName }}, {{ info.farmerFirstName }}
     </div>
   </div>
 </div>

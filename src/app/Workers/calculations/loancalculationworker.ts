@@ -117,6 +117,7 @@ export class LoancalculationWorker {
       {
         localloanobj = this.loancropunitworker.prepareLoancropunitmodel(localloanobj);
         localloanobj=this.loancropunitworker.fillFCValuesforCropunits(localloanobj);
+        localloanobj = this.loancropunitworker.calculateAPHForCropYield(localloanobj);
       }
       //STEP 3 --- FARM CALCULATIONS
       if (localloanobj.Farms != null)
@@ -165,6 +166,7 @@ export class LoancalculationWorker {
       // STEP 8 --- MASTER CALCULATIONS
       if (localloanobj.LoanMaster !== null) {
         localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+        localloanobj = this.loanMasterCalcualtions.performDashboardCaclulation(localloanobj);
         localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
       }
 

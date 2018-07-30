@@ -4,6 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { LoanMasterCalculationWorkerService } from '../../../Workers/calculations/loan-master-calculation-worker.service';
 import { environment } from '../../../../environments/environment.prod';
 import { ValueType } from '../shared/cell-value/cell-value.component';
+import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 
 @Component({
   selector: 'app-farm-financial',
@@ -15,7 +16,8 @@ export class FarmFinancialComponent implements OnInit {
   data: any;
   localloanobj: loan_model;
   constructor(private localstorageservice: LocalStorageService,
-    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService) { }
+    private loanMasterCaculationWorker: LoanMasterCalculationWorkerService,
+    private loanCalculationWorker : LoancalculationWorker) { }
 
   ngOnInit() {
      
@@ -37,85 +39,129 @@ export class FarmFinancialComponent implements OnInit {
 
   private binddata(loanObject : loan_model) {
     if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower) {
+
+      let entities = ['currentRatio','workingCapital','debtByAssets','debtByEquity','equityByAssets','ROA','operatingProfit','operatingByExpRev','interestByCashFlow'];
       
       let farmFinancialRatingValues  : FarmFinacialValueParams= {... this.getFormattedData(loanObject)};
+
+      let ffStaticValue = this.loanMasterCaculationWorker.farmFinancialStaticValues;
+
+      let ffPossibleObject = this.getPossibleData(entities,farmFinancialRatingValues,ffStaticValue);
+      let ffPossibleData = ffPossibleObject.ffPossibleValues;
+      let ffPossibleTotal = ffPossibleObject.totalPossibles;
+      let ffStateData = this.getStateData(entities,farmFinancialRatingValues,ffStaticValue);
+      let ffRatingObject = this.getRatingData(entities,farmFinancialRatingValues,ffStaticValue);
+      let ffRatingData = ffRatingObject.ffRatingValues;
+      let ffRatingTotal = ffRatingObject.totalRatings? parseFloat(ffRatingObject.totalRatings.toFixed(1)) : 0;
+      
       this.data = {
         liquidityAnalysis: [
           {
             text: 'Current Ratio',
             value: farmFinancialRatingValues.currentRatio,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.currentRatio,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.currentRatio,this.loanMasterCaculationWorker.farmFinancialStaticValues.currentRatio, 1.00)
+            staticValues: ffStaticValue.currentRatio,
+            possible : ffPossibleData.currentRatio,
+            rating : ffRatingData.currentRatio,
+            state : ffStateData.currentRatio,
 
           },
           {
             text: 'Working Capital',
             value: farmFinancialRatingValues.workingCapital,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.workingCapital,this.loanMasterCaculationWorker.farmFinancialStaticValues.workingCapital, 1.00)
+            staticValues: ffStaticValue.workingCapital,
+            possible : ffPossibleData.workingCapital,
+            rating : ffRatingData.workingCapital,
+            state : ffStateData.workingCapital,
             
           }],
           solvencyAnalysis : [{
             text: 'Debt/Assets',
             value: farmFinancialRatingValues.debtByAssets,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByAssets, 1.00),
+            staticValues: ffStaticValue.debtByAssets,
+            possible : ffPossibleData.debtByAssets,
+            rating : ffRatingData.debtByAssets,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.debtByAssets,
+            staticValueType : ValueType.PERCENTAGE,
 
           },
           {
             text: 'Equity/Assets',
             value: farmFinancialRatingValues.equityByAssets,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.equityByAssets,this.loanMasterCaculationWorker.farmFinancialStaticValues.equityByAssets, 1.00),
+            staticValues: ffStaticValue.equityByAssets,
+            possible : ffPossibleData.equityByAssets,
+            rating : ffRatingData.equityByAssets,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.equityByAssets,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Debt/Equity',
             value: farmFinancialRatingValues.debtByEquity,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.debtByEquity,this.loanMasterCaculationWorker.farmFinancialStaticValues.debtByEquity, 1.00),
+            staticValues: ffStaticValue.debtByEquity,
+            possible : ffPossibleData.debtByEquity,
+            rating : ffRatingData.debtByEquity,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.debtByEquity,
+            staticValueType : ValueType.PERCENTAGE,
           }],
           profitabilityAnalysis : [{
             text: 'ROA',
             value: farmFinancialRatingValues.ROA,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.ROA,this.loanMasterCaculationWorker.farmFinancialStaticValues.ROA, 1.00),
+            staticValues: ffStaticValue.ROA,
+            possible : ffPossibleData.ROA,
+            rating : ffRatingData.ROA,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.ROA,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Operating Profit',
             value: farmFinancialRatingValues.operatingProfit,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingProfit,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingProfit, 1.00),
+            staticValues: ffStaticValue.operatingProfit,
+            possible : ffPossibleData.operatingProfit,
+            rating : ffRatingData.operatingProfit,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.operatingProfit,
+            staticValueType : ValueType.PERCENTAGE,
           }],
           financialEfficiency : [{
             text: ' Operating Exp / Rev',
             value: farmFinancialRatingValues.operatingByExpRev,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.operatingByExpRev,this.loanMasterCaculationWorker.farmFinancialStaticValues.operatingByExpRev, 1.00),
+            staticValues: ffStaticValue.operatingByExpRev,
+            possible : ffPossibleData.operatingByExpRev,
+            rating : ffRatingData.operatingByExpRev,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.operatingByExpRev,
+            staticValueType : ValueType.PERCENTAGE,
           },
           {
             text: 'Interest/Cashflow',
             value: farmFinancialRatingValues.interestByCashFlow,
-            staticValues: this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow,
-            possible : 1.00,
-            rating : this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues.interestByCashFlow,this.loanMasterCaculationWorker.farmFinancialStaticValues.interestByCashFlow, 1.00),
+            staticValues: ffStaticValue.interestByCashFlow,
+            possible : ffPossibleData.interestByCashFlow,
+            rating : ffRatingData.interestByCashFlow,
             valueType : ValueType.PERCENTAGE,
+            state : ffStateData.interestByCashFlow,
+            staticValueType : ValueType.PERCENTAGE,
+          },
+          {
+            text: 'Total Farm Financial Rating',
+            value: '',
+            staticValues: ['','',''],
+            possible : ffPossibleTotal,
+            rating : ffRatingTotal,
+            valueType : ValueType.PERCENTAGE,
+            state : '',
+            staticValueType : ValueType.PERCENTAGE,
           }
         ]
       };
+
+      if(this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating != ffRatingTotal){
+        this.localloanobj.LoanMaster[0].Borrower_Farm_Financial_Rating = ffRatingTotal;        
+        this.loanCalculationWorker.performcalculationonloanobject(this.localloanobj,false);
+      }
     }
   }
 
@@ -128,11 +174,62 @@ export class FarmFinancialComponent implements OnInit {
     farmFinancialRatingValues.debtByAssets = ((loanMaster.Total_Liabilities/ loanMaster.Total_Assets)*100);
     farmFinancialRatingValues.equityByAssets = (((loanMaster.Total_Assets - loanMaster.Total_Liabilities)/loanMaster.Total_Assets)*100);
     farmFinancialRatingValues.debtByEquity = ((loanMaster.Total_Liabilities)/ (loanMaster.Total_Assets - loanMaster.Total_Liabilities)*100);
-    farmFinancialRatingValues.ROA = 10.3;
-    farmFinancialRatingValues.operatingProfit = 50.1;
-    farmFinancialRatingValues.operatingByExpRev = 49.9;
-    farmFinancialRatingValues.interestByCashFlow = 4.8;
+    farmFinancialRatingValues.ROA = ((loanMaster.Cash_Flow_Amount/loanMaster.Total_Assets)*100);
+    farmFinancialRatingValues.operatingProfit = ((loanMaster.Cash_Flow_Amount/this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject))*100);
+    farmFinancialRatingValues.operatingByExpRev = ((loanMaster.Total_Commitment + 
+                                                  (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.Dist_Commitment)+
+                                                  (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.ARM_Commitment)) /
+                                                  this.loanMasterCaculationWorker.getRevanueThresholdValue(loanObject))*100;
+    if(loanMaster.Cash_Flow_Amount){
+      farmFinancialRatingValues.interestByCashFlow =  (((loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.Dist_Commitment)+
+                                                    (loanMaster.Rate_Percent/100 * (225/365)*  loanMaster.ARM_Commitment))/
+                                                    loanMaster.Cash_Flow_Amount)*100;
+    }else{
+      farmFinancialRatingValues.interestByCashFlow =0;
+    }                                                  
+    
     return farmFinancialRatingValues;  
+  }
+
+  getPossibleData(entities : Array<string>, farmFinancialRatingValues : FarmFinacialValueParams,ffStaticValue){
+    let ffPossibleValues = new FarmFinacialValueParams();
+    let totalPossibles = 0;
+    entities.forEach(entity =>{
+      ffPossibleValues[entity] = this.loanMasterCaculationWorker.getPossible(farmFinancialRatingValues[entity],ffStaticValue[entity]);
+      totalPossibles += ffPossibleValues[entity];
+    });
+
+    return {
+      ffPossibleValues : ffPossibleValues,
+      totalPossibles : totalPossibles
+    }
+  }
+
+  getStateData(entities : Array<string>, farmFinancialRatingValues : FarmFinacialValueParams,ffStaticValue){
+    let ffStateValues = new FarmFinacialValueParams();
+    
+    entities.forEach(entity =>{
+      ffStateValues[entity] = this.loanMasterCaculationWorker.getState(farmFinancialRatingValues[entity],ffStaticValue[entity]);
+    });
+
+    return ffStateValues;
+  }
+
+  getRatingData(entities : Array<string>, farmFinancialRatingValues : FarmFinacialValueParams,ffStaticValue){
+    let ffRatingValues = new FarmFinacialValueParams();
+    let totalRatings = 0;
+    entities.forEach(entity =>{
+      ffRatingValues[entity] = this.loanMasterCaculationWorker.getRating(farmFinancialRatingValues[entity],ffStaticValue[entity]);
+      totalRatings += ffRatingValues[entity];
+    });
+
+    let possibleObj = this.getPossibleData(entities,farmFinancialRatingValues,ffStaticValue);
+    let totalPossible = possibleObj.totalPossibles;
+
+    return {
+      ffRatingValues : ffRatingValues,
+      totalRatings : parseFloat((totalRatings/totalPossible).toFixed(1))
+    }
   }
 }
 

@@ -1,0 +1,60 @@
+
+
+<mat-accordion>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Terms
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <a class="waves-effect waves-light btn" [ngClass]="isFormUpdated ? '' : 'disabled'"  (click)="synctoDb()" style="margin: 0 0 10px 18px;" >
+        <i class="material-icons left">cloud</i>Publish</a>
+
+    <div class="container bottom width-auto">
+      <div *ngIf="committeeForm" class="row">
+        <div class="col m5">
+          <form [formGroup]="committeeForm">
+            <div class="input-field col">
+
+              <mat-form-field>
+                <input matInput placeholder="Due Date (mm/dd/yyyy)" formControlName="Maturity_Date" (blur)="updateLocalStorage()">
+              </mat-form-field>
+            </div>
+            <div class="input-field col m8">
+
+              <mat-form-field>
+                <input matInput placeholder="Origination Fee (%)" type="number" formControlName="Orgination_Fee_Percent" (blur)="updateLocalStorage()">
+              </mat-form-field>
+              
+            </div>
+            <div class="col m4" style="margin-top: 25px">
+              {{committeeForm.value.Orgination_Fee_Amount ? '$ '+committeeForm.value.Orgination_Fee_Amount : '$ 0' }}
+            </div>
+
+
+            <div class="input-field col m8">
+              <mat-form-field>
+                <input matInput placeholder="Service Fee (%)"  type="number" formControlName="Service_Fee_Percent" (blur)="updateLocalStorage()">
+              </mat-form-field>
+              
+            </div>
+            <div class="col m4" style="margin-top: 25px">
+                {{committeeForm.value.Service_Fee_Amount ? '$ '+committeeForm.value.Service_Fee_Amount : '$ 0' }}
+            </div>
+
+            <div class="input-field col m8">
+              <mat-form-field>
+                <input matInput placeholder="Interest (%)"  type="number" formControlName="Rate_Percent" (blur)="updateLocalStorage()" >
+              </mat-form-field>
+            </div>
+            <div class="col m4" style="margin-top: 25px">
+                {{ committeeForm.value.Rate_Fee_Amount ? '$ '+committeeForm.value.Rate_Fee_Amount : '$ 0' }}
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

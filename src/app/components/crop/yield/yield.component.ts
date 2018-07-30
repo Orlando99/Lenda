@@ -21,6 +21,7 @@ import { empty } from 'rxjs/observable/empty';
 import { status } from '../../../models/syncstatusmodel';
 import { NO_CHANGE } from '@angular/core/src/render3/instructions';
 import { Observable } from 'rxjs';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 
 export interface DialogData {
   animal: string;
@@ -131,7 +132,7 @@ export class YieldComponent implements OnInit {
     });
 
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right'});
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
 
@@ -172,10 +173,7 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    //this.getgridheight();
-
-    params.api.sizeColumnsToFit();
-
+    setgriddefaults(this.gridApi,this.columnApi);
     this.getdataforgrid();
   }
 
@@ -209,7 +207,7 @@ export class YieldComponent implements OnInit {
 
     this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.gridApi.sizeColumnsToFit();
+    
   }
 
   // syncenabled(){
@@ -443,7 +441,7 @@ export class YieldComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    this.gridApi.sizeColumnsToFit();
+    //we can resize the columns here to override
   }
 
   updateSyncStatus(){

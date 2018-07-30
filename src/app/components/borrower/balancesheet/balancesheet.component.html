@@ -25,5 +25,27 @@
         [gridAutoHeight]=true>
         </ag-grid-angular>
         </div>
+
+        <div class="row" style="margin-top:5px">
+          <div class="col m2 cell text-right font-weight-600" style="margin-top:15px">
+            Financials as of:
+          </div>
+          <div class="input-field col m3">
+            <mat-form-field>
+              <input matInput type="text" [(ngModel)]="Financials_Date" name="AG_PRO_Requested_Credit"  (blur)="updateLocalStorage()">
+            </mat-form-field>
+          </div>
+        
+        <!-- <div class="col m2 cell text-left font-weight-600" style="margin-top:15px">
+          CPA Financials:
+        </div> -->
+        <div class="input-field col m3" style="margin-top:20px">
+          <!-- <mat-form-field> -->
+            <mat-checkbox matInput class="example-margin" [(ngModel)]="CPA_Prepared_Financials" (change)="updateLocalStorage()">CPA Financials</mat-checkbox>
+          <!-- </mat-form-field> -->
+        </div>
+
+      </div>
+     
   </mat-expansion-panel>
 </mat-accordion>

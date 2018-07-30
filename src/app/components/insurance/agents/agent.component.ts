@@ -124,7 +124,7 @@ export class AgentComponent implements OnInit {
 
 
   rowvaluechanged(value: any) {
-debugger
+
     var obj = value.data;
     if (obj.Assoc_ID==0 || obj.Assoc_ID==undefined) {
       obj.ActionStatus = 1;

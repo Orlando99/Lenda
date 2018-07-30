@@ -17,6 +17,8 @@ import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import * as _ from 'lodash';
+import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { setgriddefaults, toggletoolpanel, removeHeaderMenu } from '../../../aggriddefinations/aggridoptions';
 @Component({
   selector: 'app-rebator',
   templateUrl: './rebator.component.html',
@@ -39,8 +41,7 @@ export class RebatorComponent implements OnInit {
 
   style = {
     marginTop: '10px',
-    width: '97%',
-    height: '100%',
+    width: '1065px',
     boxSizing: 'border-box'
   };
 
@@ -64,19 +65,29 @@ export class RebatorComponent implements OnInit {
       //Aggrid Specific Code
       this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-      this.frameworkcomponents = {deletecolumn: DeleteButtonRenderer };
+      this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
       //Coldef here
       this.columnDefs = [
-        { headerName: 'Rebator', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
-        { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
-        { headerName: 'Location', field: 'Location', editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
-        { headerName: 'Phone', field: 'Phone', editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
-        { headerName: 'Email', field: 'Email',  editable: true, cellClass: ['editable-color']},
-        { headerName: 'Pref Contact', field: 'Preferred_Contact_Ind',  editable: false},
-        { headerName: 'Exp Rebate', field: '',  editable: false},
-        { headerName: 'Ins UOM', field: '',  editable: false},
-        { headerName: '', field: 'value',  cellRenderer: "deletecolumn" }
+        { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
+        { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Location', field: 'Location',width:100, editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
+        { headerName: 'Email', field: 'Email',width:180,  editable: true, cellClass: ['editable-color']},
+        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: false},
+        { headerName: 'Exp Rebate',width:140, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
+        cellEditorParams: (params)=> {
+          return { value : params.data.Amount || 0}
+        },
+        valueFormatter: function (params) {
+          return PriceFormatter(params.value);
+        }
+      },
+        { headerName: 'Ins UOM',width:100, field: 'Ins_UOM',valueFormatter: function (params) {
+          return 'bu';
+        }
+        },
+        { headerName: '', field: 'value',  cellRenderer: "deletecolumn" ,width:100}
 
       ];
       ///
@@ -85,15 +96,6 @@ export class RebatorComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
-    //   this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
-    //   this.localloanobject = res;
-    //   this.rowData=[];
-    //     this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "REB") : []
-    //     // this.getgridheight();
-    //     this.gridApi.refreshCells();
-    // })
-
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
       this.localloanobject = res
@@ -169,6 +171,8 @@ synctoDb() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.ActionStatus = 1;
+    newItem.Preferred_Contact_Ind = 1;
+
     newItem.Assoc_Type_Code = "REB";
     var res = this.rowData.push(newItem);
 
@@ -210,8 +214,10 @@ synctoDb() {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
-    params.api.sizeColumnsToFit();
+    //setgriddefaults(this.gridApi,this.columnApi);
+    toggletoolpanel(false,this.gridApi);
+    removeHeaderMenu(this.gridApi);
+    // params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
 
@@ -246,7 +252,7 @@ synctoDb() {
   }
 
   onGridSizeChanged(params) {
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
     params.api.resetRowHeights();
   }
 
