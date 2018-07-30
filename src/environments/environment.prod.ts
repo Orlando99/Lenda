@@ -11,6 +11,7 @@ export const environment = {
   referencedatakey:"refdata",
   uid:"userid",
   loanidkey:"selectedloanId",
+  collateralTables: "collateralTables",
   isDebugModeActive: true
 };
 

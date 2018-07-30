@@ -140,12 +140,7 @@ export class YieldComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-<<<<<<< HEAD
-      // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
-      
-=======
-      this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
->>>>>>> a2a5bd3b6ea62cbfe0f940be44e5206b63cce463
+     // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       if (res.srccomponentedit == "YieldComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
