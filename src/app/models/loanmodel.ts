@@ -382,6 +382,11 @@ export class borrower_model
         LCP_Distributer_Budget: number=0;
         @JsonProperty("LCP_Third_Party_Budget", IntConverter,false)
         LCP_Third_Party_Budget: number=0;
+        @JsonProperty("Market_Value", IntConverter,false)
+        Market_Value: number=0;
+        @JsonProperty("Disc_Market_Value", IntConverter,false)
+        Disc_Market_Value: number=0;
+
         @JsonProperty("LCP_Notes", StringConverter,false)
         LCP_Notes: string='';
         @JsonProperty("LCP_Status", IntConverter,false)
@@ -505,6 +510,10 @@ export class borrower_model
         Contract_Qty:number;
         Contract_Price:number;
         Percent_booked:number;
+        Acres : number;
+        Revenue : number;
+        W_Crop_Yield : number;
+        LC_Share : number;
         ActionStatus : number;
     }
     export class loan_farmer{

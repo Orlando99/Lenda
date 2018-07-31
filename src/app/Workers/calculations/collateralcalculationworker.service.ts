@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { loan_model } from '../../models/loanmodel';
 import { LoggingService } from '../../services/Logs/logging.service';
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../../environments/environment.prod';
+import { Loan_Crop_Unit } from '../../models/cropmodel';
+import * as _ from "lodash";
+import { Loan_Farm } from '../../models/farmmodel.';
 
 
 @Injectable()
 export class Collateralcalculationworker {
-    constructor(public logging: LoggingService) { }
+    constructor(public logging: LoggingService, public localStorageService : LocalStorageService) { }
 
     preparenetmktvalue(params) {
         params.Net_Market_Value = (Number(params.Market_Value) - Number(params.Prior_Lien_Amount)).toFixed(2);
@@ -46,6 +51,7 @@ export class Collateralcalculationworker {
         } catch{
             return input;
         }
+
     }
     // this is for footer row of FSA
     computeTotalFSA(input:loan_model) {
@@ -156,4 +162,172 @@ export class Collateralcalculationworker {
         });
         return total;
     }
+    
+    performMarketValueCalculations(loanObject : loan_model){
+        let cropPractices = loanObject.LoanCropPractices;
+    
+        cropPractices.forEach(cp => {
+            let cropPractice = this.getCropAndPracticeType(cp.Crop_Practice_ID);
+            let acres = this.getAcresForCrop(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
+            let cropyield = this.getCropYieldForCropPractice(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
+            let share = this.getShare(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode );
+            let crop = this.getCrop(loanObject,cropPractice.cropCode);
+            cp.Market_Value = (acres * cropyield * share/100)*(crop.Crop_Price+crop.Basic_Adj+crop.Marketing_Adj+crop.Rebate_Adj);
+            cp.Disc_Market_Value = cp.Market_Value* (1 - (47.5/100));
+        });
+
+        if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
+            loanObject.LoanMaster[0].Net_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Market_Value);
+            loanObject.LoanMaster[0].Disc_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Disc_Market_Value);
+        }
+        let crops = loanObject.LoanCrops;
+    
+        crops.forEach(crop => {
+            crop.Acres = this.getAcresForCrop(loanObject, crop.Crop_Code);
+            crop.W_Crop_Yield = this.getCropYieldForCrop(loanObject,crop.Crop_Code);
+            crop.LC_Share = this.getShare(loanObject,crop.Crop_Code);
+            let IRRCropPracticeID = this.getCropPracticeID(crop.Crop_Code, 'IRR');
+            let NIRCropPracticeID = this.getCropPracticeID(crop.Crop_Code,'NIR');
+            crop.Revenue = 0;
+            if(IRRCropPracticeID){
+                let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == IRRCropPracticeID);
+                crop.Revenue +=  cp ? cp.Market_Value : 0 
+            }
+
+            if(NIRCropPracticeID){
+                let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == NIRCropPracticeID);
+                crop.Revenue +=  cp ? cp.Market_Value : 0 
+            }
+            
+        });
+
+        let toVerify = _.sumBy(crops,(c)=> c.Revenue);
+        if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
+            loanObject.LoanMaster[0].Total_Crop_Acres = _.sumBy(crops,(cp)=> cp.Acres);
+            
+        }
+
+        return loanObject;
+
+    }
+
+    getCrop(localObject : loan_model,cropCode){
+        if(localObject.LoanCrops && localObject.LoanCrops.length > 0)
+        {
+            return localObject.LoanCrops.find(c=>c.Crop_Code == cropCode);
+        }
+        return undefined;
+    }
+    getCropAndPracticeType(cropPracticeID){
+        let refdata = this.localStorageService.retrieve(environment.referencedatakey);
+        if(refdata.CropList){
+            let cropPractice = refdata.CropList.find(cl=>cl.Crop_And_Practice_ID == cropPracticeID);
+            if(cropPractice){
+                return {
+                    cropCode : cropPractice.Crop_Code,
+                    practiceTypeCode : cropPractice.Practice_type_code
+                }
+            }else{
+                return undefined;
+            }
+            return undefined;
+        }
+    }
+    getCropPracticeID(cropCode,practiceType){
+        let refdata = this.localStorageService.retrieve(environment.referencedatakey);
+        if(refdata.CropList){
+            let cropPractice = refdata.CropList.find(cl=>cl.Crop_Code == cropCode && cl.Practice_type_code == practiceType);
+            if(cropPractice){
+                return cropPractice.Crop_And_Practice_ID;
+               
+            }else{
+                return undefined;
+            }
+            return undefined;
+        }
+    }
+    performMarketValueCalculationsAtCropLevel(loanObject : loan_model){
+        
+    }
+
+   
+  getAcresForCrop(loanObject : loan_model,cropCode, practiceType = undefined){
+    let totalAcres :number= 0;
+    if(loanObject.LoanCropUnits && loanObject.LoanCropUnits.length > 0 ){
+      let unitsForCrop : Array<Loan_Crop_Unit>;
+      if(practiceType){
+        unitsForCrop = loanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cropCode &&  cu.Crop_Practice_Type_Code == practiceType);
+      }else{
+        unitsForCrop = loanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cropCode);
+      }
+      
+      if(unitsForCrop && unitsForCrop.length > 0){
+       totalAcres  = _.sumBy(unitsForCrop, (cu)=> cu.CU_Acres); 
+      }
+    }
+    return totalAcres;
+
+  }
+
+  getCropYieldForCropPractice(loanObject : loan_model,cropCode, practice){
+    if(cropCode && practice){
+      if(loanObject.CropYield && loanObject.CropYield.length > 0){
+        let cropPracticeYield = loanObject.CropYield.find(cy=>cy.CropType == cropCode && cy.IrNI == practice);
+        return cropPracticeYield ? cropPracticeYield.CropYield : 0;
+      }else{
+        return 0;
+      }
+    }
+  }
+  getCropYieldForCrop(loanObject : loan_model,cropCode,cropPractice=undefined){
+   
+    let IRRAcres = this.getAcresForCrop(loanObject,cropCode,'IRR');
+    let NIRAcres = this.getAcresForCrop(loanObject,cropCode,'NIR');
+    let IRRYield = this.getCropYieldForCropPractice(loanObject,cropCode, 'IRR');
+    let NIRYield = this.getCropYieldForCropPractice(loanObject,cropCode,'NIR');
+    if(IRRAcres+NIRAcres >0){
+        return ((IRRAcres*IRRYield) + (NIRAcres*NIRYield))/(IRRAcres+NIRAcres);
+    }else{
+        return 0;
+       
+    }
+    
+    
+  }
+
+  getShare(loanObject : loan_model,cropCode,practiceType =undefined){
+
+    let totalAcres = 0;
+    let shareAcres= 0;
+    let cropUnits = [];
+    if(loanObject.LoanCropUnits && loanObject.LoanCropUnits.length > 0 ){
+        if(practiceType){
+            cropUnits = loanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cropCode && cu.Crop_Practice_Type_Code == practiceType);
+        }else{
+            cropUnits = loanObject.LoanCropUnits.filter(cu=>cu.Crop_Code == cropCode);
+        }
+      
+      cropUnits.forEach(cu => {
+        let perProd = this.getPerProdForFarm(loanObject,cu.Farm_ID);
+        totalAcres += cu.CU_Acres;
+        shareAcres += (cu.CU_Acres*perProd)/100;
+
+      });
+    }
+    if(totalAcres > 0){
+      return (shareAcres/totalAcres)*100;
+    }else{
+      return 0;
+    }
+  }
+
+  getPerProdForFarm(loanObject : loan_model,farmID){
+    let farm : Loan_Farm;
+    if(loanObject.Farms && loanObject.Farms.length > 0 ){
+      farm = loanObject.Farms.find(f=>f.Farm_ID == farmID);
+      return farm ? farm.Percent_Prod : 0;
+    }else{
+      return 0;
+    }
+  }
 }
