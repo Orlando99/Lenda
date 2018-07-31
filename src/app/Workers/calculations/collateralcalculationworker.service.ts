@@ -251,7 +251,7 @@ export class Collateralcalculationworker {
             }else{
                 return undefined;
             }
-            return undefined;
+           
         }
     }
     getCropPracticeID(cropCode,practiceType){
@@ -264,9 +264,10 @@ export class Collateralcalculationworker {
             }else{
                 return undefined;
             }
-            return undefined;
+           
         }
     }
+    
     performMarketValueCalculationsAtCropLevel(loanObject : loan_model){
         
     }
