@@ -584,7 +584,7 @@ export class PoliciesComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
 
-    params.api.sizeColumnsToFit();//autoresizing
+    //params.api.sizeColumnsToFit();//autoresizing
     this.getgriddata();
   }
   //Grid Functions End
@@ -644,7 +644,7 @@ export class PoliciesComponent implements OnInit {
   }
 
   onGridSizeChanged(params) {
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
     params.api.resetRowHeights();
   }
 
