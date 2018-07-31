@@ -62,7 +62,7 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
       this.localloanobject = res
       
       if (res.srccomponentedit == "BorrowerIncomeHistoryComponent") {
@@ -85,7 +85,7 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+    // this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];

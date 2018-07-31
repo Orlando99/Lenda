@@ -17,7 +17,7 @@ export class ProjectedincomeComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       if(res!=undefined && res!=null)
       {
-      this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage updated");
+      // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage updated");
       this.localloanobject=res;
       this.allDataFetched=true;
       }
@@ -27,7 +27,7 @@ export class ProjectedincomeComponent implements OnInit {
   getdataforgrid(){
     
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
     this.localloanobject=obj;

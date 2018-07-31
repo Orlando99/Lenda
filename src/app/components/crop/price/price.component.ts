@@ -132,7 +132,7 @@ export class PriceComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       this.localloanobject = res;
       if (res.srccomponentedit == "PriceComponent") {
         //if the same table invoked the change .. change only the edited row
@@ -151,7 +151,7 @@ export class PriceComponent implements OnInit {
   }
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];

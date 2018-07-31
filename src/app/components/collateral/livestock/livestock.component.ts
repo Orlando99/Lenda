@@ -105,11 +105,7 @@ export class LivestockComponent implements OnInit {
 
   getdataforgrid(localloanobject: loan_model, categoryCode) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
-      localloanobject = obj;
-      this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
     }
   }
@@ -120,8 +116,11 @@ export class LivestockComponent implements OnInit {
     this.collateralService.getgridheight();
   }
 
-  syncenabled() {
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {

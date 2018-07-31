@@ -107,7 +107,7 @@ export class BalancesheetComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials;

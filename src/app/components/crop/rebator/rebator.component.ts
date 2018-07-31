@@ -97,7 +97,7 @@ export class RebatorComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage updated");
       this.localloanobject = res
       
       if (res.srccomponentedit == "RebatorComponent") {
@@ -123,7 +123,7 @@ export class RebatorComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];

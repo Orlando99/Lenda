@@ -94,7 +94,7 @@ export class EquipmentComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
       if (res.srccomponentedit == "EquipmentComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
@@ -116,7 +116,7 @@ export class EquipmentComponent implements OnInit {
   getdataforgrid() {
 
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - EQP', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - EQP', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
@@ -147,8 +147,11 @@ export class EquipmentComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {    
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {
