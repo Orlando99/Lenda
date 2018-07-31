@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <mat-select placeholder="Crop" [(ngModel)]=data.selected.crop>
     <mat-option *ngFor="let crop of data.crops" [value]="crop">
-      {{crop.Crop_Name+' '+crop.Practice_type_code}}
+      {{crop.Crop_Name}}
     </mat-option>
   </mat-select>
 </div>

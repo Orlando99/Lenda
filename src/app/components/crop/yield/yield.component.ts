@@ -134,7 +134,7 @@ export class YieldComponent implements OnInit {
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
     this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right',valueFormatter: APHRoundValueSetter });
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
-    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn", width: 120});
 
     this.context = { componentParent: this };
   }
@@ -389,17 +389,57 @@ export class YieldComponent implements OnInit {
   }
 
   addrow() {
+    // let distinctCrops = [];
+    // let cropLists = []
+
+    // this.rowData.forEach(rd =>{
+    //   if(distinctCrops.indexOf(rd.Crop)== -1)
+    //   distinctCrops.push(rd.Crop_ID);
+    // });
+
+    // this.refdata.CropList.forEach(cl => {
+    //   if(distinctCrops.indexOf(cl.Crop_And_Practice_ID) == -1){
+    //     distinctCrops.push(cl.Crop_And_Practice_ID);
+    //     cropLists.push(cl);
+    //   }
+    // });
+
+    // const dialogRef = this.dialog.open(YieldDialogComponent, {
+    //   width: '250px',
+    //   data: {crops:cropLists,
+    //          selected:{crop:'', practice:''}}
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   cropLists = []
+    //   if(result != undefined){
+    //     var newItem = { Crop_ID:result.crop.Crop_And_Practice_ID,
+    //                     Crop:result.crop.Crop_Name,
+    //                     CropType: result.crop.Crop_Code,
+    //                     Loan_ID:"",
+    //                     Loan_Full_ID: this.localloanobject.Loan_Full_ID,
+    //                     IrNI:result.crop.Practice_type_code,
+    //                     Practice:result.crop.Practice_type_code,
+    //                     CropYield:"",
+    //                     APH:"",
+    //                     InsUOM:"",
+    //                     ActionStatus: 0,
+    //                     CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
+    //     this.years.forEach(y=>{ newItem[y]=null; })
+    //     this.rowData.push(newItem);
+    //     this.localloanobject.CropYield.push(newItem);
+
     let distinctCrops = [];
     let cropLists = []
 
     this.rowData.forEach(rd =>{
       if(distinctCrops.indexOf(rd.Crop)== -1)
-      distinctCrops.push(rd.Crop_ID);
+      distinctCrops.push(rd.Crop);
     });
 
     this.refdata.CropList.forEach(cl => {
-      if(distinctCrops.indexOf(cl.Crop_And_Practice_ID) == -1){
-        distinctCrops.push(cl.Crop_And_Practice_ID);
+      if(distinctCrops.indexOf(cl.Crop_Name) == -1){
+        distinctCrops.push(cl.Crop_Name);
         cropLists.push(cl);
       }
     });
@@ -413,21 +453,40 @@ export class YieldComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       cropLists = []
       if(result != undefined){
-        var newItem = { Crop_ID:result.crop.Crop_And_Practice_ID,
+        var newIRR = { Crop_ID:result.crop.Crop_And_Practice_ID,
                         Crop:result.crop.Crop_Name,
                         CropType: result.crop.Crop_Code,
                         Loan_ID:"",
                         Loan_Full_ID: this.localloanobject.Loan_Full_ID,
-                        IrNI:result.crop.Practice_type_code,
-                        Practice:result.crop.Practice_type_code,
+                        IrNI:"IRR",
+                        Practice:"IRR",
                         CropYield:"",
                         APH:"",
                         InsUOM:"",
                         ActionStatus: 0,
                         CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
-        this.years.forEach(y=>{ newItem[y]=null; })
-        this.rowData.push(newItem);
-        this.localloanobject.CropYield.push(newItem);
+
+        var newNIR = { Crop_ID:result.crop.Crop_And_Practice_ID,
+                        Crop:result.crop.Crop_Name,
+                        CropType: result.crop.Crop_Code,
+                        Loan_ID:"",
+                        Loan_Full_ID: this.localloanobject.Loan_Full_ID,
+                        IrNI:"NIR",
+                        Practice:"NIR",
+                        CropYield:"",
+                        APH:"",
+                        InsUOM:"",
+                        ActionStatus: 0,
+                        CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
+        
+        this.years.forEach(y=> { 
+          newIRR[y]=null; 
+          newNIR[y] = null; 
+        });
+        this.rowData.push(newIRR);
+        this.rowData.push(newNIR);
+        this.localloanobject.CropYield.push(newIRR);
+        this.localloanobject.CropYield.push(newNIR);
         this.gridApi.setRowData(this.rowData);
 
         //this.getgridheight();
