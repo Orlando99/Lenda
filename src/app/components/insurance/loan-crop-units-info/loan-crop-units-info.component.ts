@@ -143,7 +143,7 @@ export class LoanCropUnitsInfoComponent implements OnInit {
     //   0.4563
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
 
       //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
@@ -157,7 +157,7 @@ export class LoanCropUnitsInfoComponent implements OnInit {
   }
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;

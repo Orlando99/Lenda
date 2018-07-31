@@ -120,3 +120,7 @@ export function lookupCropType(mappings, key) {
         return "";
     }
 }
+
+export function APHRoundValueSetter(params) {
+    return Math.round(params.value);
+}

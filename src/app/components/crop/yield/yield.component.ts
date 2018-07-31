@@ -9,7 +9,7 @@ import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Crop_Type_Practice_Type_Yield_EditModel, Loan_Crop_Type_Practice_Type_Yield_AddModel } from '../../../models/cropmodel';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
-import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping, cropNameValueSetter } from '../../../Workers/utility/aggrid/cropboxes';
+import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping, cropNameValueSetter, APHRoundValueSetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
@@ -21,6 +21,7 @@ import { empty } from 'rxjs/observable/empty';
 import { status } from '../../../models/syncstatusmodel';
 import { NO_CHANGE } from '@angular/core/src/render3/instructions';
 import { Observable } from 'rxjs';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 
 export interface DialogData {
   animal: string;
@@ -131,16 +132,16 @@ export class YieldComponent implements OnInit {
     });
 
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right'});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right',valueFormatter: APHRoundValueSetter });
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
-    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn"});
+    this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn", width: 120});
 
     this.context = { componentParent: this };
   }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-      this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
+     // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
       if (res.srccomponentedit == "YieldComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
@@ -161,7 +162,7 @@ export class YieldComponent implements OnInit {
 
   getdataforgrid(){
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
       this.localloanobject=obj;
@@ -172,10 +173,7 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    //this.getgridheight();
-
-    params.api.sizeColumnsToFit();
-
+    setgriddefaults(this.gridApi,this.columnApi);
     this.getdataforgrid();
   }
 
@@ -209,7 +207,7 @@ export class YieldComponent implements OnInit {
 
     this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.gridApi.sizeColumnsToFit();
+    
   }
 
   // syncenabled(){
@@ -391,17 +389,57 @@ export class YieldComponent implements OnInit {
   }
 
   addrow() {
+    // let distinctCrops = [];
+    // let cropLists = []
+
+    // this.rowData.forEach(rd =>{
+    //   if(distinctCrops.indexOf(rd.Crop)== -1)
+    //   distinctCrops.push(rd.Crop_ID);
+    // });
+
+    // this.refdata.CropList.forEach(cl => {
+    //   if(distinctCrops.indexOf(cl.Crop_And_Practice_ID) == -1){
+    //     distinctCrops.push(cl.Crop_And_Practice_ID);
+    //     cropLists.push(cl);
+    //   }
+    // });
+
+    // const dialogRef = this.dialog.open(YieldDialogComponent, {
+    //   width: '250px',
+    //   data: {crops:cropLists,
+    //          selected:{crop:'', practice:''}}
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   cropLists = []
+    //   if(result != undefined){
+    //     var newItem = { Crop_ID:result.crop.Crop_And_Practice_ID,
+    //                     Crop:result.crop.Crop_Name,
+    //                     CropType: result.crop.Crop_Code,
+    //                     Loan_ID:"",
+    //                     Loan_Full_ID: this.localloanobject.Loan_Full_ID,
+    //                     IrNI:result.crop.Practice_type_code,
+    //                     Practice:result.crop.Practice_type_code,
+    //                     CropYield:"",
+    //                     APH:"",
+    //                     InsUOM:"",
+    //                     ActionStatus: 0,
+    //                     CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
+    //     this.years.forEach(y=>{ newItem[y]=null; })
+    //     this.rowData.push(newItem);
+    //     this.localloanobject.CropYield.push(newItem);
+
     let distinctCrops = [];
     let cropLists = []
 
     this.rowData.forEach(rd =>{
       if(distinctCrops.indexOf(rd.Crop)== -1)
-      distinctCrops.push(rd.Crop_ID);
+      distinctCrops.push(rd.Crop);
     });
 
     this.refdata.CropList.forEach(cl => {
-      if(distinctCrops.indexOf(cl.Crop_And_Practice_ID) == -1){
-        distinctCrops.push(cl.Crop_And_Practice_ID);
+      if(distinctCrops.indexOf(cl.Crop_Name) == -1){
+        distinctCrops.push(cl.Crop_Name);
         cropLists.push(cl);
       }
     });
@@ -415,21 +453,40 @@ export class YieldComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       cropLists = []
       if(result != undefined){
-        var newItem = { Crop_ID:result.crop.Crop_And_Practice_ID,
+        var newIRR = { Crop_ID:result.crop.Crop_And_Practice_ID,
                         Crop:result.crop.Crop_Name,
                         CropType: result.crop.Crop_Code,
                         Loan_ID:"",
                         Loan_Full_ID: this.localloanobject.Loan_Full_ID,
-                        IrNI:result.crop.Practice_type_code,
-                        Practice:result.crop.Practice_type_code,
+                        IrNI:"IRR",
+                        Practice:"IRR",
                         CropYield:"",
                         APH:"",
                         InsUOM:"",
                         ActionStatus: 0,
                         CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
-        this.years.forEach(y=>{ newItem[y]=null; })
-        this.rowData.push(newItem);
-        this.localloanobject.CropYield.push(newItem);
+
+        var newNIR = { Crop_ID:result.crop.Crop_And_Practice_ID,
+                        Crop:result.crop.Crop_Name,
+                        CropType: result.crop.Crop_Code,
+                        Loan_ID:"",
+                        Loan_Full_ID: this.localloanobject.Loan_Full_ID,
+                        IrNI:"NIR",
+                        Practice:"NIR",
+                        CropYield:"",
+                        APH:"",
+                        InsUOM:"",
+                        ActionStatus: 0,
+                        CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
+        
+        this.years.forEach(y=> { 
+          newIRR[y]=null; 
+          newNIR[y] = null; 
+        });
+        this.rowData.push(newIRR);
+        this.rowData.push(newNIR);
+        this.localloanobject.CropYield.push(newIRR);
+        this.localloanobject.CropYield.push(newNIR);
         this.gridApi.setRowData(this.rowData);
 
         //this.getgridheight();
@@ -443,7 +500,7 @@ export class YieldComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    this.gridApi.sizeColumnsToFit();
+    //we can resize the columns here to override
   }
 
   updateSyncStatus(){

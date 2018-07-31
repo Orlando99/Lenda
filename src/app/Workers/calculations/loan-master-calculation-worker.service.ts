@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { loan_model, loan_borrower, borrower_model } from '../../models/loanmodel';
 import { environment } from '../../../environments/environment.prod';
-
+import { LoggingService } from '../../services/Logs/logging.service';
 @Injectable()
 export class LoanMasterCalculationWorkerService {
  
@@ -36,12 +36,10 @@ export class LoanMasterCalculationWorkerService {
     interestByCashFlow: [12.0, 20.0, '<'],
   }
   //farm financial ends
-  constructor() {
-
-  }
+  constructor(public logging: LoggingService) { }
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
-
+    let starttime = new Date().getTime();
     if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
     let loanMaster = loanObject.LoanMaster[0];
     //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
@@ -74,6 +72,8 @@ export class LoanMasterCalculationWorkerService {
       }
 
     }
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
   }
     
 
@@ -108,10 +108,13 @@ export class LoanMasterCalculationWorkerService {
   }
 
   getRatingRequirement(rating: number) {
+    let starttime = new Date().getTime();
     if (rating > 5 || rating < 1) {
       throw "Invalid rating passed";
     }
     let lookupIndex = 5 - rating;
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return {
       borrowerRating: this.borrowerRatingstaticValues.borrowerRating[lookupIndex],
       FICOScore: this.borrowerRatingstaticValues.FICOScore[lookupIndex],
@@ -126,6 +129,7 @@ export class LoanMasterCalculationWorkerService {
 
   }
   getRevanueThresholdValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let loanMaster = loanObject.LoanMaster[0];
     let temp = (loanMaster.Net_Market_Value_Crops || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0 )+ (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
@@ -135,50 +139,79 @@ export class LoanMasterCalculationWorkerService {
   }
 
   getRevanueThresholdStaticValues(loanObject: loan_model) {
+    let starttime = new Date().getTime();
+
     let revanueThresholdValue = this.getRevanueThresholdValue(loanObject);
+
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_4', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+
     return this.incomeConstant.map((val, index) => Math.round(revanueThresholdValue * val / 100));
   }
 
 
   getInsuranceThresholdValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
+
     let loanMaster = loanObject.LoanMaster[0];
     let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
+
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_5', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     //tValue = parseFloat(tValue.toFixed(2));
     return Math.round(tValue);
   }
 
   getInsuranceThresholdStaticValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let maxCropLoanValue = this.getInsuranceThresholdValue(loanObject);
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_6', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return this.insuranceConstant.map((val, index) => Math.round(maxCropLoanValue * val / 100));
   }
 
   getMaxCropStaticValue(loanObject: loan_model){
+    let starttime = new Date().getTime();
     let rtStaticValue = this.getRevanueThresholdStaticValues(loanObject);
     let itStaticValue = this.getInsuranceThresholdStaticValue(loanObject);
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_7', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return rtStaticValue.map((values,index)=>Math.min(rtStaticValue[index], itStaticValue[index]))
 
   }
 
   getMaxCropLoanValue(loanObject: loan_model){
+    let starttime = new Date().getTime();
     let borrowerRating = loanObject.LoanMaster[0].Borrower_Rating;
     let mcStaticValue = this.getMaxCropStaticValue(loanObject);
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_8', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return borrowerRating>=1 && borrowerRating<=5 ? mcStaticValue[ 5 - parseInt(borrowerRating)] : 0;
 
   }
 
   getDiscNetWorthValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let loanMaster = loanObject.LoanMaster[0];
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_9', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return loanMaster.Total_Disc_Net_Worth;
   }
 
   getDiscWorthStaticValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let discWorthValue = this.getDiscNetWorthValue(loanObject);
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_10', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return this.discNetWorthConstant.map((val, index) => Math.round(discWorthValue * val / 100));
   }
 
   getAgProMaxAdditionStaticValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let discNetWorthStaticValue = this.getDiscWorthStaticValue(loanObject);
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_11', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return [Math.min( this.maxAmountConstant[0], discNetWorthStaticValue[0]), Math.min(this.maxAmountConstant[0], discNetWorthStaticValue[1]), '-', '-', '-']
   }
 

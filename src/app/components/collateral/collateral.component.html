@@ -1,10 +1,23 @@
 <div class="basic-container">
-    <app-buyer-association></app-buyer-association>
-    <app-fsa></app-fsa>
-     <app-livestock></app-livestock>
-    <app-storedcrop></app-storedcrop>
-    <app-equipment></app-equipment>
-    <app-realestate></app-realestate>
-    <app-others></app-others>
-    <app-marketing-contracts></app-marketing-contracts>
+    <mat-card class="collateral">
+        <table>
+            <td>
+                <h2>Collateral</h2>
+            </td>
+            <td>
+                <mat-select placeholder="Category" (selectionChange)="menuSelected($event)" [(ngModel)]="categories" multiple>
+                    <mat-option *ngFor="let category of categoryList" [value]="category">{{category}}</mat-option>
+                </mat-select>
+            </td>
+        </table>
+    </mat-card>
+    
+    <div *ngIf="categories.indexOf('Buyer') != -1"><app-buyer-association></app-buyer-association></div>
+    <div *ngIf="categories.indexOf('FSA') != -1"><app-fsa></app-fsa></div>
+    <div *ngIf="categories.indexOf('Livestock') != -1"><app-livestock></app-livestock></div>
+    <div *ngIf="categories.indexOf('Stored Crop') != -1"><app-storedcrop></app-storedcrop></div>
+    <div *ngIf="categories.indexOf('Equipment') != -1"><app-equipment></app-equipment></div>
+    <div *ngIf="categories.indexOf('Real Estate') != -1"><app-realestate></app-realestate></div>
+    <div *ngIf="categories.indexOf('Others') != -1"><app-others></app-others></div>
+    <div *ngIf="categories.indexOf('Marketing Contracts') != -1"><app-marketing-contracts></app-marketing-contracts></div>
 </div>

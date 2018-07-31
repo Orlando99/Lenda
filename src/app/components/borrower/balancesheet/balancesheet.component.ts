@@ -11,6 +11,7 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 
 @Component({
   selector: 'app-balancesheet',
@@ -72,10 +73,11 @@ export class BalancesheetComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.gridApi.sizeColumnsToFit();
-    window.onresize = () => {
-        this.gridApi.sizeColumnsToFit();
-    }
+    // this.gridApi.sizeColumnsToFit();
+    // window.onresize = () => {
+    //     this.gridApi.sizeColumnsToFit();
+    // }
+    setgriddefaults(this.gridApi,this.columnApi);
 }
   //End here
   // Aggrid ends
@@ -105,7 +107,7 @@ export class BalancesheetComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'BalanceSheet', "LocalStorage updated");
       this.localloanobject = res;
       this.pinnedBottomRowData=[];
       this.CPA_Prepared_Financials = this.localloanobject.LoanMaster[0].CPA_Prepared_Financials? true : false;

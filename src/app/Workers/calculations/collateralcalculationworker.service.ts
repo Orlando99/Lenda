@@ -37,15 +37,14 @@ export class Collateralcalculationworker {
                 this.preparediscvalue(input.LoanCollateral[i]);
             }
 
-            let endtime = new Date().getTime();
+            
             this.computeTotalFSA(input);
             this.computeTotalEquip(input);
-            this.computeTotalFSA(input);
             this.computeTotallivestock(input);
             this.computeotherTotal(input);
             this.computerealstateTotal(input);
             this.computestoredcropTotal(input);
-
+            let endtime = new Date().getTime();
             this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
             return input;
         } catch{
@@ -55,70 +54,83 @@ export class Collateralcalculationworker {
     }
     // this is for footer row of FSA
     computeTotalFSA(input:loan_model) {
+        let starttime = new Date().getTime();
         // footer.Collateral_Category_Code = 'Total';
         let collateralFSA=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3});
-        input.LoanMaster[0].Net_Market_Value_FSA = this.totalMarketValue(collateralFSA);
+        input.LoanMaster[0].Net_Market_Value_FSA = this.totalNetMktValue(collateralFSA);
         input.LoanMaster[0].FC_FSA_Prior_Lien_Amount = this.totalPriorLien(collateralFSA);
-        input.LoanMaster[0].FC_Market_Value_FSA = this.totalMarketValue(collateralFSA);
+        input.LoanMaster[0].FC_Market_Value_FSA = this.totalMktValue(collateralFSA);
         input.LoanMaster[0].Disc_value_FSA =this.totalDiscValue(collateralFSA);
+
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
 
        // this is for footer row of FSA
     computeTotalEquip(input:loan_model) {
+        let starttime = new Date().getTime();
         // footer.Collateral_Category_Code = 'Total';
         let collateralEqip=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3});
-        input.LoanMaster[0].Net_Market_Value_Equipment = this.totalMarketValue(collateralEqip);
+        input.LoanMaster[0].Net_Market_Value_Equipment = this.totalNetMktValue(collateralEqip);
         input.LoanMaster[0].FC_Equip_Prior_Lien_Amount = this.totalPriorLien(collateralEqip);
-        input.LoanMaster[0].FC_Market_Value_Equip = this.totalMarketValue(collateralEqip);
+        input.LoanMaster[0].FC_Market_Value_Equip = this.totalMktValue(collateralEqip);
         input.LoanMaster[0].Disc_value_Equipment =this.totalDiscValue(collateralEqip
         );
-      }
-     totalMarketValue(loanCollateral) {
-        var total = 0;
-        loanCollateral.forEach(lc => {
-            total += Number(lc.Market_Value);
-        });
 
-        return total;
-    }
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_3', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      }
+   
     computeTotallivestock(input) {
+        debugger
+        let starttime = new Date().getTime();
         let collaterallst=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
-        input.LoanMaster[0].FC_Market_Value_lst = this.totalMarketValue(collaterallst);
+        input.LoanMaster[0].FC_Market_Value_lst = this.totalMktValue(collaterallst);
         input.LoanMaster[0].FC_Lst_Prior_Lien_Amount = this.totalPriorLien(collaterallst);
         input.LoanMaster[0].Net_Market_Value_Livestock = this.totalNetMktValue(collaterallst);
         input.LoanMaster[0].Disc_value_Livestock = this.totalDiscValue(collaterallst);;
         input.LoanMaster[0].FC_total_Qty_lst = this.totalQty(collaterallst);
         input.LoanMaster[0].FC_total_Price_lst = this.totalPrice(collaterallst);
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_4', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
       }
 
       computeotherTotal(input) {
+        let starttime = new Date().getTime();
         let collateralother=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !== 3});
-        input.LoanMaster[0].FC_Market_Value_other = this.totalMarketValue(collateralother);
+        input.LoanMaster[0].FC_Market_Value_other = this.totalMktValue(collateralother);
         input.LoanMaster[0].FC_other_Prior_Lien_Amount = this.totalPriorLien(collateralother);
         input.LoanMaster[0].Net_Market_Value__Other = this.totalNetMktValue(collateralother);
         input.LoanMaster[0].Disc_value_Other = this.totalDiscValue(collateralother);
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_5', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computerealstateTotal(input) {
+        let starttime = new Date().getTime();
         let collateralrealstate=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3});       
-        input.LoanMaster[0].FC_Market_Value_realstate = this.totalMarketValue(collateralrealstate);
+        input.LoanMaster[0].FC_Market_Value_realstate = this.totalMktValue(collateralrealstate);
         input.LoanMaster[0].FC_realstate_Prior_Lien_Amount = this.totalPriorLien(collateralrealstate);
         input.LoanMaster[0].Net_Market_Value_Real_Estate = this.totalNetMktValue(collateralrealstate);
         input.LoanMaster[0].Disc_value_Real_Estate = this.totalDiscValue(collateralrealstate);
         input.LoanMaster[0].FC_total_Qty_Real_Estate = this.totalQty(collateralrealstate);
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_6', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computestoredcropTotal(input) {
-
+        let starttime = new Date().getTime();
         let collateralrealstate=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "SCP" && lc.ActionStatus !== 3});
-        input.LoanMaster[0].FC_Market_Value_storedcrop = this.totalMarketValue(collateralrealstate);
+        input.LoanMaster[0].FC_Market_Value_storedcrop = this.totalMktValue(collateralrealstate);
         input.LoanMaster[0].FC_storedcrop_Prior_Lien_Amount = this.totalPriorLien(collateralrealstate);
         input.LoanMaster[0].Net_Market_Value_Stored_Crops = this.totalNetMktValue(collateralrealstate);
         input.LoanMaster[0].Disc_value_Stored_Crops = this.totalDiscValue(collateralrealstate);;
         input.LoanMaster[0].FC_total_Qty_storedcrop = this.totalQty(collateralrealstate);
         input.LoanMaster[0].FC_total_Price_storedcrop = this.totalPrice(collateralrealstate);
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Coll_7', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
     }
      totalDiscValue(loanCollateral) {
@@ -143,6 +155,13 @@ export class Collateralcalculationworker {
         var total = 0;
         loanCollateral.forEach(lc => {
             total += Number(lc.Net_Market_Value);
+        });
+        return total;
+    }
+    totalMktValue(loanCollateral) {
+        var total = 0;
+        loanCollateral.forEach(lc => {
+            total += Number(lc.Market_Value);
         });
         return total;
     }

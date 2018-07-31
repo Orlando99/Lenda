@@ -78,7 +78,7 @@ export class PoliciesComponent implements OnInit {
     this.columnDefs = [
       {
         headerName: 'Agent', 
-        field: 'Agent_Id', 
+        field: 'Agent_Id',pickfield:'Agent_Id', 
         cellClass: 'editable-color', 
         editable: true, 
         cellEditor: "selectEditor",
@@ -94,22 +94,22 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-        field: 'ProposedAIP', 
+        field: 'ProposedAIP',pickfield:'ProposedAIP',  
         cellClass: 'editable-color', 
         editable: true, 
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
       {
-        headerName: 'County | State', 
+        headerName: 'County | State',pickfield:'StateandCountry', 
         field: 'StateandCountry'
       },
       {
-        headerName: 'Crop', 
+        headerName: 'Crop',pickfield:'CropName',  
         field: 'CropName'
       },
       {
-        headerName: 'Practice', 
+        headerName: 'Practice',pickfield:'Practice', 
         field: 'Practice'
       },
       {
@@ -118,7 +118,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Options', 
-        field: 'SecInsurance', 
+        field: 'SecInsurance',pickfield:'SecInsurance',  
         cellClass: ['editable-color'], 
         autoHeight: true,
         editable: true, 
@@ -144,7 +144,7 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Unit', 
         field: 'Unit', 
         cellClass: ['editable-color'], 
-        editable: true, 
+        editable: true, pickfield:'Unit',
         cellEditor: "selectEditor",
         cellEditorParams: { 
           values: [
@@ -163,7 +163,7 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Level', 
         field: 'Level', 
         cellClass: ['editable-color'], 
-        editable: true, 
+        editable: true, pickfield:'Level',
         cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
           
@@ -180,7 +180,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Price', 
-        field: 'Price', 
+        field: 'Price', pickfield:'Price',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -191,7 +191,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Premium', 
-        field: 'Premium', 
+        field: 'Premium',  pickfield:'Premium',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -515,7 +515,7 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
-    
+    debugger
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
@@ -584,7 +584,7 @@ export class PoliciesComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
 
-    params.api.sizeColumnsToFit();//autoresizing
+    //params.api.sizeColumnsToFit();//autoresizing
     this.getgriddata();
   }
   //Grid Functions End
@@ -644,7 +644,7 @@ export class PoliciesComponent implements OnInit {
   }
 
   onGridSizeChanged(params) {
-    params.api.sizeColumnsToFit();
+    //params.api.sizeColumnsToFit();
     params.api.resetRowHeights();
   }
 

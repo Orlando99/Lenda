@@ -17,6 +17,7 @@ export class LoggingService {
   }
   checkandcreatelog(level: Logpriority, section: string, message: string) {
     let res=this.localst.retrieve(environment.logpriority);
+    let userid = this.localst.retrieve(environment.uid);
       
       // if (level <= res) {
         
@@ -24,6 +25,7 @@ export class LoggingService {
         obj.Log_Id = 0;
         obj.Log_Message = message;
         obj.Log_Section = section;
+        obj.userID = userid;
         this.createlog(obj).subscribe(res=>{
           
         })

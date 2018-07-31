@@ -98,7 +98,7 @@ export class FSAComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
@@ -129,8 +129,11 @@ export class FSAComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {
