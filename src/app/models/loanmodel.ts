@@ -386,13 +386,46 @@ export class borrower_model
         LCP_Notes: string='';
         @JsonProperty("LCP_Status", IntConverter,false)
         LCP_Status: number=0;
-        
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=0;
-
         FC_CropName? : string = '';
         FC_PracticeType? : string = '';
+
+        //Values on top for crop pratice
+        FC_Agg_Mkt_Value? :number=0;
+        FC_Agg_Disc_Mkt_Value? :number=0;
+        FC_Agg_Disc_Ins_Value? :number=0;
+        FC_Agg_Ins_Value? :number=0;
+        FC_Agg_Disc_Cei_Value? :number=0;
         
+        // values according to insurance types
+        FC_Ins_Value_Hmax? :number=0;
+        FC_Disc_Ins_Value_Hmax :number=0;
+
+        FC_Ins_Value_Mpci? :number=0;
+        FC_Disc_Ins_Value_Mpci:number=0;
+ 
+
+        FC_Ins_Value_Ramp? :number=0;
+        FC_Disc_Ins_Value_Ramp :number=0;
+      
+
+        FC_Ins_Value_Ice? :number=0;
+        FC_Disc_Ins_Value_Ice :number=0;
+       
+
+        FC_Ins_Value_Abc? :number=0;
+        FC_Disc_Ins_Value_Abc :number=0;
+       
+
+        FC_Ins_Value_Pci? :number=0;
+        FC_Disc_Ins_Value_Pci :number=0;
+      
+
+        FC_Ins_Value_Crophail? :number=0;
+        FC_Disc_Ins_Value_Crophail :number=0;
+       
+        //
     }
     @JsonObject
     export class Loan_Collateral
