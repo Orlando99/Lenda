@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { loan_model } from '../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
@@ -25,7 +25,8 @@ import { setgriddefaults } from '../../aggriddefinations/aggridoptions';
 @Component({
   selector: 'app-farm',
   templateUrl: './farm.component.html',
-  styleUrls: ['./farm.component.scss']
+  styleUrls: ['./farm.component.scss'],
+  encapsulation:ViewEncapsulation.None
 })
 export class FarmComponent implements OnInit {
   public refdata: any = {};
@@ -102,7 +103,7 @@ export class FarmComponent implements OnInit {
         valueSetter: Countyvaluesetter
       },
       {
-        headerName: '% Prod', field: 'Percent_Prod', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
+        headerName: '% Prod',headerClass:"rightaligned",field: 'Percent_Prod', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
           return PercentageFormatter(params.value);
         },
@@ -116,14 +117,14 @@ export class FarmComponent implements OnInit {
         
       },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
-      { headerName: 'FSN', field: 'FSN', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
+      { headerName: 'FSN', field: 'FSN',headerClass:"rightaligned", cellClass: 'editable-color rightaligned', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       { headerName: 'Section', field: 'Section', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       {
         headerName: 'Rated', field: 'Rated', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 'AAA', value: 'AAA' }, { key: 'BBB', value: 'BBB' }, { key: 'NR', value: 'NR' }] },
       },
       {
-        headerName: 'Rent', field: 'Share_Rent', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Rent',headerClass:"rightaligned", field: 'Share_Rent', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
@@ -137,18 +138,18 @@ export class FarmComponent implements OnInit {
         }
       },
       {
-        headerName: '$ Rent Due', field: 'Cash_Rent_Due_Date', cellClass: 'editable-color', editable: true, cellEditor: "dateCellEditor",
+        headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "dateCellEditor",
         cellEditorParams: getDateValue,
         valueFormatter: formatDateValue
       },
       {
-        headerName: 'Waived', field: 'Cash_Rent_Waived', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
       },
       {
-        headerName: '% Rent', field: 'Rentperc',
+        headerName: '% Rent',headerClass:"rightaligned", cellClass: 'rightaligned',field: 'Rentperc',
         cellEditorParams: function (params) {
         },
         valueFormatter: function (params) {
@@ -168,15 +169,15 @@ export class FarmComponent implements OnInit {
         }
       },
       {
-        headerName: 'IR Acres', field: 'Irr_Acres', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        headerName: 'IR Acres',headerClass:"rightaligned", field: 'Irr_Acres', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
         valueFormatter: numberWithOneDecPrecValueFormatter
       },
       {
-        headerName: 'NI Acres', field: 'NI_Acres', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        headerName: 'NI Acres',headerClass:"rightaligned", field: 'NI_Acres', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
         valueFormatter: numberWithOneDecPrecValueFormatter
       },
       {
-        headerName: 'Total Acres', field: 'FC_Total_Acres', cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
+        headerName: 'Total Acres',headerClass:"rightaligned",cellClass:"rightaligned", field: 'FC_Total_Acres', cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
         valueFormatter: numberWithOneDecPrecValueFormatter
       },
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
