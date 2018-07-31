@@ -174,11 +174,12 @@ export class Collateralcalculationworker {
             let crop = this.getCrop(loanObject,cropPractice.cropCode);
             cp.Market_Value = (acres * cropyield * share/100)*(crop.Crop_Price+crop.Basic_Adj+crop.Marketing_Adj+crop.Rebate_Adj);
             cp.Disc_Market_Value = cp.Market_Value* (1 - (47.5/100));
+            cp.ActionStatus =2;
         });
 
         if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
             loanObject.LoanMaster[0].Net_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Market_Value);
-            loanObject.LoanMaster[0].Disc_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Disc_Market_Value);
+            loanObject.LoanMaster[0].Disc_value_Crops = _.sumBy(cropPractices,(cp)=> cp.Disc_Market_Value);
         }
         let crops = loanObject.LoanCrops;
     
@@ -198,6 +199,7 @@ export class Collateralcalculationworker {
                 let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == NIRCropPracticeID);
                 crop.Revenue +=  cp ? cp.Market_Value : 0 
             }
+            crop.ActionStatus =2;
             
         });
 
