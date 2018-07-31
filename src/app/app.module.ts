@@ -8,7 +8,7 @@ import { ToastModule } from 'ng2-toastr';
 import { ChartsModule } from 'ng2-charts';
 import { BarRatingModule } from "ngx-bar-rating";
 import "reflect-metadata";
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 //START MATERIAL COMPONENTS
 import { MatButtonModule, MatCheckboxModule, MatNativeDateModule, MAT_DATE_LOCALE, MatProgressSpinner, MatProgressSpinnerModule, MatTooltipModule, MatChipsModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -188,6 +188,7 @@ import { AssociationRecordsComponent } from './components/work-in-progress/assoc
 import { LoanMarketingRecordsComponent } from './components/work-in-progress/loanmarketingrecords/loanmarketingrecords.component';
 import { SyncStatusComponent } from './components/work-in-progress/syncstatus/syncstatus.component';
 import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
+import { AgGridTooltipComponent } from './aggridcolumns/tooltip/tooltip.component';
 import { CommitteeComponent } from './components/committee/committee.component';
 
 
@@ -269,8 +270,9 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
     AphComponent,
-    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent
+    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent,
 
+    AgGridTooltipComponent,
   ],
   imports: [
     BrowserModule,
@@ -311,12 +313,14 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor, ChipsListEditor, EmptyEditor]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor, AgGridTooltipComponent]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
     BarRatingModule,
     AngularMultiSelectModule,
+
+    NgbModule.forRoot(),
   ],
   exports: [
     FormsModule,

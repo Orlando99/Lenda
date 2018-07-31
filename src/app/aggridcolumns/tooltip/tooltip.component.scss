@@ -1,0 +1,42 @@
+// :host {
+ /* Tooltip styling */
+    .ag-cell,
+    .custom-tooltip {
+        //display: inline-block;
+        //position: relative;
+        // padding: 0px 2px 15px 2px;
+        &:hover~.tooltiptext,
+        &:hover~.tooltiptext:after {
+            display: block;
+            z-index: 9999;
+        }
+    }
+
+    .tooltiptext {
+        display: none;
+        position: fixed;
+        margin-right: 10px;
+        //top: -10px;
+        //margin: 10px 10px 10px 10px;
+        background: white;
+        color: #27394F;
+        padding: 4px 8px;
+        font-size: 12px;
+        line-height: 1.4;
+        min-width: 100px;
+        text-align: center;
+        border-radius: 2px;
+        border: 1px solid black;
+    }
+    /* Tooltip arrow styling/placement */
+    .tooltiptext:after {
+        content: '';
+        display: block;
+        position: absolute;
+        width: 0;
+        height: 0;
+        top:100%;
+        border-color: 1px solid black;
+    
+    }
+// }
