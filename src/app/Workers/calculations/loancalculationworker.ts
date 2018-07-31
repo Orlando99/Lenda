@@ -157,6 +157,7 @@ export class LoancalculationWorker {
       if (localloanobj.LoanCollateral != null) {
         localloanobj = this.associationcalculation.prepareLoanassociationmodel(localloanobj);
         localloanobj = this.collateralcalculation.preparecollateralmodel(localloanobj);
+        localloanobj = this.collateralcalculation.performMarketValueCalculations(localloanobj)
       }
 
       // STEP 7 --- QUESTIONS CALCULATIONS

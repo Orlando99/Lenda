@@ -12,6 +12,7 @@ import { environment } from '../../../../environments/environment.prod';
 export class ProjectedincomeComponent implements OnInit {
   private localloanobject:loan_model=new loan_model();
   public allDataFetched=false;  
+  public cropRevenue  : Array<CropRevenueModel> = [];
   constructor(public localstorageservice:LocalStorageService,public logging:LoggingService) { }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
@@ -20,6 +21,7 @@ export class ProjectedincomeComponent implements OnInit {
       // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage updated");
       this.localloanobject=res;
       this.allDataFetched=true;
+      this.prepareData();
       }
     })
     this.getdataforgrid();
@@ -33,7 +35,26 @@ export class ProjectedincomeComponent implements OnInit {
     this.localloanobject=obj;
     this.allDataFetched=true;
     }
+    this.prepareData();
+
   }
 
+  prepareData(){
+    
+  }
 
+  
+
+}
+
+class  CropRevenueModel{
+  Name : string;
+  Acres : number;
+  CropYield : number;
+  Share : number;
+  Price : number;
+  Basic_Adj : number;
+  Marketing_Adj : number;
+  Rebate_Adj : number;
+  Revenue : number;
 }
