@@ -116,8 +116,11 @@ export class LivestockComponent implements OnInit {
     this.collateralService.getgridheight();
   }
 
-  syncenabled() {
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {

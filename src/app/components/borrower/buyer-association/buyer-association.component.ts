@@ -27,7 +27,7 @@ export class BuyerAssociationComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = true;
+
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -77,7 +77,7 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Buyer', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
-      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color', 'text-right']},
       { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
@@ -202,6 +202,14 @@ export class BuyerAssociationComponent implements OnInit {
     })
 
   }
+
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0)
+      return '';
+    else
+      return 'disabled';
+  }
+
 
 }
 

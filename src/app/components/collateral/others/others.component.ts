@@ -148,9 +148,11 @@ export class OthersComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-   
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {

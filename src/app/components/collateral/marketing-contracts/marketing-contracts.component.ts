@@ -241,13 +241,13 @@ export class MarketingContractsComponent implements OnInit {
     this.getgridheight();
   }
 
-  syncenabled(){
-    if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
-      return this.localloanobject.LoanMarketingContracts.filter(p=>p.ActionStatus).length>0;
-    }else{
-      return false;
-    }
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != 0).length > 0)
+      return '';
+    else
+      return 'disabled';
   }
+
 
   synctoDb(){
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
