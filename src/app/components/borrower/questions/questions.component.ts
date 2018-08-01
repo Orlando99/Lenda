@@ -3,6 +3,8 @@ import { environment } from '../../../../environments/environment.prod';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoanQResponse, RefQuestions } from '../../../models/loan-response.model';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
+import { loan_model } from '../../../models/loanmodel';
+import { QuestionscalculationworkerService } from '../../../Workers/calculations/questionscalculationworker.service';
 
 @Component({
   selector: 'app-questions',
@@ -11,38 +13,44 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 })
 export class QuestionsComponent implements OnInit {
   refdata;
-  localloanobject;
+  localloanobject : loan_model;
   RefQuestions: RefQuestions[];
   LoanQResponse: LoanQResponse[];
+  chevronID:number;
+  responses : Array<LoanQResponse>;
 
   constructor(public localstorageservice: LocalStorageService,
-    public loanserviceworker: LoancalculationWorker) { }
+    public loanserviceworker: LoancalculationWorker,
+    private questionService : QuestionscalculationworkerService) { }
 
   ngOnInit() {
-    this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.chevronID =1;
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
-      if(res!=null && this.localloanobject.LoanQResponse!=undefined)
-      {
-        this.preparedata();
+      this.localloanobject = res;
+      if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
+        this.responses = this.questionService.prepareResponses(this.chevronID,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
       }
+      
     })
-    if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.LoanQResponse!=undefined) {
-      this.preparedata();
+
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
+      this.responses = this.questionService.prepareResponses(this.chevronID,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
     }
-    console.log(this.RefQuestions, this.LoanQResponse)
+    
   }
 
-  private preparedata() {
-    this.RefQuestions = [];
-    this.LoanQResponse = this.localloanobject.LoanQResponse;
-    //temporary fix for unmatched length of questions and response rows
-    if (this.localloanobject.LoanQResponse && this.localloanobject.LoanQResponse.length > 0) {
-      this.localloanobject.LoanQResponse.forEach((element, index) => {
-        this.RefQuestions.push(this.refdata.RefQuestions[index]);
-      });
-    }
-  }
+  // prepareQuestions(chevronID : number, queResponse : Array<LoanQResponse>){
+  //   let refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+  //   if(refdata.RefQuestions && refdata.RefQuestions.length >0){
+
+  //     let cheveronQuestions  : Array<RefQuestions>= refdata.RefQuestions.filter(que=>que.Chevron_ID == chevronID);
+  //     return cheveronQuestions;
+  //   }else{
+  //     return [];
+  //   }
+
+  // }
 
   change() {
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);

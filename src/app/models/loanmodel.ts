@@ -255,7 +255,7 @@ export class borrower_model
         Farms:Loan_Farm[]=[];
 
        @JsonProperty("LoanQResponse", ArrayConverter,true)
-        LoanQResponse:any=[];
+        LoanQResponse:Array<LoanQResponse>=[];
 
         @JsonProperty("LoanBudget",ArrayConverter,true)
         LoanBudget:Array<Loan_Budget>=[];
