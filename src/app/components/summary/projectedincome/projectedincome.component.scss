@@ -7,16 +7,37 @@ tfoot{
 td{
     padding: 5px;
 }
+
 th{
     padding: 5px;
     font-weight: 600;
-    text-align: center;
+   
 }
 .background-highlight{
     background-color: #dce6f1;
     font-weight: 600;
   }
-
-  tr td:not(:first-child) {
+.font-weight-600{
+    font-weight: 600;
+}
+tr td:not(:first-child) {
     text-align: right;
+}
+tr td:first-child {
+    text-align: left;
+}
+tr th:not(:first-child) {
+    text-align: right;
+}
+tr th:first-child {
+    text-align: left;
+}
+.price:before{
+    content : '$';
+    float: left;
+
+}
+.percent:after{
+    content : '%';
+    
 }

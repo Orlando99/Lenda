@@ -38,29 +38,30 @@
                 <td></td>
                 <td></td>
               </tr>
-              <tr *ngFor="let cropunit of localloanobject.LoanCropUnits">
-                <td>{{cropunit.Crop_Code}}</td>
-                <td>{{cropunit.CU_Acres}}</td>
-                <td>200</td>
-                <td>95%</td>
-                <td>$ {{cropunit.Z_Price}}</td>
-                <td>$ {{cropunit.Z_Basis_Adj}}</td>
-                <td>$ {{cropunit.Z_Marketing_Adj}}</td>
-                <td>$ {{cropunit.Z_Rebate_Adj}}</td>
-                <td>$ {{cropunit.FC_Revenue | number}}</td>
+              <tr *ngFor="let crop of cropRevenue">
+                <td>{{crop.Name}}</td>
+                <td>{{crop.Acres}}</td>
+                <td>{{crop.CropYield | number}}</td>
+                <td class="percent">{{crop.Share}}</td>
+                <td class="price">{{crop.Price.toFixed(4)}}</td>
+                <td class="price">{{crop.Basic_Adj.toFixed(4)}}</td>
+                <td class="price">{{crop.Marketing_Adj.toFixed(4)}}</td>
+                <td class="price">{{crop.Rebate_Adj.toFixed(4)}}</td>
+                <td class="price">{{crop.Revenue.toFixed(0) | number}}</td>
+                
               </tr>
               <tr class="background-highlight">
                 <td>
                   <b>Subtotal Crop Revenue</b>
                 </td>
-                <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_SubTotalAcres}}</td>
+                <td>{{totalAcres}}</td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_SubtotalCropRevenue}}</td>
+                <td class="price">{{NetCropRevenue  | number}}</td>
               </tr>
               <tr>
                 <td>
@@ -84,8 +85,30 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td class="price">{{Net_Market_Value_FSA  | number}}</td>
               </tr>
+              <tr>
+                  <td>Livestock</td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td class="price">{{Net_Market_Value_Livestock  | number}}</td>
+                </tr>
+                <tr>
+                    <td>Stored Crop</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="price">{{Net_Market_Value_Stored_Crops  | number}}</td>
+                  </tr>
               <tr>
                 <td>Other</td>
                 <td></td>
@@ -95,11 +118,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td class="price">{{Net_Market_Value__Other  | number}}</td>
               </tr>
               <tr>
-                <td>
-                  <b>Total Additional Revenue</b>
+                <td class="font-weight-600">
+                  Total Additional Revenue
                 </td>
                 <td></td>
                 <td></td>
@@ -108,10 +131,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>$ -</td>
+                <td class="price font-weight-600">{{Total_Additional_Revenue  | number}}</td>
               </tr>
               <tr>
-                <td>
+                <td class="font-weight-600">
                   <b>Total Revenue</b>
                 </td>
                 <td></td>
@@ -121,11 +144,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_TotalRevenue}}</td>
+                <td class="price font-weight-600">{{Total_Revenue  | number}}</td>
               </tr>
               <tr>
                   <td>
-                    <b>Total Budget</b>
+                    Total Budget
                   </td>
                   <td></td>
                   <td></td>
@@ -134,11 +157,11 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_TotalBudget}}</td>
+                  <td class="price">{{Total_Expense_Budget  | number}}</td>
                 </tr>
                 <tr>
                     <td>
-                      <b>Estimated Interest</b>
+                      Estimated Interest
                     </td>
                     <td></td>
                     <td></td>
@@ -147,7 +170,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_EstimatedInterest}}</td>
+                    <td class="price">{{Estimated_Interest  | number}}</td>
                   </tr>
                   <tr class="background-highlight">
                       <td>
@@ -160,7 +183,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td>$ {{localloanobject.LoanCropUnitFCvalues.FC_TotalCashFlow}}</td>
+                      <td class="price">{{Total_CashFlow  | number}}</td>
                     </tr>
             </tbody>
           </table>

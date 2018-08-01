@@ -251,7 +251,6 @@ export class Collateralcalculationworker {
             }else{
                 return undefined;
             }
-           
         }
     }
     getCropPracticeID(cropCode,practiceType){
@@ -264,7 +263,6 @@ export class Collateralcalculationworker {
             }else{
                 return undefined;
             }
-           
         }
     }
     

@@ -1,0 +1,45 @@
+<mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Budget
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <table class="bordered">
+              <thead>
+                <tr>
+                  <th  class="title">Budget</th>
+                  <th>ARM</th>
+                  <th>CPS</th>
+                  <th>3rd Party</th>
+                  <th>Total</th>
+                  <th>Additional Credit Notes</th>
+                  <th>% Revenue</th>
+                </tr>
+              </thead>
+  
+              <tbody>
+                
+                <tr *ngFor="let budget of budgets, let rowIndex=index" [ngClass]="rowIndex == budgets.length-1 ? 'background-highlight':''">
+                  <td class="title">{{budget.FC_Expense_Name}}</td>
+                  
+                  <td class="price"> {{ budget.ARM_Budget_Crop ? (budget.ARM_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td class="price"> {{ budget.Distributor_Budget_Crop ? (budget.Distributor_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td class="price"> {{ budget.Third_Party_Budget_Crop ? (budget.Third_Party_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td class="price"> {{ budget.Total_Budget_Crop_ET ? (budget.Total_Budget_Crop_ET.toFixed(0) | number) : '-' }} </td>
+                  <td></td>
+                  <td class="percent"> {{ budget.Per_Revenue.toFixed(1)}}</td>
+                  
+               
+              </tbody>
+            </table>
+            <br>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>

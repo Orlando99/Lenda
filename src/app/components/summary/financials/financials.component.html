@@ -26,9 +26,9 @@
                 
                 <tr *ngFor="let row of rowData, let rowIndex=index" [ngClass]="rowIndex == rowData.length-1 ? 'background-highlight':''">
                   <td class="title">{{row.Financials}}</td>
-                  <td>{{priceFormat(row.Assets)}}</td>
-                  <td>{{priceFormat(row.Debt)}}</td>
-                  <td>{{priceFormat(row.Equity)}}</td>
+                  <td class="price">{{row.Assets | number}}</td>
+                  <td class="price">{{row.Debt | number}}</td>
+                  <td class="price">{{row.Equity | number}}</td>
                   <td>{{row.Ratios}}</td>
                   <td>{{row.FICO}}</td>
                   <td>{{row.Rating}}</td>

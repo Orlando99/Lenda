@@ -7,6 +7,12 @@ tfoot{
 td:not(.title){
     text-align: right;
 }
+th:not(.title){
+    text-align: right;
+}
+th.title{
+    text-align: left;
+}
 td{
     padding: 5px;
 }
@@ -20,8 +26,13 @@ th{
     font-weight: 600;
   }
 
+
 .price:before{
     content : '$';
     float: left;
 
+}
+.percent:after{
+    content : '%';
+    
 }
