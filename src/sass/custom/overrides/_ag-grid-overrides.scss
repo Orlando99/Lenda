@@ -152,3 +152,20 @@ a.disabled {
   cursor: not-allowed;
   text-decoration: underline;
 }
+
+
+.ag-theme-balham .ag-header-cell-label{
+  display: table !important;
+}
+.rightaligned [ref="eLabel"]{
+  float: right !important;
+}
+
+.rightaligned [ref="eText"]{
+  float: right !important;
+}
+.rightaligned{
+  text-align: end;
+  padding-right: 11px;
+
+}
