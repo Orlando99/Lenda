@@ -96,7 +96,7 @@ export class LoanMasterCalculationWorkerService {
       loanMaster.Return_Percent = parseFloat(loanMaster.Return_Percent.toFixed(1)); 
       
       
-      loanMaster.Cash_Flow_Amount = this.getRevanueThresholdValue(localLoanObject) -  (loanMaster.Total_Commitment + loanMaster.Dist_Commitment+ loanMaster.Rate_Fee_Amount);
+      loanMaster.Cash_Flow_Amount = this.getRevanueThresholdValue(localLoanObject) -  (loanMaster.Total_Commitment + loanMaster.Rate_Fee_Amount);
       loanMaster.Cash_Flow_Amount = parseFloat(loanMaster.Cash_Flow_Amount.toFixed(2)); 
 
       loanMaster.Break_Even_Percent = ((loanMaster.ARM_Commitment + loanMaster.Dist_Commitment + loanMaster.Rate_Fee_Amount)/

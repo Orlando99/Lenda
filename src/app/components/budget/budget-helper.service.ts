@@ -79,7 +79,7 @@ export class BudgetHelperService {
       Third_Party_Budget_Crop: lstloanBudget.reduce((a, b) => a + (b['Third_Party_Budget_Crop'] ? parseFloat(b['Third_Party_Budget_Crop'].toString()) : 0), 0),
       Distributor_Budget_Crop: lstloanBudget.reduce((a, b) => a + (b['Distributor_Budget_Crop'] ? parseFloat(b['Distributor_Budget_Crop'].toString()) : 0), 0),
       Total_Budget_Crop_ET: lstloanBudget.reduce((a, b) => a + (b['Total_Budget_Crop_ET'] ? parseFloat(b['Total_Budget_Crop_ET'].toString()) : 0), 0),
-    }]
+    }] as Array<Loan_Budget>;
   }
 
   getTotalTableData(lstLoanBudget: Array<Loan_Budget>, cropPractices: Array<Loan_Crop_Practice>) {
