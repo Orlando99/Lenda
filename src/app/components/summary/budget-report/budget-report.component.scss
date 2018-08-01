@@ -26,3 +26,13 @@ th{
     font-weight: 600;
   }
 
+
+.price:before{
+    content : '$';
+    float: left;
+
+}
+.percent:after{
+    content : '%';
+    
+}

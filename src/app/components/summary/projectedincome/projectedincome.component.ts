@@ -3,6 +3,7 @@ import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
+import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 
 @Component({
   selector: 'app-projectedincome',
@@ -24,7 +25,7 @@ export class ProjectedincomeComponent implements OnInit {
   Total_Expense_Budget;
   Estimated_Interest;
   Total_CashFlow;
-  constructor(public localstorageservice: LocalStorageService, public logging: LoggingService) { }
+  constructor(public localstorageservice: LocalStorageService, public logging: LoggingService, public loanCalculationsService: LoancalculationWorker) { }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       if (res != undefined && res != null) {
@@ -42,6 +43,9 @@ export class ProjectedincomeComponent implements OnInit {
     // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
+      if (this.localloanobject && this.localloanobject.LoanMaster[0]) {
+        this.localloanobject.LoanMaster[0].FC_Total_Revenue =0;
+      }
       this.allDataFetched = true;
     }
     this.prepareData();
@@ -75,10 +79,15 @@ export class ProjectedincomeComponent implements OnInit {
         this.Net_Market_Value_FSA = loanMaster.Net_Market_Value_FSA || 0;
         this.Total_Additional_Revenue = this.Net_Market_Value_Livestock + this.Net_Market_Value_FSA + this.Net_Market_Value__Other + this.Net_Market_Value_Stored_Crops;
         this.Total_Revenue = this.NetCropRevenue + this.Total_Additional_Revenue;
-        this.Total_Expense_Budget =  parseInt(loanMaster.Total_Commitment.toFixed(0));
+        this.Total_Expense_Budget = parseInt(loanMaster.Total_Commitment.toFixed(0));
         this.Estimated_Interest = parseInt(loanMaster.Rate_Fee_Amount.toFixed(0));
         this.Total_CashFlow = parseInt(this.Total_Revenue.toFixed(0)) - parseInt(this.Total_Expense_Budget.toFixed(0)) - parseInt(this.Estimated_Interest.toFixed(0));
 
+        if (!this.localloanobject.LoanMaster[0].FC_Total_Revenue) {
+          this.localloanobject.LoanMaster[0].FC_Total_Revenue = this.Total_Revenue;
+          this.loanCalculationsService.performcalculationonloanobject(this.localloanobject, false);
+        }
+        
       }
     }
   }

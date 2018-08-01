@@ -15,7 +15,8 @@ export class BudgetReportComponent implements OnInit {
   public budgetService : BudgetHelperService) {
  
   }
-  budgets: Array<Loan_Budget>;
+  budgets: Array<any>;
+  totalRevenue : number;
   
 
   ngOnInit() {    
@@ -24,8 +25,8 @@ export class BudgetReportComponent implements OnInit {
       if(res!=undefined && res!=null)
       {
         let loanObject : loan_model = res;
-        if(loanObject && loanObject.LoanCropPractices && loanObject.LoanBudget ){
-          
+        if(loanObject && loanObject.LoanCropPractices && loanObject.LoanBudget && loanObject.LoanMaster){
+          this.totalRevenue = loanObject.LoanMaster[0].FC_Total_Revenue;
           this.prepareData(loanObject.LoanCropPractices,loanObject.LoanBudget);
         }       
        
@@ -33,8 +34,9 @@ export class BudgetReportComponent implements OnInit {
     });
   
     let loanObject : loan_model= this.localstorageservice.retrieve(environment.loankey);
-    if(loanObject && loanObject.LoanCropPractices && loanObject.LoanBudget ){
+    if(loanObject && loanObject.LoanCropPractices && loanObject.LoanBudget && loanObject.LoanMaster ){
           
+      this.totalRevenue = loanObject.LoanMaster[0].FC_Total_Revenue;
       this.prepareData(loanObject.LoanCropPractices,loanObject.LoanBudget);
     }  
   }
@@ -43,6 +45,11 @@ export class BudgetReportComponent implements OnInit {
     let preparedCP = this.budgetService.prepareCropPractice(cropPractices);
     this.budgets = this.budgetService.getTotalTableData(loanBudget, preparedCP);
     this.budgets.push(this.budgetService.getTotals(this.budgets)[0]);
+
+    this.budgets.forEach(budget=>{
+      budget.Per_Revenue =  (100*budget.Total_Budget_Crop_ET)/this.totalRevenue;
+      budget.Per_Revenue = parseFloat(budget.Per_Revenue.toFixed(1));
+    });
   }
 
 }
