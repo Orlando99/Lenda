@@ -35,6 +35,9 @@ export class LoanQResponse {
   FC_Question_ID_Text : string;
   FC_Choice1 :string;
   FC_Choice2 : string;
+  FC_Subsidiary_Question_ID_Ind : number;
+  FC_Parent_Question_ID : number;
+
 }
 
 export class RefQuestions {

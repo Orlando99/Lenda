@@ -40,6 +40,16 @@ export class QuestionsComponent implements OnInit {
     
   }
 
+  getVisibility(Parent_Question_ID){
+    let matchedParent = this.responses.find(res=>res.Question_ID ==Parent_Question_ID);
+    if(matchedParent){
+      return matchedParent.FC_Choice1 == matchedParent.Response_Detail;
+    }else{
+      return false;
+    }
+
+  }
+
   // prepareQuestions(chevronID : number, queResponse : Array<LoanQResponse>){
   //   let refdata = this.localstorageservice.retrieve(environment.referencedatakey);
   //   if(refdata.RefQuestions && refdata.RefQuestions.length >0){

@@ -10,13 +10,13 @@
     </button> -->
     <div *ngIf="responses && responses.length" class="container bottom">
       <div class="q-row" *ngFor="let res of responses; let i = index;">
-        <div class="row">
-          <div class="col s9"> <span>{{res.Question_ID_Text}}</span> </div>
+        <div class="row" *ngIf="res.FC_Subsidiary_Question_ID_Ind ? getVisibility(res.FC_Parent_Question_ID) : true">
+          <div class="col s9"> <span>{{res.FC_Question_ID_Text}}</span> </div>
           
           <div class="col s3" *ngIf="res.Question_Category_Code==1">
             <mat-radio-group [(ngModel)]="res.Response_Detail" (ngModelChange)="change()">
               <mat-radio-button [value]="res.FC_Choice1">{{res.FC_Choice1}}</mat-radio-button>
-              <mat-radio-button [value]="res.FC_Choise2">{{res.FC_Choise2}}</mat-radio-button>
+              <mat-radio-button [value]="res.FC_Choice2">{{res.FC_Choice2}}</mat-radio-button>
             </mat-radio-group>
           </div>
           <div class="col s3" *ngIf="res.Question_Category_Code==2">

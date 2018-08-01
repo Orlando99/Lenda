@@ -65,18 +65,21 @@ export class QuestionscalculationworkerService {
             respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
             respecctiveResponse.FC_Choice1 = que.Choice1;
             respecctiveResponse.FC_Choice2 = que.Choice2;
+            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID;
+            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
             queResponse.push(respecctiveResponse);
           }else{
             respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
             respecctiveResponse.FC_Choice1 = que.Choice1;
             respecctiveResponse.FC_Choice2 = que.Choice2;
+            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID;
+            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
           }
           
         })
       }
       
     }
-
     return queResponse;
   }
 }
