@@ -64,14 +64,14 @@ export class ProjectedincomeComponent implements OnInit {
       this.localloanobject.LoanCrops.forEach(crop => {
         let cropRevenue: CropRevenueModel = new CropRevenueModel();
         cropRevenue.Name = crop.Crop_Code;
-        cropRevenue.Acres = crop.Acres.toFixed(1);
-        cropRevenue.CropYield = parseInt(crop.W_Crop_Yield.toFixed(0));
-        cropRevenue.Share = crop.LC_Share.toFixed(1);
-        cropRevenue.Price = crop.Crop_Price;
-        cropRevenue.Basic_Adj = crop.Basic_Adj;
-        cropRevenue.Marketing_Adj = crop.Marketing_Adj;
-        cropRevenue.Rebate_Adj = crop.Rebate_Adj;
-        cropRevenue.Revenue = crop.Revenue;
+        cropRevenue.Acres = crop.Acres ? crop.Acres.toFixed(1) : '0.0';
+        cropRevenue.CropYield = crop.W_Crop_Yield ? crop.W_Crop_Yield.toFixed(0) : '0';
+        cropRevenue.Share = crop.LC_Share ? crop.LC_Share.toFixed(1) : '0.0';
+        cropRevenue.Price = crop.Crop_Price ? crop.Crop_Price.toFixed(4) : '0.0000';
+        cropRevenue.Basic_Adj = crop.Basic_Adj ? crop.Basic_Adj.toFixed(4) : '0.0000';
+        cropRevenue.Marketing_Adj = crop.Marketing_Adj ? crop.Marketing_Adj.toFixed(4) : '0.0000';
+        cropRevenue.Rebate_Adj = crop.Rebate_Adj ? crop.Rebate_Adj.toFixed(4) : '0.0000';
+        cropRevenue.Revenue = crop.Revenue ? crop.Revenue.toFixed(0) : '0';
         this.cropRevenue.push(cropRevenue);
       });
 
@@ -85,7 +85,7 @@ export class ProjectedincomeComponent implements OnInit {
         this.Net_Market_Value_FSA = loanMaster.Net_Market_Value_FSA || 0;
         this.Total_Additional_Revenue = this.Net_Market_Value_Livestock + this.Net_Market_Value_FSA + this.Net_Market_Value__Other + this.Net_Market_Value_Stored_Crops;
         this.Total_Revenue = this.NetCropRevenue + this.Total_Additional_Revenue;
-        this.Total_Revenue = parseInt(this.Total_Revenue.toFixed(0));
+        this.Total_Revenue = this.Total_Revenue ? parseInt(this.Total_Revenue.toFixed(0)) : 0;
         this.Total_Expense_Budget = loanMaster.Total_Commitment ? parseInt(loanMaster.Total_Commitment.toFixed(0)) :0;
         this.Estimated_Interest = loanMaster.Rate_Fee_Amount ? parseInt(loanMaster.Rate_Fee_Amount.toFixed(0)) : 0;
         this.Total_CashFlow = parseInt(this.Total_Revenue.toFixed(0)) - parseInt(this.Total_Expense_Budget.toFixed(0)) - parseInt(this.Estimated_Interest.toFixed(0));
@@ -109,11 +109,11 @@ export class ProjectedincomeComponent implements OnInit {
 class CropRevenueModel {
   Name: string;
   Acres: string;
-  CropYield: number;
+  CropYield: string;
   Share: string;
-  Price: number;
-  Basic_Adj: number;
-  Marketing_Adj: number;
-  Rebate_Adj: number;
-  Revenue: number;
+  Price: string;
+  Basic_Adj: string;
+  Marketing_Adj: string;
+  Rebate_Adj: string;
+  Revenue: string;
 }
