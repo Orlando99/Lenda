@@ -77,19 +77,19 @@
               </div>
               <div class="col m2">
                   <div class="block">
-                      <div class="block-header">
+                      <div class="block-header  text-left">
                           ARM Commitment
                       </div>
-                      <span class="block text-center">
-                          {{ localborrowerobject.ARM_Commitment | currency}}
+                      <span class="block text-left price">
+                          {{ localborrowerobject.ARM_Commitment.toFixed(0) | number}}
                       </span>
                     </div>
                     <div class="block">
-                        <div class="block-header">
+                        <div class="block-header  text-left">
                             Dist Commitment 
                         </div>
-                        <span class="block text-center">
-                            {{ localborrowerobject.Dist_Commitment | currency}}
+                        <span class="block text-left price">
+                             {{ localborrowerobject.Dist_Commitment.toFixed(0) | number}}
                         </span>
                     </div>
               </div>
@@ -98,24 +98,24 @@
                       <div class="block-header">
                           Interest Rate
                       </div>
-                      <span class="block">
-                          {{ localborrowerobject.Rate_Percent}} %
+                      <span class="block percent">
+                          {{ localborrowerobject.Rate_Percent.toFixed(2)}}
                       </span>
                     </div>
                     <div class="block">
                         <div class="block-header">
                             Loan Orig. Fee
                         </div>
-                        <span class="block">
-                            {{ localborrowerobject.Orgination_Fee_Percent}} %
+                        <span class="block  percent">
+                            {{ localborrowerobject.Orgination_Fee_Percent.toFixed(1)}}
                         </span>
                     </div>
                   <div class="block">
                       <div class="block-header">
                           Loan Srvc. Fee
                       </div>
-                      <span class="block">
-                          {{ localborrowerobject.Service_Fee_Percent}} %
+                      <span class="block percent">
+                          {{ localborrowerobject.Service_Fee_Percent.toFixed(1)}}
                       </span>
                     </div>
                   <div class="block">
