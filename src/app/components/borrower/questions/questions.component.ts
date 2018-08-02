@@ -5,6 +5,9 @@ import { LoanQResponse, RefQuestions } from '../../../models/loan-response.model
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { loan_model } from '../../../models/loanmodel';
 import { QuestionscalculationworkerService } from '../../../Workers/calculations/questionscalculationworker.service';
+import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { JsonConvert } from 'json2typescript';
+import { ToastsManager } from 'ng2-toastr';
 
 @Component({
   selector: 'app-questions',
@@ -13,58 +16,97 @@ import { QuestionscalculationworkerService } from '../../../Workers/calculations
 })
 export class QuestionsComponent implements OnInit {
   refdata;
-  localloanobject : loan_model;
+  localloanobject: loan_model;
   RefQuestions: RefQuestions[];
   LoanQResponse: LoanQResponse[];
-  
-  responses : Array<LoanQResponse>;
+
+  responses: Array<LoanQResponse>;
   @Input("CheveronId")
-  CheveronId:string;
+  CheveronId: string;
+
+  isResponseUpdated : boolean = false;
+  isPublishing : boolean = false;
 
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    private questionService : QuestionscalculationworkerService) { }
+    private loanapi: LoanApiService,
+    private questionService: QuestionscalculationworkerService,
+    private toaster: ToastsManager) { }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localloanobject = res;
-      if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
-        this.responses = this.questionService.prepareResponses(this.CheveronId,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
+      if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
+        this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+        this.updatePublishStatus();
+
       }
-      
+
     })
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
-      this.responses = this.questionService.prepareResponses(this.CheveronId,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
+    if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
+      this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+      this.updatePublishStatus();
     }
-    
+
+
+
   }
 
-  getVisibility(Parent_Question_ID){
-    let matchedParent = this.responses.find(res=>res.Question_ID ==Parent_Question_ID);
-    if(matchedParent){
-      return matchedParent.FC_Choice1 == matchedParent.Response_Detail;
+  private updatePublishStatus() {
+    if (this.localloanobject.LoanQResponse.find(res => res.ActionStatus == 1 || res.ActionStatus == 2)) {
+      this.isResponseUpdated = true;
     }else{
+      this.isResponseUpdated = false;
+    }
+  }
+
+  getVisibility(Parent_Question_ID) {
+    let matchedParent = this.responses.find(res => res.Question_ID == Parent_Question_ID);
+    if (matchedParent) {
+      return matchedParent.FC_Choice1 == matchedParent.Response_Detail;
+    } else {
       return false;
     }
 
   }
 
-  // prepareQuestions(chevronID : number, queResponse : Array<LoanQResponse>){
-  //   let refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-  //   if(refdata.RefQuestions && refdata.RefQuestions.length >0){
+  change(response: LoanQResponse) {
 
-  //     let cheveronQuestions  : Array<RefQuestions>= refdata.RefQuestions.filter(que=>que.Chevron_ID == chevronID);
-  //     return cheveronQuestions;
-  //   }else{
-  //     return [];
-  //   }
 
-  // }
-
-  change() {
+    if (response.Loan_Q_response_ID) {
+      response.ActionStatus = 2;
+    } else {
+      response.ActionStatus = 1;
+    }
+    this.isResponseUpdated = true;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+  }
+  synctoDb() {
+    this.isPublishing = true;
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+            this.isPublishing =false;
+            this.updatePublishStatus();
+          }
+          else {
+            this.toaster.error("Could not fetch Loan Object from API")
+            this.isPublishing =false;
+          }
+        });
+      }
+      else {
+        this.toaster.error("Error in Sync");
+        this.isPublishing =false;
+      }
+
+    });
   }
 
 }

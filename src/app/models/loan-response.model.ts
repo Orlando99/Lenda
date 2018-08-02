@@ -32,6 +32,9 @@ export class LoanQResponse {
   @JsonProperty("Status", IntConverter,false)
   Status: number;
 
+  @JsonProperty("ActionStatus", IntConverter,false)
+  ActionStatus: number;
+
   FC_Question_ID_Text : string;
   FC_Choice1 :string;
   FC_Choice2 : string;
