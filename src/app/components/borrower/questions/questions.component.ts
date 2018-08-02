@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoanQResponse, RefQuestions } from '../../../models/loan-response.model';
@@ -16,26 +16,27 @@ export class QuestionsComponent implements OnInit {
   localloanobject : loan_model;
   RefQuestions: RefQuestions[];
   LoanQResponse: LoanQResponse[];
-  chevronID:number;
+  
   responses : Array<LoanQResponse>;
+  @Input("CheveronId")
+  CheveronId:string;
 
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     private questionService : QuestionscalculationworkerService) { }
 
   ngOnInit() {
-    this.chevronID =1;
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       this.localloanobject = res;
       if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
-        this.responses = this.questionService.prepareResponses(this.chevronID,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
+        this.responses = this.questionService.prepareResponses(this.CheveronId,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
       }
       
     })
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if(this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]){
-      this.responses = this.questionService.prepareResponses(this.chevronID,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
+      this.responses = this.questionService.prepareResponses(this.CheveronId,this.localloanobject.LoanQResponse,this.localloanobject.LoanMaster[0]);
     }
     
   }

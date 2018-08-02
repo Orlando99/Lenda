@@ -41,7 +41,7 @@ export class QuestionscalculationworkerService {
   }
 
 
-  prepareResponses(chevronID : number, queResponse : Array<LoanQResponse>,loanMaster){
+  prepareResponses(chevronID : string, queResponse : Array<LoanQResponse>,loanMaster){
     let refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     if(!queResponse){
       queResponse = [];
