@@ -97,7 +97,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-        field: 'ProposedAIP',pickfield:'ProposedAIP'
+        field: 'ProposedAIP',pickfield:'ProposedAIP',
         headerTooltip: 'ProposedAIP',
         cellRenderer: 'columnTooltip',
         cellClass: 'editable-color', 

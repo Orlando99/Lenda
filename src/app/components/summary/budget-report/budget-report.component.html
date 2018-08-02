@@ -32,7 +32,7 @@
                   <td class="price"> {{ budget.Third_Party_Budget_Crop ? (budget.Third_Party_Budget_Crop.toFixed(0) | number) : '-' }} </td>
                   <td class="price"> {{ budget.Total_Budget_Crop_ET ? (budget.Total_Budget_Crop_ET.toFixed(0) | number) : '-' }} </td>
                   <td></td>
-                  <td class="percent"> {{ budget.Per_Revenue.toFixed(1)}}</td>
+                  <td class="percent"> {{ budget.Per_Revenue ? budget.Per_Revenue.toFixed(1) : '0.0' }}</td>
                   
                
               </tbody>
