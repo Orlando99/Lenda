@@ -73,7 +73,7 @@ export class YieldComponent implements OnInit {
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.cropYear = this.localstorageservice.retrieve(environment.loankey).LoanMaster[0] != null ? this.localstorageservice.retrieve(environment.loankey).LoanMaster[0].Crop_Year : 0;
+    this.cropYear = this.localstorageservice.retrieve(environment.loankey) != null ? this.localstorageservice.retrieve(environment.loankey).LoanMaster[0].Crop_Year : 0;
 
     for(let i=1; i<8;i++){
       this.years.push(this.cropYear-i);
