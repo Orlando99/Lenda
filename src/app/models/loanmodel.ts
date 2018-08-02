@@ -205,7 +205,7 @@ export class borrower_model
     export class Loan_Association
     {
         @JsonProperty("Assoc_ID", IntConverter,false)
-        Assoc_ID: number=undefined;
+        Assoc_ID: number=0;
         @JsonProperty("Loan_ID", IntConverter,false)
         Loan_ID: number=0;
         @JsonProperty("Loan_Seq_Num", IntConverter,false)

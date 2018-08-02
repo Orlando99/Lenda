@@ -25,6 +25,12 @@ export class ProjectedincomeComponent implements OnInit {
   Total_Expense_Budget;
   Estimated_Interest;
   Total_CashFlow;
+
+  //to track whether the storing the json attempted or not, otehrwise it will go in infinite look with observer
+  //as we have to call the performcalculationonloanobject function in the routine of the preparedData which is being called from
+  //observer
+  isStorageAttempted :boolean=false; 
+  
   constructor(public localstorageservice: LocalStorageService, public logging: LoggingService, public loanCalculationsService: LoancalculationWorker) { }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -43,7 +49,7 @@ export class ProjectedincomeComponent implements OnInit {
     // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      if (this.localloanobject && this.localloanobject.LoanMaster[0]) {
+      if (this.localloanobject && this.localloanobject.LoanMaster && this.localloanobject.LoanMaster[0]) {
         this.localloanobject.LoanMaster[0].FC_Total_Revenue =0;
       }
       this.allDataFetched = true;
@@ -54,7 +60,7 @@ export class ProjectedincomeComponent implements OnInit {
 
   prepareData() {
     if (this.localloanobject && this.localloanobject.LoanCrops) {
-
+      this.cropRevenue = [];
       this.localloanobject.LoanCrops.forEach(crop => {
         let cropRevenue: CropRevenueModel = new CropRevenueModel();
         cropRevenue.Name = crop.Crop_Code;
@@ -69,23 +75,27 @@ export class ProjectedincomeComponent implements OnInit {
         this.cropRevenue.push(cropRevenue);
       });
 
-      if (this.localloanobject && this.localloanobject.LoanMaster[0]) {
+      if (this.localloanobject && this.localloanobject.LoanMaster && this.localloanobject.LoanMaster[0]) {
         let loanMaster = this.localloanobject.LoanMaster[0];
-        this.totalAcres = loanMaster.Total_Crop_Acres.toFixed(1);
-        this.NetCropRevenue = loanMaster.Net_Market_Value_Crops;
+        this.totalAcres = loanMaster.Total_Crop_Acres ? loanMaster.Total_Crop_Acres.toFixed(1) : 0;
+        this.NetCropRevenue = loanMaster.Net_Market_Value_Crops ? parseInt(loanMaster.Net_Market_Value_Crops.toFixed(0)) : 0;
         this.Net_Market_Value_Livestock = loanMaster.Net_Market_Value_Livestock || 0;
         this.Net_Market_Value_Stored_Crops = loanMaster.Net_Market_Value_Stored_Crops || 0;
         this.Net_Market_Value__Other = loanMaster.Net_Market_Value__Other || 0;
         this.Net_Market_Value_FSA = loanMaster.Net_Market_Value_FSA || 0;
         this.Total_Additional_Revenue = this.Net_Market_Value_Livestock + this.Net_Market_Value_FSA + this.Net_Market_Value__Other + this.Net_Market_Value_Stored_Crops;
         this.Total_Revenue = this.NetCropRevenue + this.Total_Additional_Revenue;
-        this.Total_Expense_Budget = parseInt(loanMaster.Total_Commitment.toFixed(0));
-        this.Estimated_Interest = parseInt(loanMaster.Rate_Fee_Amount.toFixed(0));
+        this.Total_Revenue = parseInt(this.Total_Revenue.toFixed(0));
+        this.Total_Expense_Budget = loanMaster.Total_Commitment ? parseInt(loanMaster.Total_Commitment.toFixed(0)) :0;
+        this.Estimated_Interest = loanMaster.Rate_Fee_Amount ? parseInt(loanMaster.Rate_Fee_Amount.toFixed(0)) : 0;
         this.Total_CashFlow = parseInt(this.Total_Revenue.toFixed(0)) - parseInt(this.Total_Expense_Budget.toFixed(0)) - parseInt(this.Estimated_Interest.toFixed(0));
 
-        if (!this.localloanobject.LoanMaster[0].FC_Total_Revenue) {
+        if (!this.localloanobject.LoanMaster[0].FC_Total_Revenue && !this.isStorageAttempted) {
+          //it will only run one time. handled using isStorageAttempted
           this.localloanobject.LoanMaster[0].FC_Total_Revenue = this.Total_Revenue;
+          this.isStorageAttempted = true;
           this.loanCalculationsService.performcalculationonloanobject(this.localloanobject, false);
+          
         }
         
       }

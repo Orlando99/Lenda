@@ -265,6 +265,7 @@ export class Collateralcalculationworker {
             }
         }
     }
+    
     performMarketValueCalculationsAtCropLevel(loanObject : loan_model){
         
     }

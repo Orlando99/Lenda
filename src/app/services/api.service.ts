@@ -36,6 +36,7 @@ export class ApiService {
         }
         headersConfig['batchid']="token1234";
         headersConfig['userid']="1";
+        headersConfig['dbg_level']="2";
         return new Headers(headersConfig);
     };
     private formatErrors(error: any) {

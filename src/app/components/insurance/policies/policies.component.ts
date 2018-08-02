@@ -21,6 +21,7 @@ import { ToastsManager } from '../../../../../node_modules/ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
 
 @Component({
   selector: 'app-policies',
@@ -80,6 +81,8 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Agent', 
         field: 'Agent_Id',pickfield:'Agent_Id', 
         cellClass: 'editable-color', 
+        //cellRenderer: 'columnTooltip',
+        headerTooltip: 'Agent',
         editable: true, 
         cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
@@ -94,31 +97,47 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-        field: 'ProposedAIP',pickfield:'ProposedAIP',  
+        field: 'ProposedAIP', 
+        headerTooltip: 'ProposedAIP',
+        cellRenderer: 'columnTooltip',
         cellClass: 'editable-color', 
         editable: true, 
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
       {
-        headerName: 'County | State',pickfield:'StateandCountry', 
+        headerName: 'County | State', 
+        headerTooltip: 'County | State',
+        cellRenderer: 'columnTooltip',
         field: 'StateandCountry'
       },
       {
-        headerName: 'Crop',pickfield:'CropName',  
+        headerName: 'Crop', 
+        headerTooltip: 'Crop',
+        cellRenderer: 'columnTooltip',
         field: 'CropName'
       },
       {
-        headerName: 'Practice',pickfield:'Practice', 
+        headerName: 'Practice', 
+        headerTooltip: 'Practice',
+        cellRenderer: 'columnTooltip',
         field: 'Practice'
       },
       {
-        headerName: 'MPCI types',pickfield:'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'SubPlanType', 
+        headerTooltip: 'SubPlanType',
+        field: 'MPCI_Subplan', 
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "agSelectCellEditor",
         cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
         headerName: 'Options', 
-        field: 'SecInsurance',pickfield:'SecInsurance',  
+        headerTooltip: 'Options',
+        field: 'SecInsurance', 
+        cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         autoHeight: true,
         editable: true, 
@@ -142,7 +161,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Unit', 
+        headerTooltip: 'Unit',
         field: 'Unit', 
+        cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, pickfield:'Unit',
         cellEditor: "selectEditor",
@@ -161,7 +182,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Level', 
+        headerTooltip: 'Level',
         field: 'Level', 
+        cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, pickfield:'Level',
         cellEditor: "numericCellEditor",
@@ -180,7 +203,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Price', 
-        field: 'Price', pickfield:'Price',
+        headerTooltip: 'Price',
+        field: 'Price', 
+        cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -191,7 +216,9 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Premium', 
-        field: 'Premium',  pickfield:'Premium',
+        headerTooltip: 'Premium',
+        field: 'Premium', 
+        cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "numericCellEditor", 
@@ -359,8 +386,12 @@ export class PoliciesComponent implements OnInit {
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
-    this.components={ numericCellEditor: getNumericCellEditor()}
-    this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, emptyeditor: EmptyEditor };
+    this.frameworkcomponents = { 
+      chipeditor: ChipsListEditor, 
+      selectEditor: SelectEditor, 
+      numericCellEditor: NumericEditor, 
+      emptyeditor: EmptyEditor,
+      columnTooltip: AgGridTooltipComponent };
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanobj = this.localstorage.retrieve(environment.loankey);
     this.context = { componentParent: this };

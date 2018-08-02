@@ -10,17 +10,29 @@
       <th>HMAX Value</th>
       <th>Stax Value</th>
       <th>Sco Value</th>
+      <th>Ramp Value</th>
+      <th>Pci Value</th>
+      <th>Abc Value</th>
+      <th>Ice Value</th>
+      <th>Crophail Value</th>
     </tr>
     <tr *ngFor="let record of records" [ngStyle] = "changeColor(record)">
       <td>{{record.Loan_CU_ID}}</td>
-      <td>{{record.CEI_Value}}</td>
-      <td>{{record.Ins_Value}}</td>
-      <td>{{record.Mkt_Value}}</td>
+      <td>{{returndecimalcapedvalue(record.CEI_Value)}}</td>
+      <td>{{returndecimalcapedvalue(record.Ins_Value)}}</td>
+      <td>{{returndecimalcapedvalue(record.Mkt_Value)}}</td>
 
-      <td>{{record.FC_MPCIvalue}}</td>
-      <td>{{record.FC_Hmaxvalue}}</td>
-      <td>{{record.FC_Staxvalue}}</td>
-      <td>{{record.FC_Scovalue}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_MPCIvalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Hmaxvalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Staxvalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Scovalue)}}</td>
+
+
+      <td>{{returndecimalcapedvalue(record.FC_Rampvalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Pcivalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Abcvalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Icevalue)}}</td>
+      <td>{{returndecimalcapedvalue(record.FC_Crophailvalue)}}</td>
     </tr>
     
     
