@@ -43,7 +43,7 @@ export class ProjectedincomeComponent implements OnInit {
     // this.logging.checkandcreatelog(1,'Projected Income',"LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
-      if (this.localloanobject && this.localloanobject.LoanMaster[0]) {
+      if (this.localloanobject && this.localloanobject.LoanMaster && this.localloanobject.LoanMaster[0]) {
         this.localloanobject.LoanMaster[0].FC_Total_Revenue =0;
       }
       this.allDataFetched = true;
@@ -54,7 +54,7 @@ export class ProjectedincomeComponent implements OnInit {
 
   prepareData() {
     if (this.localloanobject && this.localloanobject.LoanCrops) {
-
+      this.cropRevenue = [];
       this.localloanobject.LoanCrops.forEach(crop => {
         let cropRevenue: CropRevenueModel = new CropRevenueModel();
         cropRevenue.Name = crop.Crop_Code;
@@ -69,7 +69,7 @@ export class ProjectedincomeComponent implements OnInit {
         this.cropRevenue.push(cropRevenue);
       });
 
-      if (this.localloanobject && this.localloanobject.LoanMaster[0]) {
+      if (this.localloanobject && this.localloanobject.LoanMaster && this.localloanobject.LoanMaster[0]) {
         let loanMaster = this.localloanobject.LoanMaster[0];
         this.totalAcres = loanMaster.Total_Crop_Acres.toFixed(1);
         this.NetCropRevenue = loanMaster.Net_Market_Value_Crops;
