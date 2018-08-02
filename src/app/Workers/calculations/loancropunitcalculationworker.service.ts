@@ -99,7 +99,6 @@ export class LoancropunitcalculationworkerService {
         element.FC_Section = farm.Section;
       }
       let insurancepolicy = input.InsurancePolicies.find(p => p.Crop_Practice_Id == element.Crop_Practice_ID && p.County_Id == farm.Farm_County_ID);
-
       if (insurancepolicy != undefined && insurancepolicy != null) {
         element.FC_Ins_Policy_ID = insurancepolicy.Policy_id;
         element.FC_Ins_Unit = insurancepolicy.Unit;
@@ -210,14 +209,12 @@ export class LoancropunitcalculationworkerService {
               }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "ramp") {
-
               try {
                 if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
                   let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
                   let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                   let RamplevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Price_Pct / 100 * subpolicy.Liability;
                   element.FC_RampPremium = subpolicy.Premium;
-                  // not using Liability as if now in calculation
                   element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
                   element.FC_Disc_Rampvalue=element.FC_Rampvalue * 85/100;
                 }
@@ -318,7 +315,6 @@ export class LoancropunitcalculationworkerService {
               }
             }
             else if (subpolicy.Ins_Type.toLowerCase() == "crophail") {
-
               try {
                 let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
                 let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
@@ -382,6 +378,7 @@ export class LoancropunitcalculationworkerService {
           let ppercent_Prod = input.Farms.find(p=>p.Farm_ID==crp.Farm_ID).Percent_Prod;
           element.LCP_Acres=element.LCP_Acres + (crp.CU_Acres * ppercent_Prod/100);
         });
+
         // element.FC_Agg_Mkt_Value=_.sumBy(input.LoanCropUnits,"Ins_Value");
         // element.FC_Agg_Disc_Mkt_Value=
         // element.FC_Agg_Disc_Ins_Value=
