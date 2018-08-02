@@ -54,7 +54,7 @@ export class ProjectedincomeComponent implements OnInit {
 
   prepareData() {
     if (this.localloanobject && this.localloanobject.LoanCrops) {
-
+      this.cropRevenue = [];
       this.localloanobject.LoanCrops.forEach(crop => {
         let cropRevenue: CropRevenueModel = new CropRevenueModel();
         cropRevenue.Name = crop.Crop_Code;
