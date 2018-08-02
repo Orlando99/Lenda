@@ -53,8 +53,8 @@ export class RefQuestions {
   Questions_Cat_Code: number;
   @JsonProperty("Response_Detail_Reqd_Ind", IntConverter,false)
   Response_Detail_Reqd_Ind: number;
-  @JsonProperty("Subsidiary_Question_ID", IntConverter,false)
-  Subsidiary_Question_ID: number;
+  @JsonProperty("Subsidiary_Question_ID_Ind", IntConverter,false)
+  Subsidiary_Question_ID_Ind: number;
   @JsonProperty("Parent_Question_ID", IntConverter,false)
   Parent_Question_ID: number;
   @JsonProperty("Status", IntConverter,false)

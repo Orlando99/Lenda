@@ -12,3 +12,24 @@
     }
   }
 }
+
+
+.parent:before {
+  content: '●';
+  margin-right: 10px;
+  font-size: large;
+}
+
+.child:before {
+  content: '○';
+  margin-right: 10px;
+  font-size: large;
+}
+
+.child{
+  padding-left :10px;
+}
+
+mat-radio-button{
+  padding: 0 10px;
+}
