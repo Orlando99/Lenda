@@ -582,6 +582,9 @@ export class borrower_model
         Log_Id: number;
         Log_Section: string;
         Log_Message: string;
+        Loan_Full_ID:string;
+        SourceName:string;
+        SourceDetail:string;
         userID: number;
 
     }
