@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Inject, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -51,15 +51,21 @@ export class YieldComponent implements OnInit {
   context: any;
   public syncYieldStatus : status = 0;
 
-  frameworkcomponents: { selectEditor: typeof SelectEditor, deletecolumn: typeof DeleteButtonRenderer; };
+  frameworkcomponents;
   style = {
     marginTop: '10px',
-    width: '97%',
-    //height: '180px',
-    height: '100%',
+    width: '96%',
     boxSizing: 'border-box'
   };
-  defaultColDef: { headerComponentParams: { template: string; }; };
+
+  @ViewChild("myGrid") gridEl: ElementRef;
+
+  defaultColDef = {
+    enableValue: true,
+    enableRowGroup: true,
+    enablePivot: true
+  };
+
 
   constructor(public localstorageservice:LocalStorageService,
   public loanserviceworker:LoancalculationWorker,
@@ -82,22 +88,6 @@ export class YieldComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.frameworkcomponents = {selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer};
 
-    this.defaultColDef = {
-      headerComponentParams : {
-      template:
-          '<div class="ag-cell-label-container" role="presentation">' +
-          '  <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button"></span>' +
-          '  <div ref="eLabel" class="ag-header-cell-label" role="presentation">' +
-          '    <span ref="eSortOrder" class="ag-header-icon ag-sort-order" ></span>' +
-          '    <span ref="eSortAsc" class="ag-header-icon ag-sort-ascending-icon" ></span>' +
-          '    <span ref="eSortDesc" class="ag-header-icon ag-sort-descending-icon" ></span>' +
-          '    <span ref="eSortNone" class="ag-header-icon ag-sort-none-icon" ></span>' +
-          '    <div ref="eText" class="ag-header-cell-text" role="columnheader"> </div>' +
-          '    <span ref="eFilter" class="ag-header-icon ag-filter-icon"></span>' +
-          '  </div>' +
-          '</div>'
-      }
-    };
     this.columnDefs = [
       {
         headerName: 'Crop', field: 'Crop', editable: false, cellEditor: "selectEditor",
@@ -109,29 +99,14 @@ export class YieldComponent implements OnInit {
         },
         valueSetter: cropNameValueSetter
       },
-      // {
-      //   headerName: 'Crop type', field: 'CropType',  editable: false,
-      //   // valueFormatter: function (params) {return params.value;},
-      //   // valueSetter: CropTypevaluesetter,
-      //   width: 100
-      // },
-      { headerName: 'Crop Practice', field: 'Practice', editable: false, cellEditor: "selectEditor",
-        cellEditorParams: {
-          values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
-        },
-      },
-      // { headerName: 'Practice', field: 'Practice',   editable: false,width: 100, cellEditor: "selectEditor",
-      //   cellEditorParams: {
-      //     values: [{'key': 'IRR','value':'IRR'},{'key':'NIR','value':'NIR'}]
-      //   },
-      // }
+      { headerName: 'Crop Practice', field: 'Practice', editable: false}
     ];
 
     this.years.forEach(element => {
      this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" }})
     });
 
-    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false,cellStyle: { textAlign: "right" }});
+    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false, cellStyle: { textAlign: "right" }});
     this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right',valueFormatter: APHRoundValueSetter });
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn", width: 120});
@@ -173,7 +148,10 @@ export class YieldComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    setgriddefaults(this.gridApi,this.columnApi);
+    //setgriddefaults(this.gridApi,this.columnApi);
+    // toggletoolpanel(false,this.gridApi);
+    // removeHeaderMenu(this.gridApi);
+    params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
 
@@ -370,18 +348,26 @@ export class YieldComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
+    this.alertify.confirm("Confirm", "Do you really want to delete both "+ this.rowData[rowIndex].Crop  + " NIR and IRR on this record?").subscribe(
       res => {
         if (res == true) {
           var obj = this.rowData[rowIndex];
-          if (obj.ActionStatus == 1) {
-            this.rowData.splice(rowIndex, 1);
-            this.localloanobject.CropYield.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
+          if (obj.ActionStatus == 1 || obj.ActionStatus == 0) {
+            debugger
+            this.localloanobject.CropYield = this.localloanobject.CropYield.filter(lcl => { return lcl.Crop !== obj.Crop;})
+            this.edits = this.edits.filter(ed => { ed.CropId != obj.Crop_ID});
+            console.log(this.edits);
           }else {
             this.deleteAction = true;
-            obj.ActionStatus = 3;
+            this.localloanobject.CropYield.forEach(row =>{
+              if(row.Crop === obj.Crop){
+                row.ActionStatus = 3
+              }
+            });
+
+            //obj.ActionStatus = 3;
           }
-          this.rowData=this.rowData.filter(cy=>{return cy.ActionStatus != 3});
+          this.rowData=this.localloanobject.CropYield.filter(cy=>{return cy.ActionStatus != 3});
           this.updateSyncStatus();
           // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         }
@@ -453,9 +439,10 @@ export class YieldComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       cropLists = []
       if(result != undefined){
-        var newIRR = { Crop_ID:result.crop.Crop_And_Practice_ID,
-                        Crop:result.crop.Crop_Name,
-                        CropType: result.crop.Crop_Code,
+        var cropIRR = this.refdata.CropList.find(crp => { return crp.Crop_Name == result.crop.Crop_Name && crp.Practice_type_code == 'IRR' });
+        var newIRR = { Crop_ID:cropIRR.Crop_And_Practice_ID,
+                        Crop:cropIRR.Crop_Name,
+                        CropType:cropIRR.Crop_Code,
                         Loan_ID:"",
                         Loan_Full_ID: this.localloanobject.Loan_Full_ID,
                         IrNI:"IRR",
@@ -465,10 +452,11 @@ export class YieldComponent implements OnInit {
                         InsUOM:"",
                         ActionStatus: 0,
                         CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
+        var cropNIR = this.refdata.CropList.find(crp => { return crp.Crop_Name == result.crop.Crop_Name && crp.Practice_type_code == 'NIR' });
 
-        var newNIR = { Crop_ID:result.crop.Crop_And_Practice_ID,
-                        Crop:result.crop.Crop_Name,
-                        CropType: result.crop.Crop_Code,
+        var newNIR = { Crop_ID:cropNIR.Crop_And_Practice_ID,
+                        Crop:cropNIR.Crop_Name,
+                        CropType: cropNIR.Crop_Code,
                         Loan_ID:"",
                         Loan_Full_ID: this.localloanobject.Loan_Full_ID,
                         IrNI:"NIR",
@@ -478,7 +466,6 @@ export class YieldComponent implements OnInit {
                         InsUOM:"",
                         ActionStatus: 0,
                         CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
-        
         this.years.forEach(y=> { 
           newIRR[y]=null; 
           newNIR[y] = null; 
@@ -488,19 +475,20 @@ export class YieldComponent implements OnInit {
         this.localloanobject.CropYield.push(newIRR);
         this.localloanobject.CropYield.push(newNIR);
         this.gridApi.setRowData(this.rowData);
-
+        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         //this.getgridheight();
         }
     });
-
+     
   }
 
   getgridheight(){
     //this.style.height=(29*(this.rowData.length+2)).toString()+"px";
   }
 
-  onGridSizeChanged(Event: any) {
-    //we can resize the columns here to override
+  onGridSizeChanged(params) {
+    //params.api.sizeColumnsToFit();
+    params.api.resetRowHeights();
   }
 
   updateSyncStatus(){

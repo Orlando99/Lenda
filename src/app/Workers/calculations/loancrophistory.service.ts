@@ -29,8 +29,9 @@ export class LoancrophistoryService {
           cropyielditems.push(this.input.CropYield[i][year])
         }
       });
+  
       if (cropyielditems.length <= 2) {
-        this.input.CropYield[i].CropYield == this.input.CropYield[i].APH;
+        this.input.CropYield[i].CropYield = this.input.CropYield[i].APH;
       }
       else{
         let sum=cropyielditems.reduce((p,n)=>{
