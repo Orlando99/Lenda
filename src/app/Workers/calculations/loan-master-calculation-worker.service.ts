@@ -39,48 +39,53 @@ export class LoanMasterCalculationWorkerService {
   constructor(public logging: LoggingService) { }
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
-    let starttime = new Date().getTime();
-    if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
-    let loanMaster = loanObject.LoanMaster[0];
-    //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
-    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns;
-    //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
-    loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
-    
-    let FICOScore = loanMaster.Credit_Score;
-    let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
-    let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
-    let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
-    let judgement = loanMaster.Judgement ? 'Yes' : 'No';
-    let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
-    let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
+    try{
+      let starttime = new Date().getTime();
+      if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
+      let loanMaster = loanObject.LoanMaster[0];
+      //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
+      loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns;
+      //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
+      loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
+      
+      let FICOScore = loanMaster.Credit_Score;
+      let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
+      let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
+      let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
+      let judgement = loanMaster.Judgement ? 'Yes' : 'No';
+      let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
+      let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
 
-    let borrowerRatingStar = 0;
-    for (let rating = 5; rating >= 1; rating--) {
-      let ratingRequirement = this.getRatingRequirement(rating);
+      let borrowerRatingStar = 0;
+      for (let rating = 5; rating >= 1; rating--) {
+        let ratingRequirement = this.getRatingRequirement(rating);
 
-      if (FICOScore >= ratingRequirement.FICOScore
-        && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
-        && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
-        && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
-        && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
-        && yearsFarming >= ratingRequirement.yearsFarming
-        && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
-      ) {
-        loanMaster.Borrower_Rating = rating;
-        break;
+        if (FICOScore >= ratingRequirement.FICOScore
+          && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
+          && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
+          && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
+          && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
+          && yearsFarming >= ratingRequirement.yearsFarming
+          && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
+        ) {
+          loanMaster.Borrower_Rating = rating;
+          break;
+        }
       }
-
-    }
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
-  }
-    
-
-    return loanObject;
+  
+        
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      }
+      return loanObject;
+      } catch(e){
+        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', e);
+        return loanObject;
+      }
   }
 
   performDashboardCaclulation(localLoanObject : loan_model): any {
+    let starttime = new Date().getTime();
     if(localLoanObject.LoanMaster && localLoanObject.LoanMaster[0]){
       let loanMaster = localLoanObject.LoanMaster[0];
       loanMaster.Risk_Cushion_Amount = loanMaster.Disc_value_Insurance +loanMaster.Disc_CEI_Value + (0 + loanMaster.Ag_Pro_Requested_Credit) - 
@@ -104,17 +109,19 @@ export class LoanMasterCalculationWorkerService {
       loanMaster.Break_Even_Percent = parseFloat(loanMaster.Break_Even_Percent.toFixed(1)); 
 
     }
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_Dashboard', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return localLoanObject;
   }
 
   getRatingRequirement(rating: number) {
     let starttime = new Date().getTime();
-    if (rating > 5 || rating < 1) {
-      throw "Invalid rating passed";
-    }
-    let lookupIndex = 5 - rating;
+      if (rating > 5 || rating < 1) {
+        throw "Invalid rating passed";
+      }
+      let lookupIndex = 5 - rating;
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_RatingReq', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return {
       borrowerRating: this.borrowerRatingstaticValues.borrowerRating[lookupIndex],
       FICOScore: this.borrowerRatingstaticValues.FICOScore[lookupIndex],
@@ -125,9 +132,8 @@ export class LoanMasterCalculationWorkerService {
       yearsFarming: this.borrowerRatingstaticValues.yearsFarming[lookupIndex],
       farmFinnacialRating: this.borrowerRatingstaticValues.farmFinnacialRating[lookupIndex],
     }
-
-
   }
+
   getRevanueThresholdValue(loanObject: loan_model) {
     let starttime = new Date().getTime();
     let loanMaster = loanObject.LoanMaster[0];
@@ -139,79 +145,50 @@ export class LoanMasterCalculationWorkerService {
   }
 
   getRevanueThresholdStaticValues(loanObject: loan_model) {
-    let starttime = new Date().getTime();
-
     let revanueThresholdValue = this.getRevanueThresholdValue(loanObject);
-
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_4', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
-
     return this.incomeConstant.map((val, index) => Math.round(revanueThresholdValue * val / 100));
   }
 
 
   getInsuranceThresholdValue(loanObject: loan_model) {
-    let starttime = new Date().getTime();
-
     let loanMaster = loanObject.LoanMaster[0];
     let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_5', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     //tValue = parseFloat(tValue.toFixed(2));
     return Math.round(tValue);
   }
 
   getInsuranceThresholdStaticValue(loanObject: loan_model) {
-    let starttime = new Date().getTime();
     let maxCropLoanValue = this.getInsuranceThresholdValue(loanObject);
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_6', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return this.insuranceConstant.map((val, index) => Math.round(maxCropLoanValue * val / 100));
   }
 
   getMaxCropStaticValue(loanObject: loan_model){
-    let starttime = new Date().getTime();
     let rtStaticValue = this.getRevanueThresholdStaticValues(loanObject);
     let itStaticValue = this.getInsuranceThresholdStaticValue(loanObject);
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_7', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return rtStaticValue.map((values,index)=>Math.min(rtStaticValue[index], itStaticValue[index]))
 
   }
 
   getMaxCropLoanValue(loanObject: loan_model){
-    let starttime = new Date().getTime();
     let borrowerRating = loanObject.LoanMaster[0].Borrower_Rating;
     let mcStaticValue = this.getMaxCropStaticValue(loanObject);
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_8', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return borrowerRating>=1 && borrowerRating<=5 ? mcStaticValue[ 5 - parseInt(borrowerRating)] : 0;
 
   }
 
   getDiscNetWorthValue(loanObject: loan_model) {
-    let starttime = new Date().getTime();
     let loanMaster = loanObject.LoanMaster[0];
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_9', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return loanMaster.Total_Disc_Net_Worth;
   }
 
   getDiscWorthStaticValue(loanObject: loan_model) {
-    let starttime = new Date().getTime();
     let discWorthValue = this.getDiscNetWorthValue(loanObject);
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_10', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return this.discNetWorthConstant.map((val, index) => Math.round(discWorthValue * val / 100));
   }
 
   getAgProMaxAdditionStaticValue(loanObject: loan_model) {
-    let starttime = new Date().getTime();
     let discNetWorthStaticValue = this.getDiscWorthStaticValue(loanObject);
-    let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_11', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return [Math.min( this.maxAmountConstant[0], discNetWorthStaticValue[0]), Math.min(this.maxAmountConstant[0], discNetWorthStaticValue[1]), '-', '-', '-']
   }
 
