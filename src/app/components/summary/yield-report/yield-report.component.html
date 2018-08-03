@@ -1,0 +1,40 @@
+<mat-accordion>
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            Yield History
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+  
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+            <table class="bordered">
+              <thead>
+                <tr>
+                  <th class="title">Yield History</th>
+                  <th class="title">Practice</th>
+                  <th *ngFor="let year of years">
+                    {{year}}
+                  </th>
+                  <th>Crop Yield</th>
+                </tr>
+              </thead>
+  
+              <tbody>
+                
+                <tr *ngFor="let row of cropYield">
+                  <td class="title">{{row.Crop}}</td>
+                  <td class="title">{{row.IrNI}}</td>
+                  <td *ngFor="let year of years">
+                      {{row[year+'']}}
+                  </td>
+                  <td>{{row.CropYield}}</td>
+              </tbody>
+            </table>
+            <br>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>

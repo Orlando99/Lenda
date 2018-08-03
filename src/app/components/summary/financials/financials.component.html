@@ -2,13 +2,13 @@
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          PROJECTED INCOME
+            Financials
         </mat-panel-title>
       </mat-expansion-panel-header>
-
+  
       <div *ngIf="allDataFetched" class="container">
         <div class="row">
-          <div class="">
+          <div class="col s12">
             <table class="bordered">
               <thead>
                 <tr>
@@ -21,18 +21,18 @@
                   <th>Rating</th>
                 </tr>
               </thead>
-
+  
               <tbody>
-
-                <tr *ngFor="let row of rowData">
+                
+                <tr *ngFor="let row of rowData, let rowIndex=index" [ngClass]="rowIndex == rowData.length-1 ? 'background-highlight':''">
                   <td class="title">{{row.Financials}}</td>
-                  <td>{{priceFormat(row.Assets)}}</td>
-                  <td>{{priceFormat(row.Debt)}}</td>
-                  <td>{{priceFormat(row.Equity)}}</td>
+                  <td class="price">{{row.Assets | number}}</td>
+                  <td class="price">{{row.Debt | number}}</td>
+                  <td class="price">{{row.Equity | number}}</td>
                   <td>{{row.Ratios}}</td>
                   <td>{{row.FICO}}</td>
                   <td>{{row.Rating}}</td>
-
+               
               </tbody>
             </table>
             <br>

@@ -4,6 +4,8 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../environments/environment';
 import { chartSettings } from './../../../../chart-settings';
 import 'chart.piecelabel.js';
+import { loan_model } from '../../../../models/loanmodel';
+import { PriceFormatter } from '../../../../Workers/utility/aggrid/formatters';
 
 @Component({
   selector: 'app-cash-flow',
@@ -18,7 +20,7 @@ export class CashFlowComponent implements OnInit {
     cashFlow: '',
     breakEven: ''
   };
-
+  localLoanObject : loan_model;
   // Doughnut
   // TODO: Replace this data with live API
   public doughnutChartLabels: string[] = [];
@@ -64,22 +66,40 @@ export class CashFlowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getLoanBudgetFromLocalStorage();
-    this.getLoanSummary();
+    
+
+    this.localLoanObject = this.localStorageService.retrieve(environment.loankey);
+    if(this.localLoanObject && this.localLoanObject.LoanMaster[0] && this.localLoanObject.LoanBudget){
+      this.getLoanBudgetFromLocalStorage(this.localLoanObject.LoanBudget);
+      this.getLoanSummary(this.localLoanObject.LoanMaster[0]);
+
+    }
+
+    this.localStorageService.observe(environment.loankey).subscribe(res=>{
+      if(res){
+        this.localLoanObject = res;
+        if(this.localLoanObject && this.localLoanObject.LoanMaster[0] && this.localLoanObject.LoanBudget){
+          this.getLoanBudgetFromLocalStorage(this.localLoanObject.LoanBudget);
+          this.getLoanSummary(this.localLoanObject.LoanMaster[0]);
+        }
+      }
+
+    })
+
+    
   }
 
-  getLoanSummary() {
-    let loanMaster = this.localStorageService.retrieve(environment.loankey_copy).LoanMaster[0];
-    this.info.budget = loanMaster.Total_Commitment;
-    this.info.cashFlow = loanMaster.Cash_Flow_Amount;
+  getLoanSummary(loanMaster) {
+    this.info.budget = loanMaster.Total_Commitment ? PriceFormatter(loanMaster.Total_Commitment) : '$ 0';
+    this.info.cashFlow = loanMaster.Cash_Flow_Amount ? PriceFormatter(loanMaster.Cash_Flow_Amount) : '$ 0';
     // TOOD: Replace with real value form local storage
-    this.info.breakEven = '--';
+    this.info.breakEven = loanMaster.Break_Even_Percent;
   }
 
-  getLoanBudgetFromLocalStorage() {
-    let loanBudgets = this.localStorageService.retrieve(environment.loankey_copy);
+  getLoanBudgetFromLocalStorage(loanBudgets) {
+    
     let index = 0;
-    for (let budget of loanBudgets.LoanBudget) {
+    for (let budget of loanBudgets) {
       if (budget.Total_Budget_Crop_ET !== 0 && budget.Crop_Practice_ID === 2) {
         this.doughnutChartLabels.push(
           this.getBudgetExpenseType(budget.Expense_Type_ID)

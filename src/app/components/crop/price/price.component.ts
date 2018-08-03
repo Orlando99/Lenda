@@ -16,6 +16,8 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
+import { GridPanel } from '../../../../../node_modules/ag-grid';
 
 @Component({
   selector: 'app-price',
@@ -36,13 +38,11 @@ export class PriceComponent implements OnInit {
   private columnApi;
   style = {
     width: '100%',
-    height: '240px',
     boxSizing: 'border-box'
   };
   defaultColDef: { headerComponentParams: { template: string; },width : number };
   stylesidebar={
     width: '95%',
-    height: '240px'
   };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
@@ -132,7 +132,7 @@ export class PriceComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       this.localloanobject = res;
       if (res.srccomponentedit == "PriceComponent") {
         //if the same table invoked the change .. change only the edited row
@@ -142,7 +142,7 @@ export class PriceComponent implements OnInit {
         this.rowData = [];
         this.rowData = this.localloanobject.LoanCrops !== null ? this.localloanobject.LoanCrops.filter(p => p.ActionStatus != 3):[];
       }
-      this.getgridheight();
+      //this.getgridheight();
       this.gridApi.refreshCells();
 
     })
@@ -151,7 +151,7 @@ export class PriceComponent implements OnInit {
   }
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
@@ -235,8 +235,10 @@ export class PriceComponent implements OnInit {
 
       //the same caclulation is in marketing calculation service, which should be shisted to common place
       obj.Marketing_Adj = (obj.Contract_Price - (obj.Basic_Adj + obj.Crop_Price))*(obj.Percent_booked/100);
-      obj.Adj_Price = obj.Crop_Price + obj.Basic_Adj + obj.Marketing_Adj + obj.Rebate_Adj;
+      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj || 0) + (obj.Rebate_Adj || 0);
       
+    }else{
+      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj ||0) + (obj.Rebate_Adj || 0);
     }
     //this shall have the last edit
     this.localloanobject.srccomponentedit = "PriceComponent";
@@ -246,7 +248,8 @@ export class PriceComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    setgriddefaults(this.gridApi,this.columnApi);
+    //this.getgridheight();
     //auto width and no scroll
   }
   // DeleteClicked(rowIndex: any) {
@@ -273,19 +276,13 @@ export class PriceComponent implements OnInit {
     return '';
   }
 
-  getgridheight() {
+  // getgridheight() {
 
-    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
-    this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
-  }
+  //   this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+  //   this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
+  // }
   onGridSizeChanged(Event: any) {
-
-    try{
-      this.gridApi.sizeColumnsToFit();
-    }
-    catch{
-
-    }
+    //this.gridApi.sizeColumnsToFit();
   }
 
   onColumnhiderequested(event,header:string){
@@ -294,7 +291,4 @@ export class PriceComponent implements OnInit {
     //this.gridApi.sizeColumnsToFit();
   }
 }
-function adjustheader(): void {
 
-  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
-}

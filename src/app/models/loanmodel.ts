@@ -196,6 +196,8 @@ export class borrower_model
         FC_Borrower_Intermediate_Discvalue:number=0;
         FC_Borrower_Fixed_Discvalue:number=0;
         FC_Borrower_Total_Discvalue:number=0;
+        Borrower_CPA_Financials : string;
+        CPA_Prepared_Financials:boolean;
         App_Logpriority:Logpriority=Logpriority.VeryHigh;
 
     }
@@ -203,7 +205,7 @@ export class borrower_model
     export class Loan_Association
     {
         @JsonProperty("Assoc_ID", IntConverter,false)
-        Assoc_ID: number=undefined;
+        Assoc_ID: number=0;
         @JsonProperty("Loan_ID", IntConverter,false)
         Loan_ID: number=0;
         @JsonProperty("Loan_Seq_Num", IntConverter,false)
@@ -253,7 +255,7 @@ export class borrower_model
         Farms:Loan_Farm[]=[];
 
        @JsonProperty("LoanQResponse", ArrayConverter,true)
-        LoanQResponse:any=[];
+        LoanQResponse:Array<LoanQResponse>=[];
 
         @JsonProperty("LoanBudget",ArrayConverter,true)
         LoanBudget:Array<Loan_Budget>=[];
@@ -380,17 +382,55 @@ export class borrower_model
         LCP_Distributer_Budget: number=0;
         @JsonProperty("LCP_Third_Party_Budget", IntConverter,false)
         LCP_Third_Party_Budget: number=0;
+        @JsonProperty("Market_Value", IntConverter,false)
+        Market_Value: number=0;
+        @JsonProperty("Disc_Market_Value", IntConverter,false)
+        Disc_Market_Value: number=0;
+
         @JsonProperty("LCP_Notes", StringConverter,false)
         LCP_Notes: string='';
         @JsonProperty("LCP_Status", IntConverter,false)
         LCP_Status: number=0;
-        
         @JsonProperty("ActionStatus", IntConverter,false)
         ActionStatus: number=0;
-
         FC_CropName? : string = '';
         FC_PracticeType? : string = '';
+
+        //Values on top for crop pratice
+        FC_Agg_Mkt_Value? :number=0;
+        FC_Agg_Disc_Mkt_Value? :number=0;
+        FC_Agg_Disc_Ins_Value? :number=0;
+        FC_Agg_Ins_Value? :number=0;
+        FC_Agg_Disc_Cei_Value? :number=0;
         
+        // values according to insurance types
+        FC_Ins_Value_Hmax? :number=0;
+        FC_Disc_Ins_Value_Hmax :number=0;
+
+        FC_Ins_Value_Mpci? :number=0;
+        FC_Disc_Ins_Value_Mpci:number=0;
+ 
+
+        FC_Ins_Value_Ramp? :number=0;
+        FC_Disc_Ins_Value_Ramp :number=0;
+      
+
+        FC_Ins_Value_Ice? :number=0;
+        FC_Disc_Ins_Value_Ice :number=0;
+       
+
+        FC_Ins_Value_Abc? :number=0;
+        FC_Disc_Ins_Value_Abc :number=0;
+       
+
+        FC_Ins_Value_Pci? :number=0;
+        FC_Disc_Ins_Value_Pci :number=0;
+      
+
+        FC_Ins_Value_Crophail? :number=0;
+        FC_Disc_Ins_Value_Crophail :number=0;
+       
+        //
     }
     @JsonObject
     export class Loan_Collateral
@@ -503,6 +543,10 @@ export class borrower_model
         Contract_Qty:number;
         Contract_Price:number;
         Percent_booked:number;
+        Acres : number;
+        Revenue : number;
+        W_Crop_Yield : number;
+        LC_Share : number;
         ActionStatus : number;
     }
     export class loan_farmer{
@@ -538,5 +582,9 @@ export class borrower_model
         Log_Id: number;
         Log_Section: string;
         Log_Message: string;
+        Loan_Full_ID:string;
+        SourceName:string;
+        SourceDetail:string;
+        userID: number;
 
     }

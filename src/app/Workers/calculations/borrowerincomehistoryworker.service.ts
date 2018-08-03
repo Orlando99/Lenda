@@ -10,16 +10,16 @@ export class Borrowerincomehistoryworker {
 
   prepareborrowerincomehistorymodel(input: loan_model): loan_model {
     try {
-        this.input = input
+      this.input = input
       let starttime = new Date().getTime();
-      for (let i = 0; i < this.input.BorrowerIncomeHistory.length; i++) {
-          this.prepare_fc_borrower_income(this.input.BorrowerIncomeHistory[i]);
-      }
-
+        for (let i = 0; i < this.input.BorrowerIncomeHistory.length; i++) {
+            this.prepare_fc_borrower_income(this.input.BorrowerIncomeHistory[i]);
+        }
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return this.input;
-    } catch{
+    } catch(e){
+      this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory', e);
       return this.input;
     }
   }

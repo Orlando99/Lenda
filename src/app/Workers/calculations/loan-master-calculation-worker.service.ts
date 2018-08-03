@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { loan_model, loan_borrower, borrower_model } from '../../models/loanmodel';
 import { environment } from '../../../environments/environment.prod';
-
+import { LoggingService } from '../../services/Logs/logging.service';
 @Injectable()
 export class LoanMasterCalculationWorkerService {
+ 
 
   //borrower Rating
   borrowerRatingstaticValues: any = {
@@ -27,64 +28,100 @@ export class LoanMasterCalculationWorkerService {
     currentRatio: [1.50, 1.00, '>'],
     workingCapital: [0.50, 0.20, '>'],
     debtByAssets: [30.0, 70.0, '<'],
-    debtByEquity: [70.0, 30.0, '>'],
-    equityByAssets: [42.0, 230.0, '<'],
+    debtByEquity: [42.0, 230.0, '<'],
+    equityByAssets: [70.0, 30.0, '>'],
     ROA: [12.0, 3.0, '>'],
     operatingProfit: [25.0, 10.0, '>'],
     operatingByExpRev: [75.0, 85.0, '<'],
     interestByCashFlow: [12.0, 20.0, '<'],
   }
   //farm financial ends
-  constructor() {
-
-  }
+  constructor(public logging: LoggingService) { }
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
+    try{
+      let starttime = new Date().getTime();
+      if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
+      let loanMaster = loanObject.LoanMaster[0];
+      //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
+      loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns;
+      //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
+      loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
+      
+      let FICOScore = loanMaster.Credit_Score;
+      let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
+      let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
+      let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
+      let judgement = loanMaster.Judgement ? 'Yes' : 'No';
+      let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
+      let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
 
-    if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
-    let loanMaster = loanObject.LoanMaster[0];
-    loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
-    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns || 1;
-    loanObject.Borrower.Borrower_CPA_financials = loanObject.Borrower.Borrower_CPA_financials || 1;
-    loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
-    
-    let FICOScore = loanMaster.Credit_Score;
-    let CPAFiancial = loanObject.Borrower.Borrower_CPA_financials ? 'Yes' : 'No';
-    let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
-    let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
-    let judgement = loanMaster.Judgement ? 'Yes' : 'No';
-    let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
-    let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
+      let borrowerRatingStar = 0;
+      for (let rating = 5; rating >= 1; rating--) {
+        let ratingRequirement = this.getRatingRequirement(rating);
 
-    let borrowerRatingStar = 0;
-    for (let rating = 5; rating >= 1; rating--) {
-      let ratingRequirement = this.getRatingRequirement(rating);
-
-      if (FICOScore >= ratingRequirement.FICOScore
-        && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
-        && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
-        && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
-        && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
-        && yearsFarming >= ratingRequirement.yearsFarming
-        && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
-      ) {
-        loanMaster.Borrower_Rating = rating;
-        break;
+        if (FICOScore >= ratingRequirement.FICOScore
+          && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
+          && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
+          && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
+          && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
+          && yearsFarming >= ratingRequirement.yearsFarming
+          && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
+        ) {
+          loanMaster.Borrower_Rating = rating;
+          break;
+        }
       }
+  
+        
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      }
+      return loanObject;
+      } catch(e){
+        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', e);
+        return loanObject;
+      }
+  }
+
+  performDashboardCaclulation(localLoanObject : loan_model): any {
+    let starttime = new Date().getTime();
+    if(localLoanObject.LoanMaster && localLoanObject.LoanMaster[0]){
+      let loanMaster = localLoanObject.LoanMaster[0];
+      loanMaster.Risk_Cushion_Amount = loanMaster.Disc_value_Insurance +loanMaster.Disc_CEI_Value + (0 + loanMaster.Ag_Pro_Requested_Credit) - 
+                                      (loanMaster.ARM_Commitment  + loanMaster.Dist_Commitment+ loanMaster.Rate_Fee_Amount);
+      loanMaster.Risk_Cushion_Amount = parseFloat(loanMaster.Risk_Cushion_Amount.toFixed(2)); 
+
+      loanMaster.Risk_Cushion_Percent =(loanMaster.Risk_Cushion_Amount/loanMaster.ARM_Commitment)*100;
+      loanMaster.Risk_Cushion_Percent = parseFloat(loanMaster.Risk_Cushion_Percent.toFixed(1));
+      
+      loanMaster.Return_Percent = (( loanMaster.Orgination_Fee_Amount + loanMaster.Service_Fee_Amount +
+                                    (loanMaster.Rate_Percent * (225/365) * loanMaster.ARM_Commitment)
+                                  )/loanMaster.ARM_Commitment)*100;
+      loanMaster.Return_Percent = parseFloat(loanMaster.Return_Percent.toFixed(1)); 
+      
+      
+      loanMaster.Cash_Flow_Amount = this.getRevanueThresholdValue(localLoanObject) -  (loanMaster.Total_Commitment + loanMaster.Rate_Fee_Amount);
+      loanMaster.Cash_Flow_Amount = parseFloat(loanMaster.Cash_Flow_Amount.toFixed(2)); 
+
+      loanMaster.Break_Even_Percent = ((loanMaster.ARM_Commitment + loanMaster.Dist_Commitment + loanMaster.Rate_Fee_Amount)/
+                                      this.getRevanueThresholdValue(localLoanObject))*100;
+      loanMaster.Break_Even_Percent = parseFloat(loanMaster.Break_Even_Percent.toFixed(1)); 
 
     }
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_Dashboard', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    return localLoanObject;
   }
-    
-
-    return loanObject;
-  }
-
 
   getRatingRequirement(rating: number) {
-    if (rating > 5 || rating < 1) {
-      throw "Invalid rating passed";
-    }
-    let lookupIndex = 5 - rating;
+    let starttime = new Date().getTime();
+      if (rating > 5 || rating < 1) {
+        throw "Invalid rating passed";
+      }
+      let lookupIndex = 5 - rating;
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_RatingReq', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return {
       borrowerRating: this.borrowerRatingstaticValues.borrowerRating[lookupIndex],
       FICOScore: this.borrowerRatingstaticValues.FICOScore[lookupIndex],
@@ -95,14 +132,15 @@ export class LoanMasterCalculationWorkerService {
       yearsFarming: this.borrowerRatingstaticValues.yearsFarming[lookupIndex],
       farmFinnacialRating: this.borrowerRatingstaticValues.farmFinnacialRating[lookupIndex],
     }
-
-
   }
+
   getRevanueThresholdValue(loanObject: loan_model) {
+    let starttime = new Date().getTime();
     let loanMaster = loanObject.LoanMaster[0];
     let temp = (loanMaster.Net_Market_Value_Crops || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0 )+ (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return temp;
+      //temp = parseFloat(temp.toFixed(2));
+    return Math.round(temp);
 
   }
 
@@ -116,7 +154,8 @@ export class LoanMasterCalculationWorkerService {
     let loanMaster = loanObject.LoanMaster[0];
     let tValue =  (loanMaster.Net_Market_Value_Insurance || 0) + (loanMaster.Net_Market_Value_Stored_Crops || 0) + (loanMaster.Net_Market_Value_FSA || 0) + (loanMaster.Net_Market_Value_Livestock || 0) +
       (loanMaster.Net_Market_Value__Other || 0);
-    return tValue;
+    //tValue = parseFloat(tValue.toFixed(2));
+    return Math.round(tValue);
   }
 
   getInsuranceThresholdStaticValue(loanObject: loan_model) {
@@ -155,28 +194,29 @@ export class LoanMasterCalculationWorkerService {
 
 
   getRating(ratio: number, params: Array<any>) {
-    let operator = params[2];
+    //let operator = params[2];
     let stable = params[1];
     let strong = params[0];
+    let state = this.getState(ratio,params);
     let possible = this.getPossible(ratio, params);
 
-    if (operator === '>') {
-      return (ratio - stable) / (strong - stable) * possible;
+    if (state == STATE.WEAK) {
+      return ((ratio - stable) / (strong - stable) * possible)*100;
     } else {
-      return (stable - ratio) / (stable - strong) * possible;
+      return ((stable - ratio) / (stable - strong) * possible)*100;
     }
   }
 
 
   getPossible(ratio: number, params: Array<any>){
-    let operator = params[2];
-    let stable = params[1];
-    let strong = params[0];
-
-    if (operator === '>') {
-      return ratio < stable ? -1 : 1;
+    // let operator = params[2];
+     let stable = params[1];
+     let strong = params[0];
+    let state = this.getState(ratio,params);
+    if (state === STATE.WEAK) {
+      return 1;
     } else {
-      return ratio > stable? -1 : 1;
+      return 1;
     }
   }
 

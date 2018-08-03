@@ -1,0 +1,29 @@
+table {
+    width: 97%;
+}
+tfoot{
+    background: lightgreen
+}
+td:not(.title){
+    text-align: right;
+}
+th:not(.title){
+    text-align: right;
+}
+th.title{
+    text-align: left;
+}
+td{
+    padding: 5px;
+    font-size: 12px;
+}
+th{
+    padding: 5px;
+    font-weight: 600;
+    text-align: center;
+}
+.background-highlight{
+    background-color: #dce6f1;
+    font-weight: 600;
+  }
+

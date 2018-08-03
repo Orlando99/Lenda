@@ -3,7 +3,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment';
 import { loan_model } from '../../models/loanmodel';
 import * as _ from "lodash";
-import { lookupCountyValue, lookupStateValue, lookupStateRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
+import { lookupCountyValue, lookupStateValue, lookupStateRefValue, extractStateValues, lookupStateAbvRefValue, lookupCountyRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from '../../../../node_modules/ng2-toastr';
 import { LoggingService } from '../../services/Logs/logging.service';
@@ -11,6 +11,7 @@ import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from '../../../../node_modules/json2typescript';
 import { EmptyEditor } from '../../aggridfilters/emptybox';
+import { setgriddefaults, calculatecolumnwidths } from '../../aggriddefinations/aggridoptions';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html'
@@ -25,6 +26,7 @@ export class OptimizerComponent implements OnInit {
   public loading=false;
   public context;
   public rowClassRules;
+  private refdata;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined) {
@@ -48,26 +50,21 @@ export class OptimizerComponent implements OnInit {
     { headerName: 'CropunitRecord', field: 'ID', hide: true },
     { headerName: 'Irr/NI', field: 'Practice', editable: false },
     {
-      headerName: 'State', field: 'State', editable: false,
-      valueFormatter: function (params) {
-        return lookupStateRefValue(params.value);
-      }
+      headerName: 'State', field: 'State', editable: false
     },
     {
-      headerName: 'County', field: 'County', valueFormatter: function (params) {
-        return lookupCountyValue(params.value);
-      }, editable: false
+      headerName: 'County', field: 'County', editable: false
     },
-    { headerName: '% Prod.', field: 'Prodpercentage', editable: false },
+    { headerName: '% Prod.',headerClass:"rightaligned",cellClass:"rightaligned", field: 'Prodpercentage', editable: false },
     { headerName: 'Landlord', field: 'Landlord', editable: false },
-    { headerName: 'FSN', field: 'FSN', editable: false },
+    { headerName: 'FSN',headerClass:"rightaligned",cellClass:"rightaligned", field: 'FSN', editable: false },
     { headerName: 'Crop', field: 'Crop', editable: false },
     { headerName: 'Practice', field: 'Practice', editable: false },
-    { headerName: 'CF', field: 'CF', editable: false },
-    { headerName: 'RC', field: 'RC', editable: false },
-    { headerName: 'Excess ins', field: 'ExcessIns', editable: false },
+    { headerName: 'CF',headerClass:"rightaligned",cellClass:"rightaligned", field: 'CF', editable: false },
+    { headerName: 'RC',minWidth:100,headerClass:"rightaligned",cellClass:"rightaligned", field: 'RC', editable: false },
+    { headerName: 'Excess ins',headerClass:"rightaligned",cellClass:"rightaligned", field: 'ExcessIns', editable: false },
     {
-      headerName: 'Acres', field: 'Acres',  cellClass: 'editable-color', editable: true,
+      headerName: 'Acres',headerClass:"rightaligned", field: 'Acres',  cellClass: 'editable-color rightaligned', editable: true,
       cellEditorSelector:function (params){
         if(params.data.ID==undefined){
           return {
@@ -195,6 +192,7 @@ export class OptimizerComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     this.getgriddata();
   }
@@ -214,8 +212,8 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "IRR";
-          row.State = farm.Farm_State_ID;
-          row.County = farm.Farm_County_ID;
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
           row.Prodpercentage = "80%";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
@@ -244,8 +242,8 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "NIR";
-          row.State = farm.Farm_State_ID;
-          row.County = farm.Farm_County_ID;
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
           row.Prodpercentage = "80%";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
@@ -327,7 +325,10 @@ export class OptimizerComponent implements OnInit {
   onGridReady(params) { 
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    params.api.sizeColumnsToFit();//autoresizing
+    setgriddefaults(this.gridApi,this.columnApi);
+    this.style.width=calculatecolumnwidths(this.columnApi) +2+ "px";
+    
+    //params.api.sizeColumnsToFit();//autoresizing
   }
   //Grid Functions End
 }

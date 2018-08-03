@@ -19,7 +19,7 @@ export class SummaryComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res=>{
       if(res!=undefined && res!=null)
       {
-      this.logging.checkandcreatelog(1,'Summary',"LocalStorage updated");
+      // this.logging.checkandcreatelog(1,'Summary',"LocalStorage updated");
       this.loading = false;
       this.localborrowerobject=res.LoanMaster[0];
       this.allDataFetched=true;
@@ -27,10 +27,13 @@ export class SummaryComponent implements OnInit {
     })
     this.getdataforgrid();
   }
+  getCurrentDate(){
+    return new Date();
+  }
   getdataforgrid(){
 
     let obj:any=this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1,'Summary',"LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1,'Summary',"LocalStorage retrieved");
     if(obj!=null && obj!=undefined)
     {
 

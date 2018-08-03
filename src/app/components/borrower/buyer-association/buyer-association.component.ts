@@ -27,7 +27,7 @@ export class BuyerAssociationComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = true;
+
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -77,7 +77,7 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Buyer', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
-      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color'},
+      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color', 'text-right']},
       { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
@@ -86,7 +86,7 @@ export class BuyerAssociationComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
       this.localloanobject = res
       
       if (res.srccomponentedit == "BuyerAssociationComponent") {
@@ -115,7 +115,7 @@ export class BuyerAssociationComponent implements OnInit {
 
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject && this.localloanobject.Association && this.localloanobject.Association.length>0) {
       //this.localloanobject = obj;
@@ -202,6 +202,14 @@ export class BuyerAssociationComponent implements OnInit {
     })
 
   }
+
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0)
+      return '';
+    else
+      return 'disabled';
+  }
+
 
 }
 

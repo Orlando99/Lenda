@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
 import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupStateValue, Statevaluesetter, getfilteredcounties, Countyvaluesetter, lookupStateValueinRefobj } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -15,26 +15,26 @@ import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
 import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
-import { debug } from 'util';
 import { status } from '../../../models/syncstatusmodel';
 import { JsonConvert } from '../../../../../node_modules/json2typescript';
 import { ToastsManager } from '../../../../../node_modules/ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
 
 @Component({
   selector: 'app-policies',
   templateUrl: './policies.component.html',
-  styleUrls: ['./policies.component.scss']
+  styleUrls: ['./policies.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
- 
+
 
   deleteunwantedcolumn(): any {
-    
-    var currentvisiblecolumns = this.columnDefs.filter(p => p.pickfield.includes("Subtype")).map(p => p.pickfield.split("_")[0]);
+    var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
       let included = false;
       this.rowData.forEach(row => {
@@ -47,6 +47,7 @@ export class PoliciesComponent implements OnInit {
         this.loanmodel.InsurancePolicies.forEach(function(newel){
           
          _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
+         
          newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
            element.ActionStatus=3;
          });
@@ -76,7 +77,13 @@ export class PoliciesComponent implements OnInit {
     this.columnDefs = [];
     this.columnDefs = [
       {
-        headerName: 'Agent',pickfield:'Agent',field: 'Agent_Id', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+        headerName: 'Agent', 
+        field: 'Agent_Id',pickfield:'Agent_Id', 
+        cellClass: 'editable-color', 
+        //cellRenderer: 'columnTooltip',
+        headerTooltip: 'Agent',
+        editable: true, 
+        cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
         valueFormatter: function (params) {
           try {
@@ -86,28 +93,57 @@ export class PoliciesComponent implements OnInit {
             return "Select";
           }
         }
-
       },
       {
-        headerName: 'Proposed AIP',pickfield:'Proposed AIP', field: 'ProposedAIP', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
+        headerName: 'Proposed AIP', 
+        field: 'ProposedAIP',pickfield:'ProposedAIP',
+        headerTooltip: 'ProposedAIP',
+        cellRenderer: 'columnTooltip',
+        cellClass: 'editable-color', 
+        editable: true, 
+        cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
-
       },
       {
-        headerName: 'County | State',pickfield:'County | State', field: 'StateandCountry'
+        headerName: 'County | State', 
+        headerTooltip: 'County | State',
+        cellRenderer: 'columnTooltip',
+        field: 'StateandCountry'
+        ,pickfield:'StateandCountry'
       },
       {
-        headerName: 'Crop',pickfield:'Crop', field: 'CropName'
+        headerName: 'Crop', 
+        headerTooltip: 'Crop',
+        cellRenderer: 'columnTooltip',
+        field: 'CropName',pickfield:'CropName'
       },
       {
-        headerName: 'Practice',pickfield:'Practice', field: 'Practice'
+        headerName: 'Practice', 
+        headerTooltip: 'Practice',
+        cellRenderer: 'columnTooltip',
+        field: 'Practice',pickfield:'Practice'
       },
       {
-        headerName: 'MPCI types',pickfield:'SubPlanType', field: 'MPCI_Subplan', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.GetPlanSubType('MPCI')
+        headerName: 'SubPlanType', 
+        headerTooltip: 'SubPlanType',
+        field: 'MPCI_Subplan', 
+        cellRenderer: 'columnTooltip',
+        pickfield:'MPCI_Subplan',
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "agSelectCellEditor",
+        cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
-        headerName: 'SecInsPlan',pickfield:'SecInsPlan', field: 'SecInsurance', cellClass: 'editable-color', editable: true, cellEditor: "chipeditor",
+        headerName: 'Options', 
+        headerTooltip: 'Options',
+        field: 'SecInsurance', 
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        autoHeight: true,
+        pickfield:'SecInsurance',
+        editable: true, 
+        cellEditor: "chipeditor",
         cellEditorParams: {
           items: [
             { "id": 1, "itemName": "STAX" },
@@ -126,11 +162,34 @@ export class PoliciesComponent implements OnInit {
         // }
       },
       {
-        headerName: 'Unit', pickfield:'Unit',field: 'Unit', cellClass: 'editable-color', editable: true, cellEditor: "agSelectCellEditor",
-        cellEditorParams: this.getunits()
+        headerName: 'Unit', 
+        headerTooltip: 'Unit',
+        field: 'Unit', 
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        editable: true, pickfield:'Unit',
+        cellEditor: "selectEditor",
+        cellEditorParams: { 
+          values: [
+            { key: 1, value: 'EU' }, 
+            { key: 2, value: 'BU' }, 
+            { key: 2, value: 'EP' }, 
+            { key: 2, value: 'OU' }
+          ] 
+        },
+        valueFormatter: function (params) {
+          let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
+          return selected ? selected.value : undefined;
+        }
       },
       {
-        headerName: 'Level', pickfield:'Level', field: 'Level', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor",
+        headerName: 'Level', 
+        headerTooltip: 'Level',
+        field: 'Level', 
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        editable: true, pickfield:'Level',
+        cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
           
           return PercentageFormatter(params.value);
@@ -145,13 +204,27 @@ export class PoliciesComponent implements OnInit {
         }
       },
       {
-        headerName: 'Price',pickfield:'Price', field: 'Price', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Price', 
+        headerTooltip: 'Price',
+        field: 'Price', pickfield:'Price',
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "numericCellEditor", 
+        valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
       },
       {
-        headerName: 'Premium',pickfield:'Premium', field: 'Premium', cellClass: 'editable-color', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Premium', 
+        headerTooltip: 'Premium',
+        field: 'Premium', pickfield:'Premium',
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        editable: true, 
+        cellEditor: "numericCellEditor", 
+        valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
@@ -202,22 +275,22 @@ export class PoliciesComponent implements OnInit {
     let rendervalues = [];
     if (value == "HMAX") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Deduct_HMAX','Premium_HMAX']
+      rendervalues = ['Upper_Limit_HMAX', 'Lower_Limit_HMAX', 'Deduct_HMAX','Premium_HMAX','Price_Pct_HMAX']
       //HMAX
     }
     if (value == "SCO") { //these values are Suffixed rather than prefixed
       //HMAX
-      rendervalues = ['Yield_SCO','Premium_SCO']
+      rendervalues = ['Upper_Limit_SCO','Yield_SCO','Premium_SCO']
       //HMAX
     }
     if (value == "STAX") {
-      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Yield_Pct_STAX','Premium_STAX','Prot_Factor_STAX']
+      rendervalues = ['Upper_Limit_STAX', 'Yield_STAX','Prot_Factor_STAX','Yield_Pct_STAX','Premium_STAX']
     }
     if (value == "RAMP") {
-      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_RAMP', 'Liability_RAMP','Premium_RAMP']
+      rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_Pct_RAMP', 'Liability_RAMP','Premium_RAMP']
     }
     if (value == "ICE") {
-      rendervalues = ['Yield_ICE', 'Price_ICE','Premium_ICE']
+      rendervalues = ['Upper_Level_ICE','Lower_Level_ICE','Premium_ICE','Deduct_ICE']
     }
     if (value == "ABC") {
       rendervalues = ['Upper_Limit_ABC', 'Lower_Limit_ABC','Premium_ABC']
@@ -226,7 +299,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['FCMC_PCI','Premium_PCI']
     }
     if (value == "CROPHAIL") {
-      rendervalues = ['Upper_Limit_CROPHAIL', 'Deduct_CROPHAIL', 'Price_CROPHAIL', 'Liability_CROPHAIL','Premium_CROPHAIL']
+      rendervalues = ['Upper_Limit_CROPHAIL','Price_Pct_CROPHAIL', 'Liability_CROPHAIL', 'Deduct_CROPHAIL','Premium_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
@@ -259,18 +332,15 @@ export class PoliciesComponent implements OnInit {
     if (type == "PCI") {
       return { values: [] };
     }
+    if (type == "CROPHAIL") {
+      return { values: ['Basic', 'Prod Plan', 'Comp Plan'] };
+    }
   }
 
   
-  GetPlanSubType(type: string): any {
+  GetMPCIPlanSubType(type: string): any {
     if (type == "MPCI") {
       return { values: ['CAT', 'YP', 'RP-HPE', 'RP', 'ARH'] };
-    }
-    if (type == "HMAX") {
-      return { values: ['STANDARD', 'X1', 'MAXRP'] };
-    }
-    if (type == "STAX") {
-      return { values: [] };
     }
   }
   getAIPs(): any {
@@ -303,7 +373,7 @@ export class PoliciesComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '93%',
-    height: '240px',
+    height: '366px',
 
   };
   public loanmodel: loan_model=null;
@@ -318,8 +388,12 @@ export class PoliciesComponent implements OnInit {
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
-    this.components={ numericCellEditor: getNumericCellEditor()}
-    this.frameworkcomponents = { chipeditor: ChipsListEditor, selectEditor: SelectEditor, emptyeditor: EmptyEditor };
+    this.frameworkcomponents = { 
+      chipeditor: ChipsListEditor, 
+      selectEditor: SelectEditor, 
+      numericCellEditor: NumericEditor, 
+      emptyeditor: EmptyEditor,
+      columnTooltip: AgGridTooltipComponent };
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
     this.loanobj = this.localstorage.retrieve(environment.loankey);
     this.context = { componentParent: this };
@@ -348,7 +422,6 @@ export class PoliciesComponent implements OnInit {
     {
       
     this.declarecoldefs();
-    
    }
    
   }
@@ -389,7 +462,6 @@ export class PoliciesComponent implements OnInit {
         row.Price = item.Price;
         row.Premium = item.Premium;
         item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
-           debugger
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {
@@ -476,10 +548,11 @@ export class PoliciesComponent implements OnInit {
 
   rowvaluechanged($event) {
     
+    var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
        
-      var items = $event.data.SecInsurance.toString().split(",");
+      
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
@@ -519,18 +592,19 @@ export class PoliciesComponent implements OnInit {
       
       });
        
-      let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
-      mainobj.Subpolicies.forEach(eelement => {
-        if(items.find(p=>p==eelement.Ins_Type)==undefined){
-           eelement.ActionStatus=3;
-        } 
-      });
+     
+      
       //Delete unwanted Column here
-      
-      
+     
       
       //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
+    let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
+    mainobj.Subpolicies.forEach(eelement => {
+      if(items.find(p=>p==eelement.Ins_Type)==undefined){
+         eelement.ActionStatus=3;
+      }
+    });
     //get the local loan object synced
     this.deleteunwantedcolumn();
     this.gridApi.setColumnDefs(this.columnDefs);
@@ -543,6 +617,7 @@ export class PoliciesComponent implements OnInit {
     this.columnApi = params.columnApi;
 
     //params.api.sizeColumnsToFit();//autoresizing
+    this.getgriddata();
   }
   //Grid Functions End
   synctoDb() {
@@ -598,5 +673,14 @@ export class PoliciesComponent implements OnInit {
     }
      });
      return status;
+  }
+
+  onGridSizeChanged(params) {
+    //params.api.sizeColumnsToFit();
+    params.api.resetRowHeights();
+  }
+
+  onGridScroll(params) {
+    //params.api.stopEditing();
   }
 }

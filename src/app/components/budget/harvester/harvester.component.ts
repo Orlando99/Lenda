@@ -39,7 +39,7 @@ export class HarvesterComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '96%',
-    height: '240px',
+    //height: '240px',
     boxSizing: 'border-box'
   };
   //region Ag grid Configuration
@@ -54,7 +54,7 @@ export class HarvesterComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
-    this.getgridheight();
+    //this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -89,7 +89,7 @@ export class HarvesterComponent implements OnInit {
   ngOnInit() {  
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
       if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
         this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
@@ -101,7 +101,7 @@ export class HarvesterComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
       this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
     }
@@ -186,9 +186,9 @@ export class HarvesterComponent implements OnInit {
 
   }
 
-  getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
-   }
+  // getgridheight(){
+  //   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+  //  }
   //
 
 }

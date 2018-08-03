@@ -100,13 +100,13 @@ export class LoancalculationWorker {
       console.log("Calculation Started");
       let starttime = new Date().getTime();
       console.log(starttime);
-      this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
+      // this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
 
       //STEP 1 -- BORROWER CALCULATIONS
       if (localloanobj.Borrower != null)
         localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
       if (localloanobj.BorrowerIncomeHistory !== null)
-        localloanobj = this.borrowerworker.prepareborrowerincomehistorymodel(localloanobj);
+        localloanobj = this.borrowerincomehistory.prepareborrowerincomehistorymodel(localloanobj);
 
       //STEP 2 -- CROP LEVEL CALCULATIONS
       if (localloanobj.CropYield != null) {
@@ -128,28 +128,30 @@ export class LoancalculationWorker {
 
       //STEP 5 --- BUDGET CALCULATIONS
       try {
-        if(localloanobj.LoanBudget && localloanobj.LoanBudget.length > 0){
-        for (let i = 0; i < localloanobj.LoanBudget.length; i++) {
-          let currentBudget = localloanobj.LoanBudget[i];
-          let cropPractice = localloanobj.LoanCropPractices.find(cp => cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
-          if (cropPractice != undefined && cropPractice != null) {
-            currentBudget.ARM_Budget_Crop = currentBudget.ARM_Budget_Acre * cropPractice.LCP_Acres;
-            currentBudget.Distributor_Budget_Crop = currentBudget.Distributor_Budget_Acre * cropPractice.LCP_Acres;
-            currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
-            currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
+        let starttime = new Date().getTime();
+          if(localloanobj.LoanBudget && localloanobj.LoanBudget.length > 0){
+          for (let i = 0; i < localloanobj.LoanBudget.length; i++) {
+            let currentBudget = localloanobj.LoanBudget[i];
+            let cropPractice = localloanobj.LoanCropPractices.find(cp => cp.Crop_Practice_ID === currentBudget.Crop_Practice_ID);
+            if (cropPractice != undefined && cropPractice != null) {
+              currentBudget.ARM_Budget_Crop = currentBudget.ARM_Budget_Acre * cropPractice.LCP_Acres;
+              currentBudget.Distributor_Budget_Crop = currentBudget.Distributor_Budget_Acre * cropPractice.LCP_Acres;
+              currentBudget.Third_Party_Budget_Crop = currentBudget.Third_Party_Budget_Acre * cropPractice.LCP_Acres;
+              currentBudget.Total_Budget_Crop_ET = currentBudget.Total_Budget_Acre * cropPractice.LCP_Acres;
+            }
           }
+          // propogations to Loan master table 
+          localloanobj.LoanMaster[0].ARM_Commitment=_.sumBy(localloanobj.LoanBudget,'ARM_Budget_Crop');
+          localloanobj.LoanMaster[0].Dist_Commitment=_.sumBy(localloanobj.LoanBudget,'Distributor_Budget_Crop');
+          localloanobj.LoanMaster[0].Third_Party_Credit=_.sumBy(localloanobj.LoanBudget,'Third_Party_Budget_Crop');
+          localloanobj.LoanMaster[0].Total_Commitment=_.sumBy(localloanobj.LoanBudget,'Total_Budget_Crop_ET');
+          localloanobj.LoanMaster[0].ActionStatus=2;
         }
-        // propogations to Loan master table 
-        
-        localloanobj.LoanMaster[0].ARM_Commitment=_.sumBy(localloanobj.LoanBudget,'ARM_Budget_Crop');
-        localloanobj.LoanMaster[0].Dist_Commitment=_.sumBy(localloanobj.LoanBudget,'Distributor_Budget_Crop');
-        localloanobj.LoanMaster[0].Third_Party_Credit=_.sumBy(localloanobj.LoanBudget,'Third_Party_Budget_Crop');
-        localloanobj.LoanMaster[0].Total_Commitment=_.sumBy(localloanobj.LoanBudget,'Total_Budget_Crop_ET');
-        localloanobj.LoanMaster[0].ActionStatus=2;
-      }
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_Budget', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       } catch (e) {
+        this.logging.checkandcreatelog(3, 'Calc_Budget', e);
         console.error("ERROR IN BUDGET CALCULATION" + JSON.stringify(e));
-
       }
       //localloanobj.LoanBudget = localloanobj.LoanBudget;
 
@@ -157,6 +159,7 @@ export class LoancalculationWorker {
       if (localloanobj.LoanCollateral != null) {
         localloanobj = this.associationcalculation.prepareLoanassociationmodel(localloanobj);
         localloanobj = this.collateralcalculation.preparecollateralmodel(localloanobj);
+        localloanobj = this.collateralcalculation.performMarketValueCalculations(localloanobj)
       }
 
       // STEP 7 --- QUESTIONS CALCULATIONS
@@ -166,6 +169,7 @@ export class LoancalculationWorker {
       // STEP 8 --- MASTER CALCULATIONS
       if (localloanobj.LoanMaster !== null) {
         localloanobj = this.loanMasterCalcualtions.performLoanMasterCalcualtions(localloanobj);
+        localloanobj = this.loanMasterCalcualtions.performDashboardCaclulation(localloanobj);
         localloanobj = this.overallCalculationService.balancesheet_calc(localloanobj);
       }
 
@@ -250,7 +254,7 @@ export class LoancalculationWorker {
     this.localst.store(environment.loankey, localloanobj);
     if (recalculate) {
       console.log("object updated");
-      this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
+      // this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
     }
     else
       console.log("object updated without calculations");

@@ -89,7 +89,7 @@ export class StoredCropComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - Stored Crop', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanCollateral - Stored Crop', "LocalStorage updated");
       if (res.srccomponentedit == "StoredCropComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
@@ -111,7 +111,7 @@ export class StoredCropComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - SCP', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - SCP', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData=[];
@@ -126,8 +126,11 @@ export class StoredCropComponent implements OnInit {
     this.getgridheight();
   }
 
-  syncenabled(){
-    return this.rowData.filter(p=>p.ActionStatus != null).length>0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb(){

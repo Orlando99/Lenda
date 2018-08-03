@@ -14,26 +14,34 @@ export class LoanQResponse {
   @JsonProperty("Loan_Full_ID", StringConverter,false)
   Loan_Full_ID: string;
 
+  @JsonProperty("Chevron_ID", IntConverter,false)
+  Chevron_ID: number;
+
   @JsonProperty("Question_ID", IntConverter,false)
   Question_ID: number;
-
-  @JsonProperty("Response_Ind", IntConverter,false)
-  Response_Ind: number;
 
   @JsonProperty("Question_Category_Code", IntConverter,false)
   Question_Category_Code: number;
 
-  @JsonProperty("Response_Detail_Text", StringConverter,false)
-  Response_Detail_Text: string
-
-  @JsonProperty("Response_Detail_Value", IntConverter,false)
-  Response_Detail_Value: number;
+  @JsonProperty("Response_Detail", StringConverter,false)
+  Response_Detail: string
 
   @JsonProperty("Response_Detail_Field_ID", IntConverter,false)
   Response_Detail_Field_ID: number;
 
   @JsonProperty("Status", IntConverter,false)
   Status: number;
+
+  @JsonProperty("ActionStatus", IntConverter,false)
+  ActionStatus: number;
+
+  FC_Question_ID_Text : string;
+  FC_Choice1 :string;
+  FC_Choice2 : string;
+  FC_Subsidiary_Question_ID_Ind : number;
+  FC_Parent_Question_ID : number;
+  FC_Sort_Order : number;
+
 }
 
 export class RefQuestions {
@@ -41,16 +49,23 @@ export class RefQuestions {
   Question_ID: number;
   @JsonProperty("Question_ID_Text", StringConverter,false)
   Question_ID_Text: string;
+  @JsonProperty("Chevron_ID", IntConverter,false)
+  Chevron_ID: number;
+  @JsonProperty("Sort_Order", IntConverter,false)
+  Sort_Order: number;
   @JsonProperty("Questions_Cat_Code", IntConverter,false)
   Questions_Cat_Code: number;
   @JsonProperty("Response_Detail_Reqd_Ind", IntConverter,false)
   Response_Detail_Reqd_Ind: number;
-  @JsonProperty("Sort_Order", IntConverter,false)
-  Sort_Order: number;
-  @JsonProperty("Status", IntConverter,false)
-  Status: number;
-  @JsonProperty("Subsidiary_Question_ID", IntConverter,false)
-  Subsidiary_Question_ID: number;
   @JsonProperty("Subsidiary_Question_ID_Ind", IntConverter,false)
   Subsidiary_Question_ID_Ind: number;
+  @JsonProperty("Parent_Question_ID", IntConverter,false)
+  Parent_Question_ID: number;
+  @JsonProperty("Status", IntConverter,false)
+  Status: number;
+  @JsonProperty("Choice1", StringConverter,false)
+  Choice1: string;
+  @JsonProperty("Choice2", StringConverter,false)
+  Choice2: string;
+  
 }

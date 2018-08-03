@@ -1,27 +1,17 @@
-@import "./../../../sass/theme/variables";
+.mat-card {
+    padding: 0px 15px 0px 15px !important;
+    height: 50px;
+    // background: #164c7b;
+    // color: white;
+}
+td, th{
+    padding: 0px !important;
+}
 
-.page-header {
-  display: flex;
-  align-content: center;
-  background: $primary-color;
-  color: $white;
-  border-left: 1px solid #666;
-  font-size: $font-size-md;
-  padding-left: 15px;
-  text-transform: uppercase;
-  position: fixed;
-  z-index: 999;
-  width: 100%;
+.mat-select-value{
+    color: white !important;
+}
 
-  .text {
-    text-shadow: 1px 1px #333;
-  }
-
-  .flaticon {
-    font-size: $font-size-md;
-    cursor: pointer;
-    margin-top: 3px;
-    margin-left: 10px;
-    display: inherit
-  }
+.mat-select-arrow{
+    color: white !important;
 }

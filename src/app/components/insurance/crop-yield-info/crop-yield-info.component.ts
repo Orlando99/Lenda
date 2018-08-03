@@ -84,7 +84,7 @@ export class CropYieldInfoComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
 
       this.rowData = this.localloanobject.CropYield;
@@ -97,7 +97,7 @@ export class CropYieldInfoComponent implements OnInit {
   }
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
     //if (obj != null && obj != undefined) {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;

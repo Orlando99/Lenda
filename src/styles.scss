@@ -12,3 +12,23 @@
 @import "sass/custom/overrides/rating";
 
 @import "sass/custom/utils";
+
+
+//@import "~@ng-select/ng-select/themes/material.theme.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+ag-grid-angular {
+    .ag-row-hover {
+        z-index: 1 !important;
+    }
+}
+.ag-cell {
+    //display: inline-block;
+    //position: relative;
+    // padding: 0px 2px 15px 2px;
+    &:hover .tooltiptext,
+    &:hover .tooltiptext:after {
+        display: block;
+        z-index: 9999;
+    }
+}

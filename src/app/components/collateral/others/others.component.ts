@@ -95,7 +95,7 @@ export class OthersComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
       if (res.srccomponentedit == "OthersComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
@@ -117,7 +117,7 @@ export class OthersComponent implements OnInit {
   getdataforgrid() {
 
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - OTR', "LocalStorage retrieved");
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - OTR', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
@@ -148,9 +148,11 @@ export class OthersComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-   
-    return this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+      return '';
+    else
+      return 'disabled';
   }
 
   synctoDb() {
@@ -266,11 +268,10 @@ export class OthersComponent implements OnInit {
     var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
     //var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
     
-    elementInHost.forEach(element => {
-     debugger
-      //find aggrid
+    for (let index = 0; index < elementInHost.length; index++) {
+      const element = elementInHost[index];
       var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
-       element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
-     });
+      element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+    }
    }
 }

@@ -6,21 +6,32 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
-
-     <!-- <button (click)="addrow()" mat-raised-button color="primary" >Add </button> -->
-     <a (click)="addrow()" class="waves-effect waves-light btn">
-       <i class="material-icons left">add</i>
-       Add
-    </a>
-
-    <div class="container bottom">
+    <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 00px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
+    <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
+     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+     
+        <div class="container bottom">
       <div class="row">
-        <ag-grid-angular [ngStyle]="style" class="ag-theme-balham" [animateRows]="true" [defaultColDef]="defaultColDef" [singleClickEdit]="true"
-          (gridSizeChanged)="onGridSizeChanged($event)" [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components"
-          (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true>
+      
+        <ag-grid-angular
+          id="myGrid"
+          [ngStyle]="style" 
+          class="ag-theme-balham roboto-font" 
+          [animateRows]="true" 
+          [defaultColDef]="defaultColDef" 
+          [singleClickEdit]="true"
+          [gridAutoHeight]="true"
+          (gridSizeChanged)="onGridSizeChanged($event)" 
+          [stopEditingWhenGridLosesFocus]="'true'"
+          [context]="context" 
+          [frameworkComponents]="frameworkcomponents"        
+          [components]="components" 
+          (cellEditingStopped)="rowvaluechanged($event)" 
+          [rowData]="rowData" 
+          (gridReady)="onGridReady($event)"
+          [columnDefs]="columnDefs" >
         </ag-grid-angular>
-      </div>
+      </div>  
     </div>
     <br>
   </mat-expansion-panel>

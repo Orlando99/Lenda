@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Loan_Marketing_Contract, loan_model } from '../../models/loanmodel';
 import * as _ from "lodash";
+import { LoggingService } from '../../services/Logs/logging.service';
 
 @Injectable()
 export class MarketingcontractcalculationService {
 
-  constructor() { }
+  constructor(public logging: LoggingService) { }
 
   // updateMarketingCalculation(localloanobject : loan_model){
   //   localloanobject.LoanMarketingContracts.forEach(contract => {
@@ -13,6 +14,7 @@ export class MarketingcontractcalculationService {
   //   });
   // }
    updateMktValueAndContractPer(localloanobject : loan_model, contract: Loan_Marketing_Contract) {
+    let starttime = new Date().getTime();
     contract.Market_Value = contract.Price * contract.Quantity;
     let supplyQuantity = this.getCropContract(localloanobject,contract.Crop_Code, 'IRR') + this.getCropContract(localloanobject,contract.Crop_Code, 'NIR');
 
@@ -21,10 +23,13 @@ export class MarketingcontractcalculationService {
     }else{
       contract.Contract_Per = 0;
     }
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_CrpContract_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     
   }
 
   getCropContract(localloanobject : loan_model, cropCode : string, type : string){
+    let starttime = new Date().getTime();
     if(localloanobject.LoanCropUnits && localloanobject.CropYield && localloanobject.Farms){
 
       let totalCUAcres= 0;
@@ -43,7 +48,8 @@ export class MarketingcontractcalculationService {
       if(selectedCY){
         totalCropYield = selectedCY.CropYield;
       }
-
+        let endtime = new Date().getTime();
+        this.logging.checkandcreatelog(3, 'Calc_CrpContract_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
         return totalCUAcres * totalCropYield;
     }else{
       return 0;
@@ -52,7 +58,7 @@ export class MarketingcontractcalculationService {
   }
 
   performPriceCalculation(localloanobject : loan_model){
-
+    let starttime = new Date().getTime();
     localloanobject.LoanCrops.forEach(crop =>{
       let matchingMC  = localloanobject.LoanMarketingContracts.find(mc=>mc.Crop_Code == crop.Crop_Code && mc.ActionStatus != 3);
       if(matchingMC){
@@ -62,17 +68,18 @@ export class MarketingcontractcalculationService {
         //the same caclulation is in price component, which should be shisted to common place
         crop.Marketing_Adj = (crop.Contract_Price - (crop.Basic_Adj + crop.Crop_Price))*(crop.Percent_booked/100);
         crop.Marketing_Adj = crop.Marketing_Adj ? parseFloat(crop.Marketing_Adj.toFixed(2)) : 0;
-        crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + (crop.Marketing_Adj ||0) + crop.Rebate_Adj;
+        crop.Adj_Price = (crop.Crop_Price || 0) + (crop.Basic_Adj || 0) + (crop.Marketing_Adj ||0) + (crop.Rebate_Adj || 0);
       }else{
         crop.Percent_booked = 0;
         crop.Contract_Price = 0;
         crop.Contract_Qty = 0;
         crop.Marketing_Adj =0;
-        crop.Adj_Price = 0;
+        crop.Adj_Price = (crop.Crop_Price || 0) + (crop.Basic_Adj || 0) + (crop.Marketing_Adj ||0) + (crop.Rebate_Adj || 0);
         
       }
     });
-
+    let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_Price', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     // localloanobject.LoanMarketingContracts.forEach(mktContracts =>{
     //   let matchingCrop = localloanobject.LoanCrops.find(loanCrops=> loanCrops.Crop_Code === mktContracts.Crop_Code);
     //   if(matchingCrop){

@@ -16,6 +16,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
 import * as  _ from 'lodash';
+import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 
 @Component({
   selector: 'app-borrower-income-history',
@@ -36,7 +37,6 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
     boxSizing: 'border-box'
   };
 
@@ -61,20 +61,8 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
-    //     this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
-    //     this.localloanobject = res
-    //     this.rowData = [];
-    //     this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-    //     this.localloanobject.BorrowerIncomeHistory = this.rowData;
-    //     this.getgridheight();
-    //   // this.adjustgrid();
-    // });
-    ///
-
-    /////////////
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+      // this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
       this.localloanobject = res
       
       if (res.srccomponentedit == "BorrowerIncomeHistoryComponent") {
@@ -87,7 +75,7 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
         this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
         this.localloanobject.BorrowerIncomeHistory = this.rowData;
       }
-      this.getgridheight();
+      
       this.gridApi && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
@@ -97,15 +85,15 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
 
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
+    // this.logging.checkandcreatelog(1, 'Borrower - IncomeHistory', "LocalStorage updated");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
       this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
       this.localloanobject.BorrowerIncomeHistory = this.rowData;
     }
-    this.getgridheight();
-    this.adjustgrid();
+  
+    //this.adjustgrid();
   }
 
   setData(params) {
@@ -191,27 +179,23 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
   }
 
   onGridSizeChanged(Event: any) {
-    this.adjustgrid();
+    //this.adjustgrid();
   }
 
-  private adjustgrid() {
-    try {
-      this.gridApi.sizeColumnsToFit();
-    }
-    catch {
-    }
-  }
+  // private adjustgrid() {
+  //   try {
+  //     this.gridApi.sizeColumnsToFit();
+  //   }
+  //   catch {
+  //   }
+  // }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.gridApi.showToolPanel(false);
-    this.getgridheight();
-    this.adjustgrid();
+    setgriddefaults(this.gridApi,this.columnApi);
   }
 
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
-  }
+  
 
 }

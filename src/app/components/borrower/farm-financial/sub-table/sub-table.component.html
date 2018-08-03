@@ -1,35 +1,15 @@
-<div class="flex flex-center">
-  <div class="row">
-    <div class="col m3">
-      <!-- <div class="col cell text-left" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " >{{row.text}}</div> -->
-      <div class="header p-lr-10">Current Ratio</div>
+<ng-container *ngFor="let row of rowTable, let rowInd = index">
+    <div class="col m3" [ngClass]=" highlightLastRow &&  rowTable.length==rowInd+1 ? 'background-highlight' :''">
+      <div class="col cell text-left" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : ''" style="padding : 5px" >{{row.text}}</div>
     </div>
     <div class="col m9">
-      <!-- <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [value]="row.value && row.value.toFixed(2)"></app-cell-value>
-      <app-cell-value *ngFor="let val of row.staticValues, let i = index" [value]="isNumeric(val) ? val.toFixed(2) : val" ></app-cell-value>
-      <app-cell-value [backgroundGreen]="row.state == 'strong'" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " ></app-cell-value>
-      <app-cell-value  [value]="row.possible && row.possible.toFixed(2)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " ></app-cell-value> -->
-      <app-rangebar [strong]="5.0" [stable]="2.5" [weak]="0.0" [value]="3.0"></app-rangebar>
+      <app-cell-value [bolderFont]=true [borderRight]=true [valueType]="row.valueType"  [value]="row.value && (row.valueType==1 ? row.value.toFixed(1) :row.value.toFixed(2)) " [backgroundHighlight]="highlightLastRow && rowTable.length==rowInd+1"></app-cell-value>
+
+      <app-cell-value [value]="isNumeric(row.staticValues[0]) ? row.staticValues[0].toFixed(1) : row.staticValues[0]" [valueType]="row.staticValueType" [backgroundHighlight]="highlightLastRow &&  rowTable.length==rowInd+1"></app-cell-value>
+      <app-cell-value  [value]="isNumeric(row.staticValues[1]) ? row.staticValues[1].toFixed(1) : row.staticValues[1]" [valueType]="row.staticValueType" [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1"></app-cell-value>
+      <app-cell-value [value]="row.staticValues[2]" [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1" ></app-cell-value>
+      <app-cell-value [backgroundGreen]="(row.state == 'strong') || (highlightLastRow  && rowTable.length==rowInd+1)" [backgroundLightGreen]="row.state =='stable'" [backgroundYellow]="row.state =='weak'" [value]="row.rating && row.rating.toFixed(1)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [valueType]="1" [backgroundHighlight]="highlightLastRow && rowTable.length==rowInd+1"></app-cell-value>
+      <app-cell-value  [value]="row.possible && row.possible.toFixed(2)" [ngClass]="row.text=='Total Farm Financial Rating' ? 'font-weight-600' : '' " [backgroundHighlight]="highlightLastRow  && rowTable.length==rowInd+1"></app-cell-value>
+
     </div>
-    <div class="col m3">
-      <div class="header p-lr-10">Working Capital</div>
-    </div>
-    <div class="col m9">
-      <app-rangebar [strong]="0.0" [stable]="1.0" [weak]="2.0" [value]="1.0"></app-rangebar>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col m3">
-      <div class="header p-lr-10">Debt/Assets</div>
-    </div>
-    <div class="col m9">
-      <app-rangebar [strong]="0.0" [stable]="1.0" [weak]="2.0" [value]="0.7"></app-rangebar>
-    </div>
-    <div class="col m3">
-      <div class="header p-lr-10">Equity/Assets</div>
-    </div>
-    <div class="col m9">
-      <app-rangebar [strong]="10.0" [stable]="5.0" [weak]="0.0" [value]="3.0"></app-rangebar>
-    </div>
-  </div>
-</div>
+  </ng-container>

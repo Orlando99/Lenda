@@ -4,6 +4,34 @@ table {
 tfoot{
     background: lightgreen
 }
-td:not(.title){
+
+tr td:not(:first-child) {
     text-align: right;
+}
+tr td:first-child {
+    text-align: left;
+}
+td{
+    padding: 5px;
+    font-size: 12px;
+}
+th{
+    padding: 5px;
+    font-weight: 600;
+}
+tr th:not(:first-child) {
+    text-align: right;
+}
+tr th:first-child {
+    text-align: left;
+}
+.background-highlight{
+    background-color: #dce6f1;
+    font-weight: 600;
+  }
+
+.price:before{
+    content : '$';
+    float: left;
+
 }

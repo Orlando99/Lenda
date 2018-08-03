@@ -158,7 +158,7 @@ export class MarketingContractsComponent implements OnInit {
 
   ngOnInit(){
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-          this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
+          // this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
           this.localloanobject = res
           
           if (res.srccomponentedit == "MarketingContractComponent") {
@@ -241,13 +241,13 @@ export class MarketingContractsComponent implements OnInit {
     this.getgridheight();
   }
 
-  syncenabled(){
-    if(this.localloanobject && this.localloanobject.LoanMarketingContracts.length>0){
-      return this.localloanobject.LoanMarketingContracts.filter(p=>p.ActionStatus).length>0;
-    }else{
-      return false;
-    }
+  syncenabled() {   
+    if(this.rowData.filter(p => p.ActionStatus != 0).length > 0)
+      return '';
+    else
+      return 'disabled';
   }
+
 
   synctoDb(){
     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{

@@ -31,6 +31,7 @@
         [rowData]="rowDataIIR"
         (gridReady)="onGridReady($event)"
         [columnDefs]="columnDefs"
+        [gridAutoHeight]=true
         [defaultColDef]="defaultColDef"
         [gridAutoHeight]=true>
         </ag-grid-angular>
@@ -56,6 +57,7 @@
               [singleClickEdit]="true"
               (cellEditingStopped)="rowvaluechangednir($event)"
               [rowData]="rowDataNIR"
+              [gridAutoHeight]=true
               (gridReady)="onGridReady($event)"
               [columnDefs]="columnDefs"
               [defaultColDef]="defaultColDef"

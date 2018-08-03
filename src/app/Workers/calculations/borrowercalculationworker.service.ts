@@ -53,10 +53,11 @@ export class Borrowercalculationworker {
       this.preparenetratio();
       this.prepare_FICO();
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_BORW_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(3, 'Calc_Borrower', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return this.input;
     }
-    catch{
+    catch(e){
+      this.logging.checkandcreatelog(3, 'Calc_Borrower',e);
       return input;
     }
   }

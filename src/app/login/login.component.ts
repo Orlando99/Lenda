@@ -11,6 +11,7 @@ import { CropapiService } from '../services/crop/cropapi.service';
 import { ReferenceService } from '../services/reference/reference.service';
 import { Users } from '../models/commonmodels';
 import { LoginService } from './login.service';
+import { generate } from '../Workers/utility/randomgenerator';
 
 @Component({
   selector: 'auth-page',
@@ -79,6 +80,7 @@ export class LoginComponent implements OnInit {
       // trigger login success
       this.loginService.login(true);
       this.localst.store(environment.logpriority, Logpriority.Low);
+      this.localst.store(environment.usersession,generate())
       this.localst.store(environment.uid, userfound);
       this.getreferencedata();
       //this.router.navigateByUrl("/home/loanoverview/000001/000/summary");

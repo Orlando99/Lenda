@@ -26,5 +26,11 @@ export class CropunitrecordsComponent implements OnInit {
       return { 'background-color': 'green'};
     }
   }
+  returndecimalcapedvalue(value:any){
+    if(value==null || value==undefined){
+      value=0
+    }
+    return value.toFixed(2);
+  }
 
 }
