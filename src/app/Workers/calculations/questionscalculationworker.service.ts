@@ -18,18 +18,21 @@ export class QuestionscalculationworkerService {
     obj.forEach(element => {
      // we are going to update according to question id .. thats the only way as if now.. suggestions welcomed
       switch (element.Question_ID) {
-        case 2: // judgement question
+        case 7: // judgement question
 
-        input.LoanMaster[0].Judgement=(parseInt(element.Response_Ind)==1)?0:1;
+        input.LoanMaster[0].Judgement=(element.Response_Detail=='Yes')?1:0;
           break;
         case 3: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
+        input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
           break;
-        case 4: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
+        case 5: // bankruptcy question
+        input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
           break;
-        case 21: // 3 year tax return question
-        input.Borrower.Borrower_3yr_Tax_Returns=parseInt(element.Response_Ind)
+        case 12: // CPA Financial question
+        input.LoanMaster[0].CPA_Prepared_Financials=(element.Response_Detail=='Yes')?1:0;
+          break;
+        case 13: // 3 year tax return question
+        input.Borrower.Borrower_3yr_Tax_Returns=(element.Response_Detail=='Yes')?1:0;
           break;
         default:
           break;
