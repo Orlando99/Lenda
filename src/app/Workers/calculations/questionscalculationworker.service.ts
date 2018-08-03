@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { LoggingService } from '../../services/Logs/logging.service';
 import { loan_model } from '../../models/loanmodel';
 import { LoanQResponse, RefQuestions } from '../../models/loan-response.model';
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable()
 export class QuestionscalculationworkerService {
 
-  constructor(public logging:LoggingService){
+  constructor(public logging:LoggingService, private localstorageservice : LocalStorageService){
 
   }
 
@@ -39,4 +41,45 @@ export class QuestionscalculationworkerService {
   }
 
 
+  prepareResponses(chevronID : string, queResponse : Array<LoanQResponse>,loanMaster){
+    let refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    if(!queResponse){
+      queResponse = [];
+    }
+    if(refdata.RefQuestions && refdata.RefQuestions.length >0){
+
+      let cheveronQuestions  : Array<RefQuestions>= refdata.RefQuestions.filter(que=>que.Chevron_ID == chevronID);
+
+      if(cheveronQuestions && cheveronQuestions.length>0){
+        
+        cheveronQuestions.forEach(que =>{
+          let respecctiveResponse = queResponse.find(res=>res.Question_ID == que.Question_ID);
+          if(!respecctiveResponse){
+            respecctiveResponse = new LoanQResponse();
+            respecctiveResponse.Question_ID = que.Question_ID;
+            respecctiveResponse.Chevron_ID = que.Chevron_ID;
+            respecctiveResponse.Question_Category_Code = que.Questions_Cat_Code;
+            respecctiveResponse.Loan_ID = loanMaster.Loan_ID;
+            respecctiveResponse.Loan_Full_ID = loanMaster.Loan_Full_ID;
+            respecctiveResponse.Loan_Seq_Num = loanMaster.Loan_Seq_num;
+            respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
+            respecctiveResponse.FC_Choice1 = que.Choice1;
+            respecctiveResponse.FC_Choice2 = que.Choice2;
+            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID_Ind;
+            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
+            queResponse.push(respecctiveResponse);
+          }else{
+            respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
+            respecctiveResponse.FC_Choice1 = que.Choice1;
+            respecctiveResponse.FC_Choice2 = que.Choice2;
+            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID_Ind;
+            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
+          }
+          
+        })
+      }
+      
+    }
+    return queResponse;
+  }
 }

@@ -31,7 +31,7 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
- 
+
 
   deleteunwantedcolumn(): any {
     // debugger
@@ -97,7 +97,7 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-        field: 'ProposedAIP', 
+        field: 'ProposedAIP',pickfield:'ProposedAIP',
         headerTooltip: 'ProposedAIP',
         cellRenderer: 'columnTooltip',
         cellClass: 'editable-color', 
@@ -110,24 +110,26 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'County | State',
         cellRenderer: 'columnTooltip',
         field: 'StateandCountry'
+        ,pickfield:'StateandCountry'
       },
       {
         headerName: 'Crop', 
         headerTooltip: 'Crop',
         cellRenderer: 'columnTooltip',
-        field: 'CropName'
+        field: 'CropName',pickfield:'CropName'
       },
       {
         headerName: 'Practice', 
         headerTooltip: 'Practice',
         cellRenderer: 'columnTooltip',
-        field: 'Practice'
+        field: 'Practice',pickfield:'Practice'
       },
       {
         headerName: 'SubPlanType', 
         headerTooltip: 'SubPlanType',
         field: 'MPCI_Subplan', 
         cellRenderer: 'columnTooltip',
+        pickfield:'MPCI_Subplan',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "agSelectCellEditor",
@@ -140,6 +142,7 @@ export class PoliciesComponent implements OnInit {
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         autoHeight: true,
+        pickfield:'SecInsurance',
         editable: true, 
         cellEditor: "chipeditor",
         cellEditorParams: {
@@ -204,7 +207,7 @@ export class PoliciesComponent implements OnInit {
       {
         headerName: 'Price', 
         headerTooltip: 'Price',
-        field: 'Price', 
+        field: 'Price', pickfield:'Price',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
@@ -217,7 +220,7 @@ export class PoliciesComponent implements OnInit {
       {
         headerName: 'Premium', 
         headerTooltip: 'Premium',
-        field: 'Premium', 
+        field: 'Premium', pickfield:'Premium',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
