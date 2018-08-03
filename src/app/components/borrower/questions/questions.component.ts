@@ -8,7 +8,7 @@ import { QuestionscalculationworkerService } from '../../../Workers/calculations
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
-
+import * as _ from "lodash";
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -38,6 +38,7 @@ export class QuestionsComponent implements OnInit {
       this.localloanobject = res;
       if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
         this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+        this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
         this.updatePublishStatus();
 
       }
@@ -47,6 +48,7 @@ export class QuestionsComponent implements OnInit {
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
       this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+      this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
       this.updatePublishStatus();
     }
 

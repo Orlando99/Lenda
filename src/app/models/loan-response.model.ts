@@ -40,6 +40,7 @@ export class LoanQResponse {
   FC_Choice2 : string;
   FC_Subsidiary_Question_ID_Ind : number;
   FC_Parent_Question_ID : number;
+  FC_Sort_Order : number;
 
 }
 
