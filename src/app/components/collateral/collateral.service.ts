@@ -10,7 +10,6 @@ import { JsonConvert } from 'json2typescript';
 import { ToasterService } from '../../services/toaster.service';
 import { FsaService } from './fsa/fsa.service';
 import { LiveStockService } from './livestock/livestock.service';
-import { BehaviorSubject } from 'rxjs';
 
 /**
  * Shared service for collateral
@@ -18,12 +17,11 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class CollateralService {
   // private localloanobject: loan_model = new loan_model();
-  //public rowData = [];
+  public rowData = [];
   // public gridApi;
   public deleteAction = false;
   public pinnedBottomRowData;
-  private rowData: BehaviorSubject<Array<any>> = new BehaviorSubject([]);
-  
+
   constructor(
     public localstorageservice: LocalStorageService,
     public logging: LoggingService,
@@ -52,7 +50,7 @@ export class CollateralService {
     } else {
       localloanobject = res
       this.rowData = [];
-      this.rowData =  localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
     }
     this.getgridheight();
@@ -142,14 +140,14 @@ export class CollateralService {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
 
-  getdataforgrid(localloanobject: loan_model, gridApi, categoryCode) {
+  getdataforgrid(localloanobject: loan_model, gridApi) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       localloanobject = obj;
       this.rowData = [];
-      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(categoryCode,localloanobject);//this.fsaService.computeTotal(obj);
+      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
+      this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
     }
     this.getgridheight();
     this.adjustgrid(gridApi);
