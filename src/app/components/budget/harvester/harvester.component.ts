@@ -39,7 +39,7 @@ export class HarvesterComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '96%',
-    height: '240px',
+    //height: '240px',
     boxSizing: 'border-box'
   };
   //region Ag grid Configuration
@@ -54,7 +54,7 @@ export class HarvesterComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
-    this.getgridheight();
+    //this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -186,9 +186,9 @@ export class HarvesterComponent implements OnInit {
 
   }
 
-  getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
-   }
+  // getgridheight(){
+  //   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+  //  }
   //
 
 }
