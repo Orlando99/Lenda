@@ -36,7 +36,6 @@ export class Collateralcalculationworker {
                 this.preparenetmktvalue(input.LoanCollateral[i]);
                 this.preparediscvalue(input.LoanCollateral[i]);
             }
-
             
             this.computeTotalFSA(input);
             this.computeTotalEquip(input);
@@ -45,9 +44,10 @@ export class Collateralcalculationworker {
             this.computerealstateTotal(input);
             this.computestoredcropTotal(input);
             let endtime = new Date().getTime();
-            this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+            this.logging.checkandcreatelog(3, 'Calc_Collateral', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
             return input;
-        } catch{
+        } catch(e){
+            this.logging.checkandcreatelog(3, 'Calc_Collateral', e);
             return input;
         }
 
@@ -63,7 +63,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Disc_value_FSA =this.totalDiscValue(collateralFSA);
 
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_FSA', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
 
@@ -79,7 +79,7 @@ export class Collateralcalculationworker {
         );
 
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_3', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_EQP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
    
     computeTotallivestock(input) {
@@ -93,7 +93,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].FC_total_Qty_lst = this.totalQty(collaterallst);
         input.LoanMaster[0].FC_total_Price_lst = this.totalPrice(collaterallst);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_4', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_LST', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
       }
 
@@ -105,7 +105,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Net_Market_Value__Other = this.totalNetMktValue(collateralother);
         input.LoanMaster[0].Disc_value_Other = this.totalDiscValue(collateralother);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_5', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_OTR', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computerealstateTotal(input) {
@@ -117,7 +117,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Disc_value_Real_Estate = this.totalDiscValue(collateralrealstate);
         input.LoanMaster[0].FC_total_Qty_Real_Estate = this.totalQty(collateralrealstate);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_6', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_RET', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computestoredcropTotal(input) {
@@ -130,7 +130,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].FC_total_Qty_storedcrop = this.totalQty(collateralrealstate);
         input.LoanMaster[0].FC_total_Price_storedcrop = this.totalPrice(collateralrealstate);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Coll_7', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(3, 'Calc_Collateral_SCP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
     }
      totalDiscValue(loanCollateral) {
@@ -183,52 +183,58 @@ export class Collateralcalculationworker {
     }
     
     performMarketValueCalculations(loanObject : loan_model){
-        let cropPractices = loanObject.LoanCropPractices;
-    
-        cropPractices.forEach(cp => {
-            let cropPractice = this.getCropAndPracticeType(cp.Crop_Practice_ID);
-            let acres = this.getAcresForCrop(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
-            let cropyield = this.getCropYieldForCropPractice(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
-            let share = this.getShare(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode );
-            let crop = this.getCrop(loanObject,cropPractice.cropCode);
-            cp.Market_Value = (acres * cropyield * share/100)*(crop.Crop_Price+crop.Basic_Adj+crop.Marketing_Adj+crop.Rebate_Adj);
-            cp.Disc_Market_Value = cp.Market_Value* (1 - (47.5/100));
-            cp.ActionStatus =2;
-        });
+        try{
+            let starttime = new Date().getTime(); 
+            let cropPractices = loanObject.LoanCropPractices;
+            cropPractices.forEach(cp => {
+                let cropPractice = this.getCropAndPracticeType(cp.Crop_Practice_ID);
+                let acres = this.getAcresForCrop(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
+                let cropyield = this.getCropYieldForCropPractice(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode);
+                let share = this.getShare(loanObject,cropPractice.cropCode,cropPractice.practiceTypeCode );
+                let crop = this.getCrop(loanObject,cropPractice.cropCode);
+                cp.Market_Value = (acres * cropyield * share/100)*(crop.Crop_Price+crop.Basic_Adj+crop.Marketing_Adj+crop.Rebate_Adj);
+                cp.Disc_Market_Value = cp.Market_Value* (1 - (47.5/100));
+                cp.ActionStatus =2;
+            });
 
-        if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
-            loanObject.LoanMaster[0].Net_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Market_Value);
-            loanObject.LoanMaster[0].Disc_value_Crops = _.sumBy(cropPractices,(cp)=> cp.Disc_Market_Value);
-        }
-        let crops = loanObject.LoanCrops;
-    
-        crops.forEach(crop => {
-            crop.Acres = this.getAcresForCrop(loanObject, crop.Crop_Code);
-            crop.W_Crop_Yield = this.getCropYieldForCrop(loanObject,crop.Crop_Code);
-            crop.LC_Share = this.getShare(loanObject,crop.Crop_Code);
-            let IRRCropPracticeID = this.getCropPracticeID(crop.Crop_Code, 'IRR');
-            let NIRCropPracticeID = this.getCropPracticeID(crop.Crop_Code,'NIR');
-            crop.Revenue = 0;
-            if(IRRCropPracticeID){
-                let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == IRRCropPracticeID);
-                crop.Revenue +=  cp ? cp.Market_Value : 0 
+            if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
+                loanObject.LoanMaster[0].Net_Market_Value_Crops = _.sumBy(cropPractices,(cp)=> cp.Market_Value);
+                loanObject.LoanMaster[0].Disc_value_Crops = _.sumBy(cropPractices,(cp)=> cp.Disc_Market_Value);
             }
+            let crops = loanObject.LoanCrops;
+        
+            crops.forEach(crop => {
+                crop.Acres = this.getAcresForCrop(loanObject, crop.Crop_Code);
+                crop.W_Crop_Yield = this.getCropYieldForCrop(loanObject,crop.Crop_Code);
+                crop.LC_Share = this.getShare(loanObject,crop.Crop_Code);
+                let IRRCropPracticeID = this.getCropPracticeID(crop.Crop_Code, 'IRR');
+                let NIRCropPracticeID = this.getCropPracticeID(crop.Crop_Code,'NIR');
+                crop.Revenue = 0;
+                if(IRRCropPracticeID){
+                    let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == IRRCropPracticeID);
+                    crop.Revenue +=  cp ? cp.Market_Value : 0 
+                }
 
-            if(NIRCropPracticeID){
-                let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == NIRCropPracticeID);
-                crop.Revenue +=  cp ? cp.Market_Value : 0 
+                if(NIRCropPracticeID){
+                    let cp = cropPractices.find(cp=>cp.Crop_Practice_ID == NIRCropPracticeID);
+                    crop.Revenue +=  cp ? cp.Market_Value : 0 
+                }
+                crop.ActionStatus =2;
+                
+            });
+
+            let toVerify = _.sumBy(crops,(c)=> c.Revenue);
+            if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
+                loanObject.LoanMaster[0].Total_Crop_Acres = _.sumBy(crops,(cp)=> cp.Acres);
+                
             }
-            crop.ActionStatus =2;
-            
-        });
-
-        let toVerify = _.sumBy(crops,(c)=> c.Revenue);
-        if(loanObject.LoanMaster && loanObject.LoanMaster[0]){
-            loanObject.LoanMaster[0].Total_Crop_Acres = _.sumBy(crops,(cp)=> cp.Acres);
-            
+            let endtime = new Date().getTime();
+            this.logging.checkandcreatelog(3, 'Calc_MarketValue', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+            return loanObject;
+        }catch(e){
+            this.logging.checkandcreatelog(3, 'Calc_MarketValue', e);
+            return loanObject;
         }
-
-        return loanObject;
 
     }
 

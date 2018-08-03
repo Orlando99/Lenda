@@ -13,31 +13,36 @@ export class QuestionscalculationworkerService {
   }
 
   performcalculationforquestionsupdated(input:loan_model):loan_model{
-    let starttime = new Date().getTime();
-    let obj:any[]=input.LoanQResponse;
-    obj.forEach(element => {
-     // we are going to update according to question id .. thats the only way as if now.. suggestions welcomed
-      switch (element.Question_ID) {
-        case 2: // judgement question
+    try{
+      let starttime = new Date().getTime();
+      let obj:any[]=input.LoanQResponse;
+      obj.forEach(element => {
+      // we are going to update according to question id .. thats the only way as if now.. suggestions welcomed
+        switch (element.Question_ID) {
+          case 2: // judgement question
 
-        input.LoanMaster[0].Judgement=(parseInt(element.Response_Ind)==1)?0:1;
-          break;
-        case 3: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
-          break;
-        case 4: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
-          break;
-        case 21: // 3 year tax return question
-        input.Borrower.Borrower_3yr_Tax_Returns=parseInt(element.Response_Ind)
-          break;
-        default:
-          break;
-      }
-   });
-   let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_Question_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
-   return input;
+          input.LoanMaster[0].Judgement=(parseInt(element.Response_Ind)==1)?0:1;
+            break;
+          case 3: // bankruptcy question
+          input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
+            break;
+          case 4: // bankruptcy question
+          input.LoanMaster[0].Bankruptcy_Status=(parseInt(element.Response_Ind)==1)?0:1;
+            break;
+          case 21: // 3 year tax return question
+          input.Borrower.Borrower_3yr_Tax_Returns=parseInt(element.Response_Ind)
+            break;
+          default:
+            break;
+        }
+      });
+      let endtime = new Date().getTime();
+      this.logging.checkandcreatelog(3, 'Calc_Question', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      return input;
+    }catch(e){
+      this.logging.checkandcreatelog(3, 'Calc_Question', e);
+      return input;
+    }
   }
 
 
