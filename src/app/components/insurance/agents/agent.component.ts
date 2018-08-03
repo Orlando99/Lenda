@@ -85,21 +85,13 @@ export class AgentComponent implements OnInit {
     this.context = { componentParent: this };
   }
   ngOnInit() {
-    //
-    // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'LoanInsuranceAgent', "LocalStorage retrieved");
-    // if (obj != null && obj != undefined) {
-    //   this.localloanobject = obj;
-    //
-    //   this.rowData = obj.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
-    // }
+   
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
       this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
 
-      //this.rowData = obj.Association.filter(p => p.ActionStatus != -1);
       if(this.localloanobject.Association)
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
       else
         this.rowData = null;
 
@@ -116,7 +108,7 @@ export class AgentComponent implements OnInit {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;
       if(this.localloanobject.Association)
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
       else
         this.rowData = null;
     }
@@ -133,10 +125,10 @@ export class AgentComponent implements OnInit {
       this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT")[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       if(obj.ActionStatus!=1)
       obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT")[rowindex]=obj;
+      this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT")[rowindex]=obj;
     }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
@@ -194,16 +186,16 @@ export class AgentComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT")[rowIndex];
+        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT")[rowIndex];
 
         if (obj.Assoc_ID === 0) {
-          let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="AGT");
+          let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
 
           this.localloanobject.Association.splice(this.localloanobject.Association.indexOf(filteting[rowIndex]), 1);
 
         }
         else {
-          obj.ActionStatus = -1;
+          obj.ActionStatus = 3;
         }
 
         console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
