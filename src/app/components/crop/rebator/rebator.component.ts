@@ -112,7 +112,7 @@ export class RebatorComponent implements OnInit {
       }
       this.savedData = _.cloneDeep(this.rowData);
       //this.getgridheight();
-      this.gridApi.refreshCells();
+      this.gridApi && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
