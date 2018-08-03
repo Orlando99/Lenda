@@ -269,7 +269,7 @@ export class OthersComponent implements OnInit {
     //var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
     
     elementInHost.forEach(element => {
-     debugger
+     
       //find aggrid
       var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
        element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
