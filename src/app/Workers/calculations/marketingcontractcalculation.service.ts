@@ -68,13 +68,13 @@ export class MarketingcontractcalculationService {
         //the same caclulation is in price component, which should be shisted to common place
         crop.Marketing_Adj = (crop.Contract_Price - (crop.Basic_Adj + crop.Crop_Price))*(crop.Percent_booked/100);
         crop.Marketing_Adj = crop.Marketing_Adj ? parseFloat(crop.Marketing_Adj.toFixed(2)) : 0;
-        crop.Adj_Price = crop.Crop_Price + crop.Basic_Adj + (crop.Marketing_Adj ||0) + crop.Rebate_Adj;
+        crop.Adj_Price = (crop.Crop_Price || 0) + (crop.Basic_Adj || 0) + (crop.Marketing_Adj ||0) + (crop.Rebate_Adj || 0);
       }else{
         crop.Percent_booked = 0;
         crop.Contract_Price = 0;
         crop.Contract_Qty = 0;
         crop.Marketing_Adj =0;
-        crop.Adj_Price = 0;
+        crop.Adj_Price = (crop.Crop_Price || 0) + (crop.Basic_Adj || 0) + (crop.Marketing_Adj ||0) + (crop.Rebate_Adj || 0);
         
       }
     });
