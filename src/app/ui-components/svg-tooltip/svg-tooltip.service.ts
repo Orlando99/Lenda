@@ -41,7 +41,7 @@ export class SvgTooltipService {
     // Hardcoded tooltip value for Range
     // TODO: Remove these and make it dynamic
     if (this.type === 'range') {
-      texts = ['Current Value: <<value>>', 'Strong: << Strong value >>'];
+      texts = ['Current Value: << value >>', 'Strong: << Strong value >>'];
     }
     // ===
     this.addTooltipNodes(tooltip, texts, event);
