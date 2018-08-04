@@ -1,0 +1,61 @@
+@import "./../../../../../sass/theme/variables";
+
+.font-weight-600 {
+    font-weight: 600;
+}
+
+.main-header {
+    font-weight: bold;
+    font-size: $base-font-size;
+    line-height: 1;
+}
+
+.header {
+    font-weight: 400;
+    font-size: $font-size-sm;
+    line-height: 1;
+}
+
+.col {
+    height: 40px;
+}
+
+.mw-600 {
+    max-width: 600px;
+}
+
+.result {
+    font-weight: bold;
+}
+
+.success {
+    fill: #28a745 !important;
+}
+
+.warning {
+    fill: #ffc107 !important;
+}
+
+.alert {
+    fill: #dc3545 !important;
+}
+
+.white {
+    fill: #fff !important;
+}
+
+.rangebar {
+    padding: 0 20px;
+
+    // transform: translate(0, -25px);
+}
+
+.bar-range {
+    transform: translate(0, -15px);
+}
+
+.text {
+    transform: translate(-35px, -3px);
+    font-size: $font-size-sm;
+    fill: $primary-color;
+}

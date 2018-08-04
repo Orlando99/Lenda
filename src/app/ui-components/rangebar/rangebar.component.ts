@@ -30,6 +30,6 @@ export class RangebarComponent implements OnInit {
   }
 
   calculateValuePercentage() {
-    this.valuePercent = `${this.value * 100 / Math.abs(this.strong - this.weak)}%`;
+    this.valuePercent = `${Math.abs(this.strong - this.value) * 100 / Math.abs(this.strong - this.weak)}%`;
   }
 }
