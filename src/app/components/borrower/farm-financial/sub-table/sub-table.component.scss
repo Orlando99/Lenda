@@ -1,11 +1,19 @@
+@import "./../../../../../sass/theme/variables";
+
 .font-weight-600 {
     font-weight: 600;
 }
 
 .header {
-  text-align: right;
+    font-weight: 400;
+    font-size: $font-size-sm;
+    line-height: 1;
+}
+
+.col {
+  height: 40px;
 }
 
 .mw-600 {
-  max-width: 600px;
+    max-width: 600px;
 }

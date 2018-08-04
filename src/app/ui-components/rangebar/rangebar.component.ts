@@ -13,6 +13,8 @@ export class RangebarComponent implements OnInit {
   @Input() stable;
   @Input() weak;
   @Input() value = 0;
+  @Input() isRangeBarVisible: boolean = true;
+
   public valuePercent;
   constructor(
     public svgTooltipService: SvgTooltipService,
