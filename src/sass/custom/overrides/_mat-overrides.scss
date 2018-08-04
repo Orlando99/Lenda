@@ -215,15 +215,25 @@ body .mat-expansion-panel-header {
 // ==
 // Collateral Page
 
-.collateral-context-menu .mat-menu-content {
-  padding: 5px 10px !important;
-  label {
-    display: block;
-    font-size: $base-font-size;
-    padding: 2px 0;
-    span {
-      margin-left: 5px;
+.collateral-context-menu {
+    .btn-sm {
+        margin: 0 10px 10px 0;
     }
-  }
+
+    .mat-menu-content {
+        label {
+            display: block;
+            font-size: $base-font-size;
+            padding: 2px 10px;
+
+            span {
+                margin-left: 5px;
+            }
+            &.disabled {
+              background: $light-white;
+            }
+        }
+    }
 }
+
 // ====
