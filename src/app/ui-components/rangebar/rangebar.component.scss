@@ -12,14 +12,22 @@
   fill: #dc3545 !important;
 }
 
+.white {
+  fill: #fff !important;
+}
+
 .rangebar {
   padding: 0 20px;
   transform: translate(0, -40px);
 }
 
+.bar-range {
+  transform: translate(0, -25px);
+}
+
 .text {
-  transform: translate(-15px, -20px);
-  font-size: $base-font-size;
+  transform: translate(-40px, -14px);
+  font-size: $font-size-sm;
   fill: $primary-color;
 }
 

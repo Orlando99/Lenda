@@ -1,15 +1,36 @@
 <div>
   <svg viewBox="0 0 100% 10" height="100px" preserveAspectRatio="xMinYMin meet" class="w-100 rangebar">
     <g id="value"></g>
-    <text class="text success" x="20%" y="50%">Strong</text>
-    <text class="text warning" x="50%" y="50%">Stable</text>
-    <text class="text alert" x="80%" y="50%">Weak</text>
+    <defs>
+      <filter id="shadow" x="-1%" y="0%" width="102%" height="100%">
+        <feGaussianBlur stdDeviation="1" result="shadow" />
+      </filter>
+    </defs>
+    <g>
+      <rect class="bar-range success" fill="#666" x="0" y="50%" width="33.33%" height="15">
+      </rect>
+      <text style="filter: url(#shadow); fill: black" class="text" x="33.33%" y="50%">Strong</text>
+      <text class="text white" x="33.33%" y="50%">Strong</text>
+    </g>
+    <g>
+      <rect class="bar-range warning" fill="#666" x="33.34%" y="50%" width="33.33%" height="15">
+      </rect>
+      <text style="filter: url(#shadow); fill: black" class="text" x="66.66%" y="50%">Stable</text>
+      <text class="text white" x="66.66%" y="50%">Stable</text>
+    </g>
+    <g>
+      <rect class="bar-range alert" fill="#666" x="66.67%" y="50%" width="33.34%" height="15">
+      </rect>
+      <text style="filter: url(#shadow); fill: black" class="text" x="100%" y="50%">Weak</text>
+      <text class="text white" x="100%" y="50%">Weak</text>
+    </g>
+
     <text class="text-val" x="5" y="50%">{{ strong | number:'.1-1' }}</text>
     <text class="text-val" x="50%" y="50%">{{ stable | number:'.1-1' }}</text>
     <text class="text-val" x="100%" y="50%">{{ weak | number:'.1-1' }}</text>
 
-    <rect class="bar" fill="#eee" x="0" y="50%" width="100%" height="1" />
-    <circle cx="5" cy="50%" r="3" fill="#164c7b" stroke="#666" stroke-width="1" />
+    <rect class="bar" fill="#666" x="0" y="50%" width="100%" height="1.5" />
+    <circle cx="0" cy="50%" r="3" fill="#164c7b" stroke="#666" stroke-width="1" />
     <circle cx="50%" cy="50%" r="3" fill="#164c7b" stroke="#666" stroke-width="1" />
     <circle cx="100%" cy="50%" r="3" fill="#164c7b" stroke="#666" stroke-width="1" />
     <rect class="main-value" fill="#164c7b" [attr.x]="valuePercent" y="50%" width="10" height="20" />
