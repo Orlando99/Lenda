@@ -11,16 +11,16 @@
        <app-liquidity-analysis></app-liquidity-analysis>
     </div>
 
-    <div class="row table-row">
+    <!-- <div class="row table-row">
       <div class="row p-15">
         <div class="col cell text-left font-weight-600">Solvency Analysis</div>
       </div>
-    </div>
+    </div> -->
     <div class="row table-row" *ngIf="data!=undefined && data.solvencyAnalysis!=undefined">
-      <app-sub-table  [rowTable]="data.solvencyAnalysis"></app-sub-table>
+      <app-borrower-rating></app-borrower-rating>
     </div>
 
-    <div class="row table-row">
+    <!-- <div class="row table-row">
       <div class="row p-15">
         <div class="col cell text-left font-weight-600">Profitability Analysis</div>
       </div>
@@ -37,7 +37,7 @@
       <div class="row table-row"  *ngIf="data!=undefined && data.financialEfficiency!=undefined">
         <app-sub-table [rowTable]="data.financialEfficiency" [highlightLastRow]="true"></app-sub-table>
       </div>
-  </div>
+  </div> -->
 
 
 </div>

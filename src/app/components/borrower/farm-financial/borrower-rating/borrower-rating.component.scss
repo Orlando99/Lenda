@@ -8,6 +8,22 @@
   margin: 0 !important;
 }
 
+.four-star {
+  transform: translate(20%, 0);
+}
+
+.three-star {
+  transform: translate(40%, 0);
+}
+
+.two-star {
+  transform: translate(60%, 0);
+}
+
+.one-star {
+  transform: translate(80%, 0);
+}
+
 .font-weight-600 {
     font-weight: 600;
 }
@@ -28,8 +44,8 @@
     height: 40px;
 }
 
-.mw-600 {
-    max-width: 600px;
+.mw-750 {
+    max-width: 750px;
 }
 
 .result {

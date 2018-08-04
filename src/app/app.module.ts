@@ -195,6 +195,7 @@ import { SvgTooltipComponent } from './ui-components/svg-tooltip/svg-tooltip.com
 import { YieldReportComponent } from './components/summary/yield-report/yield-report.component';
 import { BudgetReportComponent } from './components/summary/budget-report/budget-report.component';
 import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
+import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -288,7 +289,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     YieldReportComponent,
     BudgetReportComponent,
     AgGridTooltipComponent,
-    LiquidityAnalysisComponent
+    LiquidityAnalysisComponent,
+    BorrowerRatingComponent
   ],
   imports: [
     BrowserModule,
