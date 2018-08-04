@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FsaService } from './fsa/fsa.service';
 import { LiveStockService } from './livestock/livestock.service';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 @Component({
@@ -12,47 +12,71 @@ import { environment } from '../../../environments/environment.prod';
 })
 
 export class CollateralComponent implements OnInit {
-  categories:  any = [];
-  categoryList: string[] = ['Buyer','FSA', 'Livestock', 'Equipment', 'Real Estate', 'Stored Crop', 'Marketing Contracts', 'Others'];
+  categories: any = [];
   loanFullID: string;
+  // Default settings of collateral tables
+  public pageSettings = {
+    lineHolder: {
+      isActive: true,
+      isDisabled: true
+    },
+    buyer: {
+      isActive: true,
+      isDisabled: true
+    },
+    guarantor: {
+      isActive: true,
+      isDisabled: true
+    },
+    collaterlData: {
+      isActive: true,
+      isDisabled: true
+    },
+    fsa: {
+      isActive: true,
+      isDisabled: true
+    },
+    livestock: {
+      isActive: false,
+      isDisabled: false
+    },
+    storedCrop: {
+      isActive: false,
+      isDisabled: false
+    },
+    equipment: {
+      isActive: false,
+      isDisabled: false
+    },
+    realestate: {
+      isActive: false,
+      isDisabled: false
+    },
+    other: {
+      isActive: false,
+      isDisabled: false
+    },
+    contacts: {
+      isActive: true,
+      isDisabled: true
+    },
+    crossCollateral: {
+      isActive: true,
+      isDisabled: true
+    }
+  };
 
-  constructor(private localstorageservice: LocalStorageService) { 
-
-    console.log(this.categories);
+  constructor(private localstorageservice: LocalStorageService) {
     this.loanFullID = this.localstorageservice.retrieve(environment.loanidkey)
-    // 
   }
 
   ngOnInit() {
-    
-    let obj:any = this.localstorageservice.retrieve(environment.collateralTables)
-
-    if(obj !== undefined && obj !== null){
-      let value = obj.findIndex(f => { return f.loanFullID == this.loanFullID})
-      if(value !== -1)
-        this.categories = obj[value].values;
-    }
+    this.pageSettings = this.localstorageservice.retrieve(environment.collateralTables) || this.pageSettings;
   }
 
-
-  menuSelected(e){
-    let store = this.localstorageservice.retrieve(environment.collateralTables);
-
-    if(store != null && store != undefined){
-      let exist = store.findIndex(f => { return f.loanFullID == this.loanFullID})
-      
-      if(store[exist]){
-        store[exist].values = e.value
-      }else{
-        store.push({loanFullID: this.loanFullID, values: e.value});
-      }
-      
-      this.localstorageservice.store(environment.collateralTables,store);
-    }else{
-      store = [{loanFullID: this.loanFullID, values: e.value}];
-      this.localstorageservice.store(environment.collateralTables,store);
-    }
-     
+  onToggleSettings(item) {
+    item.isActive = !item.isActive;
+    this.localstorageservice.store(environment.collateralTables, this.pageSettings);
   }
 }
 

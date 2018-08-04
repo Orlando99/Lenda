@@ -1,7 +1,21 @@
-.btn, .btn-large, .btn-outline, .btn-small {
+.btn, .btn-large, .btn-small {
   background-color: $primary-color;
+  color: $white;
   &:hover {
     background-color: $nav-hover-color;
+    color: $white;
+  }
+}
+
+.btn-outline {
+  color: $primary-color;
+  border: 1px solid $primary-color;
+  border-radius: 1px;
+  line-height: 1;
+  height: auto;
+  &.btn-sm {
+    padding: 2px 5px;
+    font-size: $font-size-sm;
   }
 }
 
