@@ -90,11 +90,13 @@ export class ThirdpartyComponent implements OnInit {
   ngOnInit() {  
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+      if(res){
+        this.localloanobject = res;
       if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
+        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR");
       }
+      this.gridApi && this.gridApi.refreshCells();
+    }
     });
   
 
@@ -102,9 +104,10 @@ export class ThirdpartyComponent implements OnInit {
     this.editType = "fullRow";
   }
   getdataforgrid() {
-    // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+   
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR");
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR");
     }
   }
 
@@ -112,19 +115,18 @@ export class ThirdpartyComponent implements OnInit {
   rowvaluechanged(value: any) {
     
     var obj = value.data;
-    if (obj.ActionStatus == undefined) {
+    if (obj.Assoc_ID == undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;  
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="THR").length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="THR")[rowIndex]=value.data;
+     
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
-      obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR")[rowindex]=obj;
-    }
+      if(obj.Assoc_ID){
+        obj.ActionStatus = 2;
+      }
     
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    }
   }
 
   synctoDb() {
@@ -159,6 +161,7 @@ export class ThirdpartyComponent implements OnInit {
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="THR";
     newItem.Preferred_Contact_Ind=1;
+    newItem.Assoc_ID = undefined;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -173,12 +176,14 @@ export class ThirdpartyComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR")[rowIndex];
-        if (obj.Assoc_ID == 0) {
-          this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="THR").splice(rowIndex, 1);
-        }
-        else {
-          obj.ActionStatus = -1;
+        var obj = this.rowData[rowIndex];
+        if(obj){
+          let associationIndex = this.localloanobject.Association.findIndex(assoc=>assoc == obj);
+          if(!obj.Assoc_ID){
+            this.localloanobject.Association.splice(associationIndex,1);
+          }else{
+            obj.ActionStatus =3;
+          }
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
