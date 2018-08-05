@@ -5,18 +5,20 @@ import { FormControl } from '@angular/forms';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import CollteralSettings from './collateral-types.model';
+import { CollateralService } from './collateral.service';
 
 @Component({
   selector: 'app-collateral',
   templateUrl: './collateral.component.html',
   styleUrls: ['./collateral.component.scss'],
-  providers: [FsaService, LiveStockService]
+  providers: [FsaService, LiveStockService, CollateralService]
 })
 
 export class CollateralComponent implements OnInit {
   categories: any = [];
   loanFullID: string;
   collateralRows: any = {};
+  isSyncEnabled: boolean = false;
 
   // Default settings of collateral tables
   public pageSettings = {
@@ -70,7 +72,9 @@ export class CollateralComponent implements OnInit {
     }
   };
 
-  constructor(private localstorageservice: LocalStorageService) {
+  constructor(
+    private localstorageservice: LocalStorageService,
+    public collateralService: CollateralService) {
     this.loanFullID = this.localstorageservice.retrieve(environment.loanidkey)
   }
 
@@ -103,6 +107,15 @@ export class CollateralComponent implements OnInit {
       .filter(lc => {
         return lc[srcType] === type
       }).length;
+  }
+
+  enableSync(isEnabled) {
+    this.isSyncEnabled = isEnabled;
+  }
+
+  synctoDb() {
+    this.enableSync(false);
+    this.collateralService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
   }
 }
 

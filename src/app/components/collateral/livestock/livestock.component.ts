@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -23,6 +23,7 @@ import { CollateralService } from '../collateral.service';
   providers: [CollateralService]
 })
 export class LivestockComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   public localloanobject: loan_model = new loan_model();
@@ -96,19 +97,35 @@ export class LivestockComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK", this.rowData);
-    });
+    // Observe the localstorage for changes
+    this.subscribeToChanges();
 
-    this.rowData = this.collateralService.getdataforgrid(this.localloanobject, "LSK", this.rowData);
+    // on initialization
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, 'LSK');
+    this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, 'LSK');
+    this.collateralService.adjustgrid(this.gridApi);
   }
 
-  getdataforgrid(localloanobject: loan_model, categoryCode) {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData=obj.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
-    if (obj != null && obj != undefined) {
-      this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
-    }
+
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      // If source component is same
+      if (res.srccomponentedit == 'LivestockComponent') {
+        this.rowData[res.lasteditrowindex] = this.collateralService.getLastEditedRow(this.localloanobject, 'LSK', res.lasteditrowindex);
+      } else {
+        // If it is first page landing
+        this.localloanobject = res;
+        this.rowData = this.collateralService.getRowData(this.localloanobject, 'LSK');
+        this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, 'LSK');
+        this.collateralService.getgridheight(this.rowData);
+        this.gridApi.refreshCells();
+      }
+    });
+  }
+
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
   }
 
   onGridReady(params) {
@@ -117,28 +134,20 @@ export class LivestockComponent implements OnInit {
     this.collateralService.getgridheight(this.rowData);
   }
 
-  syncenabled() {
-    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
-      return '';
-    else
-      return 'disabled';
-  }
-
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
-  }
-
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, "LSK");
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
     this.collateralService.rowValueChanged(value, this.localloanobject, "LivestockComponent");
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
+    this.isSyncRequired(true);
   }
 
   onGridSizeChanged(Event: any) {

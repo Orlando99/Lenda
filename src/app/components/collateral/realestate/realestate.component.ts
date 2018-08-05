@@ -40,7 +40,7 @@ export class RealEstateComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
+    // height: '110px',
     boxSizing: 'border-box'
   };
 

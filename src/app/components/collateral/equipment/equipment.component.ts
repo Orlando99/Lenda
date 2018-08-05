@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -25,6 +25,7 @@ import { CollateralService } from '../collateral.service';
   providers: [CollateralService]
 })
 export class EquipmentComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -150,16 +151,13 @@ export class EquipmentComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-    if (this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
-      return '';
-    else
-      return 'disabled';
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
   }
 
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
-  }
+  // synctoDb() {
+  //   this.collateralService.syncToDb(this.localloanobject);
+  // }
 
   //Grid Events
   addrow() {
@@ -179,6 +177,7 @@ export class EquipmentComponent implements OnInit {
       colKey: "Collateral_Description"
     });
     this.getgridheight();
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
@@ -197,6 +196,7 @@ export class EquipmentComponent implements OnInit {
     this.localloanobject.srccomponentedit = "EquipmentComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -211,6 +211,7 @@ export class EquipmentComponent implements OnInit {
           obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+        this.isSyncRequired(true);
       }
     })
   }
@@ -218,7 +219,6 @@ export class EquipmentComponent implements OnInit {
   getgridheight() {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
   }
-
 
   computeTotal(loanobject) {
     var total = []

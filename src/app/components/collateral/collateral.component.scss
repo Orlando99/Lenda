@@ -7,11 +7,20 @@
     color: $white;
     border-left: 1px solid #666;
     font-size: $font-size-md;
-    padding-left: 15px;
+    padding: 5px 5px 5px 15px;
     text-transform: uppercase;
     position: fixed;
     z-index: 999;
     width: 100%;
+    margin-bottom: 20px;
+    + *::before {
+      content: ' ';
+      display: block;
+      height: 30px;
+    }
+    .btn-small {
+        margin: 0 10px;
+    }
 
     .text {
         text-shadow: 1px 1px #333;
@@ -27,11 +36,11 @@
 }
 
 .setting-text {
-  min-width: 100px;
-  display: inline-block;
+    min-width: 100px;
+    display: inline-block;
 }
 
 .number-of-rows {
-  font-size: $font-size-sm;
-  color: $black-30;
+    font-size: $font-size-sm;
+    color: $black-30;
 }

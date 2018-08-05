@@ -20,7 +20,7 @@ export class CollateralService {
   // public rowData = [];
   // public gridApi;
   public deleteAction = false;
-  public pinnedBottomRowData;
+  // public pinnedBottomRowData;
 
   constructor(
     public localstorageservice: LocalStorageService,
@@ -41,20 +41,33 @@ export class CollateralService {
     boxSizing: 'border-box'
   };
 
-  onInit(localloanobject: loan_model, gridApi, res, component, categoryCode, rowData) {
-    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
-    if (res.srccomponentedit == component) {
-      //if the same table invoked the change .. change only the edited row
-      localloanobject = res;
-      rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-    } else {
-      localloanobject = res
-      rowData = [];
-      rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
-    }
-    this.getgridheight(rowData);
-    gridApi.refreshCells();
+  // onInit(localloanobject: loan_model, gridApi, res, component, categoryCode, rowData, pinnedBottomRowData) {
+  //   this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
+  //   if (res.srccomponentedit == component) {
+  //     //if the same table invoked the change .. change only the edited row
+  //     localloanobject = res;
+  //     rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
+  //   } else {
+  //     localloanobject = res
+  //     rowData = [];
+  //     rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+  //     pinnedBottomRowData = this.computeTotal(categoryCode, res);
+  //   }
+  //   this.getgridheight(rowData);
+  //   gridApi.refreshCells();
+  // }
+
+  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex) {
+    return localloanobject.LoanCollateral.filter(lc => {
+      return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
+    })[lastEditRowIndex];
+  }
+
+  getRowData(localloanobject, categoryCode) {
+    return localloanobject.LoanCollateral !== null ?
+      localloanobject.LoanCollateral.filter(lc => {
+        return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
+      }) : [];
   }
 
   addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode) {
@@ -141,28 +154,28 @@ export class CollateralService {
   }
 
   getdataforgrid(localloanobject: loan_model, gridApi, rowData) {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      localloanobject = obj;
-      rowData = [];
-      rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
-    }
-    this.getgridheight(rowData);
-    this.adjustgrid(gridApi);
-    return rowData;
+    // let obj: any = this.localstorageservice.retrieve(environment.loankey);
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
+    // if (obj != null && obj != undefined) {
+    //   localloanobject = obj;
+    //   rowData = [];
+    //   rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
+    //   this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
+    // }
+    // this.getgridheight(rowData);
+    // this.adjustgrid(gridApi);
+    // return rowData;
   }
 
-  private adjustgrid(gridApi) {
+  public adjustgrid(gridApi) {
     try {
       gridApi.sizeColumnsToFit();
     }
-    catch (ex){
+    catch (ex) {
     }
   }
 
-  computeTotal(categoryCode, input) {
+  computeTotal(input, categoryCode) {
     if (categoryCode === 'LSK') {
       return this.liveStockService.computeTotal(input);
     } else if (categoryCode === 'FSA') {

@@ -22,7 +22,8 @@ export default {
   fsa: {
     key: 'FSA',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'FSAComponent'
   },
   livestock: {
     key: 'LSK',

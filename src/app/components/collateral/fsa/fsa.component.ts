@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -18,6 +18,7 @@ import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { FsaService } from './fsa.service';
+import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-fsa',
@@ -26,6 +27,7 @@ import { FsaService } from './fsa.service';
   providers: [FsaService, CollateralService]
 })
 export class FSAComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -89,25 +91,35 @@ export class FSAComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.collateralService.onInit(this.localloanobject, this.gridApi, res, 'FSAComponent' ,'FSA', this.rowData);
-    });
+    // Observe the localstorage for changes
+    this.subscribeToChanges();
 
-    this.rowData = this.collateralService.getdataforgrid(this.localloanobject, this.gridApi, this.rowData);
+    // on initialization
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, 'FSA');
+    this.pinnedBottomRowData = this.fsaService.computeTotal(this.localloanobject);
+    this.collateralService.adjustgrid(this.gridApi);
   }
 
-  // getdataforgrid() {
-  //   let obj: any = this.localstorageservice.retrieve(environment.loankey);
-  //   // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
-  //   if (obj != null && obj != undefined) {
-  //     this.localloanobject = obj;
-  //     this.rowData = [];
-  //     this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
-  //     this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
-  //   }
-  //   this.collateralService.getgridheight();
-  //   this.adjustgrid();
-  // }
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      // If source component is same
+      if (res.srccomponentedit == CollateralSettings.fsa.component) {
+        this.rowData[res.lasteditrowindex] = this.collateralService.getLastEditedRow(this.localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
+      } else {
+        // If it is first page landing
+        this.localloanobject = res;
+        this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key);
+        this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, CollateralSettings.fsa.key);
+        this.collateralService.getgridheight(this.rowData);
+        this.gridApi.refreshCells();
+      }
+    });
+  }
+
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
+  }
 
   onGridSizeChanged(Event: any) {
     this.adjustgrid();
@@ -128,27 +140,19 @@ export class FSAComponent implements OnInit {
     this.adjustgrid();
   }
 
-  syncenabled() {
-    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
-      return '';
-    else
-      return 'disabled';
-  }
-
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
-  }
-
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, "FSA");
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.key);
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, "FSAComponent");
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.fsa.component);
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
+    this.isSyncRequired(true);
   }
 }

@@ -7,11 +7,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
+      <!-- <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0 18px;"  ><i class="material-icons left">cloud</i>Publish</a> -->
 
       <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
 
-      <div class="container bottom">
+      <div class="container">
         <div class="row">
           <ag-grid-angular  [ngStyle]="style"
           class="ag-theme-balham roboto-font"
@@ -31,8 +31,6 @@
           </ag-grid-angular>
         </div>
         <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
-
       </div>
-      <br>
     </mat-expansion-panel>
     </mat-accordion>

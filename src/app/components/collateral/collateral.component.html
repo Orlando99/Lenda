@@ -82,14 +82,19 @@
         </label>
       </mat-menu>
     </mat-icon>
+    <div>
+      <a (click)="synctoDb()" [ngClass]="{'disabled': !isSyncEnabled}"  class="waves-effect waves-light btn-small right-align" >
+          <i class="material-icons left">cloud</i>Publish
+      </a>
+    </div>
   </div>
-  <br />
-  <app-buyer-association *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
-  <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
-  <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
-  <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
-  <app-equipment *ngIf="pageSettings.equipment.isActive"></app-equipment>
-  <app-realestate *ngIf="pageSettings.realestate.isActive"></app-realestate>
-  <app-others *ngIf="pageSettings.other.isActive"></app-others>
-  <app-marketing-contracts *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
+
+  <app-buyer-association (enableSync)="enableSync($event)" *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
+  <app-fsa (enableSync)="enableSync($event)" *ngIf="pageSettings.fsa.isActive"></app-fsa>
+  <app-livestock (enableSync)="enableSync($event)" *ngIf="pageSettings.livestock.isActive"></app-livestock>
+  <app-storedcrop (enableSync)="enableSync($event)" *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
+  <app-equipment (enableSync)="enableSync($event)" *ngIf="pageSettings.equipment.isActive"></app-equipment>
+  <app-realestate (enableSync)="enableSync($event)" *ngIf="pageSettings.realestate.isActive"></app-realestate>
+  <app-others (enableSync)="enableSync($event)" *ngIf="pageSettings.other.isActive"></app-others>
+  <app-marketing-contracts (enableSync)="enableSync($event)" *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
 </div>
