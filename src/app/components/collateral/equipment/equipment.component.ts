@@ -45,7 +45,7 @@ export class EquipmentComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
+    // height: '110px',
     boxSizing: 'border-box'
   };
 
@@ -118,22 +118,10 @@ export class EquipmentComponent implements OnInit {
     });
   }
 
-  getdataforgrid() {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'LoanCollateral - EQP', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
-      this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus != 3 }) : [];
-      this.pinnedBottomRowData = this.equipmentService.computeTotal(obj);
-    }
-    this.getgridheight();
-    this.adjustgrid();
-  }
   onGridSizeChanged(Event: any) {
-
     this.adjustgrid();
   }
+
   private adjustgrid() {
     try {
       this.gridApi.sizeColumnsToFit();
@@ -144,10 +132,9 @@ export class EquipmentComponent implements OnInit {
 
 
   onGridReady(params) {
-
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
+    this.collateralService.getgridheight(this.rowData);
     this.adjustgrid();
   }
 
@@ -155,68 +142,19 @@ export class EquipmentComponent implements OnInit {
     this.enableSync.emit(isEnabled);
   }
 
-  // synctoDb() {
-  //   this.collateralService.syncToDb(this.localloanobject);
-  // }
-
   //Grid Events
   addrow() {
-    if (this.localloanobject.LoanCollateral == null)
-      this.localloanobject.LoanCollateral = [];
-
-    var newItem = new Loan_Collateral();
-    newItem.Collateral_Category_Code = "EQP";
-    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
-    newItem.Disc_Value = 50;
-    newItem.ActionStatus = 1;
-    var res = this.rowData.push(newItem);
-    this.localloanobject.LoanCollateral.push(newItem);
-    this.gridApi.setRowData(this.rowData);
-    this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length - 1,
-      colKey: "Collateral_Description"
-    });
-    this.getgridheight();
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.equipment.key);
     this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
-    if (obj.Collateral_ID == 0) {
-      obj.ActionStatus = 1;
-      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
-    }
-    else {
-      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
-      this.localloanobject.LoanCollateral[rowindex] = obj;
-    }
-    //this shall have the last edit
-    this.localloanobject.srccomponentedit = "EquipmentComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.equipment.component);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
-          this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-        } else {
-          this.deleteAction = true;
-          obj.ActionStatus = 3;
-        }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-        this.isSyncRequired(true);
-      }
-    })
-  }
-
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
+    this.isSyncRequired(true);
   }
 }
