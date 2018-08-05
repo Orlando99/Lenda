@@ -103,16 +103,9 @@ export class FSAComponent implements OnInit {
 
   subscribeToChanges() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // If source component is same
-      if (res.srccomponentedit == CollateralSettings.fsa.component) {
-        this.rowData[res.lasteditrowindex] = this.collateralService.getLastEditedRow(this.localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
-      } else {
-        // If it is first page landing
-        this.localloanobject = res;
-        this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key);
-        this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, CollateralSettings.fsa.key);
-        this.gridApi.refreshCells();
-      }
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.fsa.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
     });
   }
 

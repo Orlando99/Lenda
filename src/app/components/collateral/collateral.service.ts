@@ -9,7 +9,9 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToasterService } from '../../services/toaster.service';
 import { FsaService } from './fsa/fsa.service';
+import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
+import CollateralSettings from './collateral-types.model';
 
 /**
  * Shared service for collateral
@@ -30,7 +32,8 @@ export class CollateralService {
     public loanapi: LoanApiService,
     public toasterService: ToasterService,
     public fsaService: FsaService,
-    public liveStockService: LiveStockService
+    public liveStockService: LiveStockService,
+    public equipmentService: EquipmentService
   ) {
   }
 
@@ -41,21 +44,23 @@ export class CollateralService {
     boxSizing: 'border-box'
   };
 
-  // onInit(localloanobject: loan_model, gridApi, res, component, categoryCode, rowData, pinnedBottomRowData) {
-  //   this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
-  //   if (res.srccomponentedit == component) {
-  //     //if the same table invoked the change .. change only the edited row
-  //     localloanobject = res;
-  //     rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-  //   } else {
-  //     localloanobject = res
-  //     rowData = [];
-  //     rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
-  //     pinnedBottomRowData = this.computeTotal(categoryCode, res);
-  //   }
-  //   this.getgridheight(rowData);
-  //   gridApi.refreshCells();
-  // }
+  subscribeToChanges(res, localloanobject, categoryCode, rowData, pinnedBottomRowData) {
+    if (res.srccomponentedit == CollateralSettings.fsa.component) {
+      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
+    } else if (res.srccomponentedit == CollateralSettings.livestock.component) {
+      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex);
+    } else if (res.srccomponentedit == CollateralSettings.equipment.component) {
+      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
+    } else {
+      localloanobject = res;
+      rowData = this.getRowData(localloanobject, categoryCode);
+      pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+    }
+    return {
+      rowData: rowData,
+      pinnedBottomRowData: pinnedBottomRowData
+    };
+  }
 
   getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex) {
     return localloanobject.LoanCollateral.filter(lc => {
@@ -176,10 +181,12 @@ export class CollateralService {
   }
 
   computeTotal(input, categoryCode) {
-    if (categoryCode === 'LSK') {
+    if (categoryCode === CollateralSettings.livestock.key) {
       return this.liveStockService.computeTotal(input);
-    } else if (categoryCode === 'FSA') {
+    } else if (categoryCode === CollateralSettings.fsa.key) {
       return this.fsaService.computeTotal(input);
+    } else if (categoryCode === CollateralSettings.equipment.key) {
+      return this.equipmentService.computeTotal(input);
     }
   }
 }

@@ -28,7 +28,8 @@ export default {
   livestock: {
     key: 'LSK',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'LivestockComponent'
   },
   storedCrop: {
     key: 'SCP',
@@ -38,7 +39,8 @@ export default {
   equipment: {
     key: 'EQP',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'EquipmentComponent'
   },
   realestate: {
     key: 'RET',

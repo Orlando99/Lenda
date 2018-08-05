@@ -15,6 +15,7 @@ import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-livestock',
@@ -102,25 +103,17 @@ export class LivestockComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, 'LSK');
-    this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, 'LSK');
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.livestock.key);
+    this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, CollateralSettings.livestock.key);
     this.collateralService.adjustgrid(this.gridApi);
   }
 
 
   subscribeToChanges() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // If source component is same
-      if (res.srccomponentedit == 'LivestockComponent') {
-        this.rowData[res.lasteditrowindex] = this.collateralService.getLastEditedRow(this.localloanobject, 'LSK', res.lasteditrowindex);
-      } else {
-        // If it is first page landing
-        this.localloanobject = res;
-        this.rowData = this.collateralService.getRowData(this.localloanobject, 'LSK');
-        this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, 'LSK');
-        this.collateralService.getgridheight(this.rowData);
-        this.gridApi.refreshCells();
-      }
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.livestock.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
     });
   }
 
@@ -136,12 +129,12 @@ export class LivestockComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, "LSK");
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.livestock.key);
     this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, "LivestockComponent");
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component);
     this.isSyncRequired(true);
   }
 

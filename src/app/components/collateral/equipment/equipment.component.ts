@@ -17,12 +17,14 @@ import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import CollateralSettings from './../collateral-types.model';
+import { EquipmentService } from './equipment.service';
 
 @Component({
   selector: 'app-equipment',
   templateUrl: './equipment.component.html',
   styleUrls: ['./equipment.component.scss'],
-  providers: [CollateralService]
+  providers: [CollateralService, EquipmentService]
 })
 export class EquipmentComponent implements OnInit {
   @Output() enableSync = new EventEmitter();
@@ -54,7 +56,8 @@ export class EquipmentComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    public collateralService: CollateralService) {
+    public collateralService: CollateralService,
+    public equipmentService: EquipmentService) {
 
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
@@ -97,35 +100,32 @@ export class EquipmentComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'LoanCollateral - Others', "LocalStorage updated");
-      if (res.srccomponentedit == "EquipmentComponent") {
-        //if the same table invoked the change .. change only the edited row
-        this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" })[res.lasteditrowindex];
-      } else {
-        this.localloanobject = res
-        this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus !== 3 }) : [];
-        this.pinnedBottomRowData = this.computeTotal(res);
-      }
-      this.getgridheight();
-      this.gridApi.refreshCells();
-      // this.adjustgrid();
-    });
+    // Observe the localstorage for changes
+    this.subscribeToChanges();
 
-    this.getdataforgrid();
+    // on initialization
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.equipment.key);
+    this.pinnedBottomRowData = this.equipmentService.computeTotal(this.localloanobject);
+    this.collateralService.adjustgrid(this.gridApi);
+  }
+
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.equipment.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
+    });
   }
 
   getdataforgrid() {
-
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     // this.logging.checkandcreatelog(1, 'LoanCollateral - EQP', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
       this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "EQP" && lc.ActionStatus != 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(obj);
+      this.pinnedBottomRowData = this.equipmentService.computeTotal(obj);
     }
     this.getgridheight();
     this.adjustgrid();
@@ -138,7 +138,7 @@ export class EquipmentComponent implements OnInit {
     try {
       this.gridApi.sizeColumnsToFit();
     }
-    catch {
+    catch (ex){
     }
   }
 
@@ -218,25 +218,5 @@ export class EquipmentComponent implements OnInit {
 
   getgridheight() {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
-  }
-
-  computeTotal(loanobject) {
-    var total = []
-    try {
-      var footer = new Loan_Collateral();
-      footer.Collateral_Category_Code = 'Total';
-      footer.Market_Value = loanobject.LoanMaster[0].FC_Market_Value_Equip
-      footer.Prior_Lien_Amount = loanobject.LoanMaster[0].FC_Equip_Prior_Lien_Amount
-      footer.Lien_Holder = '';
-      footer.Net_Market_Value = loanobject.LoanMaster[0].Net_Market_Value_Equipment
-      footer.Disc_Value = 0;
-      footer.Disc_CEI_Value = loanobject.LoanMaster[0].Disc_value_Equipment
-      total.push(footer);
-      return total;
-    }
-    catch
-    {  // Means that Calculations have not Ended
-      return total;
-    }
   }
 }
