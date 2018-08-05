@@ -4,6 +4,7 @@ import { LocalStorageService } from 'ngx-webstorage';
 import { FsaService } from './fsa/fsa.service';
 import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
+import { StoredCropService } from './storedcrop/storedcrop.service';
 import { environment } from '../../../environments/environment.prod';
 import CollteralSettings from './collateral-types.model';
 import { CollateralService } from './collateral.service';
@@ -12,7 +13,7 @@ import { CollateralService } from './collateral.service';
   selector: 'app-collateral',
   templateUrl: './collateral.component.html',
   styleUrls: ['./collateral.component.scss'],
-  providers: [FsaService, LiveStockService, EquipmentService, CollateralService]
+  providers: [FsaService, LiveStockService, EquipmentService, StoredCropService, CollateralService]
 })
 
 export class CollateralComponent implements OnInit {

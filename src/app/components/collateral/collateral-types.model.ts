@@ -34,7 +34,8 @@ export default {
   storedCrop: {
     key: 'SCP',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'StoredCropComponent'
   },
   equipment: {
     key: 'EQP',

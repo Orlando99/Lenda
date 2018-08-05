@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { FsaService } from './fsa/fsa.service';
 import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
+import { StoredCropService } from './storedcrop/storedcrop.service';
 import CollateralSettings from './collateral-types.model';
 
 /**
@@ -33,7 +34,8 @@ export class CollateralService {
     public toasterService: ToasterService,
     public fsaService: FsaService,
     public liveStockService: LiveStockService,
-    public equipmentService: EquipmentService
+    public equipmentService: EquipmentService,
+    public storedcropService: StoredCropService
   ) {
   }
 
@@ -51,6 +53,8 @@ export class CollateralService {
       rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex);
     } else if (res.srccomponentedit == CollateralSettings.equipment.component) {
       rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
+    } else if (res.srccomponentedit == CollateralSettings.storedCrop.component) {
+      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex);
     } else {
       localloanobject = res;
       rowData = this.getRowData(localloanobject, categoryCode);
@@ -187,6 +191,8 @@ export class CollateralService {
       return this.fsaService.computeTotal(input);
     } else if (categoryCode === CollateralSettings.equipment.key) {
       return this.equipmentService.computeTotal(input);
+    } else if (categoryCode === CollateralSettings.storedCrop.key) {
+      return this.storedcropService.computeTotal(input);
     }
   }
 }
