@@ -12,6 +12,7 @@ import { FsaService } from './fsa/fsa.service';
 import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
 import { StoredCropService } from './storedcrop/storedcrop.service';
+import { RealEstateService } from './realestate/realestate.service';
 import CollateralSettings from './collateral-types.model';
 
 /**
@@ -35,7 +36,8 @@ export class CollateralService {
     public fsaService: FsaService,
     public liveStockService: LiveStockService,
     public equipmentService: EquipmentService,
-    public storedcropService: StoredCropService
+    public storedcropService: StoredCropService,
+    public realEstateService: RealEstateService
   ) {
   }
 
@@ -55,6 +57,8 @@ export class CollateralService {
       rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
     } else if (res.srccomponentedit == CollateralSettings.storedCrop.component) {
       rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex);
+    } else if (res.srccomponentedit == CollateralSettings.realestate.component) {
+      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex);
     } else {
       localloanobject = res;
       rowData = this.getRowData(localloanobject, categoryCode);
@@ -162,20 +166,6 @@ export class CollateralService {
     this.style.height = (30 * (rowData.length + 2) - 2).toString() + "px";
   }
 
-  getdataforgrid(localloanobject: loan_model, gridApi, rowData) {
-    // let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
-    // if (obj != null && obj != undefined) {
-    //   localloanobject = obj;
-    //   rowData = [];
-    //   rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
-    //   this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
-    // }
-    // this.getgridheight(rowData);
-    // this.adjustgrid(gridApi);
-    // return rowData;
-  }
-
   public adjustgrid(gridApi) {
     try {
       gridApi.sizeColumnsToFit();
@@ -193,6 +183,8 @@ export class CollateralService {
       return this.equipmentService.computeTotal(input);
     } else if (categoryCode === CollateralSettings.storedCrop.key) {
       return this.storedcropService.computeTotal(input);
+    } else if (categoryCode === CollateralSettings.realestate.key) {
+      return this.realEstateService.computeTotal(input);
     }
   }
 }

@@ -46,7 +46,8 @@ export default {
   realestate: {
     key: 'RET',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'RealEstateComponent'
   },
   other: {
     key: 'OTR',

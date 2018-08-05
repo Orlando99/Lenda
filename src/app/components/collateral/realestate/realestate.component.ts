@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Output, EventEmitter } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -15,14 +15,17 @@ import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import { RealEstateService } from './realestate.service';
+import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-realestate',
   templateUrl: './realestate.component.html',
   styleUrls: ['./realestate.component.scss'],
-  providers: [CollateralService]
+  providers: [CollateralService, RealEstateService]
 })
 export class RealEstateComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -52,7 +55,8 @@ export class RealEstateComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
     private hostElement: ElementRef,
-    public collateralService: CollateralService) {
+    public collateralService: CollateralService,
+    public realEstateService: RealEstateService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -99,36 +103,21 @@ export class RealEstateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'LoanCollateral - Real Estate', "LocalStorage updated");
-      if (res.srccomponentedit == "RealEstateComponent") {
-        //if the same table invoked the change .. change only the edited row
-        this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-      } else {
-        this.localloanobject = res
-        this.rowData = [];
-        this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 }) : [];
+    this.subscribeToChanges();
 
-        this.pinnedBottomRowData = this.computeTotal(res);
-      }
-      this.getgridheight();
-      this.gridApi.refreshCells();
-      // this.adjustgrid();
-    });
-
-    this.getdataforgrid();
+    // on initialization
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.realestate.key);
+    this.pinnedBottomRowData = this.realEstateService.computeTotal(this.localloanobject);
+    this.collateralService.adjustgrid(this.gridApi);
   }
 
-  getdataforgrid() {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'LoanCollateral - RET', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
-      this.rowData = [];
-      this.rowData = this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "RET" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(obj);
-    }
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.realestate.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
+    });
   }
 
   onGridReady(params) {
@@ -138,68 +127,24 @@ export class RealEstateComponent implements OnInit {
     //this.adjustparentheight();
   }
 
-  syncenabled() {
-    if (this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
-      return '';
-    else
-      return 'disabled';
-  }
-
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
   }
 
   //Grid Events
   addrow() {
-    if (this.localloanobject.LoanCollateral == null)
-      this.localloanobject.LoanCollateral = [];
-
-    var newItem = new Loan_Collateral();
-    newItem.Collateral_Category_Code = "RET";
-    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID
-    newItem.Disc_Value = 40;
-    newItem.ActionStatus = 1;
-    var res = this.rowData.push(newItem);
-    this.localloanobject.LoanCollateral.push(newItem);
-    this.gridApi.setRowData(this.rowData);
-    this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length - 1,
-      colKey: "Collateral_Description"
-    });
-    this.getgridheight();
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.realestate.key);
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    var obj = value.data;
-    if (obj.Collateral_ID == 0) {
-      obj.ActionStatus = 1;
-      this.localloanobject.LoanCollateral[this.localloanobject.LoanCollateral.length - 1] = value.data;
-    }
-    else {
-      var rowindex = this.localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
-      this.localloanobject.LoanCollateral[rowindex] = obj;
-    }
-    this.localloanobject.srccomponentedit = "RealEstateComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.realestate.component);
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
-          this.localloanobject.LoanCollateral.splice(this.localloanobject.LoanCollateral.indexOf(obj), 1);
-        } else {
-          this.deleteAction = true;
-          obj.ActionStatus = 3;
-        }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-      }
-    })
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
+    this.isSyncRequired(true);
   }
 
   getgridheight() {
@@ -211,25 +156,9 @@ export class RealEstateComponent implements OnInit {
       this.gridApi.sizeColumnsToFit();
       this.adjustparentheight();
     }
-    catch{
+    catch (ex){
 
     }
-  }
-
-
-  computeTotal(input) {
-    var total = []
-    var footer = new Loan_Collateral();
-    footer.Collateral_Category_Code = 'Total';
-    footer.Market_Value = input.LoanMaster[0].FC_Market_Value_realstate;
-    footer.Prior_Lien_Amount = input.LoanMaster[0].FC_realstate_Prior_Lien_Amount;
-    footer.Lien_Holder = '';
-    footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Real_Estate;
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Real_Estate;
-    footer.Qty = input.LoanMaster[0].FC_total_Qty_Real_Estate;
-    total.push(footer);
-    return total;
   }
 
   expansionopen() {
@@ -240,7 +169,6 @@ export class RealEstateComponent implements OnInit {
   }
 
   adjustparentheight() {
-
     var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
     // var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
 
@@ -249,6 +177,5 @@ export class RealEstateComponent implements OnInit {
       var aggrid = element.getElementsByClassName("ag-root-wrapper")[0];
       element.setAttribute("style", "height:" + (aggrid.clientHeight + 80).toString() + "px");
     }
-
   }
 }
