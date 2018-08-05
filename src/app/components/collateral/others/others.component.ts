@@ -16,6 +16,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { GridOptions } from '../../../../../node_modules/ag-grid';
 import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
+import { CollateralService } from '../collateral.service';
 
 @Component({
   selector: 'app-others',
@@ -51,37 +52,38 @@ export class OthersComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    private hostElement: ElementRef) {
+    private hostElement: ElementRef,
+    public collateralService: CollateralService) {
 
 
-    this.components = { numericCellEditor: getNumericCellEditor(),  alphaNumeric: getAlphaNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
     this.columnDefs = [
       { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
-      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color']},
-      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color','text-right'] },
-      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color','text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130,cellClass: 'editable-color', cellEditor: "alphaNumeric"},
+      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
+      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color', 'text-right'] },
+      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'text-right'] },
+      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130, cellClass: 'editable-color', cellEditor: "alphaNumeric" },
       {
         headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
         // valueGetter: function (params) {
         //   return setNetMktValue(params);}
       },
       {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color','text-right'] , width: 130,
+        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
         pinnedRowCellRenderer: function () { return '-'; }
       },
       {
-        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor",cellClass: ['text-right'],
+        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['text-right'],
         // valueGetter: function (params) {
         //   return setDiscValue(params);
         // },
         valueFormatter: currencyFormatter
       },
       {
-        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100,cellClass: ['editable-color'] ,
+        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100, cellClass: ['editable-color'],
         cellEditorParams: {
           values: [{ 'key': 0, 'value': 'No' }, { 'key': 1, 'value': 'Yes' }]
         }, pinnedRowCellRenderer: function () { return ' '; },
@@ -99,11 +101,11 @@ export class OthersComponent implements OnInit {
       if (res.srccomponentedit == "OthersComponent") {
         //if the same table invoked the change .. change only the edited row
         this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR"  })[res.lasteditrowindex];
+        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" })[res.lasteditrowindex];
       } else {
         this.localloanobject = res
         this.rowData = [];
-        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !==3  }) : [];
+        this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !== 3 }) : [];
         this.pinnedBottomRowData = this.computeTotal(res);
       }
       this.getgridheight();
@@ -121,7 +123,7 @@ export class OthersComponent implements OnInit {
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus !=3 }) : [];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "OTR" && lc.ActionStatus != 3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(obj);
     }
     this.getgridheight();
@@ -141,40 +143,22 @@ export class OthersComponent implements OnInit {
 
 
   onGridReady(params) {
-    
+
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
     this.adjustgrid();
   }
 
-  syncenabled() {   
-    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+  syncenabled() {
+    if (this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
       return '';
     else
       return 'disabled';
   }
 
   synctoDb() {
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.deleteAction = false;
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    });
+    this.collateralService.syncToDb(this.localloanobject);
   }
 
   //Grid Events
@@ -231,12 +215,11 @@ export class OthersComponent implements OnInit {
     })
   }
 
-  expansionopen()
-  {
+  expansionopen() {
     setTimeout(() => {
       this.adjustparentheight();
     }, 10);
-  
+
   }
   getgridheight() {
     this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
@@ -263,15 +246,15 @@ export class OthersComponent implements OnInit {
     }
   }
 
-  adjustparentheight(){
+  adjustparentheight() {
 
     var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
     //var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
-    
+
     for (let index = 0; index < elementInHost.length; index++) {
       const element = elementInHost[index];
-      var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
-      element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+      var aggrid = element.getElementsByClassName("ag-root-wrapper")[0];
+      element.setAttribute("style", "height:" + (aggrid.clientHeight + 80).toString() + "px");
     }
-   }
+  }
 }
