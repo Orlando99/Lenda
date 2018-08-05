@@ -23,7 +23,8 @@ import { CollateralService } from '../collateral.service';
 @Component({
   selector: 'app-marketing-contracts',
   templateUrl: './marketing-contracts.component.html',
-  styleUrls: ['./marketing-contracts.component.scss']
+  styleUrls: ['./marketing-contracts.component.scss'],
+  providers: [CollateralService]
 })
 export class MarketingContractsComponent implements OnInit {
   public refdata: any = {};

@@ -97,10 +97,10 @@ export class LivestockComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK");
+      this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK", this.rowData);
     });
 
-    this.getdataforgrid(this.localloanobject, "LSK");
+    this.rowData = this.collateralService.getdataforgrid(this.localloanobject, "LSK", this.rowData);
   }
 
   getdataforgrid(localloanobject: loan_model, categoryCode) {
@@ -114,10 +114,10 @@ export class LivestockComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.collateralService.getgridheight();
+    this.collateralService.getgridheight(this.rowData);
   }
 
-  syncenabled() {   
+  syncenabled() {
     if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
       return '';
     else
@@ -138,14 +138,14 @@ export class LivestockComponent implements OnInit {
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
   }
 
   onGridSizeChanged(Event: any) {
     try {
       this.gridApi.sizeColumnsToFit();
     }
-    catch{
+    catch (ex){
     }
   }
 }

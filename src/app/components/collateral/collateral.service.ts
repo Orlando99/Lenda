@@ -17,7 +17,7 @@ import { LiveStockService } from './livestock/livestock.service';
 @Injectable()
 export class CollateralService {
   // private localloanobject: loan_model = new loan_model();
-  public rowData = [];
+  // public rowData = [];
   // public gridApi;
   public deleteAction = false;
   public pinnedBottomRowData;
@@ -41,19 +41,19 @@ export class CollateralService {
     boxSizing: 'border-box'
   };
 
-  onInit(localloanobject: loan_model, gridApi, res, component, categoryCode) {
+  onInit(localloanobject: loan_model, gridApi, res, component, categoryCode, rowData) {
     this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
     if (res.srccomponentedit == component) {
       //if the same table invoked the change .. change only the edited row
       localloanobject = res;
-      this.rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
+      rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
     } else {
       localloanobject = res
-      this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+      rowData = [];
+      rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
     }
-    this.getgridheight();
+    this.getgridheight(rowData);
     gridApi.refreshCells();
   }
 
@@ -75,7 +75,7 @@ export class CollateralService {
       rowIndex: rowData.length - 1,
       colKey: "Collateral_Description"
     });
-    this.getgridheight();
+    this.getgridheight(rowData);
   }
 
   rowValueChanged(value: any, localloanobject: loan_model, component) {
@@ -95,12 +95,12 @@ export class CollateralService {
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
   }
 
-  deleteClicked(rowIndex: any, localloanobject: loan_model) {
+  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.rowData[rowIndex];
+        var obj = rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
+          rowData.splice(rowIndex, 1);
           localloanobject.LoanCollateral.splice(localloanobject.LoanCollateral.indexOf(obj), 1);
         } else {
           this.deleteAction = true;
@@ -136,28 +136,29 @@ export class CollateralService {
   /**
    * Helper methods
    */
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
+  getgridheight(rowData) {
+    this.style.height = (30 * (rowData.length + 2) - 2).toString() + "px";
   }
 
-  getdataforgrid(localloanobject: loan_model, gridApi) {
+  getdataforgrid(localloanobject: loan_model, gridApi, rowData) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
     this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       localloanobject = obj;
-      this.rowData = [];
-      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
+      rowData = [];
+      rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
     }
-    this.getgridheight();
+    this.getgridheight(rowData);
     this.adjustgrid(gridApi);
+    return rowData;
   }
 
   private adjustgrid(gridApi) {
     try {
       gridApi.sizeColumnsToFit();
     }
-    catch {
+    catch (ex){
     }
   }
 

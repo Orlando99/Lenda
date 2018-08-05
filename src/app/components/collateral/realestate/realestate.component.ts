@@ -19,7 +19,8 @@ import { CollateralService } from '../collateral.service';
 @Component({
   selector: 'app-realestate',
   templateUrl: './realestate.component.html',
-  styleUrls: ['./realestate.component.scss']
+  styleUrls: ['./realestate.component.scss'],
+  providers: [CollateralService]
 })
 export class RealEstateComponent implements OnInit {
   public refdata: any = {};

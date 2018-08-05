@@ -19,7 +19,8 @@ import { CollateralService } from '../collateral.service';
 @Component({
   selector: 'app-storedcrop',
   templateUrl: './storedcrop.component.html',
-  styleUrls: ['./storedcrop.component.scss']
+  styleUrls: ['./storedcrop.component.scss'],
+  providers: [CollateralService]
 })
 export class StoredCropComponent implements OnInit {
   public refdata: any = {};

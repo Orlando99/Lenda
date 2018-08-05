@@ -21,7 +21,8 @@ import { CollateralService } from '../collateral.service';
 @Component({
   selector: 'app-others',
   templateUrl: './others.component.html',
-  styleUrls: ['./others.component.scss']
+  styleUrls: ['./others.component.scss'],
+  providers: [CollateralService]
 })
 export class OthersComponent implements OnInit {
   public refdata: any = {};
