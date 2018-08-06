@@ -1,8 +1,8 @@
 <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expanded" [ngClass] = "displayAsChildCheveron ? 'child-cheveron' : ''">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Questions
+        {{ cheveronHeader || 'Questions'}}
       </mat-panel-title>
     </mat-expansion-panel-header>
 

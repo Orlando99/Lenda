@@ -21,8 +21,17 @@ export class QuestionsComponent implements OnInit {
   LoanQResponse: LoanQResponse[];
 
   responses: Array<LoanQResponse>;
-  @Input("CheveronId")
-  CheveronId: string;
+  @Input("cheveronId")
+  cheveronId: string;
+
+  @Input("cheveronHeader")
+  cheveronHeader: string;
+
+  @Input("displayAsChildCheveron")
+  displayAsChildCheveron: boolean = false;
+
+  @Input("expanded")
+  expanded: boolean = true;
 
   isResponseUpdated : boolean = false;
   isPublishing : boolean = false;
@@ -37,7 +46,7 @@ export class QuestionsComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localloanobject = res;
       if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-        this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+        this.responses = this.questionService.prepareResponses(this.cheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
         this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
         this.updatePublishStatus();
 
@@ -47,7 +56,7 @@ export class QuestionsComponent implements OnInit {
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-      this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+      this.responses = this.questionService.prepareResponses(this.cheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
       this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
       this.updatePublishStatus();
     }
