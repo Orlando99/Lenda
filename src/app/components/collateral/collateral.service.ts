@@ -51,22 +51,36 @@ export class CollateralService {
   };
 
   subscribeToChanges(res, localloanobject, categoryCode, rowData, pinnedBottomRowData) {
-    if (res.srccomponentedit == CollateralSettings.fsa.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
-    } else if (res.srccomponentedit == CollateralSettings.livestock.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex);
-    } else if (res.srccomponentedit == CollateralSettings.equipment.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
-    } else if (res.srccomponentedit == CollateralSettings.storedCrop.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex);
-    } else if (res.srccomponentedit == CollateralSettings.realestate.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex);
-    } else if (res.srccomponentedit == CollateralSettings.other.component) {
-      rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex);
-    } else {
-      localloanobject = res;
-      rowData = this.getRowData(localloanobject, categoryCode);
-      pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+    switch (res.srccomponentedit) {
+      case CollateralSettings.fsa.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
+        break;
+      }
+      case CollateralSettings.livestock.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex);
+        break;
+      }
+      case CollateralSettings.equipment.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
+        break;
+      }
+      case CollateralSettings.storedCrop.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex);
+        break;
+      }
+      case CollateralSettings.realestate.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex);
+        break;
+      }
+      case CollateralSettings.other.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex);
+        break;
+      }
+      default: {
+        localloanobject = res;
+        rowData = this.getRowData(localloanobject, categoryCode);
+        pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+      }
     }
     return {
       rowData: rowData,
@@ -179,18 +193,25 @@ export class CollateralService {
   }
 
   computeTotal(input, categoryCode) {
-    if (categoryCode === CollateralSettings.livestock.key) {
-      return this.liveStockService.computeTotal(input);
-    } else if (categoryCode === CollateralSettings.fsa.key) {
-      return this.fsaService.computeTotal(input);
-    } else if (categoryCode === CollateralSettings.equipment.key) {
-      return this.equipmentService.computeTotal(input);
-    } else if (categoryCode === CollateralSettings.storedCrop.key) {
-      return this.storedcropService.computeTotal(input);
-    } else if (categoryCode === CollateralSettings.realestate.key) {
-      return this.realEstateService.computeTotal(input);
-    } else if (categoryCode === CollateralSettings.other.key) {
-      return this.othersService.computeTotal(input);
+    switch(categoryCode) {
+      case CollateralSettings.livestock.key: {
+        return this.liveStockService.computeTotal(input);
+      }
+      case CollateralSettings.fsa.key: {
+        return this.fsaService.computeTotal(input);
+      }
+      case CollateralSettings.equipment.key: {
+        return this.equipmentService.computeTotal(input);
+      }
+      case CollateralSettings.storedCrop.key: {
+        return this.storedcropService.computeTotal(input);
+      }
+      case CollateralSettings.realestate.key: {
+        return this.realEstateService.computeTotal(input);
+      }
+      case CollateralSettings.other.key: {
+        return this.othersService.computeTotal(input);
+      }
     }
   }
 }
