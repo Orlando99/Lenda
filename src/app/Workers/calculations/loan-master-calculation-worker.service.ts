@@ -40,25 +40,31 @@ export class LoanMasterCalculationWorkerService {
 
   performLoanMasterCalcualtions(loanObject: loan_model) {
     try{
-      let starttime = new Date().getTime();
-      if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
-      let loanMaster = loanObject.LoanMaster[0];
-      //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
-      loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns;
-      //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
-      loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
-      
-      let FICOScore = loanMaster.Credit_Score;
-      let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
-      let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
-      let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
-      let judgement = loanMaster.Judgement ? 'Yes' : 'No';
-      let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
-      let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
+    let starttime = new Date().getTime();
+    if(loanObject.LoanMaster && loanObject.LoanMaster.length>0){
+    let loanMaster = loanObject.LoanMaster[0];
+    //loanMaster.Borrower_Farm_Financial_Rating = loanMaster.Borrower_Farm_Financial_Rating || 145;
+    loanObject.Borrower.Borrower_3yr_Tax_Returns = loanObject.Borrower.Borrower_3yr_Tax_Returns;
+    //loanObject.Borrower.Borrower_CPA_financials = !!loanObject.LoanMaster[0].CPA_Prepared_Financials;
+    loanMaster.Credit_Score = loanMaster.Credit_Score || 720;
+    
+    let FICOScore = loanMaster.Credit_Score;
+    let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
+    let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
+    let bankruptcy = loanMaster.Previously_Bankrupt ? 'Yes' : 'No';
+    let judgement = loanMaster.Judgement ? 'Yes' : 'No';
+    let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
+    let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
 
-      let borrowerRatingStar = 0;
+    //Rating calculation
+    
+    if(loanMaster.Current_Bankruptcy_Status){
+      //If currenlty bankrupt, no need to check anything. It should be rating 1
+      loanMaster.Borrower_Rating = 1
+    }else{
       for (let rating = 5; rating >= 1; rating--) {
         let ratingRequirement = this.getRatingRequirement(rating);
+
 
         if (FICOScore >= ratingRequirement.FICOScore
           && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
@@ -72,12 +78,14 @@ export class LoanMasterCalculationWorkerService {
           break;
         }
       }
+    }
   
         
         let endtime = new Date().getTime();
         this.logging.checkandcreatelog(3, 'Calc_LoanMaster', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
       return loanObject;
+    
       } catch(e){
         this.logging.checkandcreatelog(3, 'Calc_LoanMaster', e);
         return loanObject;
