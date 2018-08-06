@@ -52,7 +52,8 @@ export default {
   other: {
     key: 'OTR',
     source: 'LoanCollateral',
-    sourceKey: 'Collateral_Category_Code'
+    sourceKey: 'Collateral_Category_Code',
+    component: 'OthersComponent'
   },
   contacts: {
     key: 'TBD4',

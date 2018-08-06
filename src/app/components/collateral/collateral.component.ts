@@ -6,6 +6,7 @@ import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
 import { StoredCropService } from './storedcrop/storedcrop.service';
 import { RealEstateService } from './realestate/realestate.service';
+import { OthersService } from './others/others.service';
 import { environment } from '../../../environments/environment.prod';
 import CollteralSettings from './collateral-types.model';
 import { CollateralService } from './collateral.service';
@@ -15,7 +16,7 @@ import { CollateralService } from './collateral.service';
   templateUrl: './collateral.component.html',
   styleUrls: ['./collateral.component.scss'],
   providers: [FsaService, LiveStockService, EquipmentService,
-    StoredCropService, RealEstateService, CollateralService]
+    StoredCropService, RealEstateService, CollateralService, OthersService]
 })
 
 export class CollateralComponent implements OnInit {
