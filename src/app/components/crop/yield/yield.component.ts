@@ -198,7 +198,6 @@ export class YieldComponent implements OnInit {
     let newYield = this.localloanobject.CropYield.filter(cy =>{ return cy.ActionStatus==0});
     newYield.forEach(ay => {
       this.years.forEach(y=>{
-        if(ay[y] !== "" && ay[y] !== null){
           var params = {
             Loan_ID : 0,
             Loan_Full_ID: ay.Loan_Full_ID,
@@ -214,7 +213,6 @@ export class YieldComponent implements OnInit {
             ActionStatus: 1
           }
           this.localloanobject.CropYield.push(params);
-        }
       });
     });
 
@@ -266,7 +264,6 @@ export class YieldComponent implements OnInit {
       let newYield = this.localloanobject.CropYield.filter(cy =>{ return cy.ActionStatus==0});
       newYield.forEach(ay => {
         this.years.forEach(y=>{
-          if(ay[y] !== "" && ay[y] !== null){
             var params = {
               Loan_ID : 0,
               Loan_Full_ID: ay.Loan_Full_ID,
@@ -282,7 +279,6 @@ export class YieldComponent implements OnInit {
               ActionStatus: 1
             }
             this.localloanobject.CropYield.push(params);
-          }
         });
       });
       this.gridApi.showLoadingOverlay()
@@ -479,7 +475,9 @@ export class YieldComponent implements OnInit {
         //this.getgridheight();
         }
     });
-     
+
+    this.addAction = true;
+    this.updateSyncStatus();
   }
 
   getgridheight(){
