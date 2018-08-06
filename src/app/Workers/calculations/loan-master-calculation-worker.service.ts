@@ -50,25 +50,32 @@ export class LoanMasterCalculationWorkerService {
     let FICOScore = loanMaster.Credit_Score;
     let CPAFiancial = loanObject.LoanMaster[0].CPA_Prepared_Financials ? 'Yes' : 'No';
     let threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
-    let bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
+    let bankruptcy = loanMaster.Previously_Bankrupt ? 'Yes' : 'No';
     let judgement = loanMaster.Judgement ? 'Yes' : 'No';
     let yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
     let farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';
 
-    let borrowerRatingStar = 0;
-    for (let rating = 5; rating >= 1; rating--) {
-      let ratingRequirement = this.getRatingRequirement(rating);
+    //Rating calculation
+    
+    if(loanMaster.Current_Bankruptcy_Status){
+      //If currenlty bankrupt, no need to check anything. It should be rating 1
+      loanMaster.Borrower_Rating = 1
+    }else{
+      for (let rating = 5; rating >= 1; rating--) {
+        let ratingRequirement = this.getRatingRequirement(rating);
 
-      if (FICOScore >= ratingRequirement.FICOScore
-        && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
-        && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
-        && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
-        && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
-        && yearsFarming >= ratingRequirement.yearsFarming
-        && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
-      ) {
-        loanMaster.Borrower_Rating = rating;
-        break;
+
+        if (FICOScore >= ratingRequirement.FICOScore
+          && (!ratingRequirement.CPAFiancial || CPAFiancial === ratingRequirement.CPAFiancial)
+          && (!ratingRequirement.threeYrsReturns || threeYrsReturns === ratingRequirement.threeYrsReturns)
+          && (!ratingRequirement.bankruptcy || bankruptcy === ratingRequirement.bankruptcy)
+          && (!ratingRequirement.judgement || judgement === ratingRequirement.judgement)
+          && yearsFarming >= ratingRequirement.yearsFarming
+          && farmFinnacialRating >= ratingRequirement.farmFinnacialRating
+        ) {
+          loanMaster.Borrower_Rating = rating;
+          break;
+        }
       }
 
     }
@@ -114,7 +121,6 @@ export class LoanMasterCalculationWorkerService {
     }
     let lookupIndex = 5 - rating;
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return {
       borrowerRating: this.borrowerRatingstaticValues.borrowerRating[lookupIndex],
       FICOScore: this.borrowerRatingstaticValues.FICOScore[lookupIndex],

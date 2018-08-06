@@ -22,11 +22,11 @@ export class QuestionscalculationworkerService {
 
         input.LoanMaster[0].Judgement=(element.Response_Detail=='Yes')?1:0;
           break;
-        case 3: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
+        case 3: // Current bankruptcy question
+        input.LoanMaster[0].Current_Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
           break;
-        case 5: // bankruptcy question
-        input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
+        case 5: // Previous bankruptcy question
+        input.LoanMaster[0].Previously_Bankrupt=(element.Response_Detail=='Yes')?1:0;
           break;
         case 12: // CPA Financial question
         input.LoanMaster[0].CPA_Prepared_Financials=(element.Response_Detail=='Yes')?1:0;
