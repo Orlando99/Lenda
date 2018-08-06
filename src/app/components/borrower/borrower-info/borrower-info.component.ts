@@ -171,6 +171,7 @@ export class BorrowerInfoComponent implements OnInit {
       Borrower_Phone: [formData.Borrower_Phone || '', Validators.required],
       Borrower_email: [formData.Borrower_email || '', [Validators.required, Validators.email]],
       Borrower_DOB: [formData.Borrower_DOB ? this.formatDate(formData.Borrower_DOB) : '', Validators.required],
+      Crop_Year : [formData.Crop_Year || (this.mode === 'create' ? (new Date()).getFullYear() : ''), Validators.required],
       Spouse_First_Name: [formData.Spouse_First_Name || ''],
       Spouse__MI: [formData.Spouse__MI || ''],
       Spouse_Last_name: [formData.Spouse_Last_name || ''],

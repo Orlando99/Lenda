@@ -21,27 +21,27 @@ export class QuestionscalculationworkerService {
             switch (element.Question_ID) {
               case 7: // judgement question
 
-              input.LoanMaster[0].Judgement=(element.Response_Detail=='Yes')?1:0;
-                break;
-              case 3: // bankruptcy question
-              input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
-                break;
-              case 5: // bankruptcy question
-              input.LoanMaster[0].Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
-                break;
-              case 12: // CPA Financial question
-              input.LoanMaster[0].CPA_Prepared_Financials=(element.Response_Detail=='Yes')?1:0;
-                break;
-              case 13: // 3 year tax return question
-              input.Borrower.Borrower_3yr_Tax_Returns=(element.Response_Detail=='Yes')?1:0;
-                break;
-              default:
-                break;
-            }
-        });
-        let endtime = new Date().getTime();
-          this.logging.checkandcreatelog(3, 'Calc_Question_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
-        return input;
+        input.LoanMaster[0].Judgement=(element.Response_Detail=='Yes')?1:0;
+          break;
+        case 3: // Current bankruptcy question
+        input.LoanMaster[0].Current_Bankruptcy_Status=(element.Response_Detail=='Yes')?1:0;
+          break;
+        case 5: // Previous bankruptcy question
+        input.LoanMaster[0].Previously_Bankrupt=(element.Response_Detail=='Yes')?1:0;
+          break;
+        case 12: // CPA Financial question
+        input.LoanMaster[0].CPA_Prepared_Financials=(element.Response_Detail=='Yes')?1:0;
+          break;
+        case 13: // 3 year tax return question
+        input.Borrower.Borrower_3yr_Tax_Returns=(element.Response_Detail=='Yes')?1:0;
+          break;
+        default:
+          break;
+      }
+   });
+   let endtime = new Date().getTime();
+    this.logging.checkandcreatelog(3, 'Calc_Question_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+   return input;
   }catch(e){
     this.logging.checkandcreatelog(3, 'Calc_Question', e);
     return input;
