@@ -42,13 +42,6 @@ export class EquipmentComponent implements OnInit {
   public pinnedBottomRowData;
   public rowClassRules;
 
-  style = {
-    marginTop: '10px',
-    width: '97%',
-    // height: '110px',
-    boxSizing: 'border-box'
-  };
-
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,

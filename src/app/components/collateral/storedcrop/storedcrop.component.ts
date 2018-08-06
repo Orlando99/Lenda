@@ -40,13 +40,6 @@ export class StoredCropComponent implements OnInit {
   public deleteAction = false;
   public pinnedBottomRowData;
 
-  style = {
-    marginTop: '10px',
-    width: '97%',
-    // height: '110px',
-    boxSizing: 'border-box'
-  };
-
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
     public loanserviceworker: LoancalculationWorker,
