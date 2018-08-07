@@ -14,8 +14,8 @@ export class LoanQResponse {
   @JsonProperty("Loan_Full_ID", StringConverter,false)
   Loan_Full_ID: string;
 
-  @JsonProperty("Chevron_ID", IntConverter,false)
-  Chevron_ID: number;
+  @JsonProperty("Chevron_ID", StringConverter,false)
+  Chevron_ID: string;
 
   @JsonProperty("Question_ID", IntConverter,false)
   Question_ID: number;
@@ -49,8 +49,8 @@ export class RefQuestions {
   Question_ID: number;
   @JsonProperty("Question_ID_Text", StringConverter,false)
   Question_ID_Text: string;
-  @JsonProperty("Chevron_ID", IntConverter,false)
-  Chevron_ID: number;
+  @JsonProperty("Chevron_ID", StringConverter,false)
+  Chevron_ID: string;
   @JsonProperty("Sort_Order", IntConverter,false)
   Sort_Order: number;
   @JsonProperty("Questions_Cat_Code", IntConverter,false)

@@ -33,11 +33,7 @@ tr th:not(:first-child) {
 tr th:first-child {
     text-align: left;
 }
-.price:before{
-    content : '$';
-    float: left;
 
-}
 .percent:after{
     content : '%';
     
