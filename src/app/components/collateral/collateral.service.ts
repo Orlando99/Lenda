@@ -76,10 +76,20 @@ export class CollateralService {
         rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
         break;
       }
+      case CollateralSettings.marketingContracts.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.marketingContracts.key, res.lasteditrowindex, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+        break;
+      }
       default: {
         localloanobject = res;
-        rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
-        pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+        // TODO: Add logic to call method based on categorycode
+        // If marketing contracts
+        if (categoryCode === CollateralSettings.marketingContracts.key) {
+          rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+        } else {
+          rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+          pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+        }
       }
     }
     return {
@@ -89,12 +99,25 @@ export class CollateralService {
   }
 
   getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex, source, sourceKey) {
+    if (sourceKey === '') {
+      // Marketing Contracts
+      return localloanobject[source].filter(lc => {
+        return lc.ActionStatus !== 3
+      })[lastEditRowIndex];
+    }
     return localloanobject[source].filter(lc => {
       return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
     })[lastEditRowIndex];
   }
 
   getRowData(localloanobject, categoryCode, source, sourceKey) {
+    if (sourceKey === '') {
+      // Marketing Contracts
+      return localloanobject[source] !== null ?
+        localloanobject[source].filter(lc => {
+          return lc.ActionStatus !== 3
+        }) : [];
+    }
     return localloanobject[source] !== null ?
       localloanobject[source].filter(lc => {
         return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
@@ -107,10 +130,12 @@ export class CollateralService {
     }
 
     var newItem = new Loan_Collateral();
-    newItem[sourceKey] = newItemCategoryCode;
-    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID
-    newItem.Disc_Value = 50;
-    newItem.ActionStatus = 1;
+    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID;
+    if (sourceKey && sourceKey !== '') {
+      newItem[sourceKey] = newItemCategoryCode;
+      newItem.Disc_Value = 50;
+      newItem.ActionStatus = 1
+    }
 
     var res = rowData.push(newItem);
     localloanobject[source].push(newItem);
@@ -122,14 +147,14 @@ export class CollateralService {
     this.getgridheight(rowData);
   }
 
-  rowValueChanged(value: any, localloanobject: loan_model, component, source) {
+  rowValueChanged(value: any, localloanobject: loan_model, component, source, uniqueKey) {
     var obj = value.data;
-    if (obj.Collateral_ID == 0) {
+    if (obj[uniqueKey] == 0) {
       let lastIndex = localloanobject[source].length - 1;
       obj.ActionStatus = 1;
       localloanobject[source][lastIndex] = value.data;
     } else {
-      var rowindex = localloanobject[source].findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+      var rowindex = localloanobject[source].findIndex(lc => lc[uniqueKey] == obj[uniqueKey]);
       if (obj.ActionStatus != 1)
         obj.ActionStatus = 2;
       localloanobject[source][rowindex] = obj;
@@ -140,11 +165,11 @@ export class CollateralService {
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
   }
 
-  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source) {
+  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source, uniqueKey) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = rowData[rowIndex];
-        if (obj.Collateral_ID == 0) {
+        if (obj[uniqueKey] == 0) {
           rowData.splice(rowIndex, 1);
           localloanobject[source].splice(localloanobject[source].indexOf(obj), 1);
         } else {
@@ -194,7 +219,7 @@ export class CollateralService {
   }
 
   computeTotal(input, categoryCode) {
-    switch(categoryCode) {
+    switch (categoryCode) {
       case CollateralSettings.livestock.key: {
         return this.liveStockService.computeTotal(input);
       }

@@ -131,12 +131,12 @@ export class RealEstateComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.realestate.component, CollateralSettings.realestate.source);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.realestate.component, CollateralSettings.realestate.source, CollateralSettings.realestate.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.realestate.source);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.realestate.source, CollateralSettings.realestate.pk);
     this.isSyncRequired(true);
   }
 

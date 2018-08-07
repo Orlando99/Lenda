@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { loan_model, Loan_Collateral, Loan_Marketing_Contract } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { ToastsManager } from 'ng2-toastr';
@@ -19,6 +19,7 @@ import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/ag
 import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -27,6 +28,7 @@ import { CollateralService } from '../collateral.service';
   providers: [CollateralService]
 })
 export class MarketingContractsComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -166,32 +168,21 @@ export class MarketingContractsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'LoanMarketingContracts ', "LocalStorage updated");
-      this.localloanobject = res
+    // Observe the localstorage for changes
+    this.subscribeToChanges();
 
-      if (res.srccomponentedit == "MarketingContractComponent") {
-        //if the same table invoked the change .. change only the edited row
-        this.localloanobject = res;
-        this.rowData[res.lasteditrowindex] = this.localloanobject.LoanMarketingContracts.filter(mc => { return mc.ActionStatus !== 3 })[res.lasteditrowindex];
-      } else {
-        this.localloanobject = res
-        this.rowData = [];
-        this.rowData = this.rowData = this.localloanobject.LoanMarketingContracts !== null ? this.localloanobject.LoanMarketingContracts.filter(mc => { return mc.ActionStatus !== 3 }) : [];
-
-      }
-      this.getgridheight();
-      this.gridApi.refreshCells();
-      // this.adjustgrid();
-    });
-
+    // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.marketingContracts.key, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+    this.collateralService.adjustgrid(this.gridApi);
+  }
 
-    if (this.localloanobject && this.localloanobject.LoanMarketingContracts.length > 0) {
-      this.rowData = this.localloanobject.LoanMarketingContracts !== null ? this.localloanobject.LoanMarketingContracts.filter(mc => { return mc.ActionStatus !== 3 }) : [];
-    } else {
-      this.rowData = [];
-    }
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.marketingContracts.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
+    });
   }
 
   getBuyersValue(params) {
@@ -206,6 +197,7 @@ export class MarketingContractsComponent implements OnInit {
       return { values: [] };
     }
   }
+
   getCropValues(params) {
     let cropValues = [];
     if (params.data.Category == 1) {
@@ -243,65 +235,47 @@ export class MarketingContractsComponent implements OnInit {
     }
   }
 
-
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
   }
 
-  syncenabled() {
-    if (this.rowData.filter(p => p.ActionStatus != 0).length > 0)
-      return '';
-    else
-      return 'disabled';
-  }
-
-
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
   }
 
   //Grid Events
   addrow() {
-    if (this.localloanobject.LoanMarketingContracts == null)
-      this.localloanobject.LoanMarketingContracts = [];
-
-    var newItem = new Loan_Marketing_Contract();
-    newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID;
-    this.rowData.push(newItem);
-    //this.localloanobject.LoanMarketingContracts.push(newItem);
-    this.gridApi.setRowData(this.rowData);
-    this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length - 1,
-      colKey: "Category"
-    });
-    this.getgridheight();
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.marketingContracts.key, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    var obj: Loan_Marketing_Contract = value.data;
+    // var obj: Loan_Marketing_Contract = value.data;
 
-    if (obj.Contract_ID == undefined) {
-      obj.Contract_ID = 0
-      obj.Price = 0;
-      obj.Quantity = 0;
-      obj.ActionStatus = 1;
-      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
-      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length] = value.data;
-    }
-    else {
-      var rowindex = this.localloanobject.LoanMarketingContracts.findIndex(mc => mc.Contract_ID == obj.Contract_ID);
-      if (obj.ActionStatus != 1)
-        obj.ActionStatus = 2;
-      this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
-      this.localloanobject.LoanMarketingContracts[rowindex] = obj;
-    }
+    // if (obj.Contract_ID == undefined) {
+    //   obj.Contract_ID = 0
+    //   obj.Price = 0;
+    //   obj.Quantity = 0;
+    //   obj.ActionStatus = 1;
+    //   this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
+    //   this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length] = value.data;
+    // }
+    // else {
+    //   var rowindex = this.localloanobject.LoanMarketingContracts.findIndex(mc => mc.Contract_ID == obj.Contract_ID);
+    //   if (obj.ActionStatus != 1)
+    //     obj.ActionStatus = 2;
+    //   this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
+    //   this.localloanobject.LoanMarketingContracts[rowindex] = obj;
+    // }
 
-    //this shall have the last edit
-    this.localloanobject.srccomponentedit = "MarketingContractComponent";
-    this.localloanobject.lasteditrowindex = value.rowIndex;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    // //this shall have the last edit
+    // this.localloanobject.srccomponentedit = "MarketingContractComponent";
+    // this.localloanobject.lasteditrowindex = value.rowIndex;
+    // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {

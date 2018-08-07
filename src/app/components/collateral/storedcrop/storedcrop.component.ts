@@ -130,12 +130,12 @@ export class StoredCropComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.storedCrop.component, CollateralSettings.storedCrop.source);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.storedCrop.component, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.storedCrop.source);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.pk);
     this.isSyncRequired(true);
   }
 

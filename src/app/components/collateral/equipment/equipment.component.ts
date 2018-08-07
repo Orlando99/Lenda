@@ -142,12 +142,12 @@ export class EquipmentComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.equipment.component, CollateralSettings.equipment.source);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.equipment.component, CollateralSettings.equipment.source, CollateralSettings.equipment.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.equipment.source);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.equipment.source, CollateralSettings.equipment.pk);
     this.isSyncRequired(true);
   }
 }

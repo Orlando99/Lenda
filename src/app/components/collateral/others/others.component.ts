@@ -140,12 +140,12 @@ export class OthersComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.other.component, CollateralSettings.other.source);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.other.component, CollateralSettings.other.source, CollateralSettings.other.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.other.source);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.other.source, CollateralSettings.other.pk);
     this.isSyncRequired(true);
   }
 

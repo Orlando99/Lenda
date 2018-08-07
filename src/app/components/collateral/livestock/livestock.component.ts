@@ -127,12 +127,12 @@ export class LivestockComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component, CollateralSettings.livestock.source);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component, CollateralSettings.livestock.source, CollateralSettings.livestock.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.livestock.source);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.livestock.source, CollateralSettings.livestock.pk);
     this.isSyncRequired(true);
   }
 
