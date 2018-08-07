@@ -83,7 +83,7 @@ export class Collateralcalculationworker {
       }
    
     computeTotallivestock(input) {
-        debugger
+       
         let starttime = new Date().getTime();
         let collaterallst=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
         input.LoanMaster[0].FC_Market_Value_lst = this.totalMktValue(collaterallst);

@@ -368,7 +368,7 @@ export class LoancropunitcalculationworkerService {
     
 
       //Loan Master
-      debugger
+     
       input.LoanMaster[0].Net_Market_Value_Insurance=_.sumBy(input.LoanCropUnits.filter(p=>!isNaN(p.Ins_Value)),"Ins_Value");
       input.LoanMaster[0].Disc_value_Insurance=_.sumBy(input.LoanCropUnits.filter(p=>!isNaN(p.Ins_Value)),"Disc_Ins_value");
 

@@ -31,6 +31,22 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
+  private units: any[] = [
+    { key: 1, value: 'EU' }, 
+    { key: 2, value: 'BU' }, 
+    { key: 3, value: 'EP' }, 
+    { key: 4, value: 'OU' }
+  ]; 
+  private secInsuranceOptions: any[] = [
+    { id: 1, itemName: "STAX" },
+    { id: 2, itemName: "RAMP" },
+    { id: 3, itemName: "ICE" },
+    { id: 4, itemName: "SCO" },
+    { id: 5, itemName: "HMAX" },
+    { id: 6, itemName: "ABC" },
+    { id: 7, itemName: "PCI" },
+    { id: 8, itemName: "CROPHAIL" }
+  ]
  
 
   deleteunwantedcolumn(): any {
@@ -71,15 +87,14 @@ export class PoliciesComponent implements OnInit {
       cellClassRules: {
         "edited-color": function(params){
            return params.data.ActionStatus==2;
-             
         }
       }
     };
-    this.columnDefs = [];
     this.columnDefs = [
       {
         headerName: 'Agent', 
-        field: 'Agent_Id',pickfield:'Agent_Id', 
+        field: 'Agent_Id',
+        pickfield:'Agent_Id', 
         cellClass: 'editable-color', 
         //cellRenderer: 'columnTooltip',
         headerTooltip: 'Agent',
@@ -98,6 +113,7 @@ export class PoliciesComponent implements OnInit {
       {
         headerName: 'Proposed AIP', 
         field: 'ProposedAIP', 
+        pickfield: 'ProposedAIP',
         headerTooltip: 'ProposedAIP',
         cellRenderer: 'columnTooltip',
         cellClass: 'editable-color', 
@@ -127,6 +143,7 @@ export class PoliciesComponent implements OnInit {
         headerName: 'SubPlanType', 
         headerTooltip: 'SubPlanType',
         field: 'MPCI_Subplan', 
+        pickfield: 'SubPlanType',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
@@ -137,63 +154,46 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Options', 
         headerTooltip: 'Options',
         field: 'SecInsurance', 
+        pickfield: 'SecInsurance',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         autoHeight: true,
         editable: true, 
         cellEditor: "chipeditor",
         cellEditorParams: {
-          items: [
-            { "id": 1, "itemName": "STAX" },
-            { "id": 2, "itemName": "RAMP" },
-            { "id": 3, "itemName": "ICE" },
-            { "id": 4, "itemName": "SCO" },
-            { "id": 5, "itemName": "HMAX" },
-            { "id": 6, "itemName": "ABC" },
-            { "id": 7, "itemName": "PCI" },
-            { "id": 8, "itemName": "CROPHAIL" }
-          ]
+          items: this.secInsuranceOptions
         }
-        //   valueSetter: function (params) {
-        //    return params.newValue;
-
-        // }
       },
       {
         headerName: 'Unit', 
         headerTooltip: 'Unit',
         field: 'Unit', 
-        cellRenderer: 'columnTooltip',
+        pickfield:'Unit', 
+        // cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, pickfield:'Unit',
+        editable: true, 
         cellEditor: "selectEditor",
         cellEditorParams: { 
-          values: [
-            { key: 1, value: 'EU' }, 
-            { key: 2, value: 'BU' }, 
-            { key: 2, value: 'EP' }, 
-            { key: 2, value: 'OU' }
-          ] 
+          values: this.units
         },
-        valueFormatter: function (params) {
-          let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
-          return selected ? selected.value : undefined;
+        valueFormatter: (params) => {
+         const selected =  this.units.filter(u => u.key === parseInt(params.value));
+         return selected.length > 0 ? selected[0].value : null;
         }
       },
       {
         headerName: 'Level', 
         headerTooltip: 'Level',
         field: 'Level', 
+        pickfield:'Level',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, pickfield:'Level',
+        editable: true, 
         cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
-          
           return PercentageFormatter(params.value);
         },
         valueSetter: function (params) {
-          
           numberValueSetter(params);
           if (params.newValue) {
             params.data['Rentperc'] = 100 - parseFloat(params.newValue);
@@ -205,6 +205,7 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Price', 
         headerTooltip: 'Price',
         field: 'Price', 
+        pickfield: 'Price',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
@@ -218,22 +219,29 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Premium', 
         headerTooltip: 'Premium',
         field: 'Premium', 
+        pickfield: 'Premium',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, 
         cellEditor: "numericCellEditor", 
         valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
       }
-
     ];
     this.getgriddata();
   }
-  getunits(){
-    return { values: ['EU', 'BU', 'EP','OU'] };
+
+  getUnit(unit) {
+    const units = [
+      { key: 1, value: 'EU' }, 
+      { key: 2, value: 'BU' }, 
+      { key: 3, value: 'EP' }, 
+      { key: 4, value: 'OU' }
+    ];
+    return units.filter(u => u.key === parseInt(unit));
   }
+
   addNumericColumn(element: string) {
     
     let header=element;
@@ -546,7 +554,6 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
-    debugger
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
@@ -554,7 +561,8 @@ export class PoliciesComponent implements OnInit {
       
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
-          this.ShowHideColumnsonselection(element)
+          console.log(element);
+          this.ShowHideColumnsonselection(element);
           this.columnDefs.push({
             headerName: element + '_Subtype', pickfield:element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
             cellEditorSelector: function (params) {

@@ -28,25 +28,35 @@ export class ChipsListEditor implements ICellEditorAngularComp {
     }
 
     ngAfterViewInit() {
-        // setTimeout(() => {
-            this.selectEL.focus();
-            this.selectEL.open();
-        // })
+        this.selectEL.focus();
+        this.selectEL.open();
     }
 
     scroll = ():void => {
     };
 
+    closeDropdown() { 
+        this.params.stopEditing();
+    }
+
+    onClickedOutside(event) {
+        // this.params.stopEditing();
+    }    
 
     agInit(params: any): void {
         params.eGridCell.style.height = "auto";
         this.previousWidth = params.eGridCell.style.width;
         console.log(parseInt(this.previousWidth + ""));
-        if ( parseInt(this.previousWidth + "") < 300) params.eGridCell.style.width = "300px";
         this.params = params;
         this.context = this.params.context.componentParent;
         this.dropdownList = params.items;
-        if (params.value !="") this.selectedItems=params.value.toString().split(',');
+        if (params.value !== "") {
+            this.selectedItems=params.value.toString().split(',');
+        }
+
+        if ( parseInt(this.previousWidth + "") < 300)  {
+            params.eGridCell.style.width = "200px";
+        }        
     }
 
     getValue(): any {
