@@ -140,7 +140,15 @@ export class FarmComponent implements OnInit {
       {
         headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "dateCellEditor",
         cellEditorParams: getDateValue,
-        valueFormatter: formatDateValue
+        valueFormatter: formatDateValue,
+        valueSetter: function (params) {
+          if (params.newValue) {
+            params.data['Cash_Rent_Due_Date'] = params.newValue;
+          }else{
+            params.data['Cash_Rent_Due_Date'] = null;
+          }
+          return true;
+        }
       },
       {
         headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
