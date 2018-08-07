@@ -63,6 +63,7 @@ export default {
   marketingContracts: {
     key: '',
     source: 'LoanMarketingContracts',
-    sourceKey: ''
+    sourceKey: '',
+    component: 'MarketingContractComponent'
   }
 }
