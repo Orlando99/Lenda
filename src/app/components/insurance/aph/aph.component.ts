@@ -107,7 +107,9 @@ export class AphComponent implements OnInit {
     });
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+    if (this.localloanobject && this.localloanobject.LoanCropUnits) {
+      this.rowData = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3);
+    }
   }
 
   syncenabled(){

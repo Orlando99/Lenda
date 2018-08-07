@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Crop_Type_Practice_Type_Yield_EditModel, Loan_Crop_Type_Practice_Type_Yield_AddModel } from '../../../models/cropmodel';
 import { CropapiService } from '../../../services/crop/cropapi.service';
-import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
+import { getNumericCellEditor, yieldValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { lookupCropValue, Cropvaluesetter, lookupCropTypeValue, CropTypevaluesetter, extractCropValues, lookupCropValuewithoutmapping, cropNameValueSetter, APHRoundValueSetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
@@ -103,7 +103,7 @@ export class YieldComponent implements OnInit {
     ];
 
     this.years.forEach(element => {
-     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellStyle: { textAlign: "right" }})
+     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: yieldValueSetter,cellStyle: { textAlign: "right" }})
     });
 
     this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false, cellStyle: { textAlign: "right" }});

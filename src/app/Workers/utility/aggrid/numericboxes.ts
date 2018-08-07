@@ -115,26 +115,38 @@ export function getNumericCellEditor() {
     return NumericCellEditor;
   }
 
-export function numberValueSetter(params) {
-    if(!params.newValue){
-      params.newValue=null;
-      params.data[params.colDef.field]=data;
+  export function numberValueSetter(params) {
+     
+    if(params.newValue==undefined || params.newValue==null||params.newValue==""){
+      params.newValue=0;
     }else{
       var data=parseFloat(params.newValue);
       params.data[params.colDef.field]=data;
     }
     
-    return params.newValue;
+    return true;
   }
 
-  export function numberWithOneDecPrecValueSetter(params) {
-      if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
-      params.newValue=0;    
-      var data=parseFloat(params.newValue);
-      data = parseFloat(data.toFixed(1));
-      params.data[params.colDef.field]=data;
-      return true;
-    }
+export function numberWithOneDecPrecValueSetter(params) {
+    if(params.newValue==undefined || params.newValue==null||params.newValue=="")         
+    params.newValue=0;    
+    var data=parseFloat(params.newValue);
+    data = parseFloat(data.toFixed(1));
+    params.data[params.colDef.field]=data;
+    return true;
+  }
 
+export function yieldValueSetter(params) {
+  if(!params.newValue || params.newValue == 0){
+    params.newValue=null;
+    params.data[params.colDef.field]=data;
+  }else{
+    var data=parseFloat(params.newValue);
+    params.data[params.colDef.field]=data;
+  }
+  
+  return params.newValue;
+}
+  
  
   //Numeric cell editor config Ends

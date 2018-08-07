@@ -98,7 +98,7 @@ export class FarmComponent implements OnInit {
         headerName: 'County', field: 'Farm_County_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
-          return lookupCountyValue(params.value);
+          return params.value ? lookupCountyValue(params.value) : '';
         },
         valueSetter: Countyvaluesetter
       },
@@ -116,7 +116,7 @@ export class FarmComponent implements OnInit {
         }
         
       },
-      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
+      { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false },
       { headerName: 'FSN', field: 'FSN',headerClass:"rightaligned", cellClass: 'editable-color rightaligned', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       { headerName: 'Section', field: 'Section', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       {
@@ -140,7 +140,15 @@ export class FarmComponent implements OnInit {
       {
         headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "dateCellEditor",
         cellEditorParams: getDateValue,
-        valueFormatter: formatDateValue
+        valueFormatter: formatDateValue,
+        valueSetter: function (params) {
+          if (params.newValue) {
+            params.data['Cash_Rent_Due_Date'] = params.newValue;
+          }else{
+            params.data['Cash_Rent_Due_Date'] = null;
+          }
+          return true;
+        }
       },
       {
         headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
