@@ -98,7 +98,7 @@ export class EquipmentComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.equipment.key, CollateralSettings.equipment.source);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.equipment.key, CollateralSettings.equipment.source, CollateralSettings.equipment.sourceKey);
     this.pinnedBottomRowData = this.equipmentService.computeTotal(this.localloanobject);
     this.collateralService.adjustgrid(this.gridApi);
   }
@@ -137,7 +137,7 @@ export class EquipmentComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.equipment.key, CollateralSettings.equipment.source);
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.equipment.key, CollateralSettings.equipment.source, CollateralSettings.equipment.sourceKey);
     this.isSyncRequired(true);
   }
 

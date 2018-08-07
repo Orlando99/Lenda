@@ -96,7 +96,7 @@ export class FSAComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
     this.pinnedBottomRowData = this.fsaService.computeTotal(this.localloanobject);
     this.collateralService.adjustgrid(this.gridApi);
   }
@@ -134,7 +134,7 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.key, CollateralSettings.fsa.source);
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
     this.isSyncRequired(true);
   }
 

@@ -97,7 +97,7 @@ export class OthersComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.other.key, CollateralSettings.other.source);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.other.key, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
     this.pinnedBottomRowData = this.othersService.computeTotal(this.localloanobject);
     this.collateralService.adjustgrid(this.gridApi);
   }
@@ -135,7 +135,7 @@ export class OthersComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.other.key, CollateralSettings.other.source);
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.other.key, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
     this.isSyncRequired(true);
   }
 

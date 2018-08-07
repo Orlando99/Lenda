@@ -100,7 +100,7 @@ export class StoredCropComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.storedCrop.key, CollateralSettings.storedCrop.source);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.storedCrop.key, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.sourceKey);
     this.pinnedBottomRowData = this.storedcropService.computeTotal(this.localloanobject);
     this.collateralService.adjustgrid(this.gridApi);
   }
@@ -125,7 +125,7 @@ export class StoredCropComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.storedCrop.key, CollateralSettings.storedCrop.source);
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.storedCrop.key, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.sourceKey);
     this.isSyncRequired(true);
   }
 

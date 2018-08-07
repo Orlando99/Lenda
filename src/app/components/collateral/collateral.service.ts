@@ -53,32 +53,32 @@ export class CollateralService {
   subscribeToChanges(res, localloanobject, categoryCode, rowData, pinnedBottomRowData) {
     switch (res.srccomponentedit) {
       case CollateralSettings.fsa.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex, CollateralSettings.fsa.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
         break;
       }
       case CollateralSettings.livestock.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex, CollateralSettings.livestock.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex, CollateralSettings.livestock.source, CollateralSettings.livestock.sourceKey);
         break;
       }
       case CollateralSettings.equipment.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex, CollateralSettings.equipment.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex, CollateralSettings.equipment.source, CollateralSettings.equipment.sourceKey);
         break;
       }
       case CollateralSettings.storedCrop.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex, CollateralSettings.storedCrop.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.sourceKey);
         break;
       }
       case CollateralSettings.realestate.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex, CollateralSettings.realestate.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex, CollateralSettings.realestate.source, CollateralSettings.realestate.sourceKey);
         break;
       }
       case CollateralSettings.other.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex, CollateralSettings.other.source);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
         break;
       }
       default: {
         localloanobject = res;
-        rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source);
+        rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
         pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
       }
     }
@@ -88,26 +88,26 @@ export class CollateralService {
     };
   }
 
-  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex, source) {
+  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex, source, sourceKey) {
     return localloanobject[source].filter(lc => {
-      return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
+      return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
     })[lastEditRowIndex];
   }
 
-  getRowData(localloanobject, categoryCode, source) {
+  getRowData(localloanobject, categoryCode, source, sourceKey) {
     return localloanobject[source] !== null ?
       localloanobject[source].filter(lc => {
-        return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
+        return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
       }) : [];
   }
 
-  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode, source) {
+  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode, source, sourceKey) {
     if (localloanobject[source] == null) {
       localloanobject[source] = [];
     }
 
     var newItem = new Loan_Collateral();
-    newItem.Collateral_Category_Code = newItemCategoryCode;
+    newItem[sourceKey] = newItemCategoryCode;
     newItem.Loan_Full_ID = localloanobject.Loan_Full_ID
     newItem.Disc_Value = 50;
     newItem.ActionStatus = 1;
