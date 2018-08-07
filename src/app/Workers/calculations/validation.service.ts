@@ -68,7 +68,9 @@ export class ValidationService {
       else{
         itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_SecInsurance",errorsection:"Insurance",details:null}); 
       }
-      
+        
+
+
     });
 
     currenterrors.push(...itemstoadd);

@@ -571,10 +571,6 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
-<<<<<<< HEAD
-=======
-    
->>>>>>> 913114cd7f0648a6218a7be7728afe8b74e7616f
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
