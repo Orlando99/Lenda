@@ -115,16 +115,16 @@ export function getNumericCellEditor() {
     return NumericCellEditor;
   }
 
-export function numberValueSetter(params) {
-    if(!params.newValue){
-      params.newValue=null;
-      params.data[params.colDef.field]=data;
+  export function numberValueSetter(params) {
+     
+    if(params.newValue==undefined || params.newValue==null||params.newValue==""){
+      params.newValue=0;
     }else{
       var data=parseFloat(params.newValue);
       params.data[params.colDef.field]=data;
     }
     
-    return params.newValue;
+    return true;
   }
 
   export function numberWithOneDecPrecValueSetter(params) {
