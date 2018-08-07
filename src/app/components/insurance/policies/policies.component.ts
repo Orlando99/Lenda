@@ -524,6 +524,7 @@ export class PoliciesComponent implements OnInit {
         policyname = event.colDef.pickfield.substr(0, pos-1)
       }
       let replacer=event.colDef.pickfield.replace("_" + policyname, "");
+      console.log(event.colDef.pickfield);
       if(event.colDef.pickfield.includes("Subtype"))
       {
         replacer = "Ins_SubType";
@@ -560,8 +561,9 @@ export class PoliciesComponent implements OnInit {
        
       
       items.forEach(element => {
-        if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           console.log(element);
+        
+        // if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element);
           this.columnDefs.push({
             headerName: element + '_Subtype', pickfield:element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
@@ -586,7 +588,7 @@ export class PoliciesComponent implements OnInit {
               }
             }
           })
-        }
+        // }
         let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
         if(mainobj.Subpolicies.find(p=>p.Ins_Type==element && p.ActionStatus!=3)==undefined){
           let sp:Insurance_Subpolicy=new Insurance_Subpolicy();
