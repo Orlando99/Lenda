@@ -30,6 +30,7 @@
             [singleClickEdit]="true"
             (cellEditingStopped)="rowvaluechanged($event)"
             [rowData]="rowData" 
+            suppressColumnVirtualisation=true
             [context]="context"
             (gridReady)="onGridReady($event)"
             (gridSizeChanged)="onGridSizeChanged($event)"
@@ -38,7 +39,8 @@
             [paginationPageSize]="paginationPageSize"
             [paginationNumberFormatter]="paginationNumberFormatter"
             [columnDefs]="columnDefs"
-            [defaultColDef]="defaultColDef">
+            [defaultColDef]="defaultColDef"
+            [gridOptions]="gridOptions">
          </ag-grid-angular>
 
         </mat-expansion-panel>

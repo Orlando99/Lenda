@@ -22,6 +22,8 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
+import { errormodel } from '../../../models/commonmodels';
+import { ValidationService } from '../../../Workers/calculations/validation.service';
 
 @Component({
   selector: 'app-policies',
@@ -31,7 +33,11 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
+  public errorlist:Array<errormodel>=new Array<errormodel>();
 
+  retrieveerrors(){
+     this.errorlist=(this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p=>p.errorsection="Insurance");
+  }
 
   deleteunwantedcolumn(): any {
     // debugger
@@ -119,6 +125,12 @@ export class PoliciesComponent implements OnInit {
         field: 'CropName',pickfield:'CropName'
       },
       {
+        headerName: 'Countyid', 
+        headerTooltip: 'Countyid',
+        cellRenderer: 'columnTooltip',
+        field: 'Countyid',pickfield:'Countyid',visible:false
+      },
+      {
         headerName: 'Practice', 
         headerTooltip: 'Practice',
         cellRenderer: 'columnTooltip',
@@ -172,10 +184,10 @@ export class PoliciesComponent implements OnInit {
         cellEditor: "selectEditor",
         cellEditorParams: { 
           values: [
-            { key: 1, value: 'EU' }, 
-            { key: 2, value: 'BU' }, 
-            { key: 2, value: 'EP' }, 
-            { key: 2, value: 'OU' }
+            { key: 'EU', value: 'EU' }, 
+            { key:'BU', value: 'BU' }, 
+            { key: 'EP', value: 'EP' }, 
+            { key: 'OU', value: 'OU' }
           ] 
         },
         valueFormatter: function (params) {
@@ -379,16 +391,22 @@ export class PoliciesComponent implements OnInit {
   };
   public loanmodel: loan_model=null;
 
-  public gridOptions=[];
+  public gridOptions = {
+    getRowNodeId: function(data) { 
+      return "Ins_"+data.mainpolicyId;
+     }
+ }
   columnDefs: any[];
   constructor(
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
+    private validationservice:ValidationService,
     private toaster: ToastsManager,
               public logging: LoggingService,
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
+    
     this.frameworkcomponents = { 
       chipeditor: ChipsListEditor, 
       selectEditor: SelectEditor, 
@@ -452,6 +470,7 @@ export class PoliciesComponent implements OnInit {
         row.mainpolicyId = item.Policy_id;
         row.Agent_Id = item.Agent_Id;
         row.ProposedAIP = item.ProposedAIP;
+        row.Countyid=item.County_Id;
         row.ActionStatus=item.ActionStatus;
         row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
         row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
@@ -505,6 +524,10 @@ export class PoliciesComponent implements OnInit {
       })
 
     }
+    
+    setTimeout(() => {
+      seterrors(this.errorlist);
+    }, 1000);
   }
 
   //DB Operations
@@ -536,8 +559,9 @@ export class PoliciesComponent implements OnInit {
       this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
       this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus=2;
     }
-    
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+    debugger
+    this.validate(event);
   }
 
 
@@ -549,12 +573,9 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
-    debugger
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-       
-      
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element)
@@ -617,8 +638,8 @@ export class PoliciesComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
     //params.api.sizeColumnsToFit();//autoresizing
+    this.retrieveerrors();
     this.getgriddata();
   }
   //Grid Functions End
@@ -685,4 +706,36 @@ export class PoliciesComponent implements OnInit {
   onGridScroll(params) {
     //params.api.stopEditing();
   }
+
+  //validations
+  validate(params:any){
+   let insuranceunit=params.data;
+    switch (insuranceunit.Unit) {
+      case "EU":
+           let effectedpolicies=this.loanmodel.InsurancePolicies.filter(p=>p.County_Id==insuranceunit.Countyid && p.Policy_id!=insuranceunit.mainpolicyId);
+           let invokerpolicy=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==insuranceunit.mainpolicyId);
+           this.validationservice.validateInsuranceTable(invokerpolicy,effectedpolicies);
+           
+        break;
+    
+      default:
+        break;
+    }
+    this.retrieveerrors();
+    seterrors(this.errorlist);
+  }
+  //
+}
+
+function seterrors(obj){
+  obj.forEach(element => {
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+element.cellid.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+   
+    filtered[0].querySelector('[col-id="'+element.cellid.split("_")[2]+'"]').classList.add('dirty');
+    
+  });
 }

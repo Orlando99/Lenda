@@ -13,6 +13,7 @@ export const environment = {
   loanidkey:"selectedloanId",
   collateralTables: "collateralTables",
   isDebugModeActive: true,
-  usersession:"sessionid"
+  usersession:"sessionid",
+  errorbase:"errors"
 };
 

@@ -12,3 +12,19 @@ export enum Users{
     Rajitha=12,
     Beth=13
 }
+
+export class errormodel{
+    errorsection : string;
+    cellid : string;
+    details:errordetail[]
+}
+
+export class errordetail{
+    type:errordetailtype
+    data:string
+}
+
+export enum errordetailtype{
+    Tooltip,
+    Errorclass
+}
