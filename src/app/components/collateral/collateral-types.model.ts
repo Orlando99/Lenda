@@ -24,42 +24,48 @@ export default {
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'FSAComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   livestock: {
     key: 'LSK',
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'LivestockComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   storedCrop: {
     key: 'SCP',
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'StoredCropComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   equipment: {
     key: 'EQP',
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'EquipmentComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   realestate: {
     key: 'RET',
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'RealEstateComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   other: {
     key: 'OTR',
     source: 'LoanCollateral',
     sourceKey: 'Collateral_Category_Code',
     component: 'OthersComponent',
-    pk: 'Collateral_ID'
+    pk: 'Collateral_ID',
+    colKey: 'Collateral_Description'
   },
   contacts: {
     key: 'TBD4',
@@ -71,6 +77,7 @@ export default {
     source: 'LoanMarketingContracts',
     sourceKey: '',
     component: 'MarketingContractComponent',
-    pk: 'Contract_ID'
+    pk: 'Contract_ID',
+    colKey: 'Category'
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertifyService } from '../../alertify/alertify.service';
-import { loan_model, Loan_Collateral } from '../../models/loanmodel';
+import { loan_model, Loan_Collateral, Loan_Marketing_Contract } from '../../models/loanmodel';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
@@ -82,7 +82,6 @@ export class CollateralService {
       }
       default: {
         localloanobject = res;
-        // TODO: Add logic to call method based on categorycode
         // If marketing contracts
         if (categoryCode === CollateralSettings.marketingContracts.key) {
           rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
@@ -125,25 +124,41 @@ export class CollateralService {
   }
 
   addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode, source, sourceKey) {
+    let newItem;
+
     if (localloanobject[source] == null) {
       localloanobject[source] = [];
     }
 
-    var newItem = new Loan_Collateral();
-    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID;
-    if (sourceKey && sourceKey !== '') {
-      newItem[sourceKey] = newItemCategoryCode;
-      newItem.Disc_Value = 50;
-      newItem.ActionStatus = 1
+    if (newItemCategoryCode === CollateralSettings.marketingContracts.key) {
+      newItem = new Loan_Marketing_Contract();
+    } else {
+      newItem = new Loan_Collateral();
+      if (sourceKey && sourceKey !== '') {
+        newItem[sourceKey] = newItemCategoryCode;
+        newItem.Disc_Value = 50;
+        newItem.ActionStatus = 1
+      }
     }
+    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID;
 
     var res = rowData.push(newItem);
-    localloanobject[source].push(newItem);
+    if (newItemCategoryCode !== CollateralSettings.marketingContracts.key) {
+      localloanobject[source].push(newItem);
+    }
     gridApi.setRowData(rowData);
-    gridApi.startEditingCell({
-      rowIndex: rowData.length - 1,
-      colKey: "Collateral_Description"
-    });
+    if (newItemCategoryCode === CollateralSettings.marketingContracts.key) {
+      gridApi.startEditingCell({
+        rowIndex: rowData.length - 1,
+        colKey: CollateralSettings.marketingContracts.colKey
+      });
+    } else {
+      gridApi.startEditingCell({
+        rowIndex: rowData.length - 1,
+        colKey: CollateralSettings.fsa.colKey
+      });
+    }
+
     this.getgridheight(rowData);
   }
 

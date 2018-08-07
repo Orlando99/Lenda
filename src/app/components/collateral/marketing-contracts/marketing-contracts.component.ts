@@ -251,54 +251,13 @@ export class MarketingContractsComponent implements OnInit {
     this.isSyncRequired(true);
   }
 
-  rowvaluechanged(value: any) {
-    // var obj: Loan_Marketing_Contract = value.data;
-
-    // if (obj.Contract_ID == undefined) {
-    //   obj.Contract_ID = 0
-    //   obj.Price = 0;
-    //   obj.Quantity = 0;
-    //   obj.ActionStatus = 1;
-    //   this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
-    //   this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length] = value.data;
-    // }
-    // else {
-    //   var rowindex = this.localloanobject.LoanMarketingContracts.findIndex(mc => mc.Contract_ID == obj.Contract_ID);
-    //   if (obj.ActionStatus != 1)
-    //     obj.ActionStatus = 2;
-    //   this.marketingContractService.updateMktValueAndContractPer(this.localloanobject, obj);
-    //   this.localloanobject.LoanMarketingContracts[rowindex] = obj;
-    // }
-
-    // //this shall have the last edit
-    // this.localloanobject.srccomponentedit = "MarketingContractComponent";
-    // this.localloanobject.lasteditrowindex = value.rowIndex;
-    // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
+  rowvaluechanged(value: any) {    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj) {
-          if (obj.Contract_ID == 0) {
-            this.rowData.splice(rowIndex, 1);
-            let indexToDelete = this.localloanobject.LoanMarketingContracts.findIndex(mc => mc.Contract_ID == obj.Contract_ID);
-            if (indexToDelete >= 0) {
-              this.localloanobject.LoanMarketingContracts.splice(indexToDelete, 1);
-            }
-
-          } else {
-            obj.ActionStatus = 3;
-          }
-        }
-        this.localloanobject.srccomponentedit = undefined;
-        this.localloanobject.lasteditrowindex = undefined;
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-      }
-    })
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
+    this.isSyncRequired(true);
   }
 
   getgridheight() {
