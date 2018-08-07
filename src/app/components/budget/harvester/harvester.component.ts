@@ -39,7 +39,7 @@ export class HarvesterComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '96%',
-    height: '240px',
+    //height: '240px',
     boxSizing: 'border-box'
   };
   //region Ag grid Configuration
@@ -54,7 +54,7 @@ export class HarvesterComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
-    this.getgridheight();
+    //this.getgridheight();
   }
   //End here
   // Aggrid ends
@@ -90,10 +90,14 @@ export class HarvesterComponent implements OnInit {
 
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-      if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
-      }
+      //this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+      if(res){
+            this.localloanobject = res;
+          if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
+            this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="HAR");
+          }
+          this.gridApi && this.gridApi.refreshCells();
+        }
     });
   
 
@@ -102,8 +106,9 @@ export class HarvesterComponent implements OnInit {
   }
   getdataforgrid() {
     // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
+      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="HAR");
     }
   }
 
@@ -111,16 +116,15 @@ export class HarvesterComponent implements OnInit {
   rowvaluechanged(value: any) {
     
     var obj = value.data;
-    if (obj.ActionStatus == undefined) {
+    if (obj.Assoc_ID == undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;  
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="HAR").length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="HAR")[rowIndex]=value.data;
+     
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
-      obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR")[rowindex]=obj;
+      if(obj.Assoc_ID){
+        obj.ActionStatus = 2;
+      }
     }
     
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
@@ -158,6 +162,7 @@ export class HarvesterComponent implements OnInit {
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code="HAR";
     newItem.Preferred_Contact_Ind=1;
+    newItem.Assoc_ID = undefined;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
@@ -172,13 +177,14 @@ export class HarvesterComponent implements OnInit {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR")[rowIndex];
-        if (obj.Assoc_ID == 0) {
-            var data=this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR");
-          this.localloanobject.Association.filter(p => p.ActionStatus != -1 &&  p.Assoc_Type_Code=="HAR").splice(rowIndex, 1);
-        }
-        else {
-          obj.ActionStatus = -1;
+        var obj = this.rowData[rowIndex];
+        if(obj){
+          let associationIndex = this.localloanobject.Association.findIndex(assoc=>assoc == obj);
+          if(!obj.Assoc_ID){
+            this.localloanobject.Association.splice(associationIndex,1);
+          }else{
+            obj.ActionStatus =3;
+          }
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
@@ -186,9 +192,9 @@ export class HarvesterComponent implements OnInit {
 
   }
 
-  getgridheight(){
-    this.style.height=(28*(this.rowData.length+2)).toString()+"px";
-   }
+  // getgridheight(){
+  //   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
+  //  }
   //
 
 }

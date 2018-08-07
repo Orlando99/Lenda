@@ -40,7 +40,6 @@ export class PoliciesComponent implements OnInit {
   }
 
   deleteunwantedcolumn(): any {
-    // debugger
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
       let included = false;
@@ -54,7 +53,7 @@ export class PoliciesComponent implements OnInit {
         this.loanmodel.InsurancePolicies.forEach(function(newel){
           
          _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
-         debugger
+         
          newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
            element.ActionStatus=3;
          });
@@ -482,7 +481,6 @@ export class PoliciesComponent implements OnInit {
         row.Price = item.Price;
         row.Premium = item.Premium;
         item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
-          //debugger
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {
@@ -573,6 +571,10 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 913114cd7f0648a6218a7be7728afe8b74e7616f
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {

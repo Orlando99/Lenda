@@ -8,7 +8,7 @@ import { QuestionscalculationworkerService } from '../../../Workers/calculations
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
-
+import * as _ from "lodash";
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -21,8 +21,17 @@ export class QuestionsComponent implements OnInit {
   LoanQResponse: LoanQResponse[];
 
   responses: Array<LoanQResponse>;
-  @Input("CheveronId")
-  CheveronId: string;
+  @Input("chevronId")
+  chevronId: string;
+
+  @Input("chevronHeader")
+  chevronHeader: string;
+
+  @Input("displayAsChildChevron")
+  displayAsChildChevron: boolean = false;
+
+  @Input("expanded")
+  expanded: boolean = true;
 
   isResponseUpdated : boolean = false;
   isPublishing : boolean = false;
@@ -37,7 +46,9 @@ export class QuestionsComponent implements OnInit {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localloanobject = res;
       if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-        this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+        let existingResponses = this.localloanobject.LoanQResponse.filter(res=>res.Chevron_ID == this.chevronId);
+        this.responses = this.questionService.prepareResponses(this.chevronId, existingResponses, this.localloanobject.LoanMaster[0]);
+        this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
         this.updatePublishStatus();
 
       }
@@ -46,7 +57,9 @@ export class QuestionsComponent implements OnInit {
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-      this.responses = this.questionService.prepareResponses(this.CheveronId, this.localloanobject.LoanQResponse, this.localloanobject.LoanMaster[0]);
+      let existingResponses = this.localloanobject.LoanQResponse.filter(res=>res.Chevron_ID == this.chevronId);
+      this.responses = this.questionService.prepareResponses(this.chevronId, existingResponses, this.localloanobject.LoanMaster[0]);
+      this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
       this.updatePublishStatus();
     }
 
@@ -55,7 +68,7 @@ export class QuestionsComponent implements OnInit {
   }
 
   private updatePublishStatus() {
-    if (this.localloanobject.LoanQResponse.find(res => res.ActionStatus == 1 || res.ActionStatus == 2)) {
+    if (this.localloanobject.LoanQResponse.find(res => res.Chevron_ID==this.chevronId &&(res.ActionStatus == 1 || res.ActionStatus == 2))) {
       this.isResponseUpdated = true;
     }else{
       this.isResponseUpdated = false;
@@ -74,11 +87,19 @@ export class QuestionsComponent implements OnInit {
 
   change(response: LoanQResponse) {
 
-
-    if (response.Loan_Q_response_ID) {
-      response.ActionStatus = 2;
-    } else {
-      response.ActionStatus = 1;
+    if(response){
+      let matchedResponse = this.localloanobject.LoanQResponse.find(res=>res.Question_ID == response.Question_ID);
+      if(matchedResponse){
+        matchedResponse.Response_Detail = response.Response_Detail;
+        if (matchedResponse.Loan_Q_response_ID) {
+          matchedResponse.ActionStatus = 2;
+        } else {
+          matchedResponse.ActionStatus = 1;
+        }
+      }else{
+        response.ActionStatus = 1;
+        this.localloanobject.LoanQResponse.push(response);
+      }
     }
     this.isResponseUpdated = true;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);

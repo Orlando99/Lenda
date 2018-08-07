@@ -22,7 +22,7 @@ export class OptimizercalculationService {
      }
 
      let endtime = new Date().getTime();
-     this.logging.checkandcreatelog(3, 'Calc_Optimizer_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+     this.logging.checkandcreatelog(3, 'Calc_Optimizer', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return input;
   }
 

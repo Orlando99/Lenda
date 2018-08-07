@@ -23,6 +23,7 @@ p:nth-child(3) {
 }
 .block{
     display: block;
+    font-size: 12px;
 }
 .block-header{
     font-weight: 600;
@@ -31,11 +32,11 @@ p:nth-child(3) {
 .clear-bottom-margin{
     margin-bottom: 0px;
 }
-.price:before{
-    content : '$';
-    float: left;
+// .price:before{
+//     content : '$';
+//     float: left;
 
-}
+// }
 .percent:after{
     content : '%';
     

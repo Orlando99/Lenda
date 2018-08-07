@@ -21,6 +21,7 @@ export class LoancrophistoryService {
   
       let cropyielditems = [];
       this.years = [];
+      this.input.CropYield[i].CropYield = this.input.CropYield[i].APH;
       for (let year = 1 ; year < 8; year++) {
         this.years.push(this.input.CropYield[i].CropYear - year);
       }
@@ -29,8 +30,9 @@ export class LoancrophistoryService {
           cropyielditems.push(this.input.CropYield[i][year])
         }
       });
+  
       if (cropyielditems.length <= 2) {
-        this.input.CropYield[i].CropYield == this.input.CropYield[i].APH;
+        this.input.CropYield[i].CropYield = this.input.CropYield[i].APH;
       }
       else{
         let sum=cropyielditems.reduce((p,n)=>{
@@ -51,10 +53,11 @@ export class LoancrophistoryService {
       let starttime = new Date().getMilliseconds();
       this.prepare_Crop_Yield();
       let endtime = new Date().getMilliseconds();
-      this.logging.checkandcreatelog(3, 'Calc_CropYield_1', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
+      this.logging.checkandcreatelog(3, 'Calc_CropYield', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
       return this.input;
     }
-    catch{
+    catch(e){
+      this.logging.checkandcreatelog(3, 'Calc_CropYield', e);
       return input;
     }
   }

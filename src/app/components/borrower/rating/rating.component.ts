@@ -159,7 +159,7 @@ export class RatingComponent implements OnInit {
     borrowerRatingValues.FICOScore = loanMaster.Credit_Score;
     borrowerRatingValues.CPAFiancial = loanMaster.CPA_Prepared_Financials ? 'Yes' : 'No'; //pulling the data from loan master instead of borrower
     borrowerRatingValues.threeYrsReturns = loanObject.Borrower.Borrower_3yr_Tax_Returns ? 'Yes' : 'No';
-    borrowerRatingValues.bankruptcy = loanMaster.Bankruptcy_Status ? 'Yes' : 'No';
+    borrowerRatingValues.bankruptcy = loanMaster.Previously_Bankrupt ? 'Yes' : 'No';
     borrowerRatingValues.judgement = loanMaster.Judgement ? 'Yes' : 'No';
     borrowerRatingValues.yearsFarming = loanMaster.Year_Begin_Farming ? (new Date()).getFullYear() - loanMaster.Year_Begin_Farming : 0;
     borrowerRatingValues.farmFinnacialRating = loanMaster.Borrower_Farm_Financial_Rating || '';

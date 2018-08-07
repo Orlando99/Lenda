@@ -235,8 +235,10 @@ export class PriceComponent implements OnInit {
 
       //the same caclulation is in marketing calculation service, which should be shisted to common place
       obj.Marketing_Adj = (obj.Contract_Price - (obj.Basic_Adj + obj.Crop_Price))*(obj.Percent_booked/100);
-      obj.Adj_Price = obj.Crop_Price + obj.Basic_Adj + obj.Marketing_Adj + obj.Rebate_Adj;
+      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj || 0) + (obj.Rebate_Adj || 0);
       
+    }else{
+      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj ||0) + (obj.Rebate_Adj || 0);
     }
     //this shall have the last edit
     this.localloanobject.srccomponentedit = "PriceComponent";

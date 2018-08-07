@@ -32,7 +32,7 @@ export class GlobalErrorHandler extends ErrorHandler {
   handleError(error) {
     if (environment.isDebugModeActive) {
       console.log('==== Error handled by Global Error Handler ===');
-      debugger
+      
       let parts=this.document.location.href.split('/');
       this.toasterService.error(error.message);
       let userid = this.localstorageService.retrieve(environment.uid);
