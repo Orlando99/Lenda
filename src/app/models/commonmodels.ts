@@ -16,15 +16,6 @@ export enum Users{
 export class errormodel{
     errorsection : string;
     cellid : string;
-    details:errordetail[]
-}
-
-export class errordetail{
-    type:errordetailtype
-    data:string
-}
-
-export enum errordetailtype{
-    Tooltip,
-    Errorclass
+    details:string[];
+    ToolTipText?:string;
 }

@@ -14,6 +14,7 @@ export const environment = {
   collateralTables: "collateralTables",
   isDebugModeActive: true,
   usersession:"sessionid",
-  errorbase:"errors"
+  errorbase:"errors",
+  modifiedbase:"changedvalues"
 };
 

@@ -27,46 +27,46 @@ export class ValidationService {
       let mainpolicyid=element.Policy_id;
       //level check
       if(element.Level==itemchanged.Level){
-        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Level",errorsection:"Insurance",details:null});
+        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Level",errorsection:"Insurance",details:["dirty"]});
       }
       else{
-        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Level",errorsection:"Insurance",details:null});
+        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Level",errorsection:"Insurance",details:["dirty"]});
       }
       ///
 
       //price check
       if(element.Price==itemchanged.Price){
-        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Price",errorsection:"Insurance",details:null});
+        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Price",errorsection:"Insurance",details:["dirty"]});
       }
       else{
-        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Price",errorsection:"Insurance",details:null});
+        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Price",errorsection:"Insurance",details:["dirty"]});
       }
       ///
 
       //premium check
       if(element.Premium==itemchanged.Premium){
-        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Premium",errorsection:"Insurance",details:null});
+        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Premium",errorsection:"Insurance",details:["dirty"]});
       
       }
       else{
-        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Premium",errorsection:"Insurance",details:null});
+        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Premium",errorsection:"Insurance",details:["dirty"]});
       }
       //
       if(element.Unit==itemchanged.Unit){
-        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Unit",errorsection:"Insurance",details:null});
+        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_Unit",errorsection:"Insurance",details:["dirty"]});
       
       }
       else{
-        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Unit",errorsection:"Insurance",details:null});
+        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_Unit",errorsection:"Insurance",details:["dirty"]});
       }
       //unit check 
       
       if(_.difference(element.Subpolicies.filter(p=>p.ActionStatus!=3).map(p=>p.Ins_Type),itemchanged.Subpolicies.filter(p=>p.ActionStatus!=3).map(p=>p.Ins_Type)).length!=0)
       {
-        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_SecInsurance",errorsection:"Insurance",details:null});
+        itemstoadd.push({cellid:"Ins_"+mainpolicyid+"_SecInsurance",errorsection:"Insurance",details:["dirty"]});
       }
       else{
-        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_SecInsurance",errorsection:"Insurance",details:null}); 
+        itemstoremove.push({cellid:"Ins_"+mainpolicyid+"_SecInsurance",errorsection:"Insurance",details:["dirty"]}); 
       }
         
 

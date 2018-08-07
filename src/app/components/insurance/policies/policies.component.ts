@@ -420,7 +420,7 @@ export class PoliciesComponent implements OnInit {
       return "[" + params.value.toLocaleString() + "]";
     };
     //Col defs
-
+     
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
@@ -460,7 +460,6 @@ export class PoliciesComponent implements OnInit {
   getgriddata() {
     //Get localstorage first
     this.rowData = [];
-
     if (this.loanmodel != null) {
       let insurancepolicies = this.loanmodel.InsurancePolicies;
       insurancepolicies.forEach(item => {
@@ -525,6 +524,7 @@ export class PoliciesComponent implements OnInit {
     
     setTimeout(() => {
       seterrors(this.errorlist);
+      setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
     }, 1000);
   }
 
@@ -573,6 +573,14 @@ export class PoliciesComponent implements OnInit {
   rowvaluechanged($event) {
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
+
+    let modifiedvalues=this.localstorage.retrieve(environment.modifiedbase) as Array<String>; 
+    
+    if(!modifiedvalues.includes("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field))
+    {
+      modifiedvalues.push("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
+      this.localstorage.store(environment.modifiedbase,modifiedvalues);
+    }
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
       items.forEach(element => {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
@@ -733,7 +741,32 @@ function seterrors(obj){
         return node.childNodes.length>0;
     });
    
-    filtered[0].querySelector('[col-id="'+element.cellid.split("_")[2]+'"]').classList.add('dirty');
-    
+    element.details.forEach(elemednt => {
+      var cell=filtered[0].querySelector('[col-id="'+element.cellid.split("_")[2]+'"]');
+      cell.classList.add(elemednt);
+      cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
+    });
   });
+}
+
+function setmodifiedsingle(obj){
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+      var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+      cell.classList.add("touched");
+}
+
+function setmodifiedall(arrayy){
+  arrayy.forEach(obj=> {
+  var filter = Array.prototype.filter
+  var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+  var filtered = filter.call( selectedelements, function( node ) {
+      return node.childNodes.length>0;
+  });
+    var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+    cell.classList.add("touched");
+});
 }
