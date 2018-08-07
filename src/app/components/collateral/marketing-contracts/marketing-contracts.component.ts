@@ -15,7 +15,6 @@ import { currencyFormatter, discFormatter, insuredFormatter } from '../../../Wor
 import { JsonConvert } from 'json2typescript';
 import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import * as _ from 'lodash';
-import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
@@ -57,115 +56,7 @@ export class MarketingContractsComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-
-    this.columnDefs = [
-      {
-        headerName: 'Category', field: 'Category', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: {
-          values: [{ key: 1, value: 'Crop' }, { key: 2, value: 'Stored Crop' }]
-        },
-        valueFormatter: function (params) {
-
-          if (params.value) {
-            var selectedValue = params.colDef.cellEditorParams.values.find(data => data.key == params.value);
-            if (selectedValue) {
-              return selectedValue.value;
-            } else {
-              return undefined;
-            }
-          } else {
-            return '';
-          }
-
-        },
-        width: 100
-      },
-      {
-        headerName: 'Crop', field: 'Crop_Code', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: this.marketingContractsService.getCropValues.bind(this),
-        valueFormatter: (params) => {
-
-          let cropValues: any[] = this.marketingContractsService.getCropValues(params).values;
-
-          if (params.value) {
-            var selectedValue = cropValues.find(data => data.key == params.value);
-            if (selectedValue) {
-              return selectedValue.value;
-            } else {
-              return undefined;
-            }
-          } else {
-            return '';
-          }
-
-        },
-        width: 100
-      },
-      {
-        headerName: 'Crop Type', field: 'Crop_Type_Code', editable: true, width: 100, cellEditor: "alphaNumeric", cellClass: 'editable-color',
-        cellEditorParams: (params) => {
-          return { value: params.data.Crop_Type_Code || '' }
-        },
-      },
-      {
-        headerName: 'Buyer', field: 'Assoc_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: this.marketingContractsService.getBuyersValue.bind(this),
-        valueFormatter: (params) => {
-
-          let cropValues: any[] = this.marketingContractsService.getBuyersValue(params).values;
-
-          if (params.value) {
-            var selectedValue = cropValues.find(data => data.key == params.value);
-            if (selectedValue) {
-              return selectedValue.value;
-            } else {
-              return undefined;
-            }
-          } else {
-            return '';
-          }
-
-        },
-        width: 100
-
-      },
-      { headerName: 'Contract', field: 'Contract', editable: true, width: 100 },
-      { headerName: 'Description', field: 'Description_Text', editable: true, width: 100, cellClass: ['editable-color'] },
-      {
-        headerName: 'Quantity', field: 'Quantity', editable: true, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
-        valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          if (params.value) {
-            return params.value.toFixed(0).replace(/\d(?=(\d{3})+\.)/g, '$&,')
-          } else {
-            return 0;
-          }
-        },
-        width: 100
-      },
-      {
-        headerName: 'Price', field: 'Price', editable: true, width: 150, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
-        valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
-      },
-      {
-        headerName: 'Mkt Value', field: 'Market_Value', width: 180, cellClass: ['text-right'],
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
-      },
-      {
-        headerName: 'Contract %', field: 'Contract_Per', width: 100, cellClass: ['text-right'],
-        valueFormatter: function (params) {
-          return PercentageFormatter(params.value);
-        }
-      },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
-
-    ];
-
+    this.columnDefs = this.marketingContractsService.getColumnDefs();
     this.context = { componentParent: this };
   }
 
@@ -190,7 +81,6 @@ export class MarketingContractsComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.getgridheight();
   }
 
   isSyncRequired(isEnabled) {
@@ -213,18 +103,11 @@ export class MarketingContractsComponent implements OnInit {
     this.isSyncRequired(true);
   }
 
-  getgridheight() {
-    // this.style.height = (30 * (this.rowData.length + 2)).toString() + "px";
-  }
-
   onGridSizeChanged(Event: any) {
-
     try {
       this.gridApi.sizeColumnsToFit();
     }
     catch (ex) {
-
     }
   }
-
 }
