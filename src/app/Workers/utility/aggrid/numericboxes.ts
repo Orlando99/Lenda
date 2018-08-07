@@ -117,6 +117,18 @@ export function getNumericCellEditor() {
 
 export function numberValueSetter(params) {
     if(!params.newValue){
+      params.newValue=0;
+      params.data[params.colDef.field]=data;
+    }else{
+      var data=parseFloat(params.newValue);
+      params.data[params.colDef.field]=data;
+    }
+    
+    return params.newValue;
+  }
+
+  export function yieldValueSetter(params) {
+    if(!params.newValue || params.newValue == 0){
       params.newValue=null;
       params.data[params.colDef.field]=data;
     }else{
