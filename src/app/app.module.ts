@@ -129,8 +129,6 @@ import { CropComponent } from './components/crop/crop.component';
 import { PriceComponent } from './components/crop/price/price.component';
 import { YieldComponent } from './components/crop/yield/yield.component';
 import { YieldDialogComponent } from './components/crop/yield/yield.component';
-import { YieldNewComponent } from './components/crop/yield_new/yieldnew.component';
-import { YieldNewDialogComponent } from './components/crop/yield_new/yieldnew.component';
 import { RebatorComponent } from './components/crop/rebator/rebator.component';
 
 
@@ -223,7 +221,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent, RebatorComponent, PriceComponent, YieldComponent, YieldDialogComponent,YieldNewComponent,YieldNewDialogComponent,
+    CropComponent, RebatorComponent, PriceComponent, YieldComponent, YieldDialogComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
@@ -400,7 +398,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
       useClass: GlobalErrorHandler
     }
   ],
-  entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent, YieldNewDialogComponent],
+  entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
