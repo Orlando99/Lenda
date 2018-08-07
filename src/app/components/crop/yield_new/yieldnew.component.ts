@@ -46,7 +46,7 @@ export class YieldNewComponent implements OnInit {
   public gridApi;
   public columnApi;
   public deleteAction = false;
-  public addAction = false;
+
   public cropYear;
   context: any;
   public syncYieldStatus : status = 0;
@@ -167,7 +167,6 @@ export class YieldNewComponent implements OnInit {
     this.localloanobject.srccomponentedit = "YieldComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    
   }
 
   synctoDb() {
@@ -231,7 +230,6 @@ export class YieldNewComponent implements OnInit {
                         ActionStatus: 1,
                         CropYear: this.localloanobject.LoanMaster[0].Crop_Year}
         var cropNIR = this.refdata.CropList.find(crp => { return crp.Crop_Name == result.crop.Crop_Name && crp.Practice_type_code == 'NIR' });
-
         var newNIR = { Crop_ID:cropNIR.Crop_And_Practice_ID,
                         Crop:cropNIR.Crop_Name,
                         CropType: cropNIR.Crop_Code,
@@ -292,7 +290,7 @@ export class YieldNewComponent implements OnInit {
   }
 
   syncenabled() {   
-    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
+    if(this.rowData.filter(p => p.ActionStatus != undefined).length > 0 || this.deleteAction)
       return '';
     else
       return 'disabled';
