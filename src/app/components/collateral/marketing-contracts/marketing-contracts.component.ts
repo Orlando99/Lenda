@@ -19,13 +19,14 @@ import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/ag
 import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import { MarketingContractsService } from './marketing-contracts.service';
 import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-marketing-contracts',
   templateUrl: './marketing-contracts.component.html',
   styleUrls: ['./marketing-contracts.component.scss'],
-  providers: [CollateralService]
+  providers: [CollateralService, MarketingContractsService]
 })
 export class MarketingContractsComponent implements OnInit {
   @Output() enableSync = new EventEmitter();
@@ -50,7 +51,8 @@ export class MarketingContractsComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
     private marketingContractService: MarketingcontractcalculationService,
-    public collateralService: CollateralService) {
+    public collateralService: CollateralService,
+    public marketingContractsService: MarketingContractsService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -80,10 +82,10 @@ export class MarketingContractsComponent implements OnInit {
       },
       {
         headerName: 'Crop', field: 'Crop_Code', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: this.getCropValues.bind(this),
+        cellEditorParams: this.marketingContractsService.getCropValues.bind(this),
         valueFormatter: (params) => {
 
-          let cropValues: any[] = this.getCropValues(params).values;
+          let cropValues: any[] = this.marketingContractsService.getCropValues(params).values;
 
           if (params.value) {
             var selectedValue = cropValues.find(data => data.key == params.value);
@@ -107,10 +109,10 @@ export class MarketingContractsComponent implements OnInit {
       },
       {
         headerName: 'Buyer', field: 'Assoc_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
-        cellEditorParams: this.getBuyersValue.bind(this),
+        cellEditorParams: this.marketingContractsService.getBuyersValue.bind(this),
         valueFormatter: (params) => {
 
-          let cropValues: any[] = this.getBuyersValue(params).values;
+          let cropValues: any[] = this.marketingContractsService.getBuyersValue(params).values;
 
           if (params.value) {
             var selectedValue = cropValues.find(data => data.key == params.value);
@@ -185,56 +187,6 @@ export class MarketingContractsComponent implements OnInit {
     });
   }
 
-  getBuyersValue(params) {
-    let buyersValue = [];
-    if (this.localloanobject.Association && this.localloanobject.Association.length > 0) {
-      this.localloanobject.Association.filter(as => as.Assoc_Type_Code === "BUY").map(buyer => {
-        buyersValue.push({ key: buyer.Assoc_ID, value: buyer.Assoc_Name });
-      });
-      buyersValue = _.uniqBy(buyersValue, 'key');
-      return { values: buyersValue };
-    } else {
-      return { values: [] };
-    }
-  }
-
-  getCropValues(params) {
-    let cropValues = [];
-    if (params.data.Category == 1) {
-      if (this.localloanobject.LoanCropPractices && this.localloanobject.LoanCropPractices.length > 0) {
-        let cropPracticeIds = [];
-        this.localloanobject.LoanCropPractices.map(cp => {
-          cropPracticeIds.push(cp.Crop_Practice_ID);
-        });
-        cropPracticeIds = _.uniq(cropPracticeIds);
-
-        if (this.refdata && this.refdata.CropList) {
-          cropPracticeIds.map(cpi => {
-            this.refdata.CropList.map(cl => {
-              if (cl.Crop_And_Practice_ID == cpi) {
-                cropValues.push({ key: cl.Crop_Code, value: cl.Crop_Name })
-              }
-            })
-          })
-        }
-      }
-      cropValues = _.uniqBy(cropValues, 'key');
-      return { values: cropValues };
-    } else if (params.data.Category == 2) {
-      if (this.localloanobject.LoanCollateral && this.localloanobject.LoanCollateral.length > 0) {
-        let cropPracticeIds = [];
-        this.localloanobject.LoanCollateral.filter(lc => lc.Collateral_Category_Code === "SCP").map(lc => {
-          cropValues.push({ key: lc.Collateral_Description.split(' ').join('_'), value: lc.Collateral_Description });
-        });
-
-        cropValues = _.uniqBy(cropValues, 'key');
-        return { values: cropValues };
-      }
-    } else {
-      return { values: [] };
-    }
-  }
-
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
@@ -251,7 +203,8 @@ export class MarketingContractsComponent implements OnInit {
     this.isSyncRequired(true);
   }
 
-  rowvaluechanged(value: any) {    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
+  rowvaluechanged(value: any) {
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
     this.isSyncRequired(true);
   }
 
@@ -269,7 +222,7 @@ export class MarketingContractsComponent implements OnInit {
     try {
       this.gridApi.sizeColumnsToFit();
     }
-    catch{
+    catch (ex) {
 
     }
   }
