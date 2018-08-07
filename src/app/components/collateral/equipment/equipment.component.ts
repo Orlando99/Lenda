@@ -6,7 +6,6 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter, discFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -51,44 +50,10 @@ export class EquipmentComponent implements OnInit {
     public loanapi: LoanApiService,
     public collateralService: CollateralService,
     public equipmentService: EquipmentService) {
-
-
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-
-    this.columnDefs = [
-      { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
-      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
-      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color', 'text-right'] },
-      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130, cellClass: 'editable-color', cellEditor: "alphaNumeric" },
-      {
-        headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
-        // valueGetter: function (params) {
-        //   return setNetMktValue(params);}
-      },
-      {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
-        pinnedRowCellRenderer: function () { return '-'; }
-      },
-      {
-        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['text-right'],
-        // valueGetter: function (params) {
-        //   return setDiscValue(params);
-        // },
-        valueFormatter: currencyFormatter
-      },
-      {
-        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100, cellClass: ['editable-color'],
-        cellEditorParams: {
-          values: [{ 'key': 0, 'value': 'No' }, { 'key': 1, 'value': 'Yes' }]
-        }, pinnedRowCellRenderer: function () { return ' '; },
-        valueFormatter: insuredFormatter
-      },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
-    ];
-
+    this.columnDefs = this.equipmentService.getColumnDefs();
     this.context = { componentParent: this };
   }
 
@@ -122,7 +87,6 @@ export class EquipmentComponent implements OnInit {
     catch (ex){
     }
   }
-
 
   onGridReady(params) {
     this.gridApi = params.api;
