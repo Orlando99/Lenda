@@ -98,7 +98,7 @@ export class FarmComponent implements OnInit {
         headerName: 'County', field: 'Farm_County_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredcounties,
         valueFormatter: function (params) {
-          return lookupCountyValue(params.value);
+          return params.value ? lookupCountyValue(params.value) : '';
         },
         valueSetter: Countyvaluesetter
       },
