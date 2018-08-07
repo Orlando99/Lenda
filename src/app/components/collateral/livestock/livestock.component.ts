@@ -96,7 +96,7 @@ export class LivestockComponent implements OnInit {
 
     // on initialization
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.livestock.key);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.livestock.key, CollateralSettings.livestock.source);
     this.pinnedBottomRowData = this.collateralService.computeTotal(this.localloanobject, CollateralSettings.livestock.key);
     this.collateralService.adjustgrid(this.gridApi);
   }
@@ -122,17 +122,17 @@ export class LivestockComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.livestock.key);
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.livestock.key, CollateralSettings.livestock.source);
     this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component);
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component, CollateralSettings.livestock.source);
     this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.livestock.source);
     this.isSyncRequired(true);
   }
 

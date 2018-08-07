@@ -53,32 +53,32 @@ export class CollateralService {
   subscribeToChanges(res, localloanobject, categoryCode, rowData, pinnedBottomRowData) {
     switch (res.srccomponentedit) {
       case CollateralSettings.fsa.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex, CollateralSettings.fsa.source);
         break;
       }
       case CollateralSettings.livestock.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex, CollateralSettings.livestock.source);
         break;
       }
       case CollateralSettings.equipment.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex, CollateralSettings.equipment.source);
         break;
       }
       case CollateralSettings.storedCrop.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex, CollateralSettings.storedCrop.source);
         break;
       }
       case CollateralSettings.realestate.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex, CollateralSettings.realestate.source);
         break;
       }
       case CollateralSettings.other.component: {
-        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex);
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex, CollateralSettings.other.source);
         break;
       }
       default: {
         localloanobject = res;
-        rowData = this.getRowData(localloanobject, categoryCode);
+        rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source);
         pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
       }
     }
@@ -88,22 +88,22 @@ export class CollateralService {
     };
   }
 
-  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex) {
-    return localloanobject.LoanCollateral.filter(lc => {
+  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex, source) {
+    return localloanobject[source].filter(lc => {
       return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
     })[lastEditRowIndex];
   }
 
-  getRowData(localloanobject, categoryCode) {
-    return localloanobject.LoanCollateral !== null ?
-      localloanobject.LoanCollateral.filter(lc => {
+  getRowData(localloanobject, categoryCode, source) {
+    return localloanobject[source] !== null ?
+      localloanobject[source].filter(lc => {
         return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3
       }) : [];
   }
 
-  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode) {
-    if (localloanobject.LoanCollateral == null) {
-      localloanobject.LoanCollateral = [];
+  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode, source) {
+    if (localloanobject[source] == null) {
+      localloanobject[source] = [];
     }
 
     var newItem = new Loan_Collateral();
@@ -113,7 +113,7 @@ export class CollateralService {
     newItem.ActionStatus = 1;
 
     var res = rowData.push(newItem);
-    localloanobject.LoanCollateral.push(newItem);
+    localloanobject[source].push(newItem);
     gridApi.setRowData(rowData);
     gridApi.startEditingCell({
       rowIndex: rowData.length - 1,
@@ -122,16 +122,17 @@ export class CollateralService {
     this.getgridheight(rowData);
   }
 
-  rowValueChanged(value: any, localloanobject: loan_model, component) {
+  rowValueChanged(value: any, localloanobject: loan_model, component, source) {
     var obj = value.data;
     if (obj.Collateral_ID == 0) {
+      let lastIndex = localloanobject[source].length - 1;
       obj.ActionStatus = 1;
-      localloanobject.LoanCollateral[localloanobject.LoanCollateral.length - 1] = value.data;
+      localloanobject[source][lastIndex] = value.data;
     } else {
-      var rowindex = localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+      var rowindex = localloanobject[source].findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
       if (obj.ActionStatus != 1)
         obj.ActionStatus = 2;
-      localloanobject.LoanCollateral[rowindex] = obj;
+      localloanobject[source][rowindex] = obj;
     }
     // this shall have the last edit
     localloanobject.srccomponentedit = component;
@@ -139,13 +140,13 @@ export class CollateralService {
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
   }
 
-  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData) {
+  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
         var obj = rowData[rowIndex];
         if (obj.Collateral_ID == 0) {
           rowData.splice(rowIndex, 1);
-          localloanobject.LoanCollateral.splice(localloanobject.LoanCollateral.indexOf(obj), 1);
+          localloanobject[source].splice(localloanobject[source].indexOf(obj), 1);
         } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
