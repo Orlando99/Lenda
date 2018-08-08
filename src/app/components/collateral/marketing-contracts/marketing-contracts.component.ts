@@ -49,7 +49,7 @@ export class MarketingContractsComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    private marketingContractService: MarketingcontractcalculationService,
+    private marketingContractCalculationService: MarketingcontractcalculationService,
     public collateralService: CollateralService,
     public marketingContractsService: MarketingContractsService) {
 
@@ -94,7 +94,7 @@ export class MarketingContractsComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
+    this.marketingContractsService.rowvaluechanged(value);
     this.isSyncRequired(true);
   }
 
