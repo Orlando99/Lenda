@@ -9,9 +9,14 @@ export const environment = {
   loankey_copy:"rawcurrentselectedloan",
   logpriority:"logpriority",
   referencedatakey:"refdata",
+  isDebugModeActive: true,
+  localStorage: { 
+    userRole: 'userRole' 
+  },
   uid: "userid",
   loanidkey:"selectedloanId",
-  isDebugModeActive: true,
-  usersession:"sessionid"
+  
+  usersession:"sessionid",
+  errorbase:"errors"
 };
 

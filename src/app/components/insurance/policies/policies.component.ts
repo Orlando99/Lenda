@@ -22,6 +22,8 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
+import { errormodel } from '../../../models/commonmodels';
+import { ValidationService } from '../../../Workers/calculations/validation.service';
 
 @Component({
   selector: 'app-policies',
@@ -31,7 +33,28 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 })
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
+  private units: any[] = [
+    { key: 'EU', value: 'EU' }, 
+    { key: 'BU', value: 'BU' }, 
+    { key: 'EP', value: 'EP' }, 
+    { key: 'OU', value: 'OU' }
+  ]; 
+  private secInsuranceOptions: any[] = [
+    { id: 1, itemName: "STAX" },
+    { id: 2, itemName: "RAMP" },
+    { id: 3, itemName: "ICE" },
+    { id: 4, itemName: "SCO" },
+    { id: 5, itemName: "HMAX" },
+    { id: 6, itemName: "ABC" },
+    { id: 7, itemName: "PCI" },
+    { id: 8, itemName: "CROPHAIL" }
+  ]
+ 
+  public errorlist:Array<errormodel>=new Array<errormodel>();
 
+  retrieveerrors(){
+     this.errorlist=(this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p=>p.errorsection="Insurance");
+  }
 
   deleteunwantedcolumn(): any {
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
@@ -70,15 +93,14 @@ export class PoliciesComponent implements OnInit {
       cellClassRules: {
         "edited-color": function(params){
            return params.data.ActionStatus==2;
-             
         }
       }
     };
-    this.columnDefs = [];
     this.columnDefs = [
       {
         headerName: 'Agent', 
-        field: 'Agent_Id',pickfield:'Agent_Id', 
+        field: 'Agent_Id',
+        pickfield:'Agent_Id', 
         cellClass: 'editable-color', 
         //cellRenderer: 'columnTooltip',
         headerTooltip: 'Agent',
@@ -96,7 +118,8 @@ export class PoliciesComponent implements OnInit {
       },
       {
         headerName: 'Proposed AIP', 
-        field: 'ProposedAIP',pickfield:'ProposedAIP',
+        field: 'ProposedAIP', 
+        pickfield: 'ProposedAIP',
         headerTooltip: 'ProposedAIP',
         cellRenderer: 'columnTooltip',
         cellClass: 'editable-color', 
@@ -118,6 +141,12 @@ export class PoliciesComponent implements OnInit {
         field: 'CropName',pickfield:'CropName'
       },
       {
+        headerName: 'Countyid', 
+        headerTooltip: 'Countyid',
+        cellRenderer: 'columnTooltip',
+        field: 'Countyid',pickfield:'Countyid',visible:false
+      },
+      {
         headerName: 'Practice', 
         headerTooltip: 'Practice',
         cellRenderer: 'columnTooltip',
@@ -127,8 +156,8 @@ export class PoliciesComponent implements OnInit {
         headerName: 'SubPlanType', 
         headerTooltip: 'SubPlanType',
         field: 'MPCI_Subplan', 
+        pickfield: 'SubPlanType',
         cellRenderer: 'columnTooltip',
-        pickfield:'MPCI_Subplan',
         cellClass: ['editable-color'], 
         editable: true, 
         cellEditor: "agSelectCellEditor",
@@ -138,64 +167,46 @@ export class PoliciesComponent implements OnInit {
         headerName: 'Options', 
         headerTooltip: 'Options',
         field: 'SecInsurance', 
+        pickfield: 'SecInsurance',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         autoHeight: true,
-        pickfield:'SecInsurance',
         editable: true, 
         cellEditor: "chipeditor",
         cellEditorParams: {
-          items: [
-            { "id": 1, "itemName": "STAX" },
-            { "id": 2, "itemName": "RAMP" },
-            { "id": 3, "itemName": "ICE" },
-            { "id": 4, "itemName": "SCO" },
-            { "id": 5, "itemName": "HMAX" },
-            { "id": 6, "itemName": "ABC" },
-            { "id": 7, "itemName": "PCI" },
-            { "id": 8, "itemName": "CROPHAIL" }
-          ]
+          items: this.secInsuranceOptions
         }
-        //   valueSetter: function (params) {
-        //    return params.newValue;
-
-        // }
       },
       {
         headerName: 'Unit', 
         headerTooltip: 'Unit',
         field: 'Unit', 
-        cellRenderer: 'columnTooltip',
+        pickfield:'Unit', 
+        // cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, pickfield:'Unit',
+        editable: true, 
         cellEditor: "selectEditor",
         cellEditorParams: { 
-          values: [
-            { key: 1, value: 'EU' }, 
-            { key: 2, value: 'BU' }, 
-            { key: 2, value: 'EP' }, 
-            { key: 2, value: 'OU' }
-          ] 
+          values: this.units
         },
-        valueFormatter: function (params) {
-          let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
-          return selected ? selected.value : undefined;
+        valueFormatter: (params) => {
+         const selected =  this.units.filter(u => u.key === parseInt(params.value));
+         return selected.length > 0 ? selected[0].value : null;
         }
       },
       {
         headerName: 'Level', 
         headerTooltip: 'Level',
         field: 'Level', 
+        pickfield:'Level',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, pickfield:'Level',
+        editable: true, 
         cellEditor: "numericCellEditor",
         valueFormatter: function (params) {
-          
           return PercentageFormatter(params.value);
         },
         valueSetter: function (params) {
-          
           numberValueSetter(params);
           if (params.newValue) {
             params.data['Rentperc'] = 100 - parseFloat(params.newValue);
@@ -206,7 +217,8 @@ export class PoliciesComponent implements OnInit {
       {
         headerName: 'Price', 
         headerTooltip: 'Price',
-        field: 'Price', pickfield:'Price',
+        field: 'Price', 
+        pickfield: 'Price',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
         editable: true, 
@@ -219,23 +231,30 @@ export class PoliciesComponent implements OnInit {
       {
         headerName: 'Premium', 
         headerTooltip: 'Premium',
-        field: 'Premium', pickfield:'Premium',
+        field: 'Premium', 
+        pickfield: 'Premium',
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'], 
-        editable: true, 
         cellEditor: "numericCellEditor", 
         valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return PriceFormatter(params.value);
         }
       }
-
     ];
     this.getgriddata();
   }
-  getunits(){
-    return { values: ['EU', 'BU', 'EP','OU'] };
+
+  getUnit(unit) {
+    const units = [
+      { key: 1, value: 'EU' }, 
+      { key: 2, value: 'BU' }, 
+      { key: 3, value: 'EP' }, 
+      { key: 4, value: 'OU' }
+    ];
+    return units.filter(u => u.key === parseInt(unit));
   }
+
   addNumericColumn(element: string) {
     
     let header=element;
@@ -378,16 +397,22 @@ export class PoliciesComponent implements OnInit {
   };
   public loanmodel: loan_model=null;
 
-  public gridOptions=[];
+  public gridOptions = {
+    getRowNodeId: function(data) { 
+      return "Ins_"+data.mainpolicyId;
+     }
+ }
   columnDefs: any[];
   constructor(
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
+    private validationservice:ValidationService,
     private toaster: ToastsManager,
               public logging: LoggingService,
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
+    
     this.frameworkcomponents = { 
       chipeditor: ChipsListEditor, 
       selectEditor: SelectEditor, 
@@ -402,7 +427,7 @@ export class PoliciesComponent implements OnInit {
       return "[" + params.value.toLocaleString() + "]";
     };
     //Col defs
-
+     
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
@@ -442,7 +467,6 @@ export class PoliciesComponent implements OnInit {
   getgriddata() {
     //Get localstorage first
     this.rowData = [];
-
     if (this.loanmodel != null) {
       let insurancepolicies = this.loanmodel.InsurancePolicies;
       insurancepolicies.forEach(item => {
@@ -451,6 +475,7 @@ export class PoliciesComponent implements OnInit {
         row.mainpolicyId = item.Policy_id;
         row.Agent_Id = item.Agent_Id;
         row.ProposedAIP = item.ProposedAIP;
+        row.Countyid=item.County_Id;
         row.ActionStatus=item.ActionStatus;
         row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
         row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
@@ -503,6 +528,12 @@ export class PoliciesComponent implements OnInit {
       })
 
     }
+    
+    setTimeout(() => {
+      this.retrieveerrors();
+      seterrors(this.errorlist);
+      setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
+    }, 1000);
   }
 
   //DB Operations
@@ -517,6 +548,7 @@ export class PoliciesComponent implements OnInit {
         policyname = event.colDef.pickfield.substr(0, pos-1)
       }
       let replacer=event.colDef.pickfield.replace("_" + policyname, "");
+      console.log(event.colDef.pickfield);
       if(event.colDef.pickfield.includes("Subtype"))
       {
         replacer = "Ins_SubType";
@@ -534,8 +566,9 @@ export class PoliciesComponent implements OnInit {
       this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
       this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus=2;
     }
-    
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+    debugger
+    this.validationservice.validateInsurancePolicies(event,this.loanmodel.InsurancePolicies);
   }
 
 
@@ -547,15 +580,23 @@ export class PoliciesComponent implements OnInit {
  
 
   rowvaluechanged($event) {
-    
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
+
+    let modifiedvalues=this.localstorage.retrieve(environment.modifiedbase) as Array<String>; 
+    
+    if(!modifiedvalues.includes("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field))
+    {
+      modifiedvalues.push("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
+      this.localstorage.store(environment.modifiedbase,modifiedvalues);+
+      setmodifiedsingle("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
+    }
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-       
-      
       items.forEach(element => {
-        if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
-          this.ShowHideColumnsonselection(element)
+          console.log(element);
+        
+       if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
+          this.ShowHideColumnsonselection(element);
           this.columnDefs.push({
             headerName: element + '_Subtype', pickfield:element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
             cellEditorSelector: function (params) {
@@ -579,7 +620,7 @@ export class PoliciesComponent implements OnInit {
               }
             }
           })
-        }
+         }
         let mainobj=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==$event.data.mainpolicyId);
         if(mainobj.Subpolicies.find(p=>p.Ins_Type==element && p.ActionStatus!=3)==undefined){
           let sp:Insurance_Subpolicy=new Insurance_Subpolicy();
@@ -615,8 +656,8 @@ export class PoliciesComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
     //params.api.sizeColumnsToFit();//autoresizing
+    this.retrieveerrors();
     this.getgriddata();
   }
   //Grid Functions End
@@ -683,4 +724,62 @@ export class PoliciesComponent implements OnInit {
   onGridScroll(params) {
     //params.api.stopEditing();
   }
+  //
+}
+
+function seterrors(obj){
+  obj.forEach(element => {
+    debugger
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+element.cellid.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+   
+    element.details.forEach(elemednt => {
+      try{
+        var p= _.take(_.drop(element.cellid.split("_"), 2), element.cellid.split("_").length-1);
+        var cellid=_.join(p,'_')
+        debugger
+        var cell=filtered[0].querySelector('[col-id="'+cellid+'"]');
+        cell.classList.add(elemednt);
+       }
+       catch{
+
+       }
+      //cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
+    });
+  });
+}
+
+function setmodifiedsingle(obj){
+  try{
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+      var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+      cell.classList.add("touched");
+    }
+    catch{
+
+    }
+}
+
+function setmodifiedall(arrayy){
+  arrayy.forEach(obj=> {
+    try{
+  var filter = Array.prototype.filter
+  var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+  var filtered = filter.call( selectedelements, function( node ) {
+      return node.childNodes.length>0;
+  });
+    var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+    cell.classList.add("touched");
+  }
+  catch{
+    
+  }
+});
 }

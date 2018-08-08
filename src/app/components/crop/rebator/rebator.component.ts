@@ -70,8 +70,8 @@ export class RebatorComponent implements OnInit {
       //Coldef here
       this.columnDefs = [
         { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
-        { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
-        { headerName: 'Location', field: 'Location',width:100, editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellClass: ['editable-color']},
+        { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
         { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: false},

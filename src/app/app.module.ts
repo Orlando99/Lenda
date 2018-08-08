@@ -33,9 +33,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule, MatSnackBarModule } from '@angular/material';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { ClickOutsideModule } from 'ng-click-outside';
 //ENDS MATERIAL COMPONENTS
 
 //START SERVICES
@@ -115,6 +114,7 @@ import { ConditionsComponent } from './components/work-in-progress/conditions/co
 import { NotificationFeedsService } from './shared/notification-feeds/notification-feeds.service';
 import { NotificationFeedsComponent } from './shared/notification-feeds/notification-feeds.component';
 import { SidebarComponent } from './shared/layout/sidebar.component';
+import { AdminSidebarComponent } from './shared/layout/admin-sidebar/admin-sidebar.component';
 import { RightSidebarComponent } from './shared/layout/right-sidebar/right-sidebar.component';
 import { MediaArticleComponent } from './shared/layout/right-sidebar/media-article/media-article.component';
 import { UserArticleComponent } from './shared/layout/right-sidebar/user-article/user-article.component';
@@ -196,6 +196,7 @@ import { YieldReportComponent } from './components/summary/yield-report/yield-re
 import { BudgetReportComponent } from './components/summary/budget-report/budget-report.component';
 import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
 import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
+import { ValidationService } from './Workers/calculations/validation.service';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -290,7 +291,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     BudgetReportComponent,
     AgGridTooltipComponent,
     LiquidityAnalysisComponent,
-    BorrowerRatingComponent
+    BorrowerRatingComponent,
+    AdminSidebarComponent
   ],
   imports: [
     BrowserModule,
@@ -337,7 +339,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     ChartsModule,
     BarRatingModule,
     AngularMultiSelectModule,
-
+    ClickOutsideModule,
     NgbModule.forRoot(),
   ],
   exports: [
@@ -408,6 +410,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoginService,
     MarketingcontractcalculationService,
     OptimizercalculationService,
+    ValidationService,
     ToasterService,
     {
       provide: ErrorHandler,
