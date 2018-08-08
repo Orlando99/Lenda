@@ -27,8 +27,8 @@ export class LoginComponent implements OnInit {
 
   private loggedIn: boolean;
   private isUserLoggedIn: boolean;
-  private username: string;
-  private password: string;
+  public username: string;
+  public password: string;
   private usersData: User[] = Users;
 
   constructor(
