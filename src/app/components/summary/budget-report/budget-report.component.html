@@ -27,12 +27,12 @@
                 <tr *ngFor="let budget of budgets, let rowIndex=index" [ngClass]="rowIndex == budgets.length-1 ? 'background-highlight':''">
                   <td class="title">{{budget.FC_Expense_Name}}</td>
                   
-                  <td class="price"> {{ budget.ARM_Budget_Crop ? (budget.ARM_Budget_Crop.toFixed(0) | number) : '-' }} </td>
-                  <td class="price"> {{ budget.Distributor_Budget_Crop ? (budget.Distributor_Budget_Crop.toFixed(0) | number) : '-' }} </td>
-                  <td class="price"> {{ budget.Third_Party_Budget_Crop ? (budget.Third_Party_Budget_Crop.toFixed(0) | number) : '-' }} </td>
-                  <td class="price"> {{ budget.Total_Budget_Crop_ET ? (budget.Total_Budget_Crop_ET.toFixed(0) | number) : '-' }} </td>
+                  <td> {{ budget.ARM_Budget_Crop ? '$ '+(budget.ARM_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td> {{ budget.Distributor_Budget_Crop ? '$ '+(budget.Distributor_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td> {{ budget.Third_Party_Budget_Crop ? '$ '+(budget.Third_Party_Budget_Crop.toFixed(0) | number) : '-' }} </td>
+                  <td> {{ budget.Total_Budget_Crop_ET ? '$ '+(budget.Total_Budget_Crop_ET.toFixed(0) | number) : '-' }} </td>
                   <td></td>
-                  <td class="percent"> {{ budget.Per_Revenue.toFixed(1)}}</td>
+                  <td class="percent"> {{ budget.Per_Revenue ? budget.Per_Revenue.toFixed(1) : '0.0' }}</td>
                   
                
               </tbody>

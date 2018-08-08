@@ -43,11 +43,11 @@
                 <td>{{crop.Acres}}</td>
                 <td>{{crop.CropYield | number}}</td>
                 <td class="percent">{{crop.Share}}</td>
-                <td class="price">{{crop.Price.toFixed(4)}}</td>
-                <td class="price">{{crop.Basic_Adj.toFixed(4)}}</td>
-                <td class="price">{{crop.Marketing_Adj.toFixed(4)}}</td>
-                <td class="price">{{crop.Rebate_Adj.toFixed(4)}}</td>
-                <td class="price">{{crop.Revenue.toFixed(0) | number}}</td>
+                <td>$ {{crop.Price}}</td>
+                <td>$ {{crop.Basic_Adj}}</td>
+                <td>$ {{crop.Marketing_Adj}}</td>
+                <td>$ {{crop.Rebate_Adj}}</td>
+                <td>$ {{crop.Revenue |number}}</td>
                 
               </tr>
               <tr class="background-highlight">
@@ -61,7 +61,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="price">{{NetCropRevenue  | number}}</td>
+                <td > $ {{NetCropRevenue  | number}}</td>
               </tr>
               <tr>
                 <td>
@@ -85,7 +85,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="price">{{Net_Market_Value_FSA  | number}}</td>
+                <td > $ {{Net_Market_Value_FSA  | number}}</td>
               </tr>
               <tr>
                   <td>Livestock</td>
@@ -96,7 +96,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="price">{{Net_Market_Value_Livestock  | number}}</td>
+                  <td> $ {{Net_Market_Value_Livestock  | number}}</td>
                 </tr>
                 <tr>
                     <td>Stored Crop</td>
@@ -107,7 +107,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="price">{{Net_Market_Value_Stored_Crops  | number}}</td>
+                    <td> $ {{Net_Market_Value_Stored_Crops  | number}}</td>
                   </tr>
               <tr>
                 <td>Other</td>
@@ -118,7 +118,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="price">{{Net_Market_Value__Other  | number}}</td>
+                <td> $ {{Net_Market_Value__Other  | number}}</td>
               </tr>
               <tr>
                 <td class="font-weight-600">
@@ -131,7 +131,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="price font-weight-600">{{Total_Additional_Revenue  | number}}</td>
+                <td class="font-weight-600"> ${{Total_Additional_Revenue  | number}}</td>
               </tr>
               <tr>
                 <td class="font-weight-600">
@@ -144,7 +144,7 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td class="price font-weight-600">{{Total_Revenue  | number}}</td>
+                <td class="font-weight-600"> $ {{Total_Revenue  | number}}</td>
               </tr>
               <tr>
                   <td>
@@ -157,7 +157,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td class="price">{{Total_Expense_Budget  | number}}</td>
+                  <td> $ {{Total_Expense_Budget  | number}}</td>
                 </tr>
                 <tr>
                     <td>
@@ -170,7 +170,7 @@
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td class="price">{{Estimated_Interest  | number}}</td>
+                    <td> $ {{Estimated_Interest  | number}}</td>
                   </tr>
                   <tr class="background-highlight">
                       <td>
@@ -183,7 +183,7 @@
                       <td></td>
                       <td></td>
                       <td></td>
-                      <td class="price">{{Total_CashFlow  | number}}</td>
+                      <td> $ {{Total_CashFlow  | number}}</td>
                     </tr>
             </tbody>
           </table>

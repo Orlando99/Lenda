@@ -6,6 +6,7 @@ tfoot{
 }
 td{
     padding: 5px;
+    font-size: 12px;
 }
 
 th{
@@ -32,11 +33,7 @@ tr th:not(:first-child) {
 tr th:first-child {
     text-align: left;
 }
-.price:before{
-    content : '$';
-    float: left;
 
-}
 .percent:after{
     content : '%';
     

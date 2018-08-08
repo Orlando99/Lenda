@@ -41,7 +41,7 @@ export class RebatorComponent implements OnInit {
 
   style = {
     marginTop: '10px',
-    width: '1065px',
+    width: '96%',
     boxSizing: 'border-box'
   };
 
@@ -70,10 +70,10 @@ export class RebatorComponent implements OnInit {
       //Coldef here
       this.columnDefs = [
         { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
-        { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
-        { headerName: 'Location', field: 'Location',width:100, editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color']},
+        { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellClass: ['editable-color']},
+        { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
         { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
-        { headerName: 'Email', field: 'Email',width:180,  editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color']},
+        { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: false},
         { headerName: 'Exp Rebate',width:140, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
         cellEditorParams: (params)=> {
@@ -112,7 +112,7 @@ export class RebatorComponent implements OnInit {
       }
       this.savedData = _.cloneDeep(this.rowData);
       //this.getgridheight();
-      this.gridApi.refreshCells();
+      this.gridApi && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
@@ -215,9 +215,9 @@ synctoDb() {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     //setgriddefaults(this.gridApi,this.columnApi);
-    toggletoolpanel(false,this.gridApi);
-    removeHeaderMenu(this.gridApi);
-    // params.api.sizeColumnsToFit();
+    // toggletoolpanel(false,this.gridApi);
+    // removeHeaderMenu(this.gridApi);
+    params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
 

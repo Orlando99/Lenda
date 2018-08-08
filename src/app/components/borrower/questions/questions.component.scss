@@ -3,7 +3,7 @@
 }
 .q-row{
   margin-bottom: 10px;
-  display: table-row;
+  //display: table-row;
   width: 100%;
   .right-side{
     margin-left: 45px;
@@ -32,4 +32,7 @@
 
 mat-radio-button{
   padding: 0 10px;
+}
+.child-cheveron{
+  margin: 0 1em;
 }

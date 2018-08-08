@@ -1,20 +1,22 @@
 <mat-accordion>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expanded" [ngClass] = "displayAsChildChevron ? 'child-cheveron' : ''">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        Questions
+        {{ chevronHeader || 'Questions'}}
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <!-- <button (click)="synctoDb()"  mat-icon-button>
-      <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-    </button> -->
+
+    <a class="waves-effect waves-light btn" [ngClass]="isResponseUpdated ? '' : 'disabled'"  (click)="synctoDb()" style="margin: 0 0 10px 18px;" >
+        <i class="material-icons left">cloud</i> {{isPublishing ? 'Publishing...' : 'Publish'}}</a>
+
+    
     <div *ngIf="responses && responses.length" class="container bottom">
-      <div class="q-row" *ngFor="let res of responses; let i = index;">
+      <div class="q-row" *ngFor="let res of responses; let i = index; trackBy : res ?  res.Question_ID : index ">
         <div class="row" *ngIf="res.FC_Subsidiary_Question_ID_Ind ? getVisibility(res.FC_Parent_Question_ID) : true"  >
-          <div class="col s9"> <span [ngClass]="res.FC_Subsidiary_Question_ID_Ind  ? 'child' : 'parent'">{{res.FC_Question_ID_Text}}</span> </div>
+          <div class="col s8"> <span [ngClass]="res.FC_Subsidiary_Question_ID_Ind  ? 'child' : 'parent'">{{res.FC_Question_ID_Text}}</span> </div>
           
-          <div class="col s3" *ngIf="res.Question_Category_Code==1">
-            <mat-radio-group [(ngModel)]="res.Response_Detail" (ngModelChange)="change()">
+          <div class="col s4" *ngIf="res.Question_Category_Code==1">
+            <mat-radio-group [(ngModel)]="res.Response_Detail" (ngModelChange)="change(res)">
               <mat-radio-button [value]="res.FC_Choice1">{{res.FC_Choice1}}</mat-radio-button>
               <mat-radio-button [value]="res.FC_Choice2">{{res.FC_Choice2}}</mat-radio-button>
             </mat-radio-group>
@@ -22,7 +24,7 @@
           <div class="col s3" *ngIf="res.Question_Category_Code==2">
               
               <mat-form-field>
-                  <input type="number" [(ngModel)]="res.Response_Detail" (blur)="change()" matInput placeholder="Answer"/>
+                  <input type="number" [(ngModel)]="res.Response_Detail" (blur)="change(res)" matInput placeholder="Answer"/>
                 </mat-form-field>
             </div>
 

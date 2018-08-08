@@ -9,9 +9,9 @@ import { Logpriority } from '../models/loanmodel';
 import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';
 import { ReferenceService } from '../services/reference/reference.service';
+import { Users, errormodel ,User} from '../models/commonmodels';
 import { LoginService } from './login.service';
-import { Users, User } from '../models/commonmodels';
-
+import { generate } from '../Workers/utility/randomgenerator';
 
 @Component({
   selector: 'auth-page',
@@ -83,6 +83,11 @@ export class LoginComponent implements OnInit {
       this.localst.store(environment.logpriority, Logpriority.Low);
       this.localst.store(environment.uid, user[0].id);
       this.localst.store(environment.localStorage.userRole, user[0].role);
+      this.localst.store(environment.usersession,generate())
+      
+      this.localst.store(environment.errorbase,[]);
+      this.localst.store(environment.modifiedbase,[]);
+      
       this.getreferencedata();
       //this.router.navigateByUrl("/home/loanoverview/000001/000/summary");
       this.router.navigateByUrl("/home/loans");

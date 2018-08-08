@@ -4,7 +4,12 @@ export class User {
 	password: string;
 	role: Role;
 }
-
+export class errormodel{
+    errorsection : string;
+    cellid : string;
+    details:string[];
+    ToolTipText?:string;
+}
 export enum Role {
 	user = 1,
 	admin = 2

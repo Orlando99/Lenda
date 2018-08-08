@@ -125,7 +125,7 @@ export class RealEstateComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    this.adjustparentheight();
+    //this.adjustparentheight();
   }
 
   syncenabled() {   
@@ -253,10 +253,11 @@ export class RealEstateComponent implements OnInit {
     var elementInHost = this.hostElement.nativeElement.getElementsByClassName("mat-expansion-panel-content");
    // var elements= Array.from(document.getElementsByClassName("mat-expansion-panel-content"));
     
-   elementInHost.forEach(element => {
-      //find aggrid
-      var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
-       element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
-     });
+   for (let index = 0; index < elementInHost.length; index++) {
+     const element = elementInHost[index];
+     var aggrid=element.getElementsByClassName("ag-root-wrapper")[0];
+     element.setAttribute("style","height:"+(aggrid.clientHeight+80).toString() +"px");
+   }
+   
    }
 }

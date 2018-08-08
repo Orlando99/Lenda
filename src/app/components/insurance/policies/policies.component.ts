@@ -22,6 +22,8 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
+import { errormodel } from '../../../models/commonmodels';
+// import { ValidationService } from '../../../Workers/calculations/validation.service';
 
 @Component({
   selector: 'app-policies',
@@ -48,9 +50,13 @@ export class PoliciesComponent implements OnInit {
     { id: 8, itemName: "CROPHAIL" }
   ]
  
+  public errorlist:Array<errormodel>=new Array<errormodel>();
+
+  retrieveerrors(){
+     this.errorlist=(this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p=>p.errorsection="Insurance");
+  }
 
   deleteunwantedcolumn(): any {
-    // debugger
     var currentvisiblecolumns = this.columnDefs.filter(p => p.headerName.includes("Subtype")).map(p => p.headerName.split("_")[0]);
     currentvisiblecolumns.forEach(element => {
       let included = false;
@@ -64,7 +70,7 @@ export class PoliciesComponent implements OnInit {
         this.loanmodel.InsurancePolicies.forEach(function(newel){
           
          _.remove(newel.Subpolicies,p=>p.Ins_Type==element && p.SubPolicy_Id==0);
-         debugger
+         
          newel.Subpolicies.filter(p=>p.Ins_Type==element && p.SubPolicy_Id!=0).forEach(element => {
            element.ActionStatus=3;
          });
@@ -126,18 +132,25 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'County | State',
         cellRenderer: 'columnTooltip',
         field: 'StateandCountry'
+        ,pickfield:'StateandCountry'
       },
       {
         headerName: 'Crop', 
         headerTooltip: 'Crop',
         cellRenderer: 'columnTooltip',
-        field: 'CropName'
+        field: 'CropName',pickfield:'CropName'
+      },
+      {
+        headerName: 'Countyid', 
+        headerTooltip: 'Countyid',
+        cellRenderer: 'columnTooltip',
+        field: 'Countyid',pickfield:'Countyid',visible:false
       },
       {
         headerName: 'Practice', 
         headerTooltip: 'Practice',
         cellRenderer: 'columnTooltip',
-        field: 'Practice'
+        field: 'Practice',pickfield:'Practice'
       },
       {
         headerName: 'SubPlanType', 
@@ -384,7 +397,11 @@ export class PoliciesComponent implements OnInit {
   };
   public loanmodel: loan_model=null;
 
-  public gridOptions=[];
+  public gridOptions = {
+    getRowNodeId: function(data) { 
+      return "Ins_"+data.mainpolicyId;
+     }
+ }
   columnDefs: any[];
   constructor(
     private localstorage: LocalStorageService,
@@ -394,6 +411,7 @@ export class PoliciesComponent implements OnInit {
               public alertify: AlertifyService,
               public loanapi:LoanApiService
   ) {
+    
     this.frameworkcomponents = { 
       chipeditor: ChipsListEditor, 
       selectEditor: SelectEditor, 
@@ -408,7 +426,7 @@ export class PoliciesComponent implements OnInit {
       return "[" + params.value.toLocaleString() + "]";
     };
     //Col defs
-
+     
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
@@ -448,7 +466,6 @@ export class PoliciesComponent implements OnInit {
   getgriddata() {
     //Get localstorage first
     this.rowData = [];
-
     if (this.loanmodel != null) {
       let insurancepolicies = this.loanmodel.InsurancePolicies;
       insurancepolicies.forEach(item => {
@@ -457,6 +474,7 @@ export class PoliciesComponent implements OnInit {
         row.mainpolicyId = item.Policy_id;
         row.Agent_Id = item.Agent_Id;
         row.ProposedAIP = item.ProposedAIP;
+        row.Countyid=item.County_Id;
         row.ActionStatus=item.ActionStatus;
         row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
         row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
@@ -468,7 +486,6 @@ export class PoliciesComponent implements OnInit {
         row.Price = item.Price;
         row.Premium = item.Premium;
         item.Subpolicies.filter(p=>p.ActionStatus!=3).forEach(policy => {
-          //debugger
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {
@@ -510,6 +527,11 @@ export class PoliciesComponent implements OnInit {
       })
 
     }
+    
+    setTimeout(() => {
+      seterrors(this.errorlist);
+      setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
+    }, 1000);
   }
 
   //DB Operations
@@ -542,8 +564,9 @@ export class PoliciesComponent implements OnInit {
       this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
       this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus=2;
     }
-    
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+    debugger
+    this.validate(event);
   }
 
 
@@ -557,9 +580,16 @@ export class PoliciesComponent implements OnInit {
   rowvaluechanged($event) {
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
+
+    let modifiedvalues=this.localstorage.retrieve(environment.modifiedbase) as Array<String>; 
+    
+    if(!modifiedvalues.includes("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field))
+    {
+      modifiedvalues.push("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
+      this.localstorage.store(environment.modifiedbase,modifiedvalues);+
+      setmodifiedsingle("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
+    }
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
-       
-      
       items.forEach(element => {
           console.log(element);
         
@@ -624,8 +654,8 @@ export class PoliciesComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-
     //params.api.sizeColumnsToFit();//autoresizing
+    this.retrieveerrors();
     this.getgriddata();
   }
   //Grid Functions End
@@ -692,4 +722,59 @@ export class PoliciesComponent implements OnInit {
   onGridScroll(params) {
     //params.api.stopEditing();
   }
+
+  //validations
+  validate(params:any){
+   let insuranceunit=params.data;
+    switch (insuranceunit.Unit) {
+      case "EU":
+           let effectedpolicies=this.loanmodel.InsurancePolicies.filter(p=>p.County_Id==insuranceunit.Countyid && p.Policy_id!=insuranceunit.mainpolicyId);
+           let invokerpolicy=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==insuranceunit.mainpolicyId);
+           //this.validationservice.validateInsuranceTable(invokerpolicy,effectedpolicies);
+        break;
+      default:
+        break;
+    }
+    this.retrieveerrors();
+    seterrors(this.errorlist);
+  }
+  //
+}
+
+function seterrors(obj){
+  obj.forEach(element => {
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+element.cellid.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+   
+    element.details.forEach(elemednt => {
+      var cell=filtered[0].querySelector('[col-id="'+element.cellid.split("_")[2]+'"]');
+      cell.classList.add(elemednt);
+      cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
+    });
+  });
+}
+
+function setmodifiedsingle(obj){
+    var filter = Array.prototype.filter
+    var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+    var filtered = filter.call( selectedelements, function( node ) {
+        return node.childNodes.length>0;
+    });
+      var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+      cell.classList.add("touched");
+}
+
+function setmodifiedall(arrayy){
+  arrayy.forEach(obj=> {
+  var filter = Array.prototype.filter
+  var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
+  var filtered = filter.call( selectedelements, function( node ) {
+      return node.childNodes.length>0;
+  });
+    var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
+    cell.classList.add("touched");
+});
 }
