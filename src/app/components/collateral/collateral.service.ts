@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertifyService } from '../../alertify/alertify.service';
-import { loan_model, Loan_Collateral } from '../../models/loanmodel';
+import { loan_model, Loan_Collateral, Loan_Marketing_Contract } from '../../models/loanmodel';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
@@ -9,7 +9,12 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToasterService } from '../../services/toaster.service';
 import { FsaService } from './fsa/fsa.service';
+import { EquipmentService } from './equipment/equipment.service';
 import { LiveStockService } from './livestock/livestock.service';
+import { StoredCropService } from './storedcrop/storedcrop.service';
+import { RealEstateService } from './realestate/realestate.service';
+import { OthersService } from './others/others.service';
+import CollateralSettings from './collateral-types.model';
 
 /**
  * Shared service for collateral
@@ -17,10 +22,10 @@ import { LiveStockService } from './livestock/livestock.service';
 @Injectable()
 export class CollateralService {
   // private localloanobject: loan_model = new loan_model();
-  public rowData = [];
+  // public rowData = [];
   // public gridApi;
   public deleteAction = false;
-  public pinnedBottomRowData;
+  // public pinnedBottomRowData;
 
   constructor(
     public localstorageservice: LocalStorageService,
@@ -30,7 +35,11 @@ export class CollateralService {
     public loanapi: LoanApiService,
     public toasterService: ToasterService,
     public fsaService: FsaService,
-    public liveStockService: LiveStockService
+    public liveStockService: LiveStockService,
+    public equipmentService: EquipmentService,
+    public storedcropService: StoredCropService,
+    public realEstateService: RealEstateService,
+    public othersService: OthersService
   ) {
   }
 
@@ -41,53 +50,129 @@ export class CollateralService {
     boxSizing: 'border-box'
   };
 
-  onInit(localloanobject: loan_model, gridApi, res, component, categoryCode) {
-    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
-    if (res.srccomponentedit == component) {
-      //if the same table invoked the change .. change only the edited row
-      localloanobject = res;
-      this.rowData[res.lasteditrowindex] = localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 })[res.lasteditrowindex];
-    } else {
-      localloanobject = res
-      this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
+  subscribeToChanges(res, localloanobject, categoryCode, rowData, pinnedBottomRowData) {
+    switch (res.srccomponentedit) {
+      case CollateralSettings.fsa.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.fsa.key, res.lasteditrowindex, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+        break;
+      }
+      case CollateralSettings.livestock.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.livestock.key, res.lasteditrowindex, CollateralSettings.livestock.source, CollateralSettings.livestock.sourceKey);
+        break;
+      }
+      case CollateralSettings.equipment.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.equipment.key, res.lasteditrowindex, CollateralSettings.equipment.source, CollateralSettings.equipment.sourceKey);
+        break;
+      }
+      case CollateralSettings.storedCrop.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.storedCrop.key, res.lasteditrowindex, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.sourceKey);
+        break;
+      }
+      case CollateralSettings.realestate.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.realestate.key, res.lasteditrowindex, CollateralSettings.realestate.source, CollateralSettings.realestate.sourceKey);
+        break;
+      }
+      case CollateralSettings.other.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.other.key, res.lasteditrowindex, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
+        break;
+      }
+      case CollateralSettings.marketingContracts.component: {
+        rowData[res.lasteditrowindex] = this.getLastEditedRow(localloanobject, CollateralSettings.marketingContracts.key, res.lasteditrowindex, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+        break;
+      }
+      default: {
+        localloanobject = res;
+        // If marketing contracts
+        if (categoryCode === CollateralSettings.marketingContracts.key) {
+          rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
+        } else {
+          rowData = this.getRowData(localloanobject, categoryCode, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+          pinnedBottomRowData = this.computeTotal(localloanobject, categoryCode);
+        }
+      }
     }
-    this.getgridheight();
-    gridApi.refreshCells();
+    return {
+      rowData: rowData,
+      pinnedBottomRowData: pinnedBottomRowData
+    };
   }
 
-  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode) {
-    if (localloanobject.LoanCollateral == null) {
-      localloanobject.LoanCollateral = [];
+  getLastEditedRow(localloanobject, categoryCode, lastEditRowIndex, source, sourceKey) {
+    if (sourceKey === '') {
+      // Marketing Contracts
+      return localloanobject[source].filter(lc => {
+        return lc.ActionStatus !== 3
+      })[lastEditRowIndex];
+    }
+    return localloanobject[source].filter(lc => {
+      return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
+    })[lastEditRowIndex];
+  }
+
+  getRowData(localloanobject, categoryCode, source, sourceKey) {
+    if (sourceKey === '') {
+      // Marketing Contracts
+      return localloanobject[source] !== null ?
+        localloanobject[source].filter(lc => {
+          return lc.ActionStatus !== 3
+        }) : [];
+    }
+    return localloanobject[source] !== null ?
+      localloanobject[source].filter(lc => {
+        return lc[sourceKey] === categoryCode && lc.ActionStatus !== 3
+      }) : [];
+  }
+
+  addRow(localloanobject: loan_model, gridApi, rowData, newItemCategoryCode, source, sourceKey) {
+    let newItem;
+
+    if (localloanobject[source] == null) {
+      localloanobject[source] = [];
     }
 
-    var newItem = new Loan_Collateral();
-    newItem.Collateral_Category_Code = newItemCategoryCode;
-    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID
-    newItem.Disc_Value = 50;
-    newItem.ActionStatus = 1;
+    if (newItemCategoryCode === CollateralSettings.marketingContracts.key) {
+      newItem = new Loan_Marketing_Contract();
+    } else {
+      newItem = new Loan_Collateral();
+      if (sourceKey && sourceKey !== '') {
+        newItem[sourceKey] = newItemCategoryCode;
+        newItem.Disc_Value = 50;
+        newItem.ActionStatus = 1
+      }
+    }
+    newItem.Loan_Full_ID = localloanobject.Loan_Full_ID;
 
     var res = rowData.push(newItem);
-    localloanobject.LoanCollateral.push(newItem);
+    if (newItemCategoryCode !== CollateralSettings.marketingContracts.key) {
+      localloanobject[source].push(newItem);
+    }
     gridApi.setRowData(rowData);
-    gridApi.startEditingCell({
-      rowIndex: rowData.length - 1,
-      colKey: "Collateral_Description"
-    });
-    this.getgridheight();
+    if (newItemCategoryCode === CollateralSettings.marketingContracts.key) {
+      gridApi.startEditingCell({
+        rowIndex: rowData.length - 1,
+        colKey: CollateralSettings.marketingContracts.colKey
+      });
+    } else {
+      gridApi.startEditingCell({
+        rowIndex: rowData.length - 1,
+        colKey: CollateralSettings.fsa.colKey
+      });
+    }
+
+    this.getgridheight(rowData);
   }
 
-  rowValueChanged(value: any, localloanobject: loan_model, component) {
+  rowValueChanged(value: any, localloanobject: loan_model, component, source, uniqueKey) {
     var obj = value.data;
-    if (obj.Collateral_ID == 0) {
+    if (obj[uniqueKey] == 0) {
+      let lastIndex = localloanobject[source].length - 1;
       obj.ActionStatus = 1;
-      localloanobject.LoanCollateral[localloanobject.LoanCollateral.length - 1] = value.data;
+      localloanobject[source][lastIndex] = value.data;
     } else {
-      var rowindex = localloanobject.LoanCollateral.findIndex(lc => lc.Collateral_ID == obj.Collateral_ID);
+      var rowindex = localloanobject[source].findIndex(lc => lc[uniqueKey] == obj[uniqueKey]);
       if (obj.ActionStatus != 1)
         obj.ActionStatus = 2;
-      localloanobject.LoanCollateral[rowindex] = obj;
+      localloanobject[source][rowindex] = obj;
     }
     // this shall have the last edit
     localloanobject.srccomponentedit = component;
@@ -95,13 +180,13 @@ export class CollateralService {
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
   }
 
-  deleteClicked(rowIndex: any, localloanobject: loan_model) {
+  deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source, uniqueKey) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.rowData[rowIndex];
-        if (obj.Collateral_ID == 0) {
-          this.rowData.splice(rowIndex, 1);
-          localloanobject.LoanCollateral.splice(localloanobject.LoanCollateral.indexOf(obj), 1);
+        var obj = rowData[rowIndex];
+        if (obj[uniqueKey] == 0) {
+          rowData.splice(rowIndex, 1);
+          localloanobject[source].splice(localloanobject[source].indexOf(obj), 1);
         } else {
           this.deleteAction = true;
           obj.ActionStatus = 3;
@@ -136,36 +221,38 @@ export class CollateralService {
   /**
    * Helper methods
    */
-  getgridheight() {
-    this.style.height = (30 * (this.rowData.length + 2) - 2).toString() + "px";
+  getgridheight(rowData) {
+    this.style.height = (30 * (rowData.length + 2) - 2).toString() + "px";
   }
 
-  getdataforgrid(localloanobject: loan_model, gridApi) {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      localloanobject = obj;
-      this.rowData = [];
-      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
-    }
-    this.getgridheight();
-    this.adjustgrid(gridApi);
-  }
-
-  private adjustgrid(gridApi) {
+  public adjustgrid(gridApi) {
     try {
       gridApi.sizeColumnsToFit();
     }
-    catch {
+    catch (ex) {
     }
   }
 
-  computeTotal(categoryCode, input) {
-    if (categoryCode === 'LSK') {
-      return this.liveStockService.computeTotal(input);
-    } else if (categoryCode === 'FSA') {
-      return this.fsaService.computeTotal(input);
+  computeTotal(input, categoryCode) {
+    switch (categoryCode) {
+      case CollateralSettings.livestock.key: {
+        return this.liveStockService.computeTotal(input);
+      }
+      case CollateralSettings.fsa.key: {
+        return this.fsaService.computeTotal(input);
+      }
+      case CollateralSettings.equipment.key: {
+        return this.equipmentService.computeTotal(input);
+      }
+      case CollateralSettings.storedCrop.key: {
+        return this.storedcropService.computeTotal(input);
+      }
+      case CollateralSettings.realestate.key: {
+        return this.realEstateService.computeTotal(input);
+      }
+      case CollateralSettings.other.key: {
+        return this.othersService.computeTotal(input);
+      }
     }
   }
 }

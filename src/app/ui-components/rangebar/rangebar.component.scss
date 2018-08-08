@@ -1,0 +1,41 @@
+@import "./../../../sass/theme/variables";
+
+.success {
+  fill: #28a745 !important;
+}
+
+.warning {
+  fill: #ffc107 !important;
+}
+
+.alert {
+  fill: #dc3545 !important;
+}
+
+.white {
+  fill: #fff !important;
+}
+
+.rangebar {
+  padding: 0 20px;
+  transform: translate(0, -25px);
+}
+
+.bar-range {
+  transform: translate(0, -30px);
+}
+
+.text {
+  transform: translate(-40px, -18px);
+  font-size: $font-size-sm;
+  fill: $primary-color;
+}
+
+.text-val {
+  transform: translate(-6px, 20px);
+  font-size: $font-size-sm;
+}
+
+.value-marker {
+  transform: translate(-8px, 16px);
+}

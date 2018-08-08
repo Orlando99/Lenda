@@ -1,0 +1,88 @@
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="main-header p-lr-10">Borrower Rating</div>
+  </div>
+  <div class="col m9">
+     <svg viewBox="0 0 100% 10" height="25px" preserveAspectRatio="xMinYMin meet" class="w-100 rangebar">
+      <g>
+        <image *ngFor="let number of [0,1,2,3,4]" [attr.x]="number*15 + 30" y="0" width="12" height="12" xlink:href="assets/images/svg-icons/success-star.svg" />
+      </g>
+      <g>
+        <image class="four-star" *ngFor="let number of [0,1,2,3]" [attr.x]="number*15 + 30" y="0" width="12" height="12" xlink:href="assets/images/svg-icons/success-star.svg" />
+      </g>
+      <g>
+        <image class="three-star" *ngFor="let number of [0,1,2]" [attr.x]="number*15 + 30" y="0" width="12" height="12" xlink:href="assets/images/svg-icons/warning-star.svg" />
+      </g>
+      <g>
+        <image class="two-star" *ngFor="let number of [0,1]" [attr.x]="number*15 + 30" y="0" width="12" height="12" xlink:href="assets/images/svg-icons/warning-star.svg" />
+      </g>
+      <g>
+        <image class="one-star" *ngFor="let number of [0]" [attr.x]="number*15 + 30" y="0" width="12" height="12" xlink:href="assets/images/svg-icons/error-star.svg" />
+      </g>
+    </svg>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">FICO Score</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="1.5" [weak]="0.5" [value]="1.4"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">CPA Financials</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [weak]="3.0" [value]="2.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">3 Yrs Tax Return</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.3" [weak]="1.1" [value]="0.7"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">Bankruptcy</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.8" [weak]="0.0" [value]="0.6"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">Judgement</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [weak]="3.0" [value]="1.4"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">Years Farming</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [weak]="1.0" [value]="0.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10">Operating Profit</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [weak]="1.0" [value]="0.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-750">
+  <div class="col m3">
+    <div class="header p-lr-10 result">Overall Farm Financial</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [weak]="1.0" [value]="0.25"></app-rangebar>
+  </div>
+</div>

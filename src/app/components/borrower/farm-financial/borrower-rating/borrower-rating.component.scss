@@ -1,0 +1,85 @@
+@import "./../../../../../sass/theme/variables";
+
+.m3 {
+  max-width: 150px;
+}
+
+.col {
+  margin: 0 !important;
+}
+
+.four-star {
+  transform: translate(20%, 0);
+}
+
+.three-star {
+  transform: translate(40%, 0);
+}
+
+.two-star {
+  transform: translate(60%, 0);
+}
+
+.one-star {
+  transform: translate(80%, 0);
+}
+
+.font-weight-600 {
+    font-weight: 600;
+}
+
+.main-header {
+    font-weight: bold;
+    font-size: $base-font-size;
+    line-height: 1;
+}
+
+.header {
+    font-weight: 400;
+    font-size: $font-size-sm;
+    line-height: 1;
+}
+
+.col {
+    height: 40px;
+}
+
+.mw-750 {
+    max-width: 750px;
+}
+
+.result {
+    font-weight: bold;
+}
+
+.success {
+    fill: #28a745 !important;
+}
+
+.warning {
+    fill: #ffc107 !important;
+}
+
+.alert {
+    fill: #dc3545 !important;
+}
+
+.white {
+    fill: #fff !important;
+}
+
+.rangebar {
+    padding: 0 20px;
+
+    // transform: translate(0, -25px);
+}
+
+.bar-range {
+    transform: translate(0, -15px);
+}
+
+.text {
+    transform: translate(-35px, -3px);
+    font-size: $font-size-sm;
+    fill: $primary-color;
+}

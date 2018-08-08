@@ -53,11 +53,11 @@ export class HeaderComponent implements OnInit {
   ) {
 
     this.localst.observe(environment.loankey).subscribe(res => {
-      if (res != undefined && res != null)
+      if (res != undefined && res != null && res.Loan_Full_ID)
         this.loanid = res.Loan_Full_ID.replace("-", "/");
     })
 
-        this.getloanid();
+    this.getloanid();
   }
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit {
   }
 
   changepriority(event: any) {
-    this.localst.store(environment.logpriority,parseInt(event.value));
+    this.localst.store(environment.logpriority, parseInt(event.value));
   }
 
   toggleSideBar() {

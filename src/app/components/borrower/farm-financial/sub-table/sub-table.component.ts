@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { isNumber } from 'util';
 
 @Component({
@@ -8,7 +8,9 @@ import { isNumber } from 'util';
 })
 export class SubTableComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    public elRef: ElementRef
+  ) { }
 
   @Input('rowTable')
   rowTable : Array<any>;

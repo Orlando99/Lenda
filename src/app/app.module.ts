@@ -8,7 +8,7 @@ import { ToastModule } from 'ng2-toastr';
 import { ChartsModule } from 'ng2-charts';
 import { BarRatingModule } from "ngx-bar-rating";
 import "reflect-metadata";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 //START MATERIAL COMPONENTS
 import { MatButtonModule, MatCheckboxModule, MatNativeDateModule, MAT_DATE_LOCALE, MatProgressSpinner, MatProgressSpinnerModule, MatTooltipModule, MatChipsModule } from '@angular/material';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -190,8 +190,12 @@ import { SyncStatusComponent } from './components/work-in-progress/syncstatus/sy
 import { LoanCollateralRecordsComponent } from './components/work-in-progress/loancollateralrecords/loancollateralrecords.component';
 import { AgGridTooltipComponent } from './aggridcolumns/tooltip/tooltip.component';
 import { CommitteeComponent } from './components/committee/committee.component';
+import { RangebarComponent } from './ui-components/rangebar/rangebar.component';
+import { SvgTooltipComponent } from './ui-components/svg-tooltip/svg-tooltip.component';
 import { YieldReportComponent } from './components/summary/yield-report/yield-report.component';
 import { BudgetReportComponent } from './components/summary/budget-report/budget-report.component';
+import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
+import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 import { ValidationService } from './Workers/calculations/validation.service';
 
 
@@ -273,8 +277,21 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CollateralReportComponent,
     BorrowerIncomeHistoryComponent,
     AphComponent,
-    CropunitrecordsComponent,FarmRecordsComponent, LoanCropsRecordsComponent, AssociationRecordsComponent,LoanMarketingRecordsComponent,SyncStatusComponent,LoanCollateralRecordsComponent, CommitteeComponent, YieldReportComponent, BudgetReportComponent,
+    CropunitrecordsComponent,
+    FarmRecordsComponent,
+    LoanCropsRecordsComponent,
+    AssociationRecordsComponent,
+    LoanMarketingRecordsComponent,
+    SyncStatusComponent,
+    LoanCollateralRecordsComponent,
+    CommitteeComponent,
+    RangebarComponent,
+    SvgTooltipComponent,
+    YieldReportComponent,
+    BudgetReportComponent,
     AgGridTooltipComponent,
+    LiquidityAnalysisComponent,
+    BorrowerRatingComponent,
     AdminSidebarComponent
   ],
   imports: [
@@ -316,7 +333,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor,ChipsListEditor,EmptyEditor, AgGridTooltipComponent]),
+    AgGridModule.withComponents([NumericEditor, SelectEditor, ChipsListEditor, EmptyEditor, AgGridTooltipComponent]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,
