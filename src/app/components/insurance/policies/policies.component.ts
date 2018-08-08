@@ -23,7 +23,7 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
 import { errormodel } from '../../../models/commonmodels';
-// import { ValidationService } from '../../../Workers/calculations/validation.service';
+import { ValidationService } from '../../../Workers/calculations/validation.service';
 
 @Component({
   selector: 'app-policies',
@@ -34,10 +34,10 @@ import { errormodel } from '../../../models/commonmodels';
 export class PoliciesComponent implements OnInit {
   public syncInsuranceStatus: status;
   private units: any[] = [
-    { key: 1, value: 'EU' }, 
-    { key: 2, value: 'BU' }, 
-    { key: 3, value: 'EP' }, 
-    { key: 4, value: 'OU' }
+    { key: 'EU', value: 'EU' }, 
+    { key: 'BU', value: 'BU' }, 
+    { key: 'EP', value: 'EP' }, 
+    { key: 'OU', value: 'OU' }
   ]; 
   private secInsuranceOptions: any[] = [
     { id: 1, itemName: "STAX" },
@@ -406,6 +406,7 @@ export class PoliciesComponent implements OnInit {
   constructor(
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
+    private validationservice:ValidationService,
     private toaster: ToastsManager,
               public logging: LoggingService,
               public alertify: AlertifyService,
@@ -529,6 +530,7 @@ export class PoliciesComponent implements OnInit {
     }
     
     setTimeout(() => {
+      this.retrieveerrors();
       seterrors(this.errorlist);
       setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
     }, 1000);
@@ -566,7 +568,7 @@ export class PoliciesComponent implements OnInit {
     }
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
     debugger
-    this.validate(event);
+    this.validationservice.validateInsurancePolicies(event,this.loanmodel.InsurancePolicies);
   }
 
 
@@ -722,27 +724,12 @@ export class PoliciesComponent implements OnInit {
   onGridScroll(params) {
     //params.api.stopEditing();
   }
-
-  //validations
-  validate(params:any){
-   let insuranceunit=params.data;
-    switch (insuranceunit.Unit) {
-      case "EU":
-           let effectedpolicies=this.loanmodel.InsurancePolicies.filter(p=>p.County_Id==insuranceunit.Countyid && p.Policy_id!=insuranceunit.mainpolicyId);
-           let invokerpolicy=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==insuranceunit.mainpolicyId);
-           //this.validationservice.validateInsuranceTable(invokerpolicy,effectedpolicies);
-        break;
-      default:
-        break;
-    }
-    this.retrieveerrors();
-    seterrors(this.errorlist);
-  }
   //
 }
 
 function seterrors(obj){
   obj.forEach(element => {
+    debugger
     var filter = Array.prototype.filter
     var selectedelements=document.querySelectorAll('[row-id="Ins_'+element.cellid.split("_")[1]+'"]')
     var filtered = filter.call( selectedelements, function( node ) {
@@ -750,14 +737,23 @@ function seterrors(obj){
     });
    
     element.details.forEach(elemednt => {
-      var cell=filtered[0].querySelector('[col-id="'+element.cellid.split("_")[2]+'"]');
-      cell.classList.add(elemednt);
-      cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
+      try{
+        var p= _.take(_.drop(element.cellid.split("_"), 2), element.cellid.split("_").length-1);
+        var cellid=_.join(p,'_')
+        debugger
+        var cell=filtered[0].querySelector('[col-id="'+cellid+'"]');
+        cell.classList.add(elemednt);
+       }
+       catch{
+
+       }
+      //cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
     });
   });
 }
 
 function setmodifiedsingle(obj){
+  try{
     var filter = Array.prototype.filter
     var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
     var filtered = filter.call( selectedelements, function( node ) {
@@ -765,10 +761,15 @@ function setmodifiedsingle(obj){
     });
       var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
       cell.classList.add("touched");
+    }
+    catch{
+
+    }
 }
 
 function setmodifiedall(arrayy){
   arrayy.forEach(obj=> {
+    try{
   var filter = Array.prototype.filter
   var selectedelements=document.querySelectorAll('[row-id="Ins_'+obj.split("_")[1]+'"]')
   var filtered = filter.call( selectedelements, function( node ) {
@@ -776,5 +777,9 @@ function setmodifiedall(arrayy){
   });
     var cell=filtered[0].querySelector('[col-id="'+obj.split("_")[2]+'"]');
     cell.classList.add("touched");
+  }
+  catch{
+    
+  }
 });
 }
