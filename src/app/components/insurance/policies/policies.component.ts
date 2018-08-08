@@ -579,7 +579,8 @@ export class PoliciesComponent implements OnInit {
     if(!modifiedvalues.includes("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field))
     {
       modifiedvalues.push("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
-      this.localstorage.store(environment.modifiedbase,modifiedvalues);
+      this.localstorage.store(environment.modifiedbase,modifiedvalues);+
+      setmodifiedsingle("Ins_"+$event.data.mainpolicyId+"_"+$event.colDef.field);
     }
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
       items.forEach(element => {
