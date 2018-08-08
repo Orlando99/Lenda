@@ -75,6 +75,7 @@ export class MarketingContractsComponent implements OnInit {
       let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.marketingContracts.key, this.rowData, this.pinnedBottomRowData);
       this.rowData = result.rowData;
       this.pinnedBottomRowData = result.pinnedBottomRowData;
+      this.gridApi.refreshCells();
     });
   }
 

@@ -32,7 +32,6 @@ export class MarketingContractsService {
           values: [{ key: 1, value: 'Crop' }, { key: 2, value: 'Stored Crop' }]
         },
         valueFormatter: function (params) {
-
           if (params.value) {
             var selectedValue = params.colDef.cellEditorParams.values.find(data => data.key == params.value);
             if (selectedValue) {
