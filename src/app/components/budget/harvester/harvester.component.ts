@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
-import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter, getNumericCellEditor, formatPhoneNumber } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
@@ -78,7 +78,7 @@ export class HarvesterComponent implements OnInit {
       { headerName: 'Harvester', field: 'Assoc_Name',  editable: true, cellClass: ['lenda-editable-field'] },      
       { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
       { headerName: 'Location', field: 'Location',  editable: true ,cellClass: ['lenda-editable-field']},
-      { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
+      { headerName: 'Phone', field: 'Phone', editable: true,valueFormatter: formatPhoneNumber, cellClass: ['lenda-editable-field']},
       { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
       { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },

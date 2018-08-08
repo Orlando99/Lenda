@@ -8,7 +8,7 @@ import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { LoancropunitcalculationworkerService } from '../../../Workers/calculations/loancropunitcalculationworker.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
-import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
+import { getNumericCellEditor, numberValueSetter, formatPhoneNumber } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
@@ -72,7 +72,7 @@ export class RebatorComponent implements OnInit {
         { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
         { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellClass: ['editable-color']},
         { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
-        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
+        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueFormatter: formatPhoneNumber, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: false},
         { headerName: 'Exp Rebate',width:140, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],

@@ -105,9 +105,11 @@ export class LivestockComponent implements OnInit {
 
   getdataforgrid(localloanobject: loan_model, categoryCode) {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData=obj.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
-    if (obj != null && obj != undefined) {
-      this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
+   if(obj != null){
+      this.rowData=obj.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
+      if (obj != null && obj != undefined) {
+        this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
+      }
     }
   }
 

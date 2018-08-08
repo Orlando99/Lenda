@@ -147,6 +147,13 @@ export function yieldValueSetter(params) {
   
   return params.newValue;
 }
+
+
+export function formatPhoneNumber(params) {
+  var val = (""+params.value).replace(/\D/g, '');
+  var num = val.match(/^(\d{3})(\d{3})(\d{4})$/);
+  return (!num) ? null : "(" + num[1] + ") " + num[2] + "-" + num[3];
+}
   
  
   //Numeric cell editor config Ends
