@@ -26,7 +26,7 @@ import { UserArticleComponent } from './layout/right-sidebar/user-article/user-a
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        AppRoutingModule,
+        AppRoutingModule
     ]
 })
 export class SharedModule { }

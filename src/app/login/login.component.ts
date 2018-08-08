@@ -9,7 +9,7 @@ import { Logpriority } from '../models/loanmodel';
 import { ApiService } from '../services';
 import { CropapiService } from '../services/crop/cropapi.service';
 import { ReferenceService } from '../services/reference/reference.service';
-import { Users, errormodel } from '../models/commonmodels';
+import { Users, errormodel ,User} from '../models/commonmodels';
 import { LoginService } from './login.service';
 import { generate } from '../Workers/utility/randomgenerator';
 
@@ -24,10 +24,12 @@ export class LoginComponent implements OnInit {
   title: string = '';
   isValidForm: boolean = true;
   authForm: FormGroup;
+
   private loggedIn: boolean;
   private isUserLoggedIn: boolean;
-  username: string;
-  password: string;
+  private username: string;
+  private password: string;
+  private usersData: User[] = Users;
 
   constructor(
     private route: ActivatedRoute,
@@ -75,22 +77,21 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    let userfound = Users[this.username];
-    if (userfound != undefined && this.username == this.password) {
-      // trigger login success
+    const user = this.usersData.filter(user => user.userName === this.username && user.password === this.password);
+    if(user.length > 0) {
       this.loginService.login(true);
       this.localst.store(environment.logpriority, Logpriority.Low);
+      this.localst.store(environment.uid, user[0].id);
+      this.localst.store(environment.localStorage.userRole, user[0].role);
       this.localst.store(environment.usersession,generate())
       
       this.localst.store(environment.errorbase,[]);
       this.localst.store(environment.modifiedbase,[]);
-      this.localst.store(environment.uid, userfound);
       
       this.getreferencedata();
       //this.router.navigateByUrl("/home/loanoverview/000001/000/summary");
       this.router.navigateByUrl("/home/loans");
-    }
-    else {
+    } else {
       this.toastr.error('Invalid username or password');
     }
   }
@@ -100,6 +101,4 @@ export class LoginComponent implements OnInit {
       this.localst.store(environment.referencedatakey, res.Data);
     })
   }
-
-
 }
