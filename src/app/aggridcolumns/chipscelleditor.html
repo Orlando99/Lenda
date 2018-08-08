@@ -6,9 +6,12 @@
     [multiple]="true"
     [closeOnSelect]="false"
     appendTo="body"
-    [(ngModel)]="selectedItems">
+    [(ngModel)]="selectedItems"
+    (clickOutside)="onClickedOutside($event)">
     <ng-template ng-header-tmp>
         <input (change)="changeAll($event)" type="checkbox">All
+
+        <button class="right" (click)="closeDropdown()">Close</button>
     </ng-template>
     <ng-template ng-option-tmp let-item="item">
         <input [checked]="selectedItems.indexOf(item.itemName) > -1" type="checkbox">

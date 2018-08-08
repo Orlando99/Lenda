@@ -101,7 +101,7 @@ export function Countyvaluesetter(params) {
 
 export function getfilteredcounties(params) {
     var refdata = JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|refdata") + ']')[0];
-    var selectedstate = params.data.Farm_State_ID;
+    var selectedstate = params.data.Farm_State_ID  === 0 ? 1 : params.data.Farm_State_ID;
     var allowedCounties = refdata.CountyList.filter(p => p.State_ID == selectedstate);
     return { values: extractCountyValues(allowedCounties) };
 }

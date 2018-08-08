@@ -1,0 +1,73 @@
+@import "./../../../../sass/theme/variables";
+
+mat-sidenav  {
+  padding-top: 80px;
+  mat-icon {
+    color: $icon-color;
+    font-size: 18px;
+  }
+
+  .unfeatured {
+    p {
+      color: $sidebar-unfeatured-item-color;
+      font-size: $base-font-size;
+    }
+  }
+
+  .mat-list-item {
+    height: 50px;
+  }
+
+  .mat-list-item:not(.unfeatured):not(.normalize) p.mat-line {
+    margin-top: -1px;
+    color: $white-90;
+    text-transform: uppercase;
+    font-weight: 500;
+    -webkit-transition: width 0.25s;
+    transition: width 0.25s;
+    font-size: $base-font-size;
+  }
+
+  .normalize {
+    color: $white-90;
+    font-size: $base-font-size;
+  }
+
+  .mat-list-item-focus,
+  .mat-list-item .active,
+  .mat-list-item.active {
+    background: $sidebar-selected-bg-color;
+    .flaticon {
+      color: $nav-hover-color;
+    }
+  }
+
+  .mat-list-item:not(.navLogo):hover{
+    background: $nav-hover-color;
+    .flaticon {
+      color: $white-90;
+    }
+  }
+}
+
+#arm-sidenav{
+  background: $sidebar-bg-color;
+  overflow-y: auto;
+  position: fixed;
+  // TODO: If footer is not required, give height of 100%
+  // and hide footer
+  height: calc(100% - 30px);
+  top: 0;
+  left: 0;
+  width: $sidebar-minimal-view;
+  -webkit-transition: width 0.25s;
+  transition: width 0.25s;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  &.expanded {
+    width: $sidebar-expanded-view;
+  }
+}
+
+.arm-sidenav {
+  visibility: visible !important
+}
