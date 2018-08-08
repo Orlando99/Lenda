@@ -125,7 +125,7 @@ export class RealEstateComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.getgridheight();
-    this.adjustparentheight();
+    //this.adjustparentheight();
   }
 
   syncenabled() {   

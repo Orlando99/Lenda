@@ -79,7 +79,7 @@ export class MarketingcontractcalculationService {
       }
     });
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_CrpContract_3', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(3, 'Calc_Price', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     // localloanobject.LoanMarketingContracts.forEach(mktContracts =>{
     //   let matchingCrop = localloanobject.LoanCrops.find(loanCrops=> loanCrops.Crop_Code === mktContracts.Crop_Code);
     //   if(matchingCrop){

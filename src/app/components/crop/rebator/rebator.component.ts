@@ -41,7 +41,7 @@ export class RebatorComponent implements OnInit {
 
   style = {
     marginTop: '10px',
-    width: '1065px',
+    width: '96%',
     boxSizing: 'border-box'
   };
 
@@ -112,7 +112,7 @@ export class RebatorComponent implements OnInit {
       }
       this.savedData = _.cloneDeep(this.rowData);
       //this.getgridheight();
-      this.gridApi.refreshCells();
+      this.gridApi && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
 
@@ -215,9 +215,9 @@ synctoDb() {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     //setgriddefaults(this.gridApi,this.columnApi);
-    toggletoolpanel(false,this.gridApi);
-    removeHeaderMenu(this.gridApi);
-    // params.api.sizeColumnsToFit();
+    // toggletoolpanel(false,this.gridApi);
+    // removeHeaderMenu(this.gridApi);
+    params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
 

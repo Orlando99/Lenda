@@ -12,6 +12,7 @@ export const environment = {
   uid: "userid",
   loanidkey:"selectedloanId",
   isDebugModeActive: true,
-  usersession:"sessionid"
+  usersession:"sessionid",
+  errorbase:"errors"
 };
 

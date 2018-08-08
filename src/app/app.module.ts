@@ -192,6 +192,7 @@ import { AgGridTooltipComponent } from './aggridcolumns/tooltip/tooltip.componen
 import { CommitteeComponent } from './components/committee/committee.component';
 import { YieldReportComponent } from './components/summary/yield-report/yield-report.component';
 import { BudgetReportComponent } from './components/summary/budget-report/budget-report.component';
+import { ValidationService } from './Workers/calculations/validation.service';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -392,6 +393,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LoginService,
     MarketingcontractcalculationService,
     OptimizercalculationService,
+    ValidationService,
     ToasterService,
     {
       provide: ErrorHandler,
