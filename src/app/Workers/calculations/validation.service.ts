@@ -51,7 +51,18 @@ export class ValidationService {
     let cropsets=_.uniq(allinsuranceitems.map(p=>{
         return this.refdata.CropList.find(x=>x.Crop_And_Practice_ID==p.Crop_Practice_Id).Crop_Code;
     }));
-             
+    
+    //now loop throught each crop and taking first as reference item ..lets sets errors on crop based sets
+
+    cropsets.forEach(element => {
+       //get croptypefirst
+       let availablecroppracticesets=this.refdata.CropList.filter(p=>p.Crop_Code==element);
+       let cropset=allinsuranceitems.filter(p=>availablecroppracticesets.includes(p.Crop_Practice_Id));
+       //lets take the first element as reference 
+       
+
+    });
+    
     itemseffected.forEach(element => {
       let mainpolicyid=element.Policy_id;
       //unit check 

@@ -722,9 +722,7 @@ export class PoliciesComponent implements OnInit {
            let effectedpolicies=this.loanmodel.InsurancePolicies.filter(p=>p.County_Id==insuranceunit.Countyid && p.Policy_id!=insuranceunit.mainpolicyId);
            let invokerpolicy=this.loanmodel.InsurancePolicies.find(p=>p.Policy_id==insuranceunit.mainpolicyId);
            this.validationservice.validateInsuranceTable(invokerpolicy,effectedpolicies);
-           
         break;
-    
       default:
         break;
     }
