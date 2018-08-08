@@ -16,7 +16,7 @@ export class AdminSidebarComponent implements OnInit {
 
  private Role: Role;
  private userRole: number;
- private isExpanded: boolean = true;
+ public isExpanded: boolean = true;
  
  @ViewChild('adminSidebar') public sideNav: MatSidenav;
   
