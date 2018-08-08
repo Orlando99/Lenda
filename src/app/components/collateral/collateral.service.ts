@@ -42,7 +42,7 @@ export class CollateralService {
   };
 
   onInit(localloanobject: loan_model, gridApi, res, component, categoryCode) {
-    this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
+    //this.logging.checkandcreatelog(1, 'LoanCollateral - ' + categoryCode, "LocalStorage updated");
     if (res.srccomponentedit == component) {
       //if the same table invoked the change .. change only the edited row
       localloanobject = res;
@@ -50,7 +50,7 @@ export class CollateralService {
     } else {
       localloanobject = res
       this.rowData = [];
-      this.rowData = this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
+      this.rowData = localloanobject.LoanCollateral !== null ? localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === categoryCode && lc.ActionStatus !== 3 }) : [];
       this.pinnedBottomRowData = this.computeTotal(categoryCode, res);
     }
     this.getgridheight();
@@ -93,6 +93,7 @@ export class CollateralService {
     localloanobject.srccomponentedit = component;
     localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
+   
   }
 
   deleteClicked(rowIndex: any, localloanobject: loan_model) {

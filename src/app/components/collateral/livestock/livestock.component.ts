@@ -15,6 +15,7 @@ import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
+import { LiveStockService } from './livestock.service';
 
 @Component({
   selector: 'app-livestock',
@@ -51,6 +52,7 @@ export class LivestockComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
+    public livestockService: LiveStockService,
     public collateralService: CollateralService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
@@ -97,19 +99,35 @@ export class LivestockComponent implements OnInit {
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.collateralService.onInit(this.localloanobject, this.gridApi, res, "LivestockComponent", "LSK");
+      this.collateralService.onInit(this.localloanobject, this.gridApi, res, 'LivestockComponent' ,'LSK');
     });
 
-    this.getdataforgrid(this.localloanobject, "LSK");
+    this.getdataforgrid();
   }
 
-  getdataforgrid(localloanobject: loan_model, categoryCode) {
+  getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-   if(obj != null){
-      this.rowData=obj.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
-      if (obj != null && obj != undefined) {
-        this.pinnedBottomRowData = this.collateralService.computeTotal(categoryCode, obj);
-      }
+    // this.logging.checkandcreatelog(1, 'LoanCollateral - LSK', "LocalStorage retrieved");
+    if (obj != null && obj != undefined) {
+      this.localloanobject = obj;
+      this.rowData = [];
+      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3 }) : [];
+      this.pinnedBottomRowData = this.livestockService.computeTotal(obj);
+    }
+    this.collateralService.getgridheight();
+    this.adjustgrid();
+  }
+
+  onGridSizeChanged(Event: any) {
+
+    this.adjustgrid();
+  }
+
+  private adjustgrid() {
+    try {
+      this.gridApi.sizeColumnsToFit();
+    }
+    catch {
     }
   }
 
@@ -117,6 +135,7 @@ export class LivestockComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     this.collateralService.getgridheight();
+    this.adjustgrid();
   }
 
   syncenabled() {   
@@ -141,13 +160,5 @@ export class LivestockComponent implements OnInit {
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject);
-  }
-
-  onGridSizeChanged(Event: any) {
-    try {
-      this.gridApi.sizeColumnsToFit();
-    }
-    catch{
-    }
   }
 }
