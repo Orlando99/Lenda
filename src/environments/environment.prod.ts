@@ -13,6 +13,9 @@ export const environment = {
   loanidkey:"selectedloanId",
   collateralTables: "collateralTables",
   isDebugModeActive: true,
+  localStorage: { 
+    userRole: 'userRole' 
+  },
   usersession:"sessionid",
   errorbase:"errors",
   modifiedbase:"changedvalues"
