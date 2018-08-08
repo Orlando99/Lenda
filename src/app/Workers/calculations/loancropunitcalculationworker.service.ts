@@ -345,6 +345,7 @@ export class LoancropunitcalculationworkerService {
         try {
           
           element.Ins_Value = element.Ins_Value + element.FC_Icevalue + element.FC_Hmaxvalue +element.FC_Crophailvalue +element.FC_Scovalue +element.FC_Staxvalue + element.FC_Abcvalue + element.FC_Rampvalue+element.FC_Pcivalue;
+          element.Disc_Ins_value = (element.Disc_Ins_value || 0 )+(element.FC_Disc_Icevalue || 0 )+(element.FC_Disc_Hmaxvalue || 0 )+(element.FC_Disc_Crophailvalue || 0 )+(element.FC_Disc_Scovalue || 0 )+(element.FC_Disc_Staxvalue+ element.FC_Disc_Abcvalue || 0 )+(element.FC_Disc_Rampvalue || 0 )+(element.FC_Disc_Pcivalue || 0); 
         }
         catch{
           element.Ins_Value = 0;
