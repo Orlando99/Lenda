@@ -1,44 +1,56 @@
-<mat-accordion>
-  <mat-expansion-panel [expanded]="expanded" [ngClass] = "displayAsChildChevron ? 'child-cheveron' : ''">
+<mat-accordion *ngIf="!displayAsChildChevron">
+  <mat-expansion-panel [expanded]="expanded">
     <mat-expansion-panel-header>
       <mat-panel-title>
         {{ chevronHeader || 'Questions'}}
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <a class="waves-effect waves-light btn" [ngClass]="isResponseUpdated ? '' : 'disabled'"  (click)="synctoDb()" style="margin: 0 0 10px 18px;" >
-        <i class="material-icons left">cloud</i> {{isPublishing ? 'Publishing...' : 'Publish'}}</a>
-
-    
-    <div *ngIf="responses && responses.length" class="container bottom">
-      <div class="q-row" *ngFor="let res of responses; let i = index; trackBy : res ?  res.Question_ID : index ">
-        <div class="row" *ngIf="res.FC_Subsidiary_Question_ID_Ind ? getVisibility(res.FC_Parent_Question_ID) : true"  >
-          <div class="col s8"> <span [ngClass]="res.FC_Subsidiary_Question_ID_Ind  ? 'child' : 'parent'">{{res.FC_Question_ID_Text}}</span> </div>
-          
-          <div class="col s4" *ngIf="res.Question_Category_Code==1">
-            <mat-radio-group [(ngModel)]="res.Response_Detail" (ngModelChange)="change(res)">
-              <mat-radio-button [value]="res.FC_Choice1">{{res.FC_Choice1}}</mat-radio-button>
-              <mat-radio-button [value]="res.FC_Choice2">{{res.FC_Choice2}}</mat-radio-button>
-            </mat-radio-group>
-          </div>
-          <div class="col s3" *ngIf="res.Question_Category_Code==2">
-              
-              <mat-form-field>
-                  <input type="number" [(ngModel)]="res.Response_Detail" (blur)="change(res)" matInput placeholder="Answer"/>
-                </mat-form-field>
-            </div>
+    <a class="waves-effect waves-light btn" [ngClass]="isResponseUpdated ? '' : 'disabled'" (click)="synctoDb()" style="margin: 0 0 10px 18px;">
+      <i class="material-icons left">cloud</i> {{isPublishing ? 'Publishing...' : 'Publish'}}</a>
+    <ng-container *ngTemplateOutlet="questionsList"></ng-container>
 
 
-          <!-- <div class="col s9" >
-            <div class="right-side container">
-              <span>{{q.Question_ID_Text}}</span>
-              <mat-form-field *ngIf="LoanQResponse[i].Response_Ind.toString() === '0'">
-                <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (blur)="change()" matInput placeholder="Answer"></textarea>
-              </mat-form-field>
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </div>
+
+
   </mat-expansion-panel>
 </mat-accordion>
+<ng-container *ngIf="displayAsChildChevron">
+  <h4 style="margin : 0 10px"> {{ chevronHeader || 'Questions'}} </h4>
+  <ng-container *ngTemplateOutlet="questionsList"></ng-container>
+</ng-container>
+
+<ng-template #questionsList>
+  <div *ngIf="responses && responses.length" class="container bottom">
+    <div class="q-row" *ngFor="let res of responses; let i = index; trackBy : res ?  res.Question_ID : index ">
+      <div class="row" *ngIf="res.FC_Subsidiary_Question_ID_Ind ? getVisibility(res.FC_Parent_Question_ID) : true">
+        <div class="col s8">
+          <span [ngClass]="res.FC_Subsidiary_Question_ID_Ind  ? 'child' : 'parent'">{{res.FC_Question_ID_Text}}</span>
+        </div>
+
+        <div class="col s4" *ngIf="res.Question_Category_Code==1">
+          <mat-radio-group [(ngModel)]="res.Response_Detail" (ngModelChange)="change(res)">
+            <mat-radio-button [value]="res.FC_Choice1">{{res.FC_Choice1}}</mat-radio-button>
+            <mat-radio-button [value]="res.FC_Choice2">{{res.FC_Choice2}}</mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col s3" *ngIf="res.Question_Category_Code==2">
+
+          <mat-form-field>
+            <input type="number" [(ngModel)]="res.Response_Detail" (blur)="change(res)" matInput placeholder="Answer" />
+          </mat-form-field>
+        </div>
+
+
+        <!-- <div class="col s9" >
+              <div class="right-side container">
+                <span>{{q.Question_ID_Text}}</span>
+                <mat-form-field *ngIf="LoanQResponse[i].Response_Ind.toString() === '0'">
+                  <textarea [(ngModel)]="LoanQResponse[i].Response_Detail_Text" (blur)="change()" matInput placeholder="Answer"></textarea>
+                </mat-form-field>
+              </div>
+            </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>
