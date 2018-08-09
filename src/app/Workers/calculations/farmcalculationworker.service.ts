@@ -15,11 +15,11 @@ export class FarmcalculationworkerService {
       }
 
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_LoanFarm', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_LoanFarm', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return input;
     }
     catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_LoanFarm', e);
+      this.logging.checkandcreatelog(1, 'Calc_LoanFarm', e);
       return input;
     }
   }

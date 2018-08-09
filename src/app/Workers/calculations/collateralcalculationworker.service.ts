@@ -44,10 +44,10 @@ export class Collateralcalculationworker {
             this.computerealstateTotal(input);
             this.computestoredcropTotal(input);
             let endtime = new Date().getTime();
-            this.logging.checkandcreatelog(3, 'Calc_Collateral', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+            this.logging.checkandcreatelog(1, 'Calc_Collateral', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
             return input;
         } catch(e){
-            this.logging.checkandcreatelog(3, 'Calc_Collateral', e);
+            this.logging.checkandcreatelog(1, 'Calc_Collateral', e);
             return input;
         }
 
@@ -63,7 +63,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Disc_value_FSA =this.totalDiscValue(collateralFSA);
 
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_FSA', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_FSA', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
 
@@ -79,7 +79,7 @@ export class Collateralcalculationworker {
         );
 
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_EQP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_EQP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
    
     computeTotallivestock(input) {
@@ -93,7 +93,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].FC_total_Qty_lst = this.totalQty(collaterallst);
         input.LoanMaster[0].FC_total_Price_lst = this.totalPrice(collaterallst);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_LST', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_LST', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
       }
 
@@ -105,7 +105,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Net_Market_Value__Other = this.totalNetMktValue(collateralother);
         input.LoanMaster[0].Disc_value_Other = this.totalDiscValue(collateralother);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_OTR', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_OTR', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computerealstateTotal(input) {
@@ -117,7 +117,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].Disc_value_Real_Estate = this.totalDiscValue(collateralrealstate);
         input.LoanMaster[0].FC_total_Qty_Real_Estate = this.totalQty(collateralrealstate);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_RET', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_RET', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
 
       computestoredcropTotal(input) {
@@ -130,7 +130,7 @@ export class Collateralcalculationworker {
         input.LoanMaster[0].FC_total_Qty_storedcrop = this.totalQty(collateralrealstate);
         input.LoanMaster[0].FC_total_Price_storedcrop = this.totalPrice(collateralrealstate);
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Collateral_SCP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Collateral_SCP', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
     }
      totalDiscValue(loanCollateral) {
@@ -229,10 +229,10 @@ export class Collateralcalculationworker {
                 
             }
             let endtime = new Date().getTime();
-            this.logging.checkandcreatelog(3, 'Calc_MarketValue', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+            this.logging.checkandcreatelog(1, 'Calc_MarketValue', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
             return loanObject;
         }catch(e){
-            this.logging.checkandcreatelog(3, 'Calc_MarketValue', e);
+            this.logging.checkandcreatelog(1, 'Calc_MarketValue', e);
             return loanObject;
         }
 

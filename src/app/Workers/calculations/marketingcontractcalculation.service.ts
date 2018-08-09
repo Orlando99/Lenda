@@ -24,7 +24,8 @@ export class MarketingcontractcalculationService {
       contract.Contract_Per = 0;
     }
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_CrpContract_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(1, 'Calc_CrpContract_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    
   }
 
   getCropContract(localloanobject : loan_model, cropCode : string, type : string){
@@ -48,12 +49,12 @@ export class MarketingcontractcalculationService {
         totalCropYield = selectedCY.CropYield;
       }
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_CrpContract_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_CrpContract_2', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
         return totalCUAcres * totalCropYield;
     }else{
       return 0;
     }
-
+    
   }
 
   performPriceCalculation(localloanobject : loan_model){
@@ -74,11 +75,11 @@ export class MarketingcontractcalculationService {
         crop.Contract_Qty = 0;
         crop.Marketing_Adj =0;
         crop.Adj_Price = (crop.Crop_Price || 0) + (crop.Basic_Adj || 0) + (crop.Marketing_Adj ||0) + (crop.Rebate_Adj || 0);
-
+        
       }
     });
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_Price', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(1, 'Calc_Price', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     // localloanobject.LoanMarketingContracts.forEach(mktContracts =>{
     //   let matchingCrop = localloanobject.LoanCrops.find(loanCrops=> loanCrops.Crop_Code === mktContracts.Crop_Code);
     //   if(matchingCrop){
