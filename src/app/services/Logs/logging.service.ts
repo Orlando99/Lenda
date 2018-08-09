@@ -16,11 +16,12 @@ export class LoggingService {
     return this.apiservice.post(route, Object).map(res => res);
   }
   checkandcreatelog(level: Logpriority, section: string, message: string) {
+    level = level || 2;
     let res=this.localst.retrieve(environment.logpriority);
     let userid = this.localst.retrieve(environment.uid);
     let localLoanObject = this.localst.retrieve(environment.loankey);
       
-      // if (level <= res) {
+      if (level > res) {
         
         let obj = new Logs();
         obj.Log_Id = 0;
@@ -31,6 +32,7 @@ export class LoggingService {
         this.createlog(obj).subscribe(res=>{
           
         })
+      }
       
       //ignore else
    

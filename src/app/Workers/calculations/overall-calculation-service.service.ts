@@ -34,10 +34,10 @@ export class OverallCalculationServiceService {
     }
     
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_BalanceSheet', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_BalanceSheet', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return loanObject;
     }catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_BalanceSheet', e);
+      this.logging.checkandcreatelog(1, 'Calc_BalanceSheet', e);
       return loanObject;
     }
   }

@@ -19,6 +19,7 @@ import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alpha
 import * as _ from 'lodash';
 import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults, toggletoolpanel, removeHeaderMenu } from '../../../aggriddefinations/aggridoptions';
+import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 @Component({
   selector: 'app-rebator',
   templateUrl: './rebator.component.html',
@@ -74,7 +75,10 @@ export class RebatorComponent implements OnInit {
         { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
         { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
-        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: false},
+        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
+          cellEditorParams : {values : Preferred_Contact_Ind_Options},
+          valueFormatter : PreferredContactFormatter
+        },
         { headerName: 'Exp Rebate',width:140, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
         cellEditorParams: (params)=> {
           return { value : params.data.Amount || 0}
