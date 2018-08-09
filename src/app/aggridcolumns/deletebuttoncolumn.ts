@@ -3,7 +3,12 @@ import {ICellRendererAngularComp} from "ag-grid-angular";
 
 @Component({
     selector: 'child-cell',
-    template: `<span><button style="height: 16.5px" (click)="invokeParentMethod()" class="btn btn-info">{{btntext}}</button></span>`,
+    template: `
+    <span>
+      <i (click)="invokeParentMethod()" class="material-icons ag-grid-delete">
+        delete
+      </i>
+    </span>`,
     styles: [
         `.btn {
             line-height: 0.1
@@ -14,14 +19,12 @@ import {ICellRendererAngularComp} from "ag-grid-angular";
 
 export class DeleteButtonRenderer implements ICellRendererAngularComp {
     public params: any;
-    public btntext:string="Delete"
 
     agInit(params: any): void {
         this.params = params;
     }
 
     public invokeParentMethod() {
-        
         this.params.context.componentParent.DeleteClicked(this.params.rowIndex, this.params.data)
     }
 

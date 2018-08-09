@@ -40,7 +40,7 @@ export class EquipmentService {
         }, pinnedRowCellRenderer: function () { return ' '; },
         valueFormatter: insuredFormatter
       },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
+      { headerName: '', field: 'value', cellClass: ['material-icons delete'], cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
     ];
   }
 
