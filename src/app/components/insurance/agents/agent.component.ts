@@ -17,6 +17,7 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
+import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
@@ -78,7 +79,10 @@ export class AgentComponent implements OnInit {
       { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['lenda-editable-field'] },
       { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
       { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellClass: ['lenda-editable-field'] },
+      { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['lenda-editable-field'],
+          cellEditorParams : {values : Preferred_Contact_Ind_Options},
+          valueFormatter : PreferredContactFormatter
+        },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
     ///
