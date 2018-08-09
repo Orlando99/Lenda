@@ -224,6 +224,7 @@ synctoDb() {
     params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
+  
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
@@ -245,9 +246,9 @@ synctoDb() {
   }
 
   syncenabled(){
-    var errPhne = this.rowData.filter(rd => { console.log(rd.Phone.length); return rd.Phone.length < 10;});
-    console.log(errPhne);
-    if (this.rowData.filter(p => p.ActionStatus != undefined).length > 0 && errPhne.length > 0){
+    // var errPhne = this.rowData.filter(rd => { console.log(rd.Phone.length); return rd.Phone.length < 10;});
+    // console.log(errPhne);
+    if ( this.isArrayEqual(this.rowData, this.savedData)){
       return 'disabled';
     } else 
       return '';
