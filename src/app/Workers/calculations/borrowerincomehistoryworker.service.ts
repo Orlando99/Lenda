@@ -16,10 +16,10 @@ export class Borrowerincomehistoryworker {
             this.prepare_fc_borrower_income(this.input.BorrowerIncomeHistory[i]);
         }
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_BorrowIncomeHistory', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");this.logging.checkandcreatelog(1, 'Calc_BorrowIncomeHistory_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return this.input;
     } catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_BorrowIncomeHistory', e);
+      this.logging.checkandcreatelog(1, 'Calc_BorrowIncomeHistory', e);
       return this.input;
     }
   }

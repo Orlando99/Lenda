@@ -50,11 +50,11 @@ export class LoancropunitcalculationworkerService {
       this.prepare_crops_estimatedinterest();
       this.prepare_crops_totalcashflow();
       let endtime = new Date().getMilliseconds();
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
       return this.input;
     }
     catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit', e);
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit', e);
       return input;
     }
   }
@@ -87,10 +87,10 @@ export class LoancropunitcalculationworkerService {
       }
 
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit_APH', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit_APH', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return localLoanObject;
     }catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit_APH', e);
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit_APH', e);
       return localLoanObject;
     }
   }
@@ -420,10 +420,10 @@ export class LoancropunitcalculationworkerService {
         
       
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit_FC', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit_FC', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return input;
     }catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_CropUnit_FC', e);
+      this.logging.checkandcreatelog(1, 'Calc_CropUnit_FC', e);
       return input;
     }
   }

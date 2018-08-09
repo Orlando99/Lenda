@@ -82,12 +82,12 @@ export class LoanMasterCalculationWorkerService {
   
         
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_LoanMaster', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       }
       return loanObject;
     
       } catch(e){
-        this.logging.checkandcreatelog(3, 'Calc_LoanMaster', e);
+        this.logging.checkandcreatelog(1, 'Calc_LoanMaster', e);
         return loanObject;
       }
   }
@@ -118,7 +118,7 @@ export class LoanMasterCalculationWorkerService {
 
     }
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_Dashboard', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(1, 'Calc_LoanMaster_Dashboard', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return localLoanObject;
   }
 
@@ -129,7 +129,7 @@ export class LoanMasterCalculationWorkerService {
       }
       let lookupIndex = 5 - rating;
     let endtime = new Date().getTime();
-    this.logging.checkandcreatelog(3, 'Calc_LoanMaster_RatingReq', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+    this.logging.checkandcreatelog(1, 'Calc_LoanMaster_RatingReq', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
     return {
       borrowerRating: this.borrowerRatingstaticValues.borrowerRating[lookupIndex],
       FICOScore: this.borrowerRatingstaticValues.FICOScore[lookupIndex],
