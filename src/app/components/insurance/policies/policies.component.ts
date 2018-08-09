@@ -128,8 +128,8 @@ export class PoliciesComponent implements OnInit {
         cellEditorParams: this.getAIPs()
       },
       {
-        headerName: 'County | State', 
-        headerTooltip: 'County | State',
+        headerName: 'State | County', 
+        headerTooltip: 'State | County',
         cellRenderer: 'columnTooltip',
         field: 'StateandCountry'
         ,pickfield:'StateandCountry'
@@ -139,12 +139,6 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Crop',
         cellRenderer: 'columnTooltip',
         field: 'CropName',pickfield:'CropName'
-      },
-      {
-        headerName: 'Countyid', 
-        headerTooltip: 'Countyid',
-        cellRenderer: 'columnTooltip',
-        field: 'Countyid',pickfield:'Countyid',visible:false
       },
       {
         headerName: 'Practice', 
@@ -164,20 +158,6 @@ export class PoliciesComponent implements OnInit {
         cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
       {
-        headerName: 'Options', 
-        headerTooltip: 'Options',
-        field: 'SecInsurance', 
-        pickfield: 'SecInsurance',
-        cellRenderer: 'columnTooltip',
-        cellClass: ['editable-color'], 
-        autoHeight: true,
-        editable: true, 
-        cellEditor: "chipeditor",
-        cellEditorParams: {
-          items: this.secInsuranceOptions
-        }
-      },
-      {
         headerName: 'Unit', 
         headerTooltip: 'Unit',
         field: 'Unit', 
@@ -194,6 +174,21 @@ export class PoliciesComponent implements OnInit {
          return selected.length > 0 ? selected[0].value : null;
         }
       },
+      {
+        headerName: 'Options', 
+        headerTooltip: 'Options',
+        field: 'SecInsurance', 
+        pickfield: 'SecInsurance',
+        cellRenderer: 'columnTooltip',
+        cellClass: ['editable-color'], 
+        autoHeight: true,
+        editable: true, 
+        cellEditor: "chipeditor",
+        cellEditorParams: {
+          items: this.secInsuranceOptions
+        }
+      },
+     
       {
         headerName: 'Level', 
         headerTooltip: 'Level',
@@ -477,7 +472,7 @@ export class PoliciesComponent implements OnInit {
         row.ProposedAIP = item.ProposedAIP;
         row.Countyid=item.County_Id;
         row.ActionStatus=item.ActionStatus;
-        row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + "|" + lookupCountyValue(item.County_Id);
+        row.StateandCountry = lookupStateValueinRefobj(item.State_Id) + " | " + lookupCountyValue(item.County_Id);
         row.CropName = this.getcropnamebyVcropid(item.Crop_Practice_Id);
         row.Practice = this.getcroppracticebyVcropid(item.Crop_Practice_Id);
         row.MPCI_Subplan = item.MPCI_Subplan;
