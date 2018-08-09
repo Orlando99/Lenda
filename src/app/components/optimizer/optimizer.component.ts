@@ -23,7 +23,7 @@ export class OptimizerComponent implements OnInit {
   private columnApi;
   rowDataNIR = [];
   rowDataIIR = [];
-  public loading=false;
+  public loading = false;
   public context;
   public rowClassRules;
   private refdata;
@@ -33,11 +33,11 @@ export class OptimizerComponent implements OnInit {
         return "aggregatecol";
       }
     },
-    cellRenderer: function(params) {
-      if(params.value!=undefined)
-      return '<span id='+params.column.colId+"_"+params.data.ID+'>' + params.value + '</span>';
+    cellRenderer: function (params) {
+      if (params.value != undefined)
+        return '<span id=' + params.column.colId + "_" + params.data.ID + '>' + params.value + '</span>';
       else
-      return "<span></span>"
+        return "<span></span>"
     }
   };
   style = {
@@ -55,45 +55,43 @@ export class OptimizerComponent implements OnInit {
     {
       headerName: 'County', field: 'County', editable: false
     },
-    { headerName: '% Prod.',headerClass:"rightaligned",cellClass:"rightaligned", field: 'Prodpercentage', editable: false },
+    { headerName: '% Prod.', headerClass: "rightaligned", cellClass: "rightaligned", field: 'Prodpercentage', editable: false },
     { headerName: 'Landlord', field: 'Landlord', editable: false },
-    { headerName: 'FSN',headerClass:"rightaligned",cellClass:"rightaligned", field: 'FSN', editable: false },
+    { headerName: 'FSN', headerClass: "rightaligned", cellClass: "rightaligned", field: 'FSN', editable: false },
     { headerName: 'Crop', field: 'Crop', editable: false },
     { headerName: 'Practice', field: 'Practice', editable: false },
-    { headerName: 'CF',headerClass:"rightaligned",cellClass:"rightaligned", field: 'CF', editable: false },
-    { headerName: 'RC',minWidth:100,headerClass:"rightaligned",cellClass:"rightaligned", field: 'RC', editable: false },
-    { headerName: 'Excess ins',headerClass:"rightaligned",cellClass:"rightaligned", field: 'ExcessIns', editable: false },
+    { headerName: 'CF', headerClass: "rightaligned", cellClass: "rightaligned", field: 'CF', editable: false },
+    { headerName: 'RC', minWidth: 100, headerClass: "rightaligned", cellClass: "rightaligned", field: 'RC', editable: false },
+    { headerName: 'Excess ins', headerClass: "rightaligned", cellClass: "rightaligned", field: 'ExcessIns', editable: false },
     {
-      headerName: 'Acres',headerClass:"rightaligned", field: 'Acres',  cellClass: 'editable-color rightaligned', editable: true,
-      cellEditorSelector:function (params){
-        if(params.data.ID==undefined){
+      headerName: 'Acres', headerClass: "rightaligned", field: 'Acres', cellClass: 'editable-color rightaligned', editable: true,
+      cellEditorSelector: function (params) {
+        if (params.data.ID == undefined) {
           return {
             component: 'emptyeditor'
           };
         }
       },
-       valueSetter: function (value) {
-        let result = value.context.componentParent.validateacresvalue(value.data.ID,parseInt(value.newValue));
-        if(result)
-        {
-        value.data.Acres = parseInt(value.newValue);
-        // //unset error
-        // var el = document.getElementById('Acres_'+value.data.ID);
-        // el.parentElement.parentElement.classList.remove("error");
-        // el.parentElement.parentElement.setAttribute("title","");
-        // //
-        return true;
-      }
-        else
-        {
-          var el = document.getElementById('Acres_'+value.data.ID);
-          try{
-          el.parentElement.parentElement.classList.add("error");
-          el.parentElement.parentElement.setAttribute("title","Acres cannot exceed total acres in Farm");
-             }
-             catch{
-               
-             }
+      valueSetter: function (value) {
+        let result = value.context.componentParent.validateacresvalue(value.data.ID, parseInt(value.newValue));
+        if (result) {
+          value.data.Acres = parseInt(value.newValue);
+          // //unset error
+          // var el = document.getElementById('Acres_'+value.data.ID);
+          // el.parentElement.parentElement.classList.remove("error");
+          // el.parentElement.parentElement.setAttribute("title","");
+          // //
+          return true;
+        }
+        else {
+          var el = document.getElementById('Acres_' + value.data.ID);
+          try {
+            el.parentElement.parentElement.classList.add("dirty");
+            el.parentElement.parentElement.setAttribute("title", "Acres cannot exceed total acres in Farm");
+          }
+          catch{
+
+          }
           return false;
         }
 
@@ -110,7 +108,7 @@ export class OptimizerComponent implements OnInit {
       if (Cropunit != undefined) {
         let farmid = Cropunit.Farm_ID;
         let farm = this.loanmodel.Farms.find(p => p.Farm_ID == Cropunit.Farm_ID);
-        let sumofcurrentvalues = _.sumBy(this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farmid && p.Crop_Practice_Type_Code == Cropunit.Crop_Practice_Type_Code && p.Loan_CU_ID != Cropunit.Loan_CU_ID),  function(o) { return o.CU_Acres; });
+        let sumofcurrentvalues = _.sumBy(this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farmid && p.Crop_Practice_Type_Code == Cropunit.Crop_Practice_Type_Code && p.Loan_CU_ID != Cropunit.Loan_CU_ID), function (o) { return o.CU_Acres; });
         let acres = 0
         if (Cropunit.Crop_Practice_Type_Code == "IRR") {
           acres = farm.Irr_Acres;
@@ -118,10 +116,10 @@ export class OptimizerComponent implements OnInit {
         else {
           acres = farm.NI_Acres;
         }
-        if((sumofcurrentvalues+newvalue)>acres){
+        if ((sumofcurrentvalues + newvalue) > acres) {
           return false
         }
-        else{
+        else {
           return true;
         }
       }
@@ -159,9 +157,9 @@ export class OptimizerComponent implements OnInit {
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
     private toaster: ToastsManager,
-              public logging: LoggingService,
-              public alertify: AlertifyService,
-              public loanapi:LoanApiService
+    public logging: LoggingService,
+    public alertify: AlertifyService,
+    public loanapi: LoanApiService
   ) {
     this.frameworkcomponents = { emptyeditor: EmptyEditor };
     this.context = { componentParent: this };
@@ -174,19 +172,18 @@ export class OptimizerComponent implements OnInit {
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
       //  
-      if(res!=null && res.srccomponentedit!=undefined && res.srccomponentedit!="optimizercomponent")
-      {
-      this.loanmodel = res;
-      this.getgriddata();
+      if (res != null && res.srccomponentedit != undefined && res.srccomponentedit != "optimizercomponent") {
+        this.loanmodel = res;
+        this.getgriddata();
       }
-      else{
+      else {
         this.loanmodel = res;
         this.getgriddata();
         this.gridApi.startEditingCell({
           rowIndex: this.loanmodel.lasteditrowindex,
           colKey: "Acres"
         });
-        
+
       }
     })
   }
@@ -212,9 +209,9 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "IRR";
-          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
-          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
-          row.Prodpercentage = "80%";
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID, this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID, this.refdata);
+          row.Prodpercentage = farm.Percent_Prod +" %";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
           row.Crop = crop.Crop_Code;
@@ -228,7 +225,7 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres=";
-          row.ExcessIns =""+farm.Irr_Acres;
+          row.ExcessIns = "" + farm.Irr_Acres;
           this.rowDataIIR.push(row);
         }
       });
@@ -236,15 +233,15 @@ export class OptimizerComponent implements OnInit {
       //NIR
       this.loanmodel.Farms.forEach(farm => {
         //get distinct crops for the farm
- 
+
         let distinctrows = this.loanmodel.LoanCropUnits.filter(p => p.Farm_ID == farm.Farm_ID && p.Crop_Practice_Type_Code == "NIR");
         distinctrows.forEach(crop => {
           let row: any = {};
           row.ID = crop.Loan_CU_ID;
           row.Practice = "NIR";
-          row.State = lookupStateAbvRefValue(farm.Farm_State_ID,this.refdata);
-          row.County = lookupCountyRefValue(farm.Farm_County_ID,this.refdata);
-          row.Prodpercentage = "80%";
+          row.State = lookupStateAbvRefValue(farm.Farm_State_ID, this.refdata);
+          row.County = lookupCountyRefValue(farm.Farm_County_ID, this.refdata);
+          row.Prodpercentage =farm.Percent_Prod +" %";
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
           row.Crop = crop.Crop_Code;
@@ -258,7 +255,7 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres =";
-          row.ExcessIns =""+farm.NI_Acres;
+          row.ExcessIns = "" + farm.NI_Acres;
           this.rowDataNIR.push(row);
         }
       });
@@ -268,66 +265,70 @@ export class OptimizerComponent implements OnInit {
   }
 
   syncenabled() {
-    if (this.loanmodel.LoanCropUnits.filter(p=>p.ActionStatus==2).length==0)
+    if (this.loanmodel.LoanCropUnits.filter(p => p.ActionStatus == 2).length == 0)
       return 'disabled';
     else
       return '';
   }
 
   synctoDb() {
-     
-    this.loading=true;
-    this.loanapi.syncloanobject(this.loanmodel).subscribe(res=>{
-      if(res.ResCode==1){
+
+    this.loading = true;
+    this.loanapi.syncloanobject(this.loanmodel).subscribe(res => {
+      if (res.ResCode == 1) {
         this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
 
-          this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
           if (res.ResCode == 1) {
             this.toaster.success("Records Synced");
             let jsonConvert: JsonConvert = new JsonConvert();
             this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           }
-          else{
+          else {
             this.toaster.error("Could not fetch Loan Object from API")
           }
         });
       }
-      else{
+      else {
         this.toaster.error("Error in Sync");
       }
-      this.loading=false;
+      this.loading = false;
     })
   }
 
   rowvaluechangedirr($event) {
-     
-    let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
-    if(oldvalue!=$event.value){
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).CU_Acres =parseInt($event.value);
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).ActionStatus =2;
-      this.loanmodel.srccomponentedit="optimizercomponent";
-      this.loanmodel.lasteditrowindex=$event.rowIndex;
-      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
-  }
+
+    if ($event.data.ID != undefined || $event.data.ID != null) {
+      let oldvalue = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
+      if (oldvalue != $event.value) {
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseInt($event.value);
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).ActionStatus = 2;
+        this.loanmodel.srccomponentedit = "optimizercomponent";
+        this.loanmodel.lasteditrowindex = $event.rowIndex;
+        this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+      }
+    }
   }
 
   rowvaluechangednir($event) {
-     
-    let oldvalue=this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
-    if(oldvalue!=$event.value){
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).CU_Acres =parseInt($event.value);
-      this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code==$event.data.Practice).ActionStatus =2;
-      this.loanmodel.srccomponentedit="optimizercomponent";
-      this.loanmodel.lasteditrowindex=$event.rowIndex;
-      this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+    if ($event.data.ID != undefined || $event.data.ID != null) {
+      let oldvalue = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
+      if (oldvalue != $event.value) {
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseInt($event.value);
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).ActionStatus = 2;
+        this.loanmodel.srccomponentedit = "optimizercomponent";
+        this.loanmodel.lasteditrowindex = $event.rowIndex;
+        this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+      }
+
+    }
   }
-  }
-  onGridReady(params) { 
+  onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    setgriddefaults(this.gridApi,this.columnApi);
-    this.style.width=calculatecolumnwidths(this.columnApi) +2+ "px";
-    
+    setgriddefaults(this.gridApi, this.columnApi);
+    this.style.width = calculatecolumnwidths(this.columnApi) + 2 + "px";
+
     //params.api.sizeColumnsToFit();//autoresizing
   }
   //Grid Functions End

@@ -166,6 +166,7 @@ export class YieldComponent implements OnInit {
     }
     this.localloanobject.srccomponentedit = "YieldComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
+  
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -250,6 +251,7 @@ export class YieldComponent implements OnInit {
         this.rowData.push(newNIR);
         this.localloanobject.CropYield.push(newIRR);
         this.localloanobject.CropYield.push(newNIR);
+        this.localloanobject.SyncStatus.Status_Crop_Practice=2;
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         this.gridApi.setRowData(this.rowData);
         
@@ -272,7 +274,7 @@ export class YieldComponent implements OnInit {
                 row.ActionStatus = 3
               }
             });
-
+            this.localloanobject.SyncStatus.Status_Crop_Practice=2;
             //obj.ActionStatus = 3;
           }
           this.rowData=this.localloanobject.CropYield.filter(cy=>{return cy.ActionStatus != 3});
