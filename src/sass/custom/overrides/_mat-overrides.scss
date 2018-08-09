@@ -1,6 +1,6 @@
 .mat-menu-item, .mat-button, .mat-flat-button, .mat-icon-button, .mat-stroked-button {
-  font-weight: 300;
-  font-size: $base-font-size;
+    font-weight: 300;
+    font-size: $base-font-size;
 }
 
 div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
@@ -9,7 +9,7 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
 }
 
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
-  box-shadow: 0 3px 1px -2px rgba(22, 76, 123, 0.2), 0 2px 2px 0 rgba(22, 76, 123, 0.3), 0 1px 5px 0 rgba(22, 76, 123, 0.2) !important;
+    box-shadow: 0 3px 1px -2px rgba(22, 76, 123, 0.2), 0 2px 2px 0 rgba(22, 76, 123, 0.3), 0 1px 5px 0 rgba(22, 76, 123, 0.2) !important;
 }
 
 // Accordion overrides - Option 1
@@ -79,71 +79,98 @@ div.mdl-layout__drawer > nav.mdl-navigation > a.mdl-navigation__link {
 // }
 
 // Accordion overrides - Option 2
-body .mat-expansion-panel-header:hover {
-  background-color: rgb(22, 76, 123) !important;
-  .mat-expansion-panel-header-title,
-  .mat-expansion-indicator::after {
-    color: $white;
-  }
+body .mat-expansion-panel-header {
+    &:hover {
+        .mat-content {
+            border-bottom: none !important;
+        }
+
+        .mat-expansion-panel-header-title:before {
+            visibility: visible;
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+        }
+    }
+
+    .mat-expansion-panel-header-title {
+        &:before {
+            z-index: 1000;
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: -2px;
+            left: 0;
+            background-color: $primary-color;
+            visibility: hidden;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transition: all 0.3s ease-in-out 0s;
+            transition: all 0.3s ease-in-out 0s;
+        }
+    }
 }
 
-.mat-dialog-container{
-  padding: 20px 20px 20px 20px !important;
-  width: 600px !important;
-  height: 100%;
-  overflow: hidden !important;
-  box-shadow: none !important;
+.mat-dialog-container {
+    padding: 20px 20px 20px 20px !important;
+    width: 600px !important;
+    height: 100%;
+    overflow: hidden !important;
+    box-shadow: none !important;
 }
+
 .mat-expansion-panel-header.cdk-mouse-focused {
-  .mat-expansion-panel-header-title,
-  .mat-expansion-indicator::after {
-    color: $black-70;
-    font-size: $font-size-md;
-  }
+    .mat-expansion-panel-header-title,
+    .mat-expansion-indicator::after {
+        color: $black-70;
+        font-size: $font-size-md;
+    }
 }
 
 body .mat-expansion-panel-body {
-  padding: 15px 0;
+    padding: 15px 0;
 }
 
 body .mat-expansion-panel-header {
-  display: block !important;
-  border-top: 1px solid $black-30;
-  text-transform: uppercase;
-  height: 30px;
-  max-height: 30px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 15px;
-
-  .mat-content {
-    display: inline-block;
-    color: $primary-color;
-    margin-top: 5px;
-  }
-
-  .mat-expansion-indicator  {
-    float: left;
-    margin-right: 10px;
-    margin-top: 2px;
-  }
-
-  .mat-expansion-panel-header-title,
-  .mat-expansion-indicator::after {
-    color: $primary-color;
-    font-size: $font-size-md;
-  }
-  &.mat-expanded {
-    .mat-expansion-indicator {
-      margin-top: 7px;
-    }
+    display: block !important;
+    border-top: 1px solid $black-30;
+    text-transform: uppercase;
+    height: 30px;
+    max-height: 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 15px;
 
     .mat-content {
-      border-bottom: 1px dotted $primary-color;
-      padding-bottom: 1px;
+        display: inline-block;
+        color: $primary-color;
+        margin-top: 5px;
+        position: relative;
     }
-  }
+
+    .mat-expansion-indicator {
+        float: left;
+        margin-right: 10px;
+        margin-top: 2px;
+    }
+
+    .mat-expansion-panel-header-title,
+    .mat-expansion-indicator::after {
+        color: $primary-color;
+        font-size: $font-size-md;
+    }
+
+    &.mat-expanded {
+        .mat-expansion-indicator {
+            margin-top: 7px;
+        }
+
+        .mat-content {
+            border-bottom: 1px dotted $primary-color;
+            padding-bottom: 1px;
+        }
+    }
 }
 
 // ====
@@ -152,31 +179,61 @@ body .mat-expansion-panel-header {
 // ====
 
 .mat-dialog-container {
-  min-height: 150px;
-  position: relative;
-  .mat-dialog-title {
-    background: $primary-color;
-    color: $white;
-    padding: 10px;
-    font-size: $font-size-md;
-    font-weight: normal;
-  }
+    min-height: 150px;
+    position: relative;
 
-  .mat-dialog-content {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    &::after {
-      content: ' ';
-      display: block;
-      height: 60px;
+    .mat-dialog-title {
+        background: $primary-color;
+        color: $white;
+        padding: 10px;
+        font-size: $font-size-md;
+        font-weight: normal;
     }
-  }
 
-  .mat-dialog-actions {
-    margin-bottom: 0;
-    position: absolute;
-    bottom: 0px;
-    right: 10px;
-  }
+    .mat-dialog-content {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+
+        &::after {
+            content: ' ';
+            display: block;
+            height: 60px;
+        }
+    }
+
+    .mat-dialog-actions {
+        margin-bottom: 0;
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+    }
 }
+
 //====
+
+// Context Menu override
+// ==
+// Collateral Page
+
+.collateral-context-menu {
+    .btn-sm {
+        margin: 0 10px 10px 0;
+    }
+
+    .mat-menu-content {
+        label {
+            display: block;
+            font-size: $base-font-size;
+            padding: 2px 10px;
+
+            span {
+                margin-left: 5px;
+            }
+            &.disabled {
+              background: $light-white;
+            }
+        }
+    }
+}
+
+// ====

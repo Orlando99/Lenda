@@ -24,7 +24,7 @@ export class CashFlowComponent implements OnInit {
   // Doughnut
   // TODO: Replace this data with live API
   public doughnutChartLabels: string[] = [];
-  public doughnutChartData: number[] = [];
+  public doughnutChartData: string[] = [];
   public generatedColors: string[] = [];
 
   public doughnutChartType: string = 'doughnut';
@@ -48,6 +48,16 @@ export class CashFlowComponent implements OnInit {
       render: 'percentage',
       fontColor: chartSettings.doughnut.textColor,
       showActualPercentages: true
+    },
+    tooltips: {
+      callbacks: {
+        label: (tooltipItem, data) => {
+          let datasetLabel = data.datasets[tooltipItem.datasetIndex].label || 'Other';
+          let label = data.labels[tooltipItem.index];
+          let value = parseInt(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]).toLocaleString();
+          return `${label}: ${value}`;
+        }
+      }
     }
   };
 

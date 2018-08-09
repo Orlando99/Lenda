@@ -35,7 +35,7 @@ export class ApiService {
             headersConfig['Authorization'] = this.localStorageService.retrieve("token");
         }
         headersConfig['batchid']=this.localStorageService.retrieve(environment.usersession);
-        headersConfig['userid']="1";
+        headersConfig['userid']=this.localStorageService.retrieve(environment.uid);
         headersConfig['dbg_level']="2";
         return new Headers(headersConfig);
     };

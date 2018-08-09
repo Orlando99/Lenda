@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -6,7 +6,6 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter, discFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
@@ -18,6 +17,7 @@ import { debug } from 'util';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { FsaService } from './fsa.service';
+import CollateralSettings from './../collateral-types.model';
 
 @Component({
   selector: 'app-fsa',
@@ -26,6 +26,7 @@ import { FsaService } from './fsa.service';
   providers: [FsaService, CollateralService]
 })
 export class FSAComponent implements OnInit {
+  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -52,65 +53,34 @@ export class FSAComponent implements OnInit {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-
-    this.columnDefs = [
-      { headerName: 'Category', field: 'Collateral_Category_Code', editable: false, width: 100 },
-      { headerName: 'Description', field: 'Collateral_Description', editable: true, width: 120, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
-      { headerName: 'Mkt Value', field: 'Market_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['editable-color', 'text-right'] },
-      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, width: 130, cellClass: 'editable-color', cellEditor: "alphaNumeric" },
-      {
-        headerName: 'Net Mkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
-        // valueGetter: function (params) {
-        //   return setNetMktValue(params);}
-      },
-      {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
-        pinnedRowCellRenderer: function () { return '-'; }
-      },
-      {
-        headerName: 'Disc Value', field: 'Disc_CEI_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
-        // valueGetter: function (params) {
-        //   return setDiscValue(params);
-        // },
-        valueFormatter: currencyFormatter
-      },
-      {
-        headerName: 'Insured', field: 'Insured_Flag', editable: true, cellEditor: "selectEditor", width: 100, cellClass: ['editable-color'],
-        cellEditorParams: {
-          values: [{ 'key': 0, 'value': 'No' }, { 'key': 1, 'value': 'Yes' }]
-        }, pinnedRowCellRenderer: function () { return ' '; },
-        valueFormatter: insuredFormatter
-      },
-      { headerName: '', field: 'value', cellRenderer: "deletecolumn", width: 80, pinnedRowCellRenderer: function () { return ' '; } }
-    ];
-
+    this.columnDefs = this.fsaService.getColumnDefs();
     this.context = { componentParent: this };
   }
 
   ngOnInit() {
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      this.collateralService.onInit(this.localloanobject, this.gridApi, res, 'FSAComponent' ,'FSA');
-    });
+    // Observe the localstorage for changes
+    this.subscribeToChanges();
 
-    this.getdataforgrid();
+    // on initialization
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+    this.pinnedBottomRowData = this.fsaService.computeTotal(this.localloanobject);
+    this.collateralService.adjustgrid(this.gridApi);
   }
 
-  getdataforgrid() {
-    let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'LoanCollateral - FSA', "LocalStorage retrieved");
-    if (obj != null && obj != undefined) {
-      this.localloanobject = obj;
-      this.rowData = [];
-      this.rowData = this.localloanobject.LoanCollateral !== null ? this.localloanobject.LoanCollateral.filter(lc => { return lc.Collateral_Category_Code === "FSA" && lc.ActionStatus !== 3 }) : [];
-      this.pinnedBottomRowData = this.fsaService.computeTotal(obj);
-    }
-    this.collateralService.getgridheight();
-    this.adjustgrid();
+  subscribeToChanges() {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.fsa.key, this.rowData, this.pinnedBottomRowData);
+      this.rowData = result.rowData;
+      this.pinnedBottomRowData = result.pinnedBottomRowData;
+    });
+  }
+
+  isSyncRequired(isEnabled) {
+    this.enableSync.emit(isEnabled);
   }
 
   onGridSizeChanged(Event: any) {
-
     this.adjustgrid();
   }
 
@@ -118,38 +88,30 @@ export class FSAComponent implements OnInit {
     try {
       this.gridApi.sizeColumnsToFit();
     }
-    catch {
+    catch (ex) {
     }
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.collateralService.getgridheight();
+    this.collateralService.getgridheight(this.rowData);
     this.adjustgrid();
-  }
-
-  syncenabled() {   
-    if(this.rowData.filter(p => p.ActionStatus != null).length > 0 || this.deleteAction)
-      return '';
-    else
-      return 'disabled';
-  }
-
-  synctoDb() {
-    this.collateralService.syncToDb(this.localloanobject);
   }
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, "FSA");
+    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+    this.isSyncRequired(true);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, "FSAComponent");
+    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.fsa.component, CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
+    this.isSyncRequired(true);
   }
 
   DeleteClicked(rowIndex: any) {
-    this.collateralService.deleteClicked(rowIndex, this.localloanobject);
+    this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
+    this.isSyncRequired(true);
   }
 }

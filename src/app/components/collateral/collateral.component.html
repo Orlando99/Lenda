@@ -1,23 +1,100 @@
 <div class="basic-container">
-    <mat-card class="collateral">
-        <table>
-            <td>
-                <h2>Collateral</h2>
-            </td>
-            <td>
-                <mat-select placeholder="Category" (selectionChange)="menuSelected($event)" [(ngModel)]="categories" multiple>
-                    <mat-option *ngFor="let category of categoryList" [value]="category">{{category}}</mat-option>
-                </mat-select>
-            </td>
-        </table>
-    </mat-card>
-    
-    <div *ngIf="categories.indexOf('Buyer') != -1"><app-buyer-association></app-buyer-association></div>
-    <div *ngIf="categories.indexOf('FSA') != -1"><app-fsa></app-fsa></div>
-    <div *ngIf="categories.indexOf('Livestock') != -1"><app-livestock></app-livestock></div>
-    <div *ngIf="categories.indexOf('Stored Crop') != -1"><app-storedcrop></app-storedcrop></div>
-    <div *ngIf="categories.indexOf('Equipment') != -1"><app-equipment></app-equipment></div>
-    <div *ngIf="categories.indexOf('Real Estate') != -1"><app-realestate></app-realestate></div>
-    <div *ngIf="categories.indexOf('Others') != -1"><app-others></app-others></div>
-    <div *ngIf="categories.indexOf('Marketing Contracts') != -1"><app-marketing-contracts></app-marketing-contracts></div>
+  <div class="page-header">
+    <span class="text">Collateral</span>
+    <mat-icon mat-list-icon class="corner-right">
+      <i class="flaticon material-icons" mat-button [matMenuTriggerFor]="settings">
+        settings
+      </i>
+      <mat-menu #settings="matMenu" class="collateral-context-menu">
+        <div class="right-align">
+          <a class="waves-effect waves-light btn-outline btn-sm">DONE</a>
+        </div>
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.lineHolder.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.lineHolder.isDisabled" [checked]="pageSettings.lineHolder.isActive" (change)="onToggleSettings(pageSettings.lineHolder)"  />
+          <span class="setting-text">LienHolder</span>
+          <span class="number-of-rows">({{ collateralRows.lineHolder }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.buyer.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.buyer.isDisabled" [checked]="pageSettings.buyer.isActive" (change)="onToggleSettings(pageSettings.buyer)"  />
+          <span class="setting-text">Buyer</span>
+           <span class="number-of-rows">({{ collateralRows.buyer }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()"  [ngClass]="{'disabled': pageSettings.guarantor.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.guarantor.isDisabled" [checked]="pageSettings.guarantor.isActive" (change)="onToggleSettings(pageSettings.guarantor)"  />
+          <span class="setting-text">Guarantor</span>
+           <span class="number-of-rows">({{ collateralRows.guarantor }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.collaterlData.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.collaterlData.isDisabled" [checked]="pageSettings.collaterlData.isActive" (change)="onToggleSettings(pageSettings.collaterlData)"  />
+          <span class="setting-text">Collateral Data</span>
+           <span class="number-of-rows">({{ collateralRows.collaterlData }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.fsa.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.fsa.isDisabled" [checked]="pageSettings.fsa.isActive" (change)="onToggleSettings(pageSettings.fsa)"  />
+          <span class="setting-text">FSA</span>
+           <span class="number-of-rows">({{ collateralRows.fsa }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.livestock.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.livestock.isDisabled" [checked]="pageSettings.livestock.isActive" (change)="onToggleSettings(pageSettings.livestock)" />
+          <span class="setting-text">Livestock</span>
+           <span class="number-of-rows">({{ collateralRows.livestock }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.storedCrop.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.storedCrop.isDisabled" [checked]="pageSettings.storedCrop.isActive" (change)="onToggleSettings(pageSettings.storedCrop)" />
+          <span class="setting-text">Stored Crop</span>
+           <span class="number-of-rows">({{ collateralRows.storedCrop }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.equipment.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.equipment.isDisabled" [checked]="pageSettings.equipment.isActive" (change)="onToggleSettings(pageSettings.equipment)" />
+          <span class="setting-text">Equipment</span>
+           <span class="number-of-rows">({{ collateralRows.equipment }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.realestate.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.realestate.isDisabled" [checked]="pageSettings.realestate.isActive" (change)="onToggleSettings(pageSettings.realestate)" />
+          <span class="setting-text">Real Estate</span>
+           <span class="number-of-rows">({{ collateralRows.realestate }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.other.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.other.isDisabled" [checked]="pageSettings.other.isActive" (change)="onToggleSettings(pageSettings.other)" />
+          <span class="setting-text">Other</span>
+           <span class="number-of-rows">({{ collateralRows.other }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.contacts.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.contacts.isDisabled" [checked]="pageSettings.contacts.isActive" ((change)="onToggleSettings(pageSettings.contacts)"  />
+          <span class="setting-text">Contacts</span>
+           <span class="number-of-rows">({{ collateralRows.contacts }} rows)</span>
+        </label>
+
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.crossCollateral.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.crossCollateral.isDisabled" [checked]="pageSettings.crossCollateral.isActive" (change)="onToggleSettings(pageSettings.crossCollateral)"  />
+          <span class="setting-text">Cross Collateral</span>
+           <span class="number-of-rows">({{ collateralRows.marketingContracts }} rows)</span>
+        </label>
+      </mat-menu>
+    </mat-icon>
+    <div>
+      <a (click)="synctoDb()" [ngClass]="{'disabled': !isSyncEnabled}"  class="waves-effect waves-light btn-small right-align" >
+          <i class="material-icons left">cloud</i>Publish
+      </a>
+    </div>
+  </div>
+
+  <app-buyer-association (enableSync)="enableSync($event)" *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
+  <app-fsa (enableSync)="enableSync($event)" *ngIf="pageSettings.fsa.isActive"></app-fsa>
+  <app-livestock (enableSync)="enableSync($event)" *ngIf="pageSettings.livestock.isActive"></app-livestock>
+  <app-storedcrop (enableSync)="enableSync($event)" *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
+  <app-equipment (enableSync)="enableSync($event)" *ngIf="pageSettings.equipment.isActive"></app-equipment>
+  <app-realestate (enableSync)="enableSync($event)" *ngIf="pageSettings.realestate.isActive"></app-realestate>
+  <app-others (enableSync)="enableSync($event)" *ngIf="pageSettings.other.isActive"></app-others>
+  <app-marketing-contracts (enableSync)="enableSync($event)" *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
 </div>

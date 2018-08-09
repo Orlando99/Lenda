@@ -1,0 +1,107 @@
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="main-header p-lr-10">Farm Financial Detail</div>
+  </div>
+  <div class="col m9">
+    <svg viewBox="0 0 100% 10" height="25px" preserveAspectRatio="xMinYMin meet" class="w-100 rangebar">
+      <g>
+        <rect class="bar-range success" fill="#666" x="0" y="50%" width="33.33%" height="15">
+        </rect>
+        <text style="filter: url(#shadow); fill: black" class="text" x="33.33%" y="50%">Strong</text>
+        <text class="text white" x="33.33%" y="50%">Strong</text>
+      </g>
+      <g>
+        <rect class="bar-range warning" fill="#666" x="33.34%" y="50%" width="33.33%" height="15">
+        </rect>
+        <text style="filter: url(#shadow); fill: black" class="text" x="66.66%" y="50%">Stable</text>
+        <text class="text white" x="66.66%" y="50%">Stable</text>
+      </g>
+      <g>
+        <rect class="bar-range alert" fill="#666" x="66.67%" y="50%" width="33.34%" height="15">
+        </rect>
+        <text style="filter: url(#shadow); fill: black" class="text" x="100%" y="50%">Weak</text>
+        <text class="text white" x="100%" y="50%">Weak</text>
+      </g>
+    </svg>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Current Ratio</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="1.5" [stable]="1.0" [weak]="0.5" [value]="1.4"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Working Capital</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [stable]="1.5" [weak]="3.0" [value]="2.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Debt / Assets</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.3" [stable]="0.7" [weak]="1.1" [value]="0.7"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Equity / Assets</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.8" [stable]="0.4" [weak]="0.0" [value]="0.6"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Debt / Equity</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [stable]="1.5" [weak]="3.0" [value]="1.4"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">ROA</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [stable]="0.5" [weak]="1.0" [value]="0.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Operating Profit</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [stable]="0.5" [weak]="1.0" [value]="0.0"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Operating Exp / Rev</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.75" [stable]="0.85" [weak]="0.95" [value]="0.75"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10">Interest / Cash Flow</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.10" [stable]="0.20" [weak]="0.30" [value]="0.27"></app-rangebar>
+  </div>
+</div>
+<div class="flex flex-center mw-600">
+  <div class="col m3">
+    <div class="header p-lr-10 result">Overall Farm Financial</div>
+  </div>
+  <div class="col m9">
+    <app-rangebar [isRangeBarVisible]="false" [strong]="0.0" [stable]="0.5" [weak]="1.0" [value]="0.25"></app-rangebar>
+  </div>
+</div>

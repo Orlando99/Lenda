@@ -1,17 +1,46 @@
-.mat-card {
-    padding: 0px 15px 0px 15px !important;
-    height: 50px;
-    // background: #164c7b;
-    // color: white;
-}
-td, th{
-    padding: 0px !important;
+@import "./../../../sass/theme/variables";
+
+.page-header {
+    display: flex;
+    align-content: center;
+    background: $primary-color;
+    color: $white;
+    border-left: 1px solid #666;
+    font-size: $font-size-md;
+    padding: 5px 5px 5px 15px;
+    text-transform: uppercase;
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    margin-bottom: 20px;
+    + *::before {
+      content: ' ';
+      display: block;
+      height: 30px;
+    }
+    .btn-small {
+        margin: 0 10px;
+    }
+
+    .text {
+        text-shadow: 1px 1px #333;
+    }
+
+    .flaticon {
+        font-size: $font-size-md;
+        cursor: pointer;
+        margin-top: 3px;
+        margin-left: 10px;
+        display: inherit;
+    }
 }
 
-.mat-select-value{
-    color: white !important;
+.setting-text {
+    min-width: 100px;
+    display: inline-block;
 }
 
-.mat-select-arrow{
-    color: white !important;
+.number-of-rows {
+    font-size: $font-size-sm;
+    color: $black-30;
 }

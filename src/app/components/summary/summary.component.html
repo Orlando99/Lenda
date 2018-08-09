@@ -99,7 +99,7 @@
                           Interest Rate
                       </div>
                       <span class="block percent">
-                          {{ localborrowerobject.Rate_Percent.toFixed(2)}}
+                          {{ localborrowerobject.Rate_Percent ? localborrowerobject.Rate_Percent.toFixed(2) : '0.00'}}
                       </span>
                     </div>
                     <div class="block">
@@ -107,7 +107,7 @@
                             Loan Orig. Fee
                         </div>
                         <span class="block  percent">
-                            {{ localborrowerobject.Orgination_Fee_Percent.toFixed(1)}}
+                            {{ localborrowerobject.Orgination_Fee_Percent ? localborrowerobject.Orgination_Fee_Percent.toFixed(1) : '0.0'}}
                         </span>
                     </div>
                   <div class="block">
@@ -115,7 +115,7 @@
                           Loan Srvc. Fee
                       </div>
                       <span class="block percent">
-                          {{ localborrowerobject.Service_Fee_Percent.toFixed(1)}}
+                          {{ localborrowerobject.Service_Fee_Percent ? localborrowerobject.Service_Fee_Percent.toFixed(1) : '0.0'}}
                       </span>
                     </div>
                   <div class="block">
