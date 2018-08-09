@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AgentComponent } from './agent.component';
+import { AssociationComponent } from './association.component';
 
-describe('AgentComponent', () => {
-  let component: AgentComponent;
-  let fixture: ComponentFixture<AgentComponent>;
+describe('AssociationComponent', () => {
+  let component: AssociationComponent;
+  let fixture: ComponentFixture<AssociationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AgentComponent ]
+      declarations: [AssociationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AgentComponent);
+    fixture = TestBed.createComponent(AssociationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

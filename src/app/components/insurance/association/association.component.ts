@@ -21,11 +21,11 @@ import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
-  selector: 'app-agent',
-  templateUrl: './agent.component.html',
-  styleUrls: ['./agent.component.scss']
+  selector: 'app-association',
+  templateUrl: './association.component.html',
+  styleUrls: ['./association.component.scss']
 })
-export class AgentComponent implements OnInit {
+export class AssociationComponent implements OnInit {
   public refdata: any = {};
   public isgriddirty:boolean;
   indexsedit = [];
