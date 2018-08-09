@@ -154,6 +154,80 @@ export function formatPhoneNumber(params) {
   var num = val.match(/^(\d{3})(\d{3})(\d{4})$/);
   return (!num) ? null : "(" + num[1] + ") " + num[2] + "-" + num[3];
 }
+
+export function getPhoneCellEditor() {
+  debugger
+  function isCharNumeric(charStr) {
+    return !!/\d/.test(charStr);
+  }
+  
+  function isKeyPressedNumeric(event) {
+
+    var charCode = getCharCodeFromEvent(event);
+    var charStr = String.fromCharCode(charCode);
+    console.log('charStr', charStr);
+    return isCharNumeric(charStr) && event.srcElement.value.length <= 9;
+  }
+
+  function getCharCodeFromEvent(event) {
+    event = event || window.event;
+    return typeof event.which === "undefined" ? event.keyCode : event.which;
+  }
+  function NumericCellEditor() { }
+
+  NumericCellEditor.prototype.init = function (params) {
+    this.focusAfterAttached = params.cellStartedEdit;
+    this.eInput = document.createElement("input");
+    this.eInput.style.width = "100%";
+    this.eInput.style.height = "100%";
+    this.eInput.addEventListener("change", function(event) {
+      event.srcElement.parentElement.className=event.srcElement.parentElement.className.replace("editable-color","edited-color")
+    });
+
+    this.eInput.value = (isCharNumeric(params.charPress) ? params.charPress : params.value)==undefined ?0:(isCharNumeric(params.charPress) ? params.charPress : params.value);
+    var that = this;
+    this.eInput.addEventListener("keypress", function(event) {
+      if ((!isKeyPressedNumeric(event))) {
+        that.eInput.focus();
+        if (event.preventDefault) event.preventDefault();
+      }
+    });
+    this.eInput.addEventListener("blur", function(event) {
+
+      if(params.newValue==undefined || params.newValue==null||params.newValue=="") {
+        return this.classList.add("error");
+      }
+    });
+  };
+  NumericCellEditor.prototype.getGui = function () {
+    return this.eInput;
+  };
+  NumericCellEditor.prototype.afterGuiAttached = function () {
+    if (this.focusAfterAttached) {
+      this.eInput.focus();
+      this.eInput.select();
+    }
+  };
+  NumericCellEditor.prototype.isCancelBeforeStart = function () {
+    return this.cancelBeforeStart;
+  };
+  NumericCellEditor.prototype.isCancelAfterEnd = function () { };
+  NumericCellEditor.prototype.getValue = function () {
+    
+    return this.eInput.value==""?0:this.eInput.value;
+  };
+  NumericCellEditor.prototype.focusIn = function () {
+    var eInput = this.getGui();
+    eInput.focus();
+    eInput.select();
+    console.log("NumericCellEditor.focusIn()");
+  };
+  NumericCellEditor.prototype.focusOut = function () {
+    console.log("NumericCellEditor.focusOut()");
+  };
+  console.log('Numeric',NumericCellEditor);
+  return NumericCellEditor;
+}
   
  
   //Numeric cell editor config Ends

@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
-import { numberValueSetter, getNumericCellEditor, formatPhoneNumber } from '../../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter, getNumericCellEditor, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
@@ -67,7 +67,7 @@ export class ThirdpartyComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(),  phoneCellEditor: getPhoneCellEditor() };
     
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);

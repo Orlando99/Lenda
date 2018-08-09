@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
-import { numberValueSetter, getNumericCellEditor, formatPhoneNumber } from '../../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter, getNumericCellEditor, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
@@ -71,7 +71,7 @@ export class BuyerAssociationComponent implements OnInit {
     public collateralService: CollateralService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor(), phoneCellEditor: getPhoneCellEditor() };
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -82,7 +82,13 @@ export class BuyerAssociationComponent implements OnInit {
       { headerName: 'Buyer', field: 'Assoc_Name',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Contact', field: 'Contact',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
       { headerName: 'Location', field: 'Location',  editable: true, cellEditor: "alphaNumeric", cellClass: 'editable-color' },
-      { headerName: 'Phone', field: 'Phone', editable: true, cellEditor: "alphaNumeric", valueFormatter: formatPhoneNumber, cellClass: ['editable-color', 'text-right']},
+      { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber,cellStyle: function(params) {
+        if (params.value.length < 10) {
+            return {color: 'red'};
+        }else{
+          return {color: 'blue'}
+        }
+      }, cellClass: ['editable-color','text-right']},
       { headerName: 'Email', field: 'Email', editable: true, cellClass: 'editable-color'},
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];
