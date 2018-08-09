@@ -15,6 +15,7 @@ import { LoginService } from './login/login.service';
   providers: [LayoutService, LoginService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  public loadingBarColor = '#2cbb9c';
   public isSidebarExpanded: boolean = true;
   public isUserLoggedIn;
   title = 'LendaPlus';
