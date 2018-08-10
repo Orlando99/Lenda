@@ -91,7 +91,7 @@
   </div>
 
   <app-questions [currentPageName]="currentPageName" *ngIf="pageSettings.questions.isActive" [chevronId]="'Collateral'"></app-questions>
-  <app-buyer-association *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
+  <app-buyer-association [currentPageName]="currentPageName" *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
   <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
   <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
   <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
