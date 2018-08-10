@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@angular/core';
 import { Headers, Http, Response, URLSearchParams } from '@angular/http';
 // tslint:disable-next-line:import-blacklist
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs';
 import { ToastsManager } from 'ng2-toastr';
 import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';

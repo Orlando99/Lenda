@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 
 import { environment } from '../../../../../environments/environment';
-import { chartSettings } from './../../../../chart-settings';
+import { chartSettings } from '../../../../chart-settings';
 import 'chart.piecelabel.js';
 import { loan_model } from '../../../../models/loanmodel';
 import { PriceFormatter } from '../../../../Workers/utility/aggrid/formatters';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Insurance_Policy } from '../../models/insurancemodel';
-import { LocalStorageService } from '../../../../node_modules/ngx-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import * as _ from 'lodash'
 import { errormodel } from '../../models/commonmodels';

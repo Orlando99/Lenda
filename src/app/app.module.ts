@@ -197,6 +197,7 @@ import { BudgetReportComponent } from './components/summary/budget-report/budget
 import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
 import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 import { ValidationService } from './Workers/calculations/validation.service';
+import { BooleanEditor } from './aggridfilters/booleanaggrid.';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -204,6 +205,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
 @NgModule({
   declarations: [
     NumericEditor,
+    BooleanEditor,
     SelectEditor,
     EmptyEditor,
     ChipsListEditor,
@@ -333,7 +335,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor, SelectEditor, ChipsListEditor, EmptyEditor, AgGridTooltipComponent]),
+    AgGridModule.withComponents([NumericEditor,BooleanEditor, SelectEditor, ChipsListEditor, EmptyEditor, AgGridTooltipComponent]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,

@@ -5,11 +5,11 @@ import { loan_model } from '../../models/loanmodel';
 import * as _ from "lodash";
 import { lookupCountyValue, lookupStateValue, lookupStateRefValue, extractStateValues, lookupStateAbvRefValue, lookupCountyRefValue } from '../../Workers/utility/aggrid/stateandcountyboxes';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
-import { ToastsManager } from '../../../../node_modules/ng2-toastr';
+import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../services/Logs/logging.service';
 import { AlertifyService } from '../../alertify/alertify.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
-import { JsonConvert } from '../../../../node_modules/json2typescript';
+import { JsonConvert } from 'json2typescript';
 import { EmptyEditor } from '../../aggridfilters/emptybox';
 import { setgriddefaults, calculatecolumnwidths } from '../../aggriddefinations/aggridoptions';
 @Component({
