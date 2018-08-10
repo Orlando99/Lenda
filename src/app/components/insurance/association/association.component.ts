@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -17,20 +17,24 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
+import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
-  selector: 'app-agent',
-  templateUrl: './agent.component.html',
-  styleUrls: ['./agent.component.scss']
+  selector: 'app-association',
+  templateUrl: './association.component.html',
+  styleUrls: ['./association.component.scss']
 })
-export class AgentComponent implements OnInit {
+export class AssociationComponent implements OnInit {
   public refdata: any = {};
   public isgriddirty:boolean;
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  
+  @Input('header')
+  header :string = '';
+  @Input('associationTypeCode')
+  associationTypeCode :string = '';
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -70,36 +74,46 @@ export class AgentComponent implements OnInit {
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     //Coldef here
 
-    this.columnDefs = [
-
-      { headerName: 'Agent', field: 'Assoc_Name', editable: true,cellClass: ['lenda-editable-field'] },
-      // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
-      { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['lenda-editable-field'] },
-      { headerName: 'Phone', field: 'Phone', editable: true, valueFormatter: formatPhoneNumber, cellClass: ['lenda-editable-field']},
-      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
-      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellClass: ['lenda-editable-field'] },
-      { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
-    ];
-    ///
-    this.context = { componentParent: this };
+    
   }
   ngOnInit() {
-   
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-      this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    if(this.header && this.associationTypeCode){
 
-      if(this.localloanobject.Association)
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
-      else
-        this.rowData = null;
+      this.columnDefs = [
 
-    });
+        { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['lenda-editable-field'] },
+        // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
+        { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
+        { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['lenda-editable-field'] },
+        { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
+        { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
+        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['lenda-editable-field'],
+            cellEditorParams : {values : Preferred_Contact_Ind_Options},
+            valueFormatter : PreferredContactFormatter
+          },
+        { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+      ];
+      ///
+      this.context = { componentParent: this };
+
+      this.localstorageservice.observe(environment.loankey).subscribe(res => {
+        // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+        this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+
+        if(this.localloanobject.Association)
+          this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
+        else
+          this.rowData = null;
+
+      });
 
 
-    this.getdataforgrid();
-    this.editType = "fullRow";
+      this.getdataforgrid();
+      this.editType = "fullRow";
+    }else{
+      throw new Error("'header' and 'associationTypeCode' are required for Association Component");
+       
+    }
   }
   getdataforgrid() {
    // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
@@ -108,7 +122,7 @@ export class AgentComponent implements OnInit {
     if (this.localloanobject != null && this.localloanobject != undefined) {
       //this.localloanobject = obj;
       if(this.localloanobject.Association)
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
+        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
       else
         this.rowData = null;
     }
@@ -121,14 +135,14 @@ export class AgentComponent implements OnInit {
     if (obj.Assoc_ID==0 || obj.Assoc_ID==undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT").length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code=="AGT")[rowIndex]=value.data;
+      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode).length;
+      this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode)[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT").findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       if(obj.ActionStatus!=1)
       obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT")[rowindex]=obj;
+      this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowindex]=obj;
     }
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
@@ -164,7 +178,7 @@ export class AgentComponent implements OnInit {
   addrow() {
     // var newItem = new Loan_Association();
     // newItem.Loan_ID=this.localloanobject.Loan_PK_ID;
-    // newItem.Assoc_Type_Code="AGT";
+    // newItem.Assoc_Type_Code=this.associationTypeCode;
     // var res = this.gridApi.updateRowData({ add: [newItem] });
     // this.gridApi.startEditingCell({
     //   rowIndex: this.rowData.length,
@@ -172,7 +186,7 @@ export class AgentComponent implements OnInit {
     // });
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
-    newItem.Assoc_Type_Code="AGT";
+    newItem.Assoc_Type_Code=this.associationTypeCode;
     newItem.Preferred_Contact_Ind=1;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
@@ -186,10 +200,10 @@ export class AgentComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT")[rowIndex];
+        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowIndex];
 
         if (obj.Assoc_ID === 0) {
-          let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="AGT");
+          let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
 
           this.localloanobject.Association.splice(this.localloanobject.Association.indexOf(filteting[rowIndex]), 1);
 

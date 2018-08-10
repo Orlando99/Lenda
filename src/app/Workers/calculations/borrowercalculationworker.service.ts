@@ -53,11 +53,11 @@ export class Borrowercalculationworker {
       this.preparenetratio();
       this.prepare_FICO();
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_Borrower', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_Borrower', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return this.input;
     }
     catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_Borrower',e);
+      this.logging.checkandcreatelog(1, 'Calc_Borrower',e);
       return input;
     }
   }
@@ -72,7 +72,7 @@ export class Borrowercalculationworker {
       }
 
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_Coll_1', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       return input2;
     } catch{
       return input2;

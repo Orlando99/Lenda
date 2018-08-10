@@ -53,11 +53,11 @@ export class LoancrophistoryService {
       let starttime = new Date().getMilliseconds();
       this.prepare_Crop_Yield();
       let endtime = new Date().getMilliseconds();
-      this.logging.checkandcreatelog(3, 'Calc_CropYield', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calc_CropYield', "LoanCalculation timetaken :" + (starttime - endtime).toString() + " ms");
       return this.input;
     }
     catch(e){
-      this.logging.checkandcreatelog(3, 'Calc_CropYield', e);
+      this.logging.checkandcreatelog(1, 'Calc_CropYield', e);
       return input;
     }
   }
