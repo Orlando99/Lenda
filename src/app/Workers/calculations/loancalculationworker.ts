@@ -54,7 +54,7 @@ export class LoancalculationWorker {
   //     console.log("Calculation Started");
   //     let starttime = new Date().getTime();
   //     console.log(starttime);
-  //     this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
+  //     this.logging.checkandcreatelog(1, 'Calculationforloan', "LoanCalculation Started");
   //     if (localloanobj.Borrower != null)
   //       localloanobj.Borrower = this.borrowerworker.prepareborrowermodel(localloanobj.Borrower);
   //     if (localloanobj.LoanCropUnits != null)
@@ -75,7 +75,7 @@ export class LoancalculationWorker {
   //     //localloanobj=this.associationcalculation.prepareLoanassociationmodel(localloanobj);
   //     console.log("Calculation Ended");
   //     let endtime = new Date().getTime();
-  //     this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+  //     this.logging.checkandcreatelog(1, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
 
 
   //     console.log("Time taken :" + (starttime - endtime).toString() + " ms");
@@ -84,7 +84,7 @@ export class LoancalculationWorker {
   //   this.localst.store(environment.loankey, localloanobj);
   //   if (recalculate) {
   //     console.log("object updated");
-  //     this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
+  //     this.logging.checkandcreatelog(1, 'Calculationforloan', "Local Storage updated");
   //   }
   //   else
   //     console.log("object updated without calculations");
@@ -100,7 +100,7 @@ export class LoancalculationWorker {
       console.log("Calculation Started");
       let starttime = new Date().getTime();
       console.log(starttime);
-      // this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation Started");
+      // this.logging.checkandcreatelog(1, 'Calculationforloan', "LoanCalculation Started");
 
       //STEP 1 -- BORROWER CALCULATIONS
       if (localloanobj.Borrower != null)
@@ -148,9 +148,9 @@ export class LoancalculationWorker {
           localloanobj.LoanMaster[0].ActionStatus=2;
         }
         let endtime = new Date().getTime();
-        this.logging.checkandcreatelog(3, 'Calc_Budget', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+        this.logging.checkandcreatelog(1, 'Calc_Budget', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       } catch (e) {
-        this.logging.checkandcreatelog(3, 'Calc_Budget', e);
+        this.logging.checkandcreatelog(1, 'Calc_Budget', e);
         console.error("ERROR IN BUDGET CALCULATION" + JSON.stringify(e));
       }
       //localloanobj.LoanBudget = localloanobj.LoanBudget;
@@ -246,7 +246,7 @@ export class LoancalculationWorker {
       localloanobj.InsurancePolicies = localloanobj.InsurancePolicies;
       console.log("Calculation Ended");
       let endtime = new Date().getTime();
-      this.logging.checkandcreatelog(3, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
+      this.logging.checkandcreatelog(1, 'Calculationforloan', "LoanCalculation timetaken :" + (endtime - starttime).toString() + " ms");
       console.log("Time taken :" + (starttime - endtime).toString() + " ms");
     }
 
@@ -254,7 +254,7 @@ export class LoancalculationWorker {
     this.localst.store(environment.loankey, localloanobj);
     if (recalculate) {
       console.log("object updated");
-      // this.logging.checkandcreatelog(3, 'Calculationforloan', "Local Storage updated");
+      // this.logging.checkandcreatelog(1, 'Calculationforloan', "Local Storage updated");
     }
     else
       console.log("object updated without calculations");

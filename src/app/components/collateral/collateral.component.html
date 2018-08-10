@@ -89,6 +89,7 @@
     </div>
   </div>
 
+  <app-questions [chevronId]="'Collateral'"></app-questions>
   <app-buyer-association (enableSync)="enableSync($event)" *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
   <app-fsa (enableSync)="enableSync($event)" *ngIf="pageSettings.fsa.isActive"></app-fsa>
   <app-livestock (enableSync)="enableSync($event)" *ngIf="pageSettings.livestock.isActive"></app-livestock>
