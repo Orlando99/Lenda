@@ -208,7 +208,17 @@ export class BorrowerInfoComponent implements OnInit {
   }
 
   onEntityTypeChange(data) {
-
+    
+    let entities = ['PRP','JNT','COP','LLC'];
+    let valueIndex = entities.indexOf(data.value);
+    if(valueIndex >-1){
+      entities.splice(valueIndex,1);
+      let existingAssociations = this.localloanobj.Association.filter(as=> entities.indexOf(as.Assoc_Type_Code) > -1 );
+      existingAssociations.forEach(assoc => {
+        assoc.Assoc_Type_Code = data.value;
+      });
+      this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+    }
   }
 
   synctoDb() {
