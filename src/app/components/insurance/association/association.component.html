@@ -16,8 +16,8 @@
       <div class="container bottom">
         <div class="row">
           <ag-grid-angular class="ag-theme-balham roboto-font" [context]="context" [frameworkComponents]="frameworkcomponents"
-            [components]="components" (rowEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" [editType]="editType"
-            (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true>
+            [components]="components" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" [editType]="editType"
+            (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true [singleClickEdit]="true">
           </ag-grid-angular>
         </div>
       </div>

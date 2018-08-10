@@ -18,6 +18,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
 import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
@@ -68,7 +69,7 @@ export class AssociationComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { emaileditor:EmailEditor,selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumericCellEditor: getAlphaNumericCellEditor(), };
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -81,13 +82,13 @@ export class AssociationComponent implements OnInit {
 
       this.columnDefs = [
 
-        { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['lenda-editable-field'] },
+        { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
         // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
-        { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
-        { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['lenda-editable-field'] },
-        { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['lenda-editable-field']},
-        { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
-        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['lenda-editable-field'],
+        { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
+        { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
+        { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable-color'], cellEditor: "numericCellEditor"},
+        { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
+        { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
             cellEditorParams : {values : Preferred_Contact_Ind_Options},
             valueFormatter : PreferredContactFormatter
           },
@@ -98,18 +99,24 @@ export class AssociationComponent implements OnInit {
 
       this.localstorageservice.observe(environment.loankey).subscribe(res => {
         // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-        this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-
-        if(this.localloanobject.Association)
-          this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
-        else
-          this.rowData = null;
+        //this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+        if(res){
+          this.localloanobject = res;
+          if(this.localloanobject.Association){
+            if(this.localloanobject.srccomponentedit == this.associationTypeCode+"AssociationComponent"){
+              this.rowData[this.localloanobject.lasteditrowindex] = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[this.localloanobject.lasteditrowindex];
+            }else{
+              this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);    
+            }
+          }
+        }
+        
 
       });
 
 
       this.getdataforgrid();
-      this.editType = "fullRow";
+      this.editType = "";
     }else{
       throw new Error("'header' and 'associationTypeCode' are required for Association Component");
        
@@ -135,15 +142,18 @@ export class AssociationComponent implements OnInit {
     if (obj.Assoc_ID==0 || obj.Assoc_ID==undefined) {
       obj.ActionStatus = 1;
       obj.Assoc_ID=0;
-      var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode).length;
-      this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode)[rowIndex]=value.data;
+      // not required as memory reference are same so automatically updates the localStorage
+      //var rowIndex=this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode).length;
+      //this.localloanobject.Association.filter(p => p.Assoc_Type_Code==this.associationTypeCode)[rowIndex]=value.data;
     }
     else {
-      var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
+      //var rowindex=this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).findIndex(p=>p.Assoc_ID==obj.Assoc_ID);
       if(obj.ActionStatus!=1)
       obj.ActionStatus = 2;
-      this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowindex]=obj;
+      //this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowindex]=obj;
     }
+    this.localloanobject.srccomponentedit = this.associationTypeCode+"AssociationComponent";
+    this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
@@ -200,19 +210,32 @@ export class AssociationComponent implements OnInit {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowIndex];
 
-        if (obj.Assoc_ID === 0) {
-          let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
+        let assocObj  = this.rowData[rowIndex];
+        let localObjIndex = this.localloanobject.Association.findIndex(assoc => assoc == assocObj);
+        if(localObjIndex > -1){
+          if(assocObj.ActionStatus == 1){
 
-          this.localloanobject.Association.splice(this.localloanobject.Association.indexOf(filteting[rowIndex]), 1);
-
+            this.localloanobject.Association.splice(localObjIndex,1);
+          }else{
+            assocObj.ActionStatus = 3;
+          }
+          this.localloanobject.srccomponentedit = undefined;
+          this.localloanobject.lasteditrowindex = undefined;
         }
-        else {
-          obj.ActionStatus = 3;
-        }
+        // var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowIndex];
 
-        console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
+        // if (obj.Assoc_ID === 0) {
+        //   let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
+
+        //   this.localloanobject.Association.splice(this.localloanobject.Association.indexOf(filteting[rowIndex]), 1);
+
+        // }
+        // else {
+        //   obj.ActionStatus = 3;
+        // }
+
+        // console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
 
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
@@ -221,7 +244,7 @@ export class AssociationComponent implements OnInit {
   }
 
   syncenabled() {
-    if(this.localloanobject.Association.filter(p => p.ActionStatus != 0 && p.ActionStatus != null && p.ActionStatus != undefined).length == 0)
+    if(this.localloanobject.Association.filter(p => p.ActionStatus && p.Assoc_Type_Code == this.associationTypeCode).length == 0)
     return 'disabled';
     else
     return '';
