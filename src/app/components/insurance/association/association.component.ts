@@ -36,6 +36,8 @@ export class AssociationComponent implements OnInit {
   header :string = '';
   @Input('associationTypeCode')
   associationTypeCode :string = '';
+  @Input("withoutChevron")
+  withoutChevron : boolean = false;
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;

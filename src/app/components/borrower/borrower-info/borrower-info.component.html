@@ -170,7 +170,7 @@
 
 	</div>
 	<!-- Table -->
-	<div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
+	<!-- <div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
 		<h3>{{getTypeNameOfCB(borrowerInfoForm.value.Co_Borrower_ID)}}</h3>
 		<a (click)="addrow()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
 			<i class="material-icons left">add</i>Add</a>
@@ -196,5 +196,9 @@
 				</div>
 		
 			  </div>  
+	</div> -->
+
+	<div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
+		<app-association [header]="getTypeNameOfCB(borrowerInfoForm.value.Co_Borrower_ID)" [associationTypeCode]="borrowerInfoForm.value.Co_Borrower_ID" [withoutChevron]="true"></app-association>
 	</div>
 </div>
