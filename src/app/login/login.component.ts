@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.title = 'Test Tour of Heroes';
-
+    this.loginService.removeDataFromLocalStorage();
     this.loginService.login(false);
   }
 
@@ -84,10 +84,10 @@ export class LoginComponent implements OnInit {
       this.localst.store(environment.uid, user[0].id);
       this.localst.store(environment.localStorage.userRole, user[0].role);
       this.localst.store(environment.usersession,generate())
-      
+
       this.localst.store(environment.errorbase,[]);
       this.localst.store(environment.modifiedbase,[]);
-      
+
       this.getreferencedata();
       //this.router.navigateByUrl("/home/loanoverview/000001/000/summary");
       this.router.navigateByUrl("/home/loans");

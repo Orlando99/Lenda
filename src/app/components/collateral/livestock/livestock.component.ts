@@ -16,6 +16,7 @@ import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alpha
 import { CollateralService } from '../collateral.service';
 import { LiveStockService } from './livestock.service';
 import CollateralSettings from './../collateral-types.model';
+import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
   selector: 'app-livestock',
@@ -24,7 +25,6 @@ import CollateralSettings from './../collateral-types.model';
   providers: [CollateralService]
 })
 export class LivestockComponent implements OnInit {
-  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   public localloanobject: loan_model = new loan_model();
@@ -47,7 +47,8 @@ export class LivestockComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
     public collateralService: CollateralService,
-    public liveStockService: LiveStockService) {
+    public liveStockService: LiveStockService,
+    public publishService: PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -76,10 +77,6 @@ export class LivestockComponent implements OnInit {
     });
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
@@ -89,17 +86,17 @@ export class LivestockComponent implements OnInit {
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.livestock.key, CollateralSettings.livestock.source, CollateralSettings.livestock.sourceKey);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
     this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.livestock.component, CollateralSettings.livestock.source, CollateralSettings.livestock.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.livestock.source, CollateralSettings.livestock.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   onGridSizeChanged(Event: any) {

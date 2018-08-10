@@ -6,8 +6,8 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
 
-    <a class="waves-effect waves-light btn" [ngClass]="isResponseUpdated ? '' : 'disabled'" (click)="synctoDb()" style="margin: 0 0 10px 18px;">
-      <i class="material-icons left">cloud</i> {{isPublishing ? 'Publishing...' : 'Publish'}}</a>
+    <!-- <a class="waves-effect waves-light btn" [ngClass]="isResponseUpdated ? '' : 'disabled'" (click)="synctoDb()" style="margin: 0 0 10px 18px;">
+      <i class="material-icons left">cloud</i> {{isPublishing ? 'Publishing...' : 'Publish'}}</a> -->
     <ng-container *ngTemplateOutlet="questionsList"></ng-container>
 
 

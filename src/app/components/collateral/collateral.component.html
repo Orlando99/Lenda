@@ -9,6 +9,11 @@
         <div class="right-align">
           <a class="waves-effect waves-light btn-outline btn-sm">DONE</a>
         </div>
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.questions.isDisabled}">
+          <input type="checkbox" [disabled]="pageSettings.questions.isDisabled" [checked]="pageSettings.questions.isActive" (change)="onToggleSettings(pageSettings.questions)"  />
+          <span class="setting-text">Questions</span>
+          <!-- <span class="number-of-rows">({{ collateralRows.lineHolder }} rows)</span> -->
+        </label>
         <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.lineHolder.isDisabled}">
           <input type="checkbox" [disabled]="pageSettings.lineHolder.isDisabled" [checked]="pageSettings.lineHolder.isActive" (change)="onToggleSettings(pageSettings.lineHolder)"  />
           <span class="setting-text">LienHolder</span>
@@ -21,7 +26,7 @@
            <span class="number-of-rows">({{ collateralRows.buyer }} rows)</span>
         </label>
 
-        <label (click)="$event.stopPropagation()"  [ngClass]="{'disabled': pageSettings.guarantor.isDisabled}">
+        <label (click)="$event.stopPropagation()" [ngClass]="{'disabled': pageSettings.guarantor.isDisabled}">
           <input type="checkbox" [disabled]="pageSettings.guarantor.isDisabled" [checked]="pageSettings.guarantor.isActive" (change)="onToggleSettings(pageSettings.guarantor)"  />
           <span class="setting-text">Guarantor</span>
            <span class="number-of-rows">({{ collateralRows.guarantor }} rows)</span>
@@ -82,20 +87,16 @@
         </label>
       </mat-menu>
     </mat-icon>
-    <div>
-      <a (click)="synctoDb()" [ngClass]="{'disabled': !isSyncEnabled}"  class="waves-effect waves-light btn-small right-align" >
-          <i class="material-icons left">cloud</i>Publish
-      </a>
-    </div>
+    <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
   </div>
 
-  <app-questions [chevronId]="'Collateral'"></app-questions>
-  <app-buyer-association (enableSync)="enableSync($event)" *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
-  <app-fsa (enableSync)="enableSync($event)" *ngIf="pageSettings.fsa.isActive"></app-fsa>
-  <app-livestock (enableSync)="enableSync($event)" *ngIf="pageSettings.livestock.isActive"></app-livestock>
-  <app-storedcrop (enableSync)="enableSync($event)" *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
-  <app-equipment (enableSync)="enableSync($event)" *ngIf="pageSettings.equipment.isActive"></app-equipment>
-  <app-realestate (enableSync)="enableSync($event)" *ngIf="pageSettings.realestate.isActive"></app-realestate>
-  <app-others (enableSync)="enableSync($event)" *ngIf="pageSettings.other.isActive"></app-others>
-  <app-marketing-contracts (enableSync)="enableSync($event)" *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
+  <app-questions [currentPageName]="currentPageName" *ngIf="pageSettings.questions.isActive" [chevronId]="'Collateral'"></app-questions>
+  <app-buyer-association *ngIf="pageSettings.buyer.isActive"></app-buyer-association>
+  <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
+  <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
+  <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
+  <app-equipment *ngIf="pageSettings.equipment.isActive"></app-equipment>
+  <app-realestate *ngIf="pageSettings.realestate.isActive"></app-realestate>
+  <app-others *ngIf="pageSettings.other.isActive"></app-others>
+  <app-marketing-contracts *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
 </div>

@@ -197,6 +197,7 @@ import { BudgetReportComponent } from './components/summary/budget-report/budget
 import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
 import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 import { ValidationService } from './Workers/calculations/validation.service';
+import { BtnPublishComponent } from './ui-components/btn-publish/btn-publish.component';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -292,7 +293,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AgGridTooltipComponent,
     LiquidityAnalysisComponent,
     BorrowerRatingComponent,
-    AdminSidebarComponent
+    AdminSidebarComponent,
+    BtnPublishComponent
   ],
   imports: [
     BrowserModule,

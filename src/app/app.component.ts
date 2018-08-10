@@ -7,17 +7,19 @@ import {
 import { environment } from '../environments/environment.prod';
 import { LayoutService } from './shared/layout/layout.service';
 import { LoginService } from './login/login.service';
+import { PublishService, Sync } from './services/publish.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  providers: [LayoutService, LoginService]
+  providers: [LayoutService, LoginService, PublishService]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   public loadingBarColor = '#2cbb9c';
   public isSidebarExpanded: boolean = true;
   public isUserLoggedIn;
+  public syncItems: Sync[];
   title = 'LendaPlus';
   loading;
   @HostListener('window:beforeunload', ['$event'])
@@ -30,8 +32,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     vcf: ViewContainerRef,
     private loanstorage: LocalStorageService,
     public layoutService: LayoutService,
-    public loginService: LoginService) {
-
+    public loginService: LoginService,
+    public publishService: PublishService) {
     this.toaster.setRootViewContainerRef(vcf);
     this.loading = true;
 

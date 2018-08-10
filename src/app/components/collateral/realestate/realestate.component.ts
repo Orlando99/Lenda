@@ -16,6 +16,7 @@ import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alpha
 import { CollateralService } from '../collateral.service';
 import { RealEstateService } from './realestate.service';
 import CollateralSettings from './../collateral-types.model';
+import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
   selector: 'app-realestate',
@@ -48,7 +49,8 @@ export class RealEstateComponent implements OnInit {
     public loanapi: LoanApiService,
     private hostElement: ElementRef,
     public collateralService: CollateralService,
-    public realEstateService: RealEstateService) {
+    public realEstateService: RealEstateService,
+    public publishService: PublishService) {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
@@ -81,24 +83,20 @@ export class RealEstateComponent implements OnInit {
     //this.adjustparentheight();
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.realestate.key, CollateralSettings.realestate.source, CollateralSettings.realestate.sourceKey);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
     this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.realestate.component, CollateralSettings.realestate.source, CollateralSettings.realestate.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.realestate.source, CollateralSettings.realestate.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   getgridheight() {

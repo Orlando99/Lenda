@@ -18,6 +18,7 @@ import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alpha
 import { CollateralService } from '../collateral.service';
 import { OthersService } from './others.service';
 import CollateralSettings from './../collateral-types.model';
+import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
   selector: 'app-others',
@@ -26,7 +27,6 @@ import CollateralSettings from './../collateral-types.model';
   providers: [CollateralService, OthersService]
 })
 export class OthersComponent implements OnInit {
-  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -50,7 +50,8 @@ export class OthersComponent implements OnInit {
     public loanapi: LoanApiService,
     private hostElement: ElementRef,
     public collateralService: CollateralService,
-    public othersService: OthersService) {
+    public othersService: OthersService,
+    public publishService: PublishService) {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
@@ -98,24 +99,20 @@ export class OthersComponent implements OnInit {
     this.adjustgrid();
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.other.key, CollateralSettings.other.source, CollateralSettings.other.sourceKey);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
     this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.other.component, CollateralSettings.other.source, CollateralSettings.other.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.other.source, CollateralSettings.other.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   expansionopen() {

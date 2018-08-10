@@ -4,6 +4,8 @@ import { LayoutService } from '../layout/layout.service';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import { MatSidenav } from '@angular/material';
+import { PublishService, Sync } from './../../services/publish.service';
+
 /**
  * @title Autosize sidenav
  */
@@ -23,24 +25,42 @@ export class SidebarComponent implements OnInit {
   private mainLogo;
   private minLogo;
   public loanid: string = "";
+  public syncItems: Sync[];
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private layoutService: LayoutService,
-    private localstorage: LocalStorageService
+    private localstorage: LocalStorageService,
+    private publishService: PublishService
   ) {
     this.localstorage.observe(environment.loankey).subscribe(res => {
       if (res != undefined && res != null)
-        this.loanid =this.localstorage.retrieve(environment.loanidkey).replace("-","/");
+        this.loanid = this.localstorage.retrieve(environment.loanidkey).replace("-", "/");
     })
     this.getloanid();
-
   }
 
   ngOnInit() {
     this.layoutService.isSidebarExpanded().subscribe((value) => {
       this.isExpanded = value;
     });
+
+    // Start subscribing if sync is required
+    this.publishService.listenToSyncRequired().subscribe((syncItems) => {
+      this.syncItems = syncItems;
+      debugger
+    });
+  }
+
+  isSyncRequired(pageName: string) {
+    let item: Sync;
+    for (item of this.syncItems) {
+      if (item.page === pageName) {
+        return true;
+      }
+    }
+    return false;
   }
 
   gotoborrower(event) {
@@ -49,7 +69,7 @@ export class SidebarComponent implements OnInit {
 
   getloanid() {
     try {
-      this.loanid =this.localstorage.retrieve(environment.loanidkey).replace("-","/");
+      this.loanid = this.localstorage.retrieve(environment.loanidkey).replace("-", "/");
     }
     catch (ex) {
 
