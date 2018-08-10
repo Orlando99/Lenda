@@ -30,6 +30,8 @@ export class BorrowerInfoComponent implements OnInit {
     { key: 'COP', value: 'Corporation' },
     { key: 'LLC', value: 'LLC' },
   ];
+  associationTypeCodes = ['PRP','JNT','COP','LLC'];
+  selectedAssociaionTypeCode : string = '';
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
   public columnDefs = [];
@@ -179,7 +181,10 @@ export class BorrowerInfoComponent implements OnInit {
       Spouse_Email: [formData.Spouse_Email || ''],
 
     })
-
+    if(this.associationTypeCodes.indexOf(formData.Co_Borrower_ID)>-1){
+      this.selectedAssociaionTypeCode =  formData.Co_Borrower_ID;
+    }
+    
     this.borrowerInfoForm.valueChanges.forEach(
       (value: any) => {
         this.isSubmitted = false;
@@ -209,15 +214,17 @@ export class BorrowerInfoComponent implements OnInit {
 
   onEntityTypeChange(data) {
     
-    let entities = ['PRP','JNT','COP','LLC'];
+    let entities = this.associationTypeCodes.slice(0); //clone
     let valueIndex = entities.indexOf(data.value);
     if(valueIndex >-1){
       entities.splice(valueIndex,1);
       let existingAssociations = this.localloanobj.Association.filter(as=> entities.indexOf(as.Assoc_Type_Code) > -1 );
       existingAssociations.forEach(assoc => {
         assoc.Assoc_Type_Code = data.value;
+        assoc.ActionStatus = assoc.ActionStatus || 2;
       });
       this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+      this.selectedAssociaionTypeCode = data.value;
     }
   }
 

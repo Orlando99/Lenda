@@ -198,7 +198,7 @@
 			  </div>  
 	</div> -->
 
-	<div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
-		<app-association [header]="getTypeNameOfCB(borrowerInfoForm.value.Co_Borrower_ID)" [associationTypeCode]="borrowerInfoForm.value.Co_Borrower_ID" [withoutChevron]="true"></app-association>
+	<div class="row" *ngIf="mode!='create' && selectedAssociaionTypeCode">
+		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [associationTypeCode]="selectedAssociaionTypeCode" [withoutChevron]="true"></app-association>
 	</div>
 </div>

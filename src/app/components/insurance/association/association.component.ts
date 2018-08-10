@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -26,7 +26,7 @@ import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alpha
   templateUrl: './association.component.html',
   styleUrls: ['./association.component.scss']
 })
-export class AssociationComponent implements OnInit {
+export class AssociationComponent implements OnInit, OnChanges {
   public refdata: any = {};
   public isgriddirty:boolean;
   indexsedit = [];
@@ -79,7 +79,34 @@ export class AssociationComponent implements OnInit {
 
     
   }
+  
   ngOnInit() {
+    this.prepareColDefs();
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
+      //this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+      if(res){
+        this.localloanobject = res;
+        if(this.localloanobject.Association){
+          if(this.localloanobject.srccomponentedit == this.associationTypeCode+"AssociationComponent"){
+            this.rowData[this.localloanobject.lasteditrowindex] = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[this.localloanobject.lasteditrowindex];
+          }else{
+            this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);    
+          }
+        }
+        
+      }
+      
+
+    });
+    
+  }
+
+  ngOnChanges(){
+    this.prepareColDefs();
+  }
+
+  prepareColDefs(){
     if(this.header && this.associationTypeCode){
 
       this.columnDefs = [
@@ -99,22 +126,7 @@ export class AssociationComponent implements OnInit {
       ///
       this.context = { componentParent: this };
 
-      this.localstorageservice.observe(environment.loankey).subscribe(res => {
-        // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage updated");
-        //this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-        if(res){
-          this.localloanobject = res;
-          if(this.localloanobject.Association){
-            if(this.localloanobject.srccomponentedit == this.associationTypeCode+"AssociationComponent"){
-              this.rowData[this.localloanobject.lasteditrowindex] = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[this.localloanobject.lasteditrowindex];
-            }else{
-              this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);    
-            }
-          }
-        }
-        
-
-      });
+      
 
 
       this.getdataforgrid();
