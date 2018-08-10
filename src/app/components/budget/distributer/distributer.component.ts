@@ -294,17 +294,9 @@ export class DistributerComponent implements OnInit {
 
       }
     })
-
   }
 
-  // getgridheight(){
-  //   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
-  //  }
-  //
-
   syncenabled(){
-    // var errPhne = this.rowData.filter(rd => { console.log(rd.Phone.length); return rd.Phone.length < 10;});
-    // console.log(errPhne);
     if ( this.isArrayEqual(this.rowData, this.savedData)){
       return 'disabled';
     } else 
@@ -312,7 +304,6 @@ export class DistributerComponent implements OnInit {
   }
 
   onGridSizeChanged(params) {
-    //params.api.sizeColumnsToFit();
     params.api.resetRowHeights();
   }
 

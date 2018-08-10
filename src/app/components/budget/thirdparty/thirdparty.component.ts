@@ -1,22 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
 import { numberValueSetter, getNumericCellEditor, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
-import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
-/// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
+import * as _ from 'lodash';
+import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 @Component({
   selector: 'app-thirdparty',
   templateUrl: './thirdparty.component.html',
@@ -27,8 +24,6 @@ export class ThirdpartyComponent implements OnInit {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
-  public syncenabled = true;
-  // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
   public context;
@@ -37,28 +32,24 @@ export class ThirdpartyComponent implements OnInit {
   public pinnedBottomRowData = [];
   private gridApi;
   private columnApi;
+  public savedData = [];
   style = {
     marginTop: '10px',
     width: '96%',
-    //height: '240px',
     boxSizing: 'border-box'
   };
-  //region Ag grid Configuration
 
+  @ViewChild("myGrid") gridEl: ElementRef;
 
+  defaultColDef = {
+    enableValue: true,
+    enableRowGroup: true,
+    enablePivot: true
+  };
   returncountylist() {
     return this.refdata.CountyList;
   }
 
-
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.columnApi = params.columnApi;
-    params.api.sizeColumnsToFit();
-    //this.getgridheight();
-  }
-  //End here
-  // Aggrid ends
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public insuranceservice: InsuranceapiService,
@@ -68,137 +59,160 @@ export class ThirdpartyComponent implements OnInit {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor(),  phoneCellEditor: getPhoneCellEditor() };
+    this.components = { numericCellEditor: getNumericCellEditor() ,  phoneCellEditor: getPhoneCellEditor(), alphaNumeric: getAlphaNumericCellEditor(),};
     
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    //Coldef here
-    
+
     this.columnDefs = [
       
-      { headerName: '3rd Party', field: 'Assoc_Name',  editable: true,cellClass: ['lenda-editable-field'] },      
-      { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['lenda-editable-field'] },
-      { headerName: 'Location', field: 'Location',  editable: true ,cellClass: ['lenda-editable-field']},
-      { headerName: 'Phone', field: 'Phone', editable: true, valueFormatter: formatPhoneNumber, cellClass: ['lenda-editable-field']},
-      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['lenda-editable-field']},
-      { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['lenda-editable-field'],
-          cellEditorParams : {values : Preferred_Contact_Ind_Options},
-          valueFormatter : PreferredContactFormatter
-        },
-      { headerName: 'Amount', width: 100, field: 'Amount',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['lenda-editable-field'] },
+      { headerName: '3rd Party', field: 'Assoc_Name',  editable: true,cellEditor: "alphaNumeric",cellClass: ['editable-color'] },      
+      { headerName: 'Contact', field: 'Contact',  editable: true,cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
+      { headerName: 'Location', field: 'Location',  editable: true,cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
+      { headerName: 'Phone', field: 'Phone', editable: true,cellEditor: "phoneCellEditor", valueFormatter: formatPhoneNumber, cellClass: ['editable-color']},
+      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
+      { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable-color'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];
-    ///
+
     this.context = { componentParent: this };
   }
+
   ngOnInit() {  
+    this.localstorageservice.observe(environment.loankey).subscribe(res=>{
+      // this.logging.checkandcreatelog(1,'CropYield',"LocalStorage updated");
+       if (res.srccomponentedit == "ThirdPartyComponent") {
+         //if the same table invoked the change .. change only the edited row
+         this.localloanobject = res;
+         this.rowData[res.lasteditrowindex] =  this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR")[res.lasteditrowindex];
+         this.gridApi.refreshCells();
+       }
+       else {
+         this.localloanobject = res;
+         this.rowData= this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR");
+         this.gridApi.refreshCells();
+       }
+       this.gridApi.refreshCells();
+     });
+  }
 
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      if(res){
-        this.localloanobject = res;
-      if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-        this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR");
-      }
-      this.gridApi && this.gridApi.refreshCells();
-    }
-    });
-  
-
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.columnApi = params.columnApi;
+    params.api.sizeColumnsToFit();
     this.getdataforgrid();
-    this.editType = "fullRow";
   }
+
   getdataforgrid() {
-   
-    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    if (this.localloanobject != null && this.localloanobject != undefined && this.localloanobject.Association!=null && this.localloanobject.Association !=undefined) {
-      this.rowData = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code=="THR");
+    let obj: any = this.localstorageservice.retrieve(environment.loankey);
+    // this.logging.checkandcreatelog(1, 'CropRebator', "LocalStorage retrieved");
+    if (obj != null && obj != undefined) {
+      this.localloanobject = obj;
+      this.rowData=[];
+      this.rowData=this.localloanobject.Association !=null ? this.localloanobject.Association.filter(ac => ac.Assoc_Type_Code == "THR") : []
+      this.rowData = this.rowData.map(row=>{ row.ActionStatus=0; return row;});
+      this.savedData = _.cloneDeep(this.rowData);
+      //this.getgridheight();
     }
   }
 
-
-  rowvaluechanged(value: any) {
-    
-    var obj = value.data;
-    if (obj.Assoc_ID == undefined) {
+  rowvaluechanged(params: any) {
+    var obj = params.data;
+    if (obj.Assoc_ID == 0) {
       obj.ActionStatus = 1;
-      obj.Assoc_ID=0;  
-     
+      this.localloanobject.Association[this.localloanobject.Association.length - 1] = obj;
     }
     else {
-      if(obj.Assoc_ID){
-        obj.ActionStatus = 2;
+      var rowindex = this.localloanobject.Association.findIndex(as => as.Assoc_ID == obj.Assoc_ID);
+      if (obj.ActionStatus != 1){
+        obj.ActionStatus = 2;  
+        if (params.value != this.localloanobject.Association[rowindex][params.colDef.field]){
+          this.localloanobject.Association[rowindex][params.colDef.field] = params.value;        
+        }
       }
-    
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+       
+      this.localloanobject.Association[rowindex] = obj;
     }
+
+    this.localloanobject.srccomponentedit = "ThirdPartyComponent";
+    this.localloanobject.lasteditrowindex = params.rowIndex;
   }
 
   synctoDb() {
-      
-  this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-    if(res.ResCode==1){
-     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-       
-       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-       if (res.ResCode == 1) {
-         this.toaster.success("Records Synced");
-         let jsonConvert: JsonConvert = new JsonConvert();
-         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-       }
-       else{
-         this.toaster.error("Could not fetch Loan Object from API")
-       }
-     });
-    }
-    else{
-      this.toaster.error("Error in Sync");
-    }
-  })
-
-
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+      if(res.ResCode==1){
+      this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+        
+        this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+        if (res.ResCode == 1) {
+          this.toaster.success("Records Synced");
+          let jsonConvert: JsonConvert = new JsonConvert();
+          this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+        }
+        else{
+          this.toaster.error("Could not fetch Loan Object from API")
+        }
+      });
+      }
+      else{
+        this.toaster.error("Error in Sync");
+      }
+    })
   }
 
-  //Grid Events
   addrow() {
-        
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
-    newItem.Assoc_Type_Code="THR";
-    newItem.Preferred_Contact_Ind=1;
-    newItem.Assoc_ID = undefined;
+    newItem.ActionStatus = 1;
+    newItem.Preferred_Contact_Ind = 1;
+
+    newItem.Assoc_Type_Code = "THR";
     var res = this.rowData.push(newItem);
-    this.gridApi.updateRowData({ add: [newItem] });
+
+    //this.gridApi.updateRowData({ add: [newItem] });
+    this.gridApi.setRowData(this.rowData);
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
       colKey: "Assoc_Name"
     });
+    
     this.localloanobject.Association.push(newItem);
   }
 
   DeleteClicked(rowIndex: any) {
-    
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
+      res => {
       if (res == true) {
-        
         var obj = this.rowData[rowIndex];
-        if(obj){
-          let associationIndex = this.localloanobject.Association.findIndex(assoc=>assoc == obj);
-          if(!obj.Assoc_ID){
-            this.localloanobject.Association.splice(associationIndex,1);
-          }else{
-            obj.ActionStatus =3;
-          }
+        this.rowData.splice(rowIndex, 1);
+        this.gridApi.setRowData(this.rowData);
+        let index = this.localloanobject.Association.findIndex(as=>as==obj);
+        if (obj.ActionStatus != 1) {
+          this.localloanobject.Association[index].ActionStatus = 3;
+        } else {
+          this.localloanobject.Association.splice(index, 1);
+          this.localloanobject.LoanCollateral.splice(this.localloanobject.Association.indexOf(obj), 1);
         }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+
       }
     })
-
   }
 
-  // getgridheight(){
-  //   this.style.height=(28*(this.rowData.length+2)).toString()+"px";
-  //  }
-  //
+  syncenabled(){
+    if ( this.isArrayEqual(this.rowData, this.savedData)){
+      return 'disabled';
+    } else 
+      return '';
+  }
+
+  onGridSizeChanged(params) {
+    params.api.resetRowHeights();
+  }
+
+  isArrayEqual(x, y) {
+    if (x.length != y.length ) return false;
+    return _(x).differenceWith(y, _.isEqual).isEmpty() ;
+  };
 
 }
 
