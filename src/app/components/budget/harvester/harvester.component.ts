@@ -80,7 +80,7 @@ export class HarvesterComponent implements OnInit {
       { headerName: 'Contact', field: 'Contact',  editable: true,cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
       { headerName: 'Location', field: 'Location',  editable: true,cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
       { headerName: 'Phone', field: 'Phone', editable: true,cellEditor: "phoneCellEditor", valueFormatter: formatPhoneNumber, cellClass: ['editable-color']},
-      { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
+      { headerName: 'Email', field: 'Email', editable: true,cellEditor: "alphaNumeric", cellClass: ['editable-color']},
       { headerName: 'Pref Contact', width: 80, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "numericCellEditor", valueSetter: numberValueSetter,cellClass: ['editable-color'] },
       { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
     ];

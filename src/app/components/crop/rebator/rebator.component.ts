@@ -73,13 +73,7 @@ export class RebatorComponent implements OnInit {
         { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
         { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellClass: ['editable-color']},
         { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
-        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber,cellStyle: function(params) {
-          if (params.value.length < 10) {
-              return {color: 'red'};
-          }else{
-            return {color: 'blue'}
-          }
-        }, cellClass: ['editable-color','text-right']},
+        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
           cellEditorParams : {values : Preferred_Contact_Ind_Options},
