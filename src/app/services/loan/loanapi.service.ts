@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { ResponseModel } from '../../models/resmodels/reponse.model';
 import { environment } from '../../../environments/environment.prod';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../api.service';
 import { loan_model, loan_borrower, loan_farmer } from '../../models/loanmodel';
 const API_URL = environment.apiUrl;
 @Injectable()

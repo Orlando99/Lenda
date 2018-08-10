@@ -16,7 +16,7 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
-import { CollateralService } from './../../collateral/collateral.service';
+import { CollateralService } from '../../collateral/collateral.service';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({

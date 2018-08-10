@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NotificationFeedsService } from './/notification-feeds.service';
+import { NotificationFeedsService } from './notification-feeds.service';
 import { MatSidenav } from '@angular/material';
 @Component({
   selector: 'notification-feeds',

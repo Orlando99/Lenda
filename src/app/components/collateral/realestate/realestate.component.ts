@@ -15,7 +15,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { RealEstateService } from './realestate.service';
-import CollateralSettings from './../collateral-types.model';
+import CollateralSettings from '../collateral-types.model';
 
 @Component({
   selector: 'app-realestate',

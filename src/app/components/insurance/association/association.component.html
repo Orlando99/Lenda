@@ -1,6 +1,6 @@
 <div class="basic-container" *ngIf="header && associationTypeCode">
 
-  <mat-accordion>
+  <mat-accordion *ngIf="!withoutChevron">
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -11,18 +11,29 @@
       <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
 
       <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
-     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+     <!-- <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a> -->
 
-      <div class="container bottom">
-        <div class="row">
-          <ag-grid-angular class="ag-theme-balham roboto-font" [context]="context" [frameworkComponents]="frameworkcomponents"
-            [components]="components" (rowEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" [editType]="editType"
-            (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true>
-          </ag-grid-angular>
-        </div>
-      </div>
+      <ng-container *ngTemplateOutlet="associationGrid"></ng-container>
       <br>
     </mat-expansion-panel>
   </mat-accordion>
 
+<ng-container *ngIf="withoutChevron">
+  <h4> {{header}}</h4>
+  <ng-container *ngTemplateOutlet="associationGrid"></ng-container>
+</ng-container>
 </div>
+
+
+<ng-template #associationGrid >
+
+  <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
+  <div class="container bottom">
+    <div class="row">
+      <ag-grid-angular class="ag-theme-balham roboto-font" [context]="context" [frameworkComponents]="frameworkcomponents"
+        [components]="components" (cellEditingStopped)="rowvaluechanged($event)" [rowData]="rowData" [editType]="editType"
+        (gridReady)="onGridReady($event)" [columnDefs]="columnDefs" [gridAutoHeight]=true [singleClickEdit]="true">
+      </ag-grid-angular>
+    </div>
+  </div>
+</ng-template>

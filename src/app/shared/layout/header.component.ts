@@ -7,11 +7,11 @@ import { JsonConvert } from 'json2typescript';
 
 import { environment } from '../../../environments/environment.prod';
 import { NotificationFeedsComponent } from '../notification-feeds/notification-feeds.component';
-import { SidebarComponent } from '../layout/sidebar.component';
+import { SidebarComponent } from './sidebar.component';
 
 import { NotificationFeedsService } from '../notification-feeds/notification-feeds.service';
 import { ReferenceService } from '../../services/reference/reference.service';
-import { LayoutService } from '../../shared/layout/layout.service';
+import { LayoutService } from './layout.service';
 import { GlobalService } from '../../services/global.service';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 

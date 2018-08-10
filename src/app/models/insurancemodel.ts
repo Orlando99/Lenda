@@ -1,4 +1,4 @@
-import { JsonObject, JsonProperty } from "../../../node_modules/json2typescript";
+import { JsonObject, JsonProperty } from "json2typescript";
 import { IntConverter, StringConverter } from "../Workers/utility/jsonconvertors";
 
 @JsonObject
@@ -89,5 +89,6 @@ export class Insurance_Subpolicy
     FCMC:number=undefined;
     @JsonProperty("Deduct", IntConverter)
     Deduct:number=undefined;
+    Icc:number=0;
     ActionStatus:number=0;
 }
