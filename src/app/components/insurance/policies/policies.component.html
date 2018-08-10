@@ -47,21 +47,12 @@
             <mat-expansion-panel [expanded]="expanded" style="margin : 0 10px">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  Questions 
+                  Questions {{optedInsuranceOptions | json}}
                 </mat-panel-title>
               </mat-expansion-panel-header>
           
-              <!-- <a class="waves-effect waves-light btn" (click)="synctoDb()" style="margin: 0 0 10px 18px;">
-                <i class="material-icons left">cloud</i></a> -->
-
-              <app-questions [chevronHeader]="'MPCI'" [chevronId]="'Insurance_MPCI'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'HMAX'" [chevronId]="'Insurance_HMAX'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'RAMP'" [chevronId]="'Insurance_RAMP'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'ICE'" [chevronId]="'Insurance_ICE'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'ABC'" [chevronId]="'Insurance_ABC'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'CROPHAIL'" [chevronId]="'Insurance_CROPHAIL'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-              <app-questions [chevronHeader]="'WFRP'" [chevronId]="'Insurance_WFRP'" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
-
+              <app-questions *ngFor=" let insOption of optedInsuranceOptions" [chevronHeader]="insOption" [chevronId]="'Insurance_'+insOption" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
+             
             </mat-expansion-panel>
           </mat-accordion>
         </mat-expansion-panel>

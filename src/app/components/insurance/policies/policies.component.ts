@@ -51,6 +51,7 @@ export class PoliciesComponent implements OnInit {
   ]
  
   public errorlist:Array<errormodel>=new Array<errormodel>();
+  public optedInsuranceOptions : Array<any> = [];
 
   retrieveerrors(){
      this.errorlist=(this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p=>p.errorsection="Insurance");
@@ -435,7 +436,7 @@ export class PoliciesComponent implements OnInit {
         
       this.loanmodel = res;
       this.declarecoldefs();
-     
+      this.getOptedInsuranceOptions();
       
       }
     })
@@ -447,6 +448,7 @@ export class PoliciesComponent implements OnInit {
     {
       
     this.declarecoldefs();
+    this.getOptedInsuranceOptions();
    }
    
   }
@@ -651,6 +653,7 @@ export class PoliciesComponent implements OnInit {
     this.gridApi.setColumnDefs(this.columnDefs);
     this.updatelocalloanobject($event);
     this.updateSyncStatus();
+    this.getOptedInsuranceOptions()
   }
 
   onGridReady(params) {
@@ -723,6 +726,21 @@ export class PoliciesComponent implements OnInit {
 
   onGridScroll(params) {
     //params.api.stopEditing();
+  }
+
+  getOptedInsuranceOptions(){
+    this.optedInsuranceOptions = [];
+    this.optedInsuranceOptions.push('MPCI');
+    this.loanmodel.InsurancePolicies.forEach(ip => {
+      if(ip.ActionStatus !=3){
+        ip.Subpolicies.forEach(sip => {
+
+          if(sip.ActionStatus!=3 && sip.Ins_Type && (this.optedInsuranceOptions.indexOf(sip.Ins_Type)== -1)){
+            this.optedInsuranceOptions.push(sip.Ins_Type);
+          }
+        });
+      }
+    });
   }
   //
 }
