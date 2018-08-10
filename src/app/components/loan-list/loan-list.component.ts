@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LoanApiService } from './../../services/loan/loanapi.service';
+import { LoanApiService } from '../../services/loan/loanapi.service';
 import { LoanListResModel } from '../../models/resmodels/loan-list.model';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../../../node_modules/ngx-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 
 @Component({

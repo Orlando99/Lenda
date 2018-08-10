@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { chartSettings } from './../../../../../chart-settings';
+import { chartSettings } from '../../../../../chart-settings';
 declare var Chart;
 
 @Component({

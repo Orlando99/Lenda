@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
-import { Observable } from "rxjs/Rx";
+import { Observable } from "rxjs";
 
 /**
  * Shared service for login

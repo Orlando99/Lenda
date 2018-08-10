@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, Renderer2 } from '@angular/core';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
-import { SvgTooltipService } from './../../ui-components/svg-tooltip/svg-tooltip.service';
+import { SvgTooltipService } from '../../ui-components/svg-tooltip/svg-tooltip.service';
 declare var $;
 
 @Component({

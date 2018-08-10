@@ -19,7 +19,7 @@ import { MarketingcontractcalculationService } from '../../../Workers/calculatio
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { MarketingContractsService } from './marketing-contracts.service';
-import CollateralSettings from './../collateral-types.model';
+import CollateralSettings from '../collateral-types.model';
 
 @Component({
   selector: 'app-marketing-contracts',

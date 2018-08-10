@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../../environments/environment';
-import { chartSettings } from './../../../../../chart-settings';
+import { chartSettings } from '../../../../../chart-settings';
 import { PriceFormatter } from '../../../../../Workers/utility/aggrid/formatters';
 import { loan_model } from '../../../../../models/loanmodel';
 

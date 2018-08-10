@@ -96,6 +96,7 @@ export class LoancropunitcalculationworkerService {
   }
 
   fillFCValuesforCropunits(input: loan_model) {
+    debugger
     try{
       let starttime = new Date().getTime();
       input.LoanCropUnits.forEach(element => {
@@ -112,12 +113,12 @@ export class LoancropunitcalculationworkerService {
           element.FC_Ins_Unit = insurancepolicy.Unit;
           element.FC_Primary_limit = insurancepolicy.Level;
 
-
+          let crop_adj_price=input.LoanCrops.find(p=>p.Crop_Code==element.Crop_Code).Adj_Price;
           //Mkt Value
           try {
             //z price to be flipped to Adj_price
             // Ins_Aph flipped to Crop yield
-            element.Mkt_Value = element.Ins_APH * element.CU_Acres * element.Z_Price * farm.Percent_Prod / 100;
+            element.Mkt_Value = element.Ins_APH * element.CU_Acres * crop_adj_price * farm.Percent_Prod / 100;
             element.Disc_Mkt_Value = element.Mkt_Value * 47.5 / 100;
             if (insurancepolicy.MPCI_Subplan == "ARH") {
               //Then MPCI Leveli %= Loan_InsurancePolicy.Level_PCT* Loan_InsurancePolicy.Yield_PCT * Loan_InsurancePolicy.Price_PCT
@@ -138,7 +139,7 @@ export class LoancropunitcalculationworkerService {
               element.FC_ModifiedAPH = element.Ins_APH;
             }
             else {
-              element.FC_ModifiedAPH = element.Ins_APH * element.Z_Price;
+              element.FC_ModifiedAPH = element.Ins_APH * insurancepolicy.Price;
             }
             ///MPCI VALUES  is ins value
             element.FC_MPCIvalue = ((element.FC_ModifiedAPH * element.FC_Level1Perc / 100) - insurancepolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
@@ -171,7 +172,7 @@ export class LoancropunitcalculationworkerService {
                     let deduct_pct = 0;
                     let deduct_amt = 0; // these are hardcoded values and will be aded to Db soon
                     // using insurance aph instead of CU_APH
-                    element.FC_Hmaxvalue = ((((HmaxlevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * element.Z_Price) - element.FC_HmaxPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                    element.FC_Hmaxvalue = ((((HmaxlevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * insurancepolicy.Price) - element.FC_HmaxPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Hmaxvalue=element.FC_Hmaxvalue * 85/100;
                   }
                   else {
@@ -187,7 +188,7 @@ export class LoancropunitcalculationworkerService {
                 subpolicy.Upper_Limit = 86;
                 try {
                   if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                    let liability = element.Z_Price * subpolicy.Yield;
+                    let liability = insurancepolicy.Price * subpolicy.Yield;
                     let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                     element.FC_Scovalue = ((CoveragetoMPCI / 100 * liability) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Scovalue=element.FC_Scovalue * 80/100;
@@ -204,7 +205,7 @@ export class LoancropunitcalculationworkerService {
                 try {
                   subpolicy.Upper_Limit = 90;
                   if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                    let liability = element.Z_Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct / 100;
+                    let liability = insurancepolicy.Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct / 100;
                     let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                     element.FC_Staxvalue = ((CoveragetoMPCI / 100 * liability) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Staxvalue=element.FC_Staxvalue * 80/100;
@@ -223,7 +224,7 @@ export class LoancropunitcalculationworkerService {
                     let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                     let RamplevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Price_Pct / 100 * subpolicy.Liability;
                     element.FC_RampPremium = subpolicy.Premium;
-                    element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * element.Z_Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                    element.FC_Rampvalue = ((RamplevelPerc * element.Ins_APH * insurancepolicy.Price) - element.FC_RampPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Rampvalue=element.FC_Rampvalue * 85/100;
                   }
                   else {
@@ -279,7 +280,7 @@ export class LoancropunitcalculationworkerService {
                     let icelevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band) * subpolicy.Yield_Pct / 100 * subpolicy.Price_Pct / 100;
                     element.FC_IcePremium = subpolicy.Premium;
                     // not using Liability as if now in calculation
-                    element.FC_Icevalue = ((((icelevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * element.Z_Price) - element.FC_IcePremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                    element.FC_Icevalue = ((((icelevelPerc - (_.max([deduct_pct, (element.Ins_APH == 0 ? 0 : (deduct_amt / element.Ins_APH))]))) - (element.Ins_APH == 0 ? 0 : (subpolicy.Deduct / element.Ins_APH))) * element.Ins_APH * insurancepolicy.Price) - element.FC_IcePremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Icevalue=element.FC_Icevalue * 85/100;
                   }
                   else {
@@ -298,7 +299,7 @@ export class LoancropunitcalculationworkerService {
                     let AbclevelPerc = CoveragetoMPCI / 100 * (CoveragetoMPCI / band);
                     element.FC_AbcPremium = subpolicy.Premium;
                     // not using Liability as if now in calculation and change zprice to insadjusted price
-                    element.FC_Abcvalue = ((AbclevelPerc * element.Ins_APH * element.Z_Price) - element.FC_AbcPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
+                    element.FC_Abcvalue = ((AbclevelPerc * element.Ins_APH * insurancepolicy.Price) - element.FC_AbcPremium) * (element.CU_Acres) * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Abcvalue=element.FC_Abcvalue * 85/100;
                   }
                   else {
@@ -314,14 +315,16 @@ export class LoancropunitcalculationworkerService {
                 try {
                   let array = [1, 2, 3, 4, 5];
                   let iccvalue = _.sumBy(input.LoanBudget.filter(p => p.Crop_Practice_ID == element.Crop_Practice_ID && array.includes(p.Expense_Type_ID)), "Total_Budget_Acre");
+                  subpolicy.Icc=iccvalue;
                   let liability = iccvalue + subpolicy.FCMC;
                   element.FC_Pcivalue = (liability - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                   element.FC_Disc_Pcivalue=element.FC_Pcivalue * 85/100;
+                  3
                 }
                 catch{
                   element.FC_Pcivalue = 0;
                 }
-              }
+              } 
               else if (subpolicy.Ins_Type.toLowerCase() == "crophail") {
                 try {
                   let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
@@ -332,7 +335,7 @@ export class LoancropunitcalculationworkerService {
                   }
                   if (subpolicy.Ins_SubType == "Prod Plan" || subpolicy.Ins_SubType == "Comp Plan") {
                     let deduct_pct = 0;
-                    element.FC_Crophailvalue = ((element.Ins_APH * element.Z_Price * (element.FC_Level1Perc - deduct_pct)) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
+                    element.FC_Crophailvalue = ((element.Ins_APH * insurancepolicy.Price * (element.FC_Level1Perc - deduct_pct)) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                   }
                   element.FC_Disc_Crophailvalue=element.FC_Crophailvalue * 80/100;
                 }
