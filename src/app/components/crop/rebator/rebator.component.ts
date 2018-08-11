@@ -8,7 +8,7 @@ import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { LoancropunitcalculationworkerService } from '../../../Workers/calculations/loancropunitcalculationworker.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
-import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
+import { getNumericCellEditor, numberValueSetter, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
@@ -64,16 +64,16 @@ export class RebatorComponent implements OnInit {
     public loanapi:LoanApiService){
 
       //Aggrid Specific Code
-      this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor()};
+      this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor(), phoneCellEditor: getPhoneCellEditor()};
       this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
       this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
       //Coldef here
       this.columnDefs = [
-        { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric",cellClass: ['editable-color'] },
+        { headerName: 'Rebator', field: 'Assoc_Name',width:100,  editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
         { headerName: 'Contact', field: 'Contact',width:100,  editable: true, cellClass: ['editable-color']},
         { headerName: 'Location', field: 'Location',width:100, editable: true, cellClass: ['editable-color']},
-        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right']},
+        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email',width:180,  editable: true,  cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
           cellEditorParams : {values : Preferred_Contact_Ind_Options},
@@ -119,8 +119,6 @@ export class RebatorComponent implements OnInit {
       this.gridApi && this.gridApi.refreshCells();
       // this.adjustgrid();
     });
-
-
 
 
   }
@@ -224,6 +222,7 @@ synctoDb() {
     params.api.sizeColumnsToFit();
     this.getdataforgrid();
   }
+  
 
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(
@@ -245,7 +244,9 @@ synctoDb() {
   }
 
   syncenabled(){
-    if (this.isArrayEqual(this.rowData, this.savedData)){
+    // var errPhne = this.rowData.filter(rd => { console.log(rd.Phone.length); return rd.Phone.length < 10;});
+    // console.log(errPhne);
+    if ( this.isArrayEqual(this.rowData, this.savedData)){
       return 'disabled';
     } else 
       return '';

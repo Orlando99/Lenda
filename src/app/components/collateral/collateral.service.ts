@@ -178,6 +178,7 @@ export class CollateralService {
     localloanobject.srccomponentedit = component;
     localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(localloanobject);
+   
   }
 
   deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source, uniqueKey) {

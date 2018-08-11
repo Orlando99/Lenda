@@ -50,6 +50,8 @@ export class PoliciesComponent implements OnInit {
     { id: 7, itemName: "PCI" },
     { id: 8, itemName: "CROPHAIL" }
   ]
+ 
+  public optedInsuranceOptions : Array<any> = [];
 
   public errorlist: Array<errormodel> = new Array<errormodel>();
 
@@ -462,12 +464,12 @@ export class PoliciesComponent implements OnInit {
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
-      if (res != null) {
-
-        this.loanmodel = res;
-        this.declarecoldefs();
-
-
+      if(res!=null){
+        
+      this.loanmodel = res;
+      this.declarecoldefs();
+      this.getOptedInsuranceOptions();
+      
       }
     })
   }
@@ -476,10 +478,11 @@ export class PoliciesComponent implements OnInit {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     if (this.loanmodel != null && this.loanmodel != undefined) //if the data is still in calculation mode and components loads before it
     {
-
-      this.declarecoldefs();
-    }
-
+      
+    this.declarecoldefs();
+    this.getOptedInsuranceOptions();
+   }
+   
   }
 
   //Crops Functions
@@ -685,6 +688,7 @@ export class PoliciesComponent implements OnInit {
     this.gridApi.setColumnDefs(this.columnDefs);
     this.updatelocalloanobject($event);
     this.updateSyncStatus();
+    this.getOptedInsuranceOptions()
   }
 
   onGridReady(params) {
@@ -756,6 +760,21 @@ export class PoliciesComponent implements OnInit {
 
   onGridScroll(params) {
     //params.api.stopEditing();
+  }
+
+  getOptedInsuranceOptions(){
+    this.optedInsuranceOptions = [];
+    this.optedInsuranceOptions.push('MPCI');
+    this.loanmodel.InsurancePolicies.forEach(ip => {
+      if(ip.ActionStatus !=3){
+        ip.Subpolicies.forEach(sip => {
+
+          if(sip.ActionStatus!=3 && sip.Ins_Type && (this.optedInsuranceOptions.indexOf(sip.Ins_Type)== -1)){
+            this.optedInsuranceOptions.push(sip.Ins_Type);
+          }
+        });
+      }
+    });
   }
   //
 }

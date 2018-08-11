@@ -132,7 +132,7 @@ export class BalancesheetComponent implements OnInit {
 
         break;
       }
-      this.localloanobject.srccomponentedit = undefined;
+      //this.localloanobject.srccomponentedit = undefined;
       if(this.gridApi!=undefined){
         var params = { force: true };
         this.gridApi.refreshCells(params);

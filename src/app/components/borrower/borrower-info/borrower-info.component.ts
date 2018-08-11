@@ -30,6 +30,8 @@ export class BorrowerInfoComponent implements OnInit {
     { key: 'COP', value: 'Corporation' },
     { key: 'LLC', value: 'LLC' },
   ];
+  associationTypeCodes = ['PRP','JNT','COP','LLC'];
+  selectedAssociaionTypeCode : string = '';
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit
   public columnDefs = [];
@@ -76,29 +78,29 @@ export class BorrowerInfoComponent implements OnInit {
     private alertify: AlertifyService, public loanapi: LoanApiService) {
 
 
-    this.components = { numericCellEditor: getNumericCellEditor() };
-    this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
-    this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
+    // this.components = { numericCellEditor: getNumericCellEditor() };
+    // this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
+    // this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
 
-    this.columnDefs = [
-      { headerName: 'Name', field: 'Assoc_Name', cellClass: 'editable-color', editable: true, width: 150 },
-      { headerName: 'Title', field: 'Contact', cellClass: 'editable-color', editable: true, width: 150 },
-      { headerName: 'Location', field: 'Location', cellClass: 'editable-color', editable: true, width: 150 },
-      { headerName: 'Phone', field: 'Phone', cellClass: 'editable-color', editable: true, width: 150 },
-      { headerName: 'Email', field: 'Email', cellClass: 'editable-color', editable: true, width: 150 },
-      {
-        headerName: 'Co Borrower', field: 'Is_CoBorrower', cellClass: 'editable-color', editable: true, width: 100, cellEditor: "selectEditor",
-        cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
-        valueFormatter: function (params) {
-          return params.value == 1 ? 'Yes' : 'No';
-        }
-      },
-      { headerName: '', field: '', cellRenderer: "deletecolumn" },
+    // this.columnDefs = [
+    //   { headerName: 'Name', field: 'Assoc_Name', cellClass: 'editable-color', editable: true, width: 150 },
+    //   { headerName: 'Title', field: 'Contact', cellClass: 'editable-color', editable: true, width: 150 },
+    //   { headerName: 'Location', field: 'Location', cellClass: 'editable-color', editable: true, width: 150 },
+    //   { headerName: 'Phone', field: 'Phone', cellClass: 'editable-color', editable: true, width: 150 },
+    //   { headerName: 'Email', field: 'Email', cellClass: 'editable-color', editable: true, width: 150 },
+    //   {
+    //     headerName: 'Co Borrower', field: 'Is_CoBorrower', cellClass: 'editable-color', editable: true, width: 100, cellEditor: "selectEditor",
+    //     cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
+    //     valueFormatter: function (params) {
+    //       return params.value == 1 ? 'Yes' : 'No';
+    //     }
+    //   },
+    //   { headerName: '', field: '', cellRenderer: "deletecolumn" },
 
 
-    ];
+    // ];
 
-    this.context = { componentParent: this };
+    // this.context = { componentParent: this };
 
   }
 
@@ -118,36 +120,36 @@ export class BorrowerInfoComponent implements OnInit {
         }
       
       this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
-      if (this.borrowerInfoForm.value.Co_Borrower_ID) {
-        this.rowData = [];
-        this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID; }) : [];
-      }
+      // if (this.borrowerInfoForm.value.Co_Borrower_ID) {
+      //   this.rowData = [];
+      //   this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID; }) : [];
+      // }
     }
 
-    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
       
-      if (res) {
+    //   if (res) {
 
-        // if(this.localloanobj){
-        //   this.initialize();
-        // }
-        this.localloanobj = res;
-        //borrower info
-        if (this.localloanobj.srccomponentedit == "BorrowerInfoComponent") {
+    //     // if(this.localloanobj){
+    //     //   this.initialize();
+    //     // }
+    //     this.localloanobj = res;
+    //     //borrower info
+    //     if (this.localloanobj.srccomponentedit == "BorrowerInfoComponent") {
 
-          this.rowData[this.localloanobj.lasteditrowindex] = this.localloanobj.Association.find(as => { return as.ActionStatus !== 3 && as == this.latestUpdatedObject });
-        } else {
+    //       this.rowData[this.localloanobj.lasteditrowindex] = this.localloanobj.Association.find(as => { return as.ActionStatus !== 3 && as == this.latestUpdatedObject });
+    //     } else {
 
-          this.rowData = [];
-          this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID }) : [];
+    //       this.rowData = [];
+    //       this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID }) : [];
 
-        }
-        this.localloanobj.srccomponentedit = undefined;
-        this.localloanobj.lasteditrowindex = undefined;
-        this.latestUpdatedObject = undefined;
-      }
+    //     }
+    //     this.localloanobj.srccomponentedit = undefined;
+    //     this.localloanobj.lasteditrowindex = undefined;
+    //     this.latestUpdatedObject = undefined;
+    //   }
 
-    });
+    // });
 
 
   }
@@ -179,7 +181,10 @@ export class BorrowerInfoComponent implements OnInit {
       Spouse_Email: [formData.Spouse_Email || ''],
 
     })
-
+    if(this.associationTypeCodes.indexOf(formData.Co_Borrower_ID)>-1){
+      this.selectedAssociaionTypeCode =  formData.Co_Borrower_ID;
+    }
+    
     this.borrowerInfoForm.valueChanges.forEach(
       (value: any) => {
         this.isSubmitted = false;
@@ -208,7 +213,19 @@ export class BorrowerInfoComponent implements OnInit {
   }
 
   onEntityTypeChange(data) {
-
+    
+    let entities = this.associationTypeCodes.slice(0); //clone
+    let valueIndex = entities.indexOf(data.value);
+    if(valueIndex >-1){
+      entities.splice(valueIndex,1);
+      let existingAssociations = this.localloanobj.Association.filter(as=> entities.indexOf(as.Assoc_Type_Code) > -1 );
+      existingAssociations.forEach(assoc => {
+        assoc.Assoc_Type_Code = data.value;
+        assoc.ActionStatus = assoc.ActionStatus || 2;
+      });
+      this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+      this.selectedAssociaionTypeCode = data.value;
+    }
   }
 
   synctoDb() {
@@ -262,73 +279,73 @@ export class BorrowerInfoComponent implements OnInit {
     });
   }
 
-  addrow() {
+  // addrow() {
 
 
-    //TODO: Workaround of not refreshing rowData issue, otherwise not required
-    let tempRowData = this.rowData;
-    this.rowData = [];
-    tempRowData.forEach(element => {
-      this.rowData.push(element);
-    })
+  //   //TODO: Workaround of not refreshing rowData issue, otherwise not required
+  //   let tempRowData = this.rowData;
+  //   this.rowData = [];
+  //   tempRowData.forEach(element => {
+  //     this.rowData.push(element);
+  //   })
 
-    let newAssocialtion = new Loan_Association();
-    this.rowData.push(newAssocialtion);
+  //   let newAssocialtion = new Loan_Association();
+  //   this.rowData.push(newAssocialtion);
 
-  }
+  // }
 
-  rowvaluechanged(value) {
-    let data: Loan_Association = value.data;
-    if (data.Assoc_ID == undefined) {
-      data.Assoc_ID = 0;
-      data.ActionStatus = 1;
-      data.Assoc_Type_Code = this.borrowerInfoForm.value.Co_Borrower_ID;
-      data.Loan_Full_ID = this.localloanobj.Loan_Full_ID;
-      this.localloanobj.Association.push(data);
+  // rowvaluechanged(value) {
+  //   let data: Loan_Association = value.data;
+  //   if (data.Assoc_ID == undefined) {
+  //     data.Assoc_ID = 0;
+  //     data.ActionStatus = 1;
+  //     data.Assoc_Type_Code = this.borrowerInfoForm.value.Co_Borrower_ID;
+  //     data.Loan_Full_ID = this.localloanobj.Loan_Full_ID;
+  //     this.localloanobj.Association.push(data);
 
-    } else if (data.Assoc_ID > 0) {
-      data.ActionStatus = 2;
-    }
+  //   } else if (data.Assoc_ID > 0) {
+  //     data.ActionStatus = 2;
+  //   }
 
-    this.localloanobj.srccomponentedit = "BorrowerInfoComponent";
-    this.localloanobj.lasteditrowindex = value.rowIndex;
-    this.latestUpdatedObject = data;
-    this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
-  }
+  //   this.localloanobj.srccomponentedit = "BorrowerInfoComponent";
+  //   this.localloanobj.lasteditrowindex = value.rowIndex;
+  //   this.latestUpdatedObject = data;
+  //   this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+  // }
 
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.columnApi = params.columnApi;
+  // onGridReady(params) {
+  //   this.gridApi = params.api;
+  //   this.columnApi = params.columnApi;
 
-  }
+  // }
 
-  onGridSizeChanged(Event: any) {
-    this.gridApi.sizeColumnsToFit();
-  }
+  // onGridSizeChanged(Event: any) {
+  //   this.gridApi.sizeColumnsToFit();
+  // }
 
 
-  DeleteClicked(rowIndex: any) {
-    this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
-      if (res == true) {
-        let association: Loan_Association = this.rowData[rowIndex];
+  // DeleteClicked(rowIndex: any) {
+  //   this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
+  //     if (res == true) {
+  //       let association: Loan_Association = this.rowData[rowIndex];
 
-        this.rowData.splice(rowIndex, 1);
+  //       this.rowData.splice(rowIndex, 1);
 
-        if (association.Assoc_ID == 0) {
-          //Newly added, altered, stored in local db but Assoc_ID = 0
-          let localIndex = this.localloanobj.Association.findIndex(as => as == association);
-          if (localIndex >= 0) {
-            this.localloanobj.Association.splice(localIndex, 1);
-          }
-        } else if (association.Assoc_ID > 0) {
-          //already exist in db and have some proper Assoc_ID
-          let localObj = this.localloanobj.Association.find(as => as.Assoc_ID == association.Assoc_ID);
-          localObj.ActionStatus = 3;
+  //       if (association.Assoc_ID == 0) {
+  //         //Newly added, altered, stored in local db but Assoc_ID = 0
+  //         let localIndex = this.localloanobj.Association.findIndex(as => as == association);
+  //         if (localIndex >= 0) {
+  //           this.localloanobj.Association.splice(localIndex, 1);
+  //         }
+  //       } else if (association.Assoc_ID > 0) {
+  //         //already exist in db and have some proper Assoc_ID
+  //         let localObj = this.localloanobj.Association.find(as => as.Assoc_ID == association.Assoc_ID);
+  //         localObj.ActionStatus = 3;
 
-        }
-        this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
-      }
-    })
-  }
+  //       }
+  //       this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+  //     }
+  //   })
+  // }
 
 }
