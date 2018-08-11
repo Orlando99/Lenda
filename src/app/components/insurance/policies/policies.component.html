@@ -32,6 +32,7 @@
             [rowData]="rowData" 
             suppressColumnVirtualisation=true
             [context]="context"
+            (paginationChanged)="onPaginationChanged($event)"
             (gridReady)="onGridReady($event)"
             (gridSizeChanged)="onGridSizeChanged($event)"
             (bodyScroll)="onGridScroll($event)"
@@ -44,7 +45,7 @@
          </ag-grid-angular>
 
          <mat-accordion>
-            <mat-expansion-panel [expanded]="expanded" style="margin : 0 10px">
+            <mat-expansion-panel  style="margin : 0 10px">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Questions 

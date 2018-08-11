@@ -51,6 +51,8 @@ export class Insurance_Policy
     Subpolicies:Insurance_Subpolicy[]=[];
     
     ActionStatus:number=0;
+
+    Practice_Type:string="";
     
 
 }
