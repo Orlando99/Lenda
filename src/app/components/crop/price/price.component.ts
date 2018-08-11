@@ -17,7 +17,7 @@ import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
-import { GridPanel } from '../../../../../node_modules/ag-grid';
+import { GridPanel } from 'ag-grid';
 
 @Component({
   selector: 'app-price',

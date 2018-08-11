@@ -94,8 +94,8 @@ export class AphComponent implements OnInit {
         this.localloanobject = res;
         if (this.localloanobject.LoanCropUnits && this.localloanobject.srccomponentedit == "APH") {
           this.rowData[res.lasteditrowindex] = this.localloanobject.LoanCropUnits.filter(p => p.ActionStatus != 3)[res.lasteditrowindex];
-          this.localloanobject.srccomponentedit = undefined;
-          this.localloanobject.lasteditrowindex = undefined;
+          // this.localloanobject.srccomponentedit = undefined;
+          // this.localloanobject.lasteditrowindex = undefined;
         }
         else if (this.localloanobject && this.localloanobject.LoanCropUnits) {
 

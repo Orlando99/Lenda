@@ -5,7 +5,7 @@ import { FormControl } from "@angular/forms";
 import { MatChipInputEvent, MatAutocompleteSelectedEvent } from "@angular/material";
 import { Observable } from "rxjs";
 import { startWith, map } from "rxjs/operators";
-import { NgSelectComponent } from "../../../node_modules/@ng-select/ng-select";
+import { NgSelectComponent } from "@ng-select/ng-select";
 
 @Component({
     selector: 'chipseditor-cell',

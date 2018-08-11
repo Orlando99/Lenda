@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
-import { SvgTooltipService } from './../svg-tooltip/svg-tooltip.service';
+import { SvgTooltipService } from '../svg-tooltip/svg-tooltip.service';
 import * as d3 from 'd3';
 
 @Component({

@@ -2,10 +2,10 @@ import { ErrorHandler, Inject, Injector, Injectable, ViewContainerRef } from '@a
 import { ToasterService } from './toaster.service';
 import { environment } from '../../environments/environment';
 import { LoggingService } from './Logs/logging.service';
-import { LocalStorageService } from '../../../node_modules/ngx-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
 import { Logs } from '../models/loanmodel';
-import { inject } from '../../../node_modules/@angular/core/src/render3';
-import { DOCUMENT } from '../../../node_modules/@angular/common';
+import { inject } from '@angular/core/src/render3';
+import { DOCUMENT } from '@angular/common';
 
 @Injectable()
 export class GlobalErrorHandler extends ErrorHandler {

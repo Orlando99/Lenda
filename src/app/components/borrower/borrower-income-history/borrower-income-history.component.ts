@@ -13,7 +13,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { GridOptions } from '../../../../../node_modules/ag-grid';
+import { GridOptions } from 'ag-grid';
 import { debug } from 'util';
 import * as  _ from 'lodash';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';

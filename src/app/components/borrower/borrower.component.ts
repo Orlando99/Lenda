@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from '../../../../node_modules/ngx-webstorage';
+import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import { loan_model } from '../../models/loanmodel';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
-import { ToastsManager } from '../../../../node_modules/ng2-toastr';
+import { ToastsManager } from 'ng2-toastr';
 
 @Component({
   selector: 'app-borrower',
