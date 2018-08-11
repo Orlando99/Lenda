@@ -8,26 +8,32 @@
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/borrower']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-user"></i></mat-icon>
       <p matLine>Borrower</p>
+      <i *ngIf="isSyncRequired('borrower')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/crop']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-plant"></i></mat-icon>
       <p matLine>Crop</p>
+      <i *ngIf="isSyncRequired('crop')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/farm']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-tractor"></i></mat-icon>
       <p matLine>Farm</p>
+      <i *ngIf="isSyncRequired('farm')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/insurance']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-umbrella"></i></mat-icon>
       <p matLine>Insurance</p>
+      <i *ngIf="isSyncRequired('insurance')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/budget']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-calculator"></i></mat-icon>
       <p matLine>Budget</p>
+      <i *ngIf="isSyncRequired('budget')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/optimizer']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-gear"></i></mat-icon>
       <p matLine>Optimizer</p>
+      <i *ngIf="isSyncRequired('optimizer')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/collateral']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-link"></i></mat-icon>
@@ -37,30 +43,37 @@
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/committee']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-group"></i></mat-icon>
       <p matLine>Committeee</p>
+      <i *ngIf="isSyncRequired('committee')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/closing']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-checklist"></i></mat-icon>
       <p matLine>Closing</p>
+      <i *ngIf="isSyncRequired('closing')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/preferences']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-preferences"></i></mat-icon>
       <p matLine>My Preferences</p>
+      <i *ngIf="isSyncRequired('myPreferences')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/favorites']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-star"></i></mat-icon>
       <p matLine>Favorites</p>
+      <i *ngIf="isSyncRequired('favorites')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/flowchart']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-flowchart"></i></mat-icon>
       <p matLine>Flowchart</p>
+      <i *ngIf="isSyncRequired('flowchart')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/work-in-progress']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-team"></i></mat-icon>
       <p matLine>Work In Progress</p>
+      <i *ngIf="isSyncRequired('workInProgress')" class="material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/custom-entry']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-gear"></i></mat-icon>
       <p matLine>Custom Entry</p>
+      <i *ngIf="isSyncRequired('customEntry')" class="material-icons">save</i>
     </mat-list-item>
     <br>
     <mat-list-item routerLinkActive="active" class="arm-recent-record normalize" *ngIf="isExpanded">
