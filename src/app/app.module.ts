@@ -36,7 +36,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ClickOutsideModule } from 'ng-click-outside';
 //ENDS MATERIAL COMPONENTS
-
+import { LoadingBarHttpModule } from '@ngx-loading-bar/http';
 //START SERVICES
 import { LocalStorageService } from 'ngx-webstorage';
 import { GlobalService, ApiService } from './services';
@@ -197,6 +197,7 @@ import { BudgetReportComponent } from './components/summary/budget-report/budget
 import { LiquidityAnalysisComponent } from './components/borrower/farm-financial/liquidity-analysis/liquidity-analysis.component';
 import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 import { ValidationService } from './Workers/calculations/validation.service';
+import { BtnPublishComponent } from './ui-components/btn-publish/btn-publish.component';
 import { BooleanEditor } from './aggridfilters/booleanaggrid.';
 
 
@@ -294,7 +295,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AgGridTooltipComponent,
     LiquidityAnalysisComponent,
     BorrowerRatingComponent,
-    AdminSidebarComponent
+    AdminSidebarComponent,
+    BtnPublishComponent
   ],
   imports: [
     BrowserModule,
@@ -343,6 +345,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AngularMultiSelectModule,
     ClickOutsideModule,
     NgbModule.forRoot(),
+    LoadingBarHttpModule
   ],
   exports: [
     FormsModule,

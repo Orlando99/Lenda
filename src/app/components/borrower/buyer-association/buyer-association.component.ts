@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -16,7 +16,8 @@ import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
-import { CollateralService } from '../../collateral/collateral.service';
+import { CollateralService } from './../../collateral/collateral.service';
+import { PublishService, Page } from "../../../services/publish.service";
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
@@ -26,6 +27,7 @@ import { CollateralService } from '../../collateral/collateral.service';
   providers: [CollateralService]
 })
 export class BuyerAssociationComponent implements OnInit {
+  @Input() currentPageName: Page;
   @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   indexsedit = [];
@@ -68,7 +70,8 @@ export class BuyerAssociationComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    public collateralService: CollateralService
+    public collateralService: CollateralService,
+    public publishService: PublishService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor(), phoneCellEditor: getPhoneCellEditor() };
@@ -125,10 +128,6 @@ export class BuyerAssociationComponent implements OnInit {
     }
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   getdataforgrid() {
     // let obj: loan_model = this.localstorageservice.retrieve(environment.loankey);
     // this.logging.checkandcreatelog(1, 'LoanAgents', "LocalStorage retrieved");
@@ -165,7 +164,7 @@ export class BuyerAssociationComponent implements OnInit {
     this.localloanobject.srccomponentedit = "BuyerAssociationComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(this.currentPageName);
   }
 
   // synctoDb() {
@@ -206,7 +205,7 @@ export class BuyerAssociationComponent implements OnInit {
     });
     this.localloanobject.Association.push(newItem);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(this.currentPageName);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -220,7 +219,7 @@ export class BuyerAssociationComponent implements OnInit {
           obj.ActionStatus = 3;
         }
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-        this.isSyncRequired(true);
+        this.publishService.enableSync(this.currentPageName);
       }
     })
   }

@@ -90,7 +90,7 @@
 .aggregaterow .aggregatecol{
   background: lightgreen !important;
   color:#1312e3;
-  cursor: not-allowed;  
+  cursor: not-allowed;
 }
 .tooltip {
   position: relative;
@@ -125,7 +125,7 @@
 // .invisible{
 //   color: red;
 //   height: 0px !important;
-//   visibility:collapse !important  
+//   visibility:collapse !important
 // }
 a.disabled {
   color: gray;
@@ -146,3 +146,13 @@ a.disabled {
   text-align: end;
   padding-right: 11px;
 }
+
+// Ag Grid Global Styles
+// ===
+.ag-grid-delete {
+  cursor: pointer;
+  color: $error-color;
+  margin-top: 3px;
+  font-size: 20px;
+}
+// ===

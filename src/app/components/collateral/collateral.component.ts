@@ -10,6 +10,7 @@ import { OthersService } from './others/others.service';
 import { environment } from '../../../environments/environment.prod';
 import CollteralSettings from './collateral-types.model';
 import { CollateralService } from './collateral.service';
+import { PublishService, Sync, Page } from './../../services/publish.service';
 
 @Component({
   selector: 'app-collateral',
@@ -20,6 +21,8 @@ import { CollateralService } from './collateral.service';
 })
 
 export class CollateralComponent implements OnInit {
+  public currentPageName: string = Page.collateral;
+
   categories: any = [];
   loanFullID: string;
   collateralRows: any = {};
@@ -30,6 +33,10 @@ export class CollateralComponent implements OnInit {
     lineHolder: {
       isActive: true,
       isDisabled: true
+    },
+    questions: {
+      isActive: true,
+      isDisabled: false
     },
     buyer: {
       isActive: true,
@@ -79,8 +86,9 @@ export class CollateralComponent implements OnInit {
 
   constructor(
     private localstorageservice: LocalStorageService,
-    public collateralService: CollateralService) {
-    this.loanFullID = this.localstorageservice.retrieve(environment.loanidkey)
+    public collateralService: CollateralService,
+    public publishService: PublishService) {
+    this.loanFullID = this.localstorageservice.retrieve(environment.loanidkey);
   }
 
   ngOnInit() {
@@ -114,12 +122,11 @@ export class CollateralComponent implements OnInit {
       }).length;
   }
 
-  enableSync(isEnabled) {
-    this.isSyncEnabled = isEnabled;
-  }
-
+  /**
+   * Sync to database - publish button event
+   */
   synctoDb() {
-    this.enableSync(false);
+    this.publishService.syncCompleted();
     this.collateralService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
   }
 }
