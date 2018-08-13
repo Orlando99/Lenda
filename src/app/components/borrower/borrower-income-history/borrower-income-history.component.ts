@@ -17,6 +17,7 @@ import { GridOptions } from 'ag-grid';
 import { debug } from 'util';
 import * as  _ from 'lodash';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
+import { Page, PublishService } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-borrower-income-history',
@@ -46,7 +47,8 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     public cropunitservice: CropapiService,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService) {
+    public loanapi: LoanApiService,
+    private publishService : PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -135,28 +137,28 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     return incomeData;
   }
 
-  synctoDb() {
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.localloanobject = res.Data;
-            this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    });
-  }
+  // synctoDb() {
+  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.localloanobject = res.Data;
+  //           this.rowData = this.setData(this.localloanobject.BorrowerIncomeHistory);
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   });
+  // }
 
   syncenabled() {
     if (this.localloanobject.BorrowerIncomeHistory.filter(p => p.ActionStatus == 2).length == 0) {
@@ -176,6 +178,7 @@ export class BorrowerIncomeHistoryComponent implements OnInit {
     //this shall have the last edit
     this.localloanobject.srccomponentedit = "BorrowerIncomeHistoryComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
+    this.publishService.enableSync(Page.borrower);
   }
 
   onGridSizeChanged(Event: any) {

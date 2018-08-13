@@ -22,6 +22,7 @@ import { status } from '../../../models/syncstatusmodel';
 import { NO_CHANGE } from '@angular/core/src/render3/instructions';
 import { Observable } from 'rxjs';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
+import { Page, PublishService } from '../../../services/publish.service';
 
 export interface DialogData {
   animal: string;
@@ -74,7 +75,8 @@ export class YieldComponent implements OnInit {
   public logging:LoggingService,
   public loanapi:LoanApiService,
   public alertify:AlertifyService,
-  public dialog: MatDialog
+  public dialog: MatDialog,
+  private publishService : PublishService
   ) {
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -168,29 +170,30 @@ export class YieldComponent implements OnInit {
     this.localloanobject.lasteditrowindex = value.rowIndex;
   
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(Page.crop);
   }
 
-  synctoDb() {
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-        if(res.ResCode == 1){
-          this.deleteAction = false;
-          this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-            this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-            if (res.ResCode == 1) {
-              this.toaster.success("Records Synced");
-              let jsonConvert: JsonConvert = new JsonConvert();
-              this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-            }
-            else{
-              this.toaster.error("Could not fetch Loan Object from API")
-            }
-          });
-        }
-        else{
-          this.toaster.error("Error in Sync");
-        }
-    });
-  }
+  // synctoDb() {
+  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+  //       if(res.ResCode == 1){
+  //         this.deleteAction = false;
+  //         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //           this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+  //           if (res.ResCode == 1) {
+  //             this.toaster.success("Records Synced");
+  //             let jsonConvert: JsonConvert = new JsonConvert();
+  //             this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //           }
+  //           else{
+  //             this.toaster.error("Could not fetch Loan Object from API")
+  //           }
+  //         });
+  //       }
+  //       else{
+  //         this.toaster.error("Error in Sync");
+  //       }
+  //   });
+  // }
 
   addrow() {
     let distinctCrops = [];
@@ -258,6 +261,7 @@ export class YieldComponent implements OnInit {
         //this.getgridheight();
         }
     });
+    this.publishService.enableSync(Page.crop);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -279,6 +283,7 @@ export class YieldComponent implements OnInit {
           }
           this.rowData=this.localloanobject.CropYield.filter(cy=>{return cy.ActionStatus != 3});
           // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+          this.publishService.enableSync(Page.crop);
         }
     })
   }
