@@ -1,4 +1,8 @@
 <div class="basic-container">
+        <div class="page-header">
+                <span class="text">Crop</span>
+                <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
+        </div>
     <app-rebator></app-rebator>
     <app-yield></app-yield>
     <app-price></app-price>

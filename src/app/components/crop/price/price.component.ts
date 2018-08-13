@@ -18,6 +18,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 import { GridPanel } from 'ag-grid';
+import { PublishService, Page } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-price',
@@ -50,7 +51,8 @@ export class PriceComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService
+    public loanapi: LoanApiService,
+    private publishService : PublishService
   ) {
 
     //Aggrid Specific Code
@@ -244,6 +246,7 @@ export class PriceComponent implements OnInit {
     this.localloanobject.srccomponentedit = "PriceComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(Page.crop);
   }
   onGridReady(params) {
     this.gridApi = params.api;

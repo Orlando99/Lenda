@@ -23,7 +23,7 @@ export class PublishService {
    * @param isEnabled if sync is required or not
    */
   public enableSync(pageName: Page) {
-    let sync = new Sync(Page.collateral);
+    let sync = new Sync(pageName);
     this.syncRequiredOnPage(sync);
   }
 

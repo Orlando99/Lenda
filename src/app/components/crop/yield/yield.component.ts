@@ -22,6 +22,7 @@ import { status } from '../../../models/syncstatusmodel';
 import { NO_CHANGE } from '@angular/core/src/render3/instructions';
 import { Observable } from 'rxjs';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
+import { Page, PublishService } from '../../../services/publish.service';
 
 export interface DialogData {
   animal: string;
@@ -74,7 +75,8 @@ export class YieldComponent implements OnInit {
   public logging:LoggingService,
   public loanapi:LoanApiService,
   public alertify:AlertifyService,
-  public dialog: MatDialog
+  public dialog: MatDialog,
+  private publishService : PublishService
   ) {
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -168,6 +170,7 @@ export class YieldComponent implements OnInit {
     this.localloanobject.lasteditrowindex = value.rowIndex;
   
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(Page.crop);
   }
 
   synctoDb() {
@@ -258,6 +261,7 @@ export class YieldComponent implements OnInit {
         //this.getgridheight();
         }
     });
+    this.publishService.enableSync(Page.crop);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -279,6 +283,7 @@ export class YieldComponent implements OnInit {
           }
           this.rowData=this.localloanobject.CropYield.filter(cy=>{return cy.ActionStatus != 3});
           // this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+          this.publishService.enableSync(Page.crop);
         }
     })
   }
