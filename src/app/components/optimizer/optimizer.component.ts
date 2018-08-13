@@ -20,6 +20,8 @@ import { NumericEditor } from '../../aggridfilters/numericaggrid';
 export class OptimizerComponent implements OnInit {
 
   //Properties
+
+
   private gridApi;
   private columnApi;
   rowDataNIR = [];
@@ -31,7 +33,7 @@ export class OptimizerComponent implements OnInit {
   private refdata;
   defaultColDef = {
     cellClass: function (params) {
-      if (params.data.ID == undefined) {
+      if (params.data.ID == undefined || params.data==undefined) {
         return "aggregatecol";
       }
     },
@@ -58,16 +60,16 @@ export class OptimizerComponent implements OnInit {
     {
       headerName: 'County', field: 'County', editable: false
     },
-    { headerName: '% Prod.', headerClass: "rightaligned", cellClass: "rightaligned", field: 'Prodpercentage', editable: false },
+    { headerName: '% Prod.', headerClass: "rightaligned", cellClass: "rightaligned aggregatecol", field: 'Prodpercentage', editable: false },
     { headerName: 'Landlord', field: 'Landlord', editable: false },
-    { headerName: 'FSN', headerClass: "rightaligned", cellClass: "rightaligned", field: 'FSN', editable: false },
+    { headerName: 'FSN', headerClass: "rightaligned", cellClass: "rightaligned aggregatecol", field: 'FSN', editable: false },
     { headerName: 'Crop', field: 'Crop', editable: false },
     { headerName: 'Practice', field: 'Practice', editable: false },
-    { headerName: 'CF', headerClass: "rightaligned", cellClass: "rightaligned", field: 'CF', editable: false },
-    { headerName: 'RC', minWidth: 100, headerClass: "rightaligned", cellClass: "rightaligned", field: 'RC', editable: false },
-    { headerName: 'Excess ins', headerClass: "rightaligned", cellClass: "rightaligned", field: 'ExcessIns', editable: false },
+    { headerName: 'CF', headerClass: "rightaligned", cellClass: "rightaligned aggregatecol", field: 'CF', editable: false },
+    { headerName: 'RC', minWidth: 100, headerClass: "rightaligned", cellClass: "rightaligned aggregatecol", field: 'RC', editable: false },
+    { headerName: 'Excess ins', headerClass: "rightaligned", cellClass: "rightaligned aggregatecol", field: 'ExcessIns', editable: false },
     {
-      headerName: 'Acres', headerClass: "rightaligned", field: 'Acres', cellClass: 'editable-color rightaligned', editable: true,
+      headerName: 'Acres', headerClass: "rightaligned", field: 'Acres', cellClass: 'editable-color rightaligned aggregatecol', editable: true,
       cellEditorSelector: function (params) {
         if (params.data.ID == undefined) {
           return {
@@ -80,7 +82,7 @@ export class OptimizerComponent implements OnInit {
         }; 
       },
       valueSetter: function (value) {
-         
+         debugger
         let result = value.context.componentParent.validateacresvalue(value.data.ID, parseFloat(value.newValue));
         if (result) {
           value.data.Acres = parseFloat(value.newValue);
@@ -105,7 +107,8 @@ export class OptimizerComponent implements OnInit {
 
       },
       cellEditorParams: {
-        decimals: 2
+        decimals: 1
+        
       },
     },
 
@@ -172,7 +175,7 @@ export class OptimizerComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService
   ) {
-    this.frameworkcomponents= { emptyeditor: typeof EmptyEditor, numericCellEditor: NumericEditor};
+    this.frameworkcomponents= { emptyeditor:EmptyEditor, numericCellEditor: NumericEditor};
     this.context = { componentParent: this };
     // change row class contextually here
     this.rowClassRules = {
@@ -312,7 +315,7 @@ export class OptimizerComponent implements OnInit {
     if ($event.data.ID != undefined || $event.data.ID != null) {
       let oldvalue = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
       if (oldvalue != $event.value) {
-        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseInt($event.value);
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseFloat($event.value);
         this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).ActionStatus = 2;
         this.loanmodel.srccomponentedit = "optimizercomponent";
         this.loanmodel.lasteditrowindex = $event.rowIndex;
@@ -325,7 +328,7 @@ export class OptimizerComponent implements OnInit {
     if ($event.data.ID != undefined || $event.data.ID != null) {
       let oldvalue = this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID).CU_Acres;
       if (oldvalue != $event.value) {
-        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseInt($event.value);
+        this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).CU_Acres = parseFloat($event.value);
         this.loanmodel.LoanCropUnits.find(p => p.Loan_CU_ID == $event.data.ID && p.Crop_Practice_Type_Code == $event.data.Practice).ActionStatus = 2;
         this.loanmodel.srccomponentedit = "optimizercomponent";
         this.loanmodel.lasteditrowindex = $event.rowIndex;

@@ -54,7 +54,7 @@ export class ExceptionService {
         }else{
           return 0;
         }
-        break;
+       // break;
       case Operation.GreterEqual:
         if(this.isNotNullAndUndefined(response.FC_Level2_Val) && (response.Response_Detail >= response.FC_Level2_Val))
         {
@@ -64,7 +64,7 @@ export class ExceptionService {
         }else{
           return 0;
         }
-        break;
+       // break;
       case Operation.Equal:
         if(this.isNotNullAndUndefined(response.FC_Level2_Val) && (response.Response_Detail == response.FC_Level2_Val))
         {
@@ -74,7 +74,7 @@ export class ExceptionService {
         }else{
           return 0;
         }
-        break;
+       // break;
 
     
       default:
