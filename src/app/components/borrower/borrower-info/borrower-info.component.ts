@@ -181,6 +181,12 @@ export class BorrowerInfoComponent implements OnInit {
     );
   }
 
+  coBorrowerCountChange = (data)=>{
+    if(this.localloanobj && this.localloanobj.LoanMaster[0]){
+      this.localloanobj.LoanMaster[0].Co_Borrower_Count = data.count;
+      this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+    }
+  }
 
   savedByparentSuccessssCallback = () => {
     this.createForm({});

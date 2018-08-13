@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -38,6 +38,8 @@ export class AssociationComponent implements OnInit, OnChanges {
   associationTypeCode :string = '';
   @Input("withoutChevron")
   withoutChevron : boolean = false;
+  @Output('onRowCountChange')
+  onRowCountChange: EventEmitter<any> = new EventEmitter<any>();
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -219,6 +221,7 @@ export class AssociationComponent implements OnInit, OnChanges {
       colKey: "Assoc_Name"
     });
     this.localloanobject.Association.push(newItem);
+    this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
   }
 
   DeleteClicked(rowIndex: any) {
@@ -251,6 +254,7 @@ export class AssociationComponent implements OnInit, OnChanges {
 
         // console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
 
+        this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })

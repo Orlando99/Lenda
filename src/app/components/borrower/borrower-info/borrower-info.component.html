@@ -199,6 +199,6 @@
 	</div> -->
 
 	<div class="row" *ngIf="mode!='create' && selectedAssociaionTypeCode">
-		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [associationTypeCode]="selectedAssociaionTypeCode" [withoutChevron]="true"></app-association>
+		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [associationTypeCode]="selectedAssociaionTypeCode" [withoutChevron]="true" (onRowCountChange)="coBorrowerCountChange($event)"></app-association>
 	</div>
 </div>
