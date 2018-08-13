@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
+import { loan_model, Loan_Collateral, Loan_Marketing_Contract } from '../../../models/loanmodel';
 import * as _ from 'lodash';
 import { environment } from '../../../../environments/environment';
 import { LocalStorageService } from 'ngx-webstorage';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
+import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
+import CollateralSettings from './../collateral-types.model';
+import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 
 /**
  * Shared service for Marketing Contracts
@@ -13,7 +16,10 @@ import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utilit
 export class MarketingContractsService {
   private localloanobject;
   private refdata;
-  constructor(public localStorageService: LocalStorageService) {
+  constructor(
+    public localStorageService: LocalStorageService,
+    public marketingCalculationService: MarketingcontractcalculationService,
+    public loanserviceworker: LoancalculationWorker) {
     this.localloanobject = this.localStorageService.retrieve(environment.loankey);
     this.refdata = this.localStorageService.retrieve(environment.referencedatakey);
   }
@@ -26,7 +32,6 @@ export class MarketingContractsService {
           values: [{ key: 1, value: 'Crop' }, { key: 2, value: 'Stored Crop' }]
         },
         valueFormatter: function (params) {
-
           if (params.value) {
             var selectedValue = params.colDef.cellEditorParams.values.find(data => data.key == params.value);
             if (selectedValue) {
@@ -126,6 +131,29 @@ export class MarketingContractsService {
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
 
     ];
+  }
+
+  rowvaluechanged(value: any) {
+    var obj: Loan_Marketing_Contract = value.data;
+    if (obj.Contract_ID == undefined) {
+      obj.Contract_ID = 0
+      obj.Price = 0;
+      obj.Quantity = 0;
+      obj.ActionStatus = 1;
+      this.localloanobject.LoanMarketingContracts[this.localloanobject.LoanMarketingContracts.length] = value.data;
+    }
+    else {
+      var rowindex = this.localloanobject.LoanMarketingContracts.findIndex(mc => mc.Contract_ID == obj.Contract_ID);
+      if (obj.ActionStatus != 1)
+        obj.ActionStatus = 2;
+      this.localloanobject.LoanMarketingContracts[rowindex] = obj;
+    }
+    this.marketingCalculationService.updateMktValueAndContractPer(this.localloanobject, obj);
+
+    //this shall have the last edit
+    this.localloanobject.srccomponentedit = CollateralSettings.marketingContracts.component;
+    this.localloanobject.lasteditrowindex = value.rowIndex;
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
 
   getBuyersValue(params) {

@@ -18,6 +18,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 import { GridPanel } from 'ag-grid';
+import { PublishService, Page } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-price',
@@ -50,7 +51,8 @@ export class PriceComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService
+    public loanapi: LoanApiService,
+    private publishService : PublishService
   ) {
 
     //Aggrid Specific Code
@@ -162,29 +164,29 @@ export class PriceComponent implements OnInit {
 
 
 
-  synctoDb() {
-    this.gridApi.showLoadingOverlay();
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-          this.gridApi.hideOverlay()
-        });
-      }
-      else {
-        this.gridApi.hideOverlay()
-        this.toaster.error("Error in Sync");
-      }
-    })
-  }
+  // synctoDb() {
+  //   this.gridApi.showLoadingOverlay();
+  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //         this.gridApi.hideOverlay()
+  //       });
+  //     }
+  //     else {
+  //       this.gridApi.hideOverlay()
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   })
+  // }
 
   // //Grid Events
   // addrow() {
@@ -244,6 +246,7 @@ export class PriceComponent implements OnInit {
     this.localloanobject.srccomponentedit = "PriceComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(Page.crop);
   }
   onGridReady(params) {
     this.gridApi = params.api;

@@ -7,6 +7,7 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, loan_farmer } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
+import { Page, PublishService } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-farmer-info',
@@ -34,7 +35,8 @@ export class FarmerInfoComponent implements OnInit {
     public loanserviceworker: LoancalculationWorker,
     public logging: LoggingService,
     private loanApiService: LoanApiService,
-    private toaster: ToastsManager) {
+    private toaster: ToastsManager,
+  private publishService : PublishService) {
 
   }
 
@@ -81,7 +83,7 @@ export class FarmerInfoComponent implements OnInit {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
         }
-
+        this.publishService.enableSync(Page.borrower);
       }
     );
   }

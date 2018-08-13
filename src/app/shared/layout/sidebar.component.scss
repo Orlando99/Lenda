@@ -33,18 +33,22 @@ mat-sidenav  {
     font-size: $base-font-size;
   }
 
+  .save-icon {
+    color: $white-90;
+  }
+
   .mat-list-item-focus,
   .mat-list-item .active,
   .mat-list-item.active {
     background: $sidebar-selected-bg-color;
-    .flaticon {
+    .flaticon, .save-icon {
       color: $nav-hover-color;
     }
   }
 
-  .mat-list-item:not(.navLogo):hover{
+  .mat-list-item:not(.navLogo):hover {
     background: $nav-hover-color;
-    .flaticon {
+    .flaticon, .save-icon {
       color: $white-90;
     }
   }

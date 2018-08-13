@@ -10,12 +10,15 @@ import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
 import * as _ from "lodash";
 import { ExceptionService } from '../../../Workers/calculations/exception.service';
+import { PublishService, Page } from "../../../services/publish.service";
+
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.scss']
 })
 export class QuestionsComponent implements OnInit {
+  @Input() currentPageName: Page;
   refdata;
   localloanobject: loan_model;
   RefQuestions: RefQuestions[];
@@ -34,45 +37,42 @@ export class QuestionsComponent implements OnInit {
   @Input("expanded")
   expanded: boolean = true;
 
-  isResponseUpdated : boolean = false;
-  isPublishing : boolean = false;
+  isResponseUpdated: boolean = false;
+  isPublishing: boolean = false;
 
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     private loanapi: LoanApiService,
     private questionService: QuestionscalculationworkerService,
     private toaster: ToastsManager,
-    private exceptionService : ExceptionService) { }
+    private exceptionService : ExceptionService,
+    public publishService: PublishService) { }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.localloanobject = res;
       if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-        let existingResponses = this.localloanobject.LoanQResponse.filter(res=>res.Chevron_ID == this.chevronId);
+        let existingResponses = this.localloanobject.LoanQResponse.filter(res => res.Chevron_ID == this.chevronId);
         this.responses = this.questionService.prepareResponses(this.chevronId, existingResponses, this.localloanobject.LoanMaster[0]);
         this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
         this.updatePublishStatus();
-
       }
-
     })
 
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobject && this.localloanobject.LoanQResponse && this.localloanobject.LoanMaster[0]) {
-      let existingResponses = this.localloanobject.LoanQResponse.filter(res=>res.Chevron_ID == this.chevronId);
+      let existingResponses = this.localloanobject.LoanQResponse.filter(res => res.Chevron_ID == this.chevronId);
       this.responses = this.questionService.prepareResponses(this.chevronId, existingResponses, this.localloanobject.LoanMaster[0]);
       this.responses = _.sortBy(this.responses, 'FC_Sort_Order');
       this.updatePublishStatus();
     }
-
-
-
   }
 
   private updatePublishStatus() {
-    if (this.localloanobject.LoanQResponse.find(res => res.Chevron_ID==this.chevronId &&(res.ActionStatus == 1 || res.ActionStatus == 2))) {
+    if (this.localloanobject.LoanQResponse.find(res => res.Chevron_ID == this.chevronId && (res.ActionStatus == 1 || res.ActionStatus == 2))) {
       this.isResponseUpdated = true;
-    }else{
+      this.publishService.enableSync(this.currentPageName);
+    } else {
       this.isResponseUpdated = false;
     }
   }
@@ -84,21 +84,19 @@ export class QuestionsComponent implements OnInit {
     } else {
       return false;
     }
-
   }
 
   change(response: LoanQResponse) {
-
-    if(response){
-      let matchedResponse = this.localloanobject.LoanQResponse.find(res=>res.Question_ID == response.Question_ID);
-      if(matchedResponse){
+    if (response) {
+      let matchedResponse = this.localloanobject.LoanQResponse.find(res => res.Question_ID == response.Question_ID);
+      if (matchedResponse) {
         matchedResponse.Response_Detail = response.Response_Detail;
         if (matchedResponse.Loan_Q_response_ID) {
           matchedResponse.ActionStatus = 2;
         } else {
           matchedResponse.ActionStatus = 1;
         }
-      }else{
+      } else {
         response.ActionStatus = 1;
         this.localloanobject.LoanQResponse.push(response);
       }
@@ -106,31 +104,31 @@ export class QuestionsComponent implements OnInit {
     this.isResponseUpdated = true;
     this.exceptionService.logExceptionIfApplicable(response);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-  }
-  synctoDb() {
-    this.isPublishing = true;
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-            this.isPublishing =false;
-            this.updatePublishStatus();
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-            this.isPublishing =false;
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-        this.isPublishing =false;
-      }
-
-    });
+    this.publishService.enableSync(this.currentPageName);
   }
 
+  // synctoDb() {
+  //   this.isPublishing = true;
+  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //           this.isPublishing = false;
+  //           this.updatePublishStatus();
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //           this.isPublishing = false;
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //       this.isPublishing = false;
+  //     }
+  //   });
+  // }
 }

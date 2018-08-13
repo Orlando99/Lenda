@@ -10,14 +10,15 @@ export const environment = {
   logpriority:"logpriority",
   referencedatakey:"refdata",
   isDebugModeActive: true,
-  localStorage: { 
-    userRole: 'userRole' 
+  collateralTables: "collateralTables",
+  localStorage: {
+    userRole: 'userRole'
   },
   uid: "userid",
   loanidkey:"selectedloanId",
-  
   usersession:"sessionid",
   errorbase:"errors",
   exceptionStorageKey : "exceptions",
+  syncRequiredItems: "syncRequiredItems"
 };
 

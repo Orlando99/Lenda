@@ -15,7 +15,8 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { StoredCropService } from './storedcrop.service';
-import CollateralSettings from '../collateral-types.model';
+import CollateralSettings from './../collateral-types.model';
+import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
   selector: 'app-storedcrop',
@@ -24,7 +25,6 @@ import CollateralSettings from '../collateral-types.model';
   providers: [CollateralService, StoredCropService]
 })
 export class StoredCropComponent implements OnInit {
-  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -47,7 +47,8 @@ export class StoredCropComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
     public collateralService: CollateralService,
-    public storedcropService: StoredCropService) {
+    public storedcropService: StoredCropService,
+    public publishService: PublishService) {
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
@@ -80,24 +81,20 @@ export class StoredCropComponent implements OnInit {
     this.collateralService.getgridheight(this.rowData);
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.storedCrop.key, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.sourceKey);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
     this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.storedCrop.component, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.storedCrop.source, CollateralSettings.storedCrop.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   onGridSizeChanged(Event: any) {

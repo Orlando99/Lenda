@@ -19,6 +19,7 @@ export const environment = {
   usersession:"sessionid",
   errorbase:"errors",
   exceptionStorageKey : "exceptions",
-  modifiedbase:"changedvalues"
+  modifiedbase:"changedvalues",
+  syncRequiredItems: "syncRequiredItems"
 };
 

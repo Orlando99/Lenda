@@ -19,7 +19,8 @@ import { MarketingcontractcalculationService } from '../../../Workers/calculatio
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { MarketingContractsService } from './marketing-contracts.service';
-import CollateralSettings from '../collateral-types.model';
+import CollateralSettings from './../collateral-types.model';
+import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
   selector: 'app-marketing-contracts',
@@ -28,7 +29,6 @@ import CollateralSettings from '../collateral-types.model';
   providers: [CollateralService, MarketingContractsService]
 })
 export class MarketingContractsComponent implements OnInit {
-  @Output() enableSync = new EventEmitter();
   public refdata: any = {};
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
@@ -49,9 +49,10 @@ export class MarketingContractsComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
-    private marketingContractService: MarketingcontractcalculationService,
+    private marketingContractCalculationService: MarketingcontractcalculationService,
     public collateralService: CollateralService,
-    public marketingContractsService: MarketingContractsService) {
+    public marketingContractsService: MarketingContractsService,
+    public publishService: PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -75,6 +76,7 @@ export class MarketingContractsComponent implements OnInit {
       let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.marketingContracts.key, this.rowData, this.pinnedBottomRowData);
       this.rowData = result.rowData;
       this.pinnedBottomRowData = result.pinnedBottomRowData;
+      this.gridApi.refreshCells();
     });
   }
 
@@ -83,24 +85,20 @@ export class MarketingContractsComponent implements OnInit {
     this.columnApi = params.columnApi;
   }
 
-  isSyncRequired(isEnabled) {
-    this.enableSync.emit(isEnabled);
-  }
-
   //Grid Events
   addrow() {
     this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.marketingContracts.key, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.sourceKey);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.marketingContracts.component, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
-    this.isSyncRequired(true);
+    this.marketingContractsService.rowvaluechanged(value);
+    this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.marketingContracts.source, CollateralSettings.marketingContracts.pk);
-    this.isSyncRequired(true);
+    this.publishService.enableSync(Page.collateral);
   }
 
   onGridSizeChanged(Event: any) {

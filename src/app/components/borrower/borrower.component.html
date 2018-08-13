@@ -1,5 +1,10 @@
 <div class="basic-container">
 
+    <div class="page-header">
+        <span class="text">Borrower</span>
+        <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
+    </div>
+
     <mat-accordion>
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
@@ -68,7 +73,7 @@
   </mat-accordion>
 
   <app-balancesheet></app-balancesheet>
-  <app-questions [chevronId]="'Borrower'"></app-questions>
+  <app-questions [chevronId]="'Borrower'"  [currentPageName]="currentPageName"></app-questions>
 
  <mat-accordion>
     <mat-expansion-panel [expanded]="true">
