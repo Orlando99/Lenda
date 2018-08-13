@@ -10,21 +10,29 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     private params: any;
     public value: number;
     private cancelBeforeStart: boolean = false;
-
+    private acceptsdecimals:boolean=false;
+    private decimalscount:number=0;
     @ViewChild('input', {read: ViewContainerRef}) public input;
 
 
     agInit(params: any): void {
-
+         
         this.params = params;
-        this.value = this.params.value;
+        this.value = parseFloat(this.params.value);
+        if(this.params.decimals!=undefined){
+            this.acceptsdecimals=true;
+            this.decimalscount=this.params.decimals;
+        }
+    
 
         // only start edit if key pressed is a number, not a letter
         this.cancelBeforeStart = params.charPress && ('1234567890'.indexOf(params.charPress) < 0);
     }
 
     getValue(): any {
-       
+        if(this.acceptsdecimals)
+        return parseFloat(this.value.toString()).toFixed(this.decimalscount);
+        else
         return this.value;
     }
 
@@ -58,11 +66,19 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     private isCharNumeric(charStr): boolean {
+        if(charStr=="Backspace"){
+            return true;
+        }
+        if(this.acceptsdecimals && charStr=="." && !this.value.toString().includes("."))
+        {
+            return true;
+        }
         return !!/\d/.test(charStr);
+       
     }
 
     private isKeyPressedNumeric(event): boolean {
-        
+         
         const charCode = this.getCharCodeFromEvent(event);
         const charStr = event.key ? event.key : String.fromCharCode(charCode);
         return this.isCharNumeric(charStr);

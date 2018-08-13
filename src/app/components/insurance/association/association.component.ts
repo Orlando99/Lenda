@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
 import { loan_model, Loan_Association } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
@@ -8,7 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
-import { numberValueSetter, getNumericCellEditor, formatPhoneNumber } from '../../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter, getNumericCellEditor, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { NumericEditor } from '../../../aggridfilters/numericaggrid';
@@ -38,6 +38,8 @@ export class AssociationComponent implements OnInit, OnChanges {
   associationTypeCode :string = '';
   @Input("withoutChevron")
   withoutChevron : boolean = false;
+  @Output('onRowCountChange')
+  onRowCountChange: EventEmitter<any> = new EventEmitter<any>();
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -71,7 +73,7 @@ export class AssociationComponent implements OnInit, OnChanges {
     public loanapi:LoanApiService
   ) {
     this.frameworkcomponents = { emaileditor:EmailEditor,selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumericCellEditor: getAlphaNumericCellEditor(), };
+    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumericCellEditor: getAlphaNumericCellEditor(), phoneCellEditor: getPhoneCellEditor() };
 
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
@@ -115,7 +117,8 @@ export class AssociationComponent implements OnInit, OnChanges {
         // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
         { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
         { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
-        { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable-color'], cellEditor: "numericCellEditor"},
+        // { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable-color'], cellEditor: "numericCellEditor"},
+        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
             cellEditorParams : {values : Preferred_Contact_Ind_Options},
@@ -219,6 +222,7 @@ export class AssociationComponent implements OnInit, OnChanges {
       colKey: "Assoc_Name"
     });
     this.localloanobject.Association.push(newItem);
+    this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
   }
 
   DeleteClicked(rowIndex: any) {
@@ -251,6 +255,7 @@ export class AssociationComponent implements OnInit, OnChanges {
 
         // console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
 
+        this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
       }
     })

@@ -96,7 +96,7 @@ export class LoancropunitcalculationworkerService {
   }
 
   fillFCValuesforCropunits(input: loan_model) {
-    debugger
+     
     try{
       let starttime = new Date().getTime();
       input.LoanCropUnits.forEach(element => {

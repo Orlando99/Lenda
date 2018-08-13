@@ -12,6 +12,7 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { EmptyEditor } from '../../aggridfilters/emptybox';
 import { setgriddefaults, calculatecolumnwidths } from '../../aggriddefinations/aggridoptions';
+import { NumericEditor } from '../../aggridfilters/numericaggrid';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html'
@@ -23,6 +24,7 @@ export class OptimizerComponent implements OnInit {
   private columnApi;
   rowDataNIR = [];
   rowDataIIR = [];
+  public frameworkcomponents;
   public loading = false;
   public context;
   public rowClassRules;
@@ -46,6 +48,7 @@ export class OptimizerComponent implements OnInit {
     boxSizing: 'border-box'
   };
   public loanmodel: loan_model;
+
   columnDefs = [
     { headerName: 'CropunitRecord', field: 'ID', hide: true },
     { headerName: 'Irr/NI', field: 'Practice', editable: false },
@@ -71,11 +74,16 @@ export class OptimizerComponent implements OnInit {
             component: 'emptyeditor'
           };
         }
+        else
+        return {
+          component: 'numericCellEditor'
+        }; 
       },
       valueSetter: function (value) {
-        let result = value.context.componentParent.validateacresvalue(value.data.ID, parseInt(value.newValue));
+         
+        let result = value.context.componentParent.validateacresvalue(value.data.ID, parseFloat(value.newValue));
         if (result) {
-          value.data.Acres = parseInt(value.newValue);
+          value.data.Acres = parseFloat(value.newValue);
           // //unset error
           // var el = document.getElementById('Acres_'+value.data.ID);
           // el.parentElement.parentElement.classList.remove("error");
@@ -95,11 +103,14 @@ export class OptimizerComponent implements OnInit {
           return false;
         }
 
-      }
+      },
+      cellEditorParams: {
+        decimals: 2
+      },
     },
 
   ];
-  frameworkcomponents: { emptyeditor: typeof EmptyEditor; };
+  
   //Generic Functions and validations
   validateacresvalue(id, newvalue: number) {
 
@@ -161,7 +172,7 @@ export class OptimizerComponent implements OnInit {
     public alertify: AlertifyService,
     public loanapi: LoanApiService
   ) {
-    this.frameworkcomponents = { emptyeditor: EmptyEditor };
+    this.frameworkcomponents= { emptyeditor: typeof EmptyEditor, numericCellEditor: NumericEditor};
     this.context = { componentParent: this };
     // change row class contextually here
     this.rowClassRules = {

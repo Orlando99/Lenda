@@ -113,45 +113,28 @@ export class BorrowerInfoComponent implements OnInit {
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
     if (this.localloanobj) {
       
-      
-        if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
-          this.createForm(this.localloanobj.LoanMaster[0]);
-          this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
-        }
-      
+      this.prepateFormAndVariables();
       this.stateList = this.localstorageservice.retrieve(environment.referencedatakey).StateList;
-      // if (this.borrowerInfoForm.value.Co_Borrower_ID) {
-      //   this.rowData = [];
-      //   this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID; }) : [];
-      // }
+     
     }
 
-    // this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      
-    //   if (res) {
+    this.localstorageservice.observe(environment.loankey).subscribe(res => {
+      if (res) {
 
-    //     // if(this.localloanobj){
-    //     //   this.initialize();
-    //     // }
-    //     this.localloanobj = res;
-    //     //borrower info
-    //     if (this.localloanobj.srccomponentedit == "BorrowerInfoComponent") {
+        this.localloanobj = res;
+        this.prepateFormAndVariables();
+      }
 
-    //       this.rowData[this.localloanobj.lasteditrowindex] = this.localloanobj.Association.find(as => { return as.ActionStatus !== 3 && as == this.latestUpdatedObject });
-    //     } else {
-
-    //       this.rowData = [];
-    //       this.rowData = this.localloanobj.Association !== null ? this.localloanobj.Association.filter(as => { return as.ActionStatus !== 3 && as.Assoc_Type_Code == this.borrowerInfoForm.value.Co_Borrower_ID }) : [];
-
-    //     }
-    //     this.localloanobj.srccomponentedit = undefined;
-    //     this.localloanobj.lasteditrowindex = undefined;
-    //     this.latestUpdatedObject = undefined;
-    //   }
-
-    // });
+    });
 
 
+  }
+
+  private prepateFormAndVariables() {
+    if (this.localloanobj && this.localloanobj.LoanMaster && this.localloanobj.LoanMaster[0]) {
+      this.createForm(this.localloanobj.LoanMaster[0]);
+      this.loan_id = this.localloanobj.LoanMaster[0].Loan_ID;
+    }
   }
 
   getTypeNameOfCB(cbTypeID){
@@ -198,6 +181,12 @@ export class BorrowerInfoComponent implements OnInit {
     );
   }
 
+  coBorrowerCountChange = (data)=>{
+    if(this.localloanobj && this.localloanobj.LoanMaster[0]){
+      this.localloanobj.LoanMaster[0].Co_Borrower_Count = data.count;
+      this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+    }
+  }
 
   savedByparentSuccessssCallback = () => {
     this.createForm({});

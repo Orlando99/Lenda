@@ -91,6 +91,9 @@ export class PoliciesComponent implements OnInit {
 
   }
 
+  onPaginationChanged(event:any){
+    seterrors(this.errorlist);
+  }
   declarecoldefs() {
     this.defaultColDef = {
       cellClassRules: {
@@ -107,6 +110,7 @@ export class PoliciesComponent implements OnInit {
         cellClass: 'editable-color',
         //cellRenderer: 'columnTooltip',
         headerTooltip: 'Agent',
+        hide:true,
         editable: true,
         cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
@@ -127,6 +131,7 @@ export class PoliciesComponent implements OnInit {
         cellRenderer: 'columnTooltip',
         cellClass: 'editable-color',
         editable: true,
+        hide:true,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
@@ -157,6 +162,7 @@ export class PoliciesComponent implements OnInit {
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
+        hide:true,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.GetMPCIPlanSubType('MPCI')
       },
@@ -221,6 +227,9 @@ export class PoliciesComponent implements OnInit {
         cellClass: ['editable-color'],
         editable: true,
         cellEditor: "numericCellEditor",
+        cellEditorParams: {
+          decimals: 2
+        },
         valueSetter: numberValueSetter,
         valueFormatter: function (params) {
           return  (params.value);
@@ -234,6 +243,9 @@ export class PoliciesComponent implements OnInit {
         editable: true,
         cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
+        cellEditorParams: {
+          decimals: 2
+        },
         cellEditor: "numericCellEditor",
         valueSetter: numberValueSetter,
         valueFormatter: function (params) {
@@ -289,7 +301,7 @@ export class PoliciesComponent implements OnInit {
     };
     if (editortype == "booleaneditor") {
       column.valueFormatter = function (params) {
-        debugger
+        
         if (params.value == "1") {
           return "Yes";
         }
@@ -490,7 +502,7 @@ export class PoliciesComponent implements OnInit {
     //Get localstorage first
     this.rowData = [];
     if (this.loanmodel != null) {
-      let insurancepolicies = this.loanmodel.InsurancePolicies;
+      let insurancepolicies = _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"]);
       insurancepolicies.forEach(item => {
 
         let row: any = {};
@@ -576,7 +588,7 @@ export class PoliciesComponent implements OnInit {
       if (event.colDef.pickfield.includes("Subtype")) {
         replacer = "Ins_SubType";
       }
-      let policy = this.loanmodel.InsurancePolicies[event.rowIndex].Subpolicies.find(p => p.Ins_Type == policyname && p.ActionStatus != 3);
+      let policy = _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"])[event.rowIndex].Subpolicies.find(p => p.Ins_Type == policyname && p.ActionStatus != 3);
       if (policy != null && policy != undefined) {
         if (isNaN(event.value))
           policy[replacer] = event.value;
@@ -589,11 +601,11 @@ export class PoliciesComponent implements OnInit {
 
     }
     else {
-      this.loanmodel.InsurancePolicies[event.rowIndex][event.colDef.field] = event.value;
-      this.loanmodel.InsurancePolicies[event.rowIndex].ActionStatus = 2;
+      _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"])[event.rowIndex][event.colDef.field] = event.value;
+      _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"])[event.rowIndex].ActionStatus = 2;
     }
     this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
-    debugger
+     
     this.validationservice.validateInsurancePolicies(event, this.loanmodel.InsurancePolicies);
   }
 
@@ -768,8 +780,12 @@ export class PoliciesComponent implements OnInit {
 }
 
 function seterrors(obj) {
+  var items = document.querySelectorAll('.ag-cell');
+  for (var i = 0; i < items.length; i++) {
+    items[i].classList.remove('dirty')
+  }
   obj.forEach(element => {
-    debugger
+     
     var filter = Array.prototype.filter
     var selectedelements = document.querySelectorAll('[row-id="Ins_' + element.cellid.split("_")[1] + '"]')
     var filtered = filter.call(selectedelements, function (node) {
@@ -780,7 +796,7 @@ function seterrors(obj) {
       try {
         var p = _.take(_.drop(element.cellid.split("_"), 2), element.cellid.split("_").length - 1);
         var cellid = _.join(p, '_')
-        debugger
+         
         var cell = filtered[0].querySelector('[col-id="' + cellid + '"]');
         cell.classList.add(elemednt);
       }
