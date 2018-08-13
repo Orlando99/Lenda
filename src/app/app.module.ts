@@ -199,6 +199,7 @@ import { BorrowerRatingComponent } from './components/borrower/farm-financial/bo
 import { ValidationService } from './Workers/calculations/validation.service';
 import { BtnPublishComponent } from './ui-components/btn-publish/btn-publish.component';
 import { BooleanEditor } from './aggridfilters/booleanaggrid.';
+import { ExceptionService } from './Workers/calculations/exception.service';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -416,6 +417,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MarketingcontractcalculationService,
     OptimizercalculationService,
     ValidationService,
+    ExceptionService,
     ToasterService,
     {
       provide: ErrorHandler,

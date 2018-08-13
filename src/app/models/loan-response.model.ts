@@ -1,6 +1,12 @@
 import {JsonProperty} from 'json2typescript';
 import {IntConverter, StringConverter} from '../Workers/utility/jsonconvertors';
 
+
+export enum Operation {
+  Greater = '>',
+  Equal = '=',
+  GreterEqual = '>='
+}
 export class LoanQResponse {
   @JsonProperty("Loan_Q_response_ID", IntConverter,false)
   Loan_Q_response_ID: number;
@@ -41,6 +47,10 @@ export class LoanQResponse {
   FC_Subsidiary_Question_ID_Ind : number;
   FC_Parent_Question_ID : number;
   FC_Sort_Order : number;
+  FC_Exception_Msg: string;
+  FC_Operation: Operation;
+  FC_Level1_Val: string;
+  FC_Level2_Val: string;
 
 }
 
@@ -67,5 +77,14 @@ export class RefQuestions {
   Choice1: string;
   @JsonProperty("Choice2", StringConverter,false)
   Choice2: string;
+  @JsonProperty("Exception_Msg", StringConverter,false)
+  Exception_Msg: string;
+  @JsonProperty("Operation", StringConverter,false)
+  Operation: Operation;
+  @JsonProperty("Level1_Val", StringConverter,false)
+  Level1_Val: string;
+  @JsonProperty("Level2_Val", StringConverter,false)
+  Level2_Val: string;
   
 }
+

@@ -10,6 +10,13 @@ export class errormodel{
     details:string[];
     ToolTipText?:string;
 }
+
+export class ExceptionModel{
+    section : string;
+    message : string;
+	level : number;
+	questionId : number;
+}
 export enum Role {
 	user = 1,
 	admin = 2

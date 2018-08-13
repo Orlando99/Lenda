@@ -9,6 +9,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
 import * as _ from "lodash";
+import { ExceptionService } from '../../../Workers/calculations/exception.service';
 import { PublishService, Page } from "../../../services/publish.service";
 
 @Component({
@@ -44,6 +45,7 @@ export class QuestionsComponent implements OnInit {
     private loanapi: LoanApiService,
     private questionService: QuestionscalculationworkerService,
     private toaster: ToastsManager,
+    private exceptionService : ExceptionService,
     public publishService: PublishService) { }
 
   ngOnInit() {
@@ -100,6 +102,7 @@ export class QuestionsComponent implements OnInit {
       }
     }
     this.isResponseUpdated = true;
+    this.exceptionService.logExceptionIfApplicable(response);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
     this.publishService.enableSync(this.currentPageName);
   }

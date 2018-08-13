@@ -9,6 +9,7 @@ import { loan_model } from '../../models/loanmodel';
 import { JsonConvert } from 'json2typescript';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoggingService } from '../../services/Logs/logging.service';
+import { ExceptionService } from '../../Workers/calculations/exception.service';
 
 
 @Component({
@@ -25,7 +26,8 @@ export class LoanOverviewComponent implements OnInit {
     private loanservice: LoanApiService,
     private localstorageservice: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
-    private logging: LoggingService
+    private logging: LoggingService,
+    private exceptionService : ExceptionService
   ) {
 
     let temp = this.route.params.subscribe(params => {
@@ -65,6 +67,7 @@ export class LoanOverviewComponent implements OnInit {
           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
           //we are making a copy of it also
           this.localstorageservice.store(environment.loankey_copy, res.Data);
+          this.exceptionService.logExceptionForAllResponses();
          
         }
         else {

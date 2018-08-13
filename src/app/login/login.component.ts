@@ -86,6 +86,7 @@ export class LoginComponent implements OnInit {
       this.localst.store(environment.usersession,generate())
 
       this.localst.store(environment.errorbase,[]);
+      this.localst.store(environment.exceptionStorageKey,[]);
       this.localst.store(environment.modifiedbase,[]);
 
       this.getreferencedata();
