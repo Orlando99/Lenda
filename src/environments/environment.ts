@@ -17,6 +17,7 @@ export const environment = {
   loanidkey:"selectedloanId",
   
   usersession:"sessionid",
-  errorbase:"errors"
+  errorbase:"errors",
+  exceptionStorageKey : "exceptions",
 };
 

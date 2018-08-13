@@ -198,6 +198,7 @@ import { LiquidityAnalysisComponent } from './components/borrower/farm-financial
 import { BorrowerRatingComponent } from './components/borrower/farm-financial/borrower-rating/borrower-rating.component';
 import { ValidationService } from './Workers/calculations/validation.service';
 import { BooleanEditor } from './aggridfilters/booleanaggrid.';
+import { ExceptionService } from './Workers/calculations/exception.service';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -413,6 +414,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MarketingcontractcalculationService,
     OptimizercalculationService,
     ValidationService,
+    ExceptionService,
     ToasterService,
     {
       provide: ErrorHandler,

@@ -9,6 +9,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
 import * as _ from "lodash";
+import { ExceptionService } from '../../../Workers/calculations/exception.service';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -40,7 +41,8 @@ export class QuestionsComponent implements OnInit {
     public loanserviceworker: LoancalculationWorker,
     private loanapi: LoanApiService,
     private questionService: QuestionscalculationworkerService,
-    private toaster: ToastsManager) { }
+    private toaster: ToastsManager,
+    private exceptionService : ExceptionService) { }
 
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
@@ -102,6 +104,7 @@ export class QuestionsComponent implements OnInit {
       }
     }
     this.isResponseUpdated = true;
+    this.exceptionService.logExceptionIfApplicable(response);
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
   }
   synctoDb() {

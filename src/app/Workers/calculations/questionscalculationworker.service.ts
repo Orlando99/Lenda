@@ -70,20 +70,10 @@ export class QuestionscalculationworkerService {
             respecctiveResponse.Loan_ID = loanMaster.Loan_ID;
             respecctiveResponse.Loan_Full_ID = loanMaster.Loan_Full_ID;
             respecctiveResponse.Loan_Seq_Num = loanMaster.Loan_Seq_num;
-            respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
-            respecctiveResponse.FC_Choice1 = que.Choice1;
-            respecctiveResponse.FC_Choice2 = que.Choice2;
-            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID_Ind;
-            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
-            respecctiveResponse.FC_Sort_Order = que.Sort_Order;
+            this.copyFCValues(respecctiveResponse, que);
             queResponse.push(respecctiveResponse);
           }else{
-            respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
-            respecctiveResponse.FC_Choice1 = que.Choice1;
-            respecctiveResponse.FC_Choice2 = que.Choice2;
-            respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID_Ind;
-            respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
-            respecctiveResponse.FC_Sort_Order = que.Sort_Order;
+            this.copyFCValues(respecctiveResponse, que);
           }
           
         })
@@ -91,5 +81,18 @@ export class QuestionscalculationworkerService {
       
     }
     return queResponse;
+  }
+
+  private copyFCValues(respecctiveResponse: LoanQResponse, que: RefQuestions) {
+    respecctiveResponse.FC_Question_ID_Text = que.Question_ID_Text;
+    respecctiveResponse.FC_Choice1 = que.Choice1;
+    respecctiveResponse.FC_Choice2 = que.Choice2;
+    respecctiveResponse.FC_Subsidiary_Question_ID_Ind = que.Subsidiary_Question_ID_Ind;
+    respecctiveResponse.FC_Parent_Question_ID = que.Parent_Question_ID;
+    respecctiveResponse.FC_Sort_Order = que.Sort_Order;
+    respecctiveResponse.FC_Exception_Msg = que.Exception_Msg;
+    respecctiveResponse.FC_Operation = que.Operation;
+    respecctiveResponse.FC_Level1_Val = que.Level1_Val;
+    respecctiveResponse.FC_Level2_Val = que.Level2_Val;
   }
 }
