@@ -4,7 +4,7 @@
   <layout-sidebar></layout-sidebar>
 
     <div class="pageContent">
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="onActivate($event)"></router-outlet>
     </div>
   </div>
 </div>

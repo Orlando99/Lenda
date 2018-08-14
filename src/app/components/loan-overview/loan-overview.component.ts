@@ -109,4 +109,12 @@ export class LoanOverviewComponent implements OnInit {
     let currentloanid=this.localstorageservice.retrieve(environment.loanidkey);
     this.router.navigateByUrl("/home/loanoverview/" + currentloanid + "/insurance")
   }
+
+  /**
+   * To scroll to top as the page changes
+   * @param event OnActivate event object
+   */
+  onActivate(event) {
+    window.scroll(0,0);
+  }
 }
