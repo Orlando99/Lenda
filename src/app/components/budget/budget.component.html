@@ -1,10 +1,19 @@
 <!-- <app-cropbasedbudget></app-cropbasedbudget> -->
 
 <div class="basic-container">
-    <app-distributer></app-distributer>
+
+    <div class="page-header">
+        <span class="text">Budget</span>
+        <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
+    </div>
+
+    <app-association [header]="'Distributor'" [associationTypeCode]="'DIS'" [currentPageName]="currentPageName"></app-association>
+    <app-association [header]="'Third Party'" [associationTypeCode]="'THR'" [currentPageName]="currentPageName"></app-association>
+    <app-association [header]="'Harvester'" [associationTypeCode]="'HAR'" [currentPageName]="currentPageName"></app-association>
+    <!-- <app-distributer></app-distributer>
     <app-thirdparty></app-thirdparty>
-    <app-harvester></app-harvester>
-    <app-questions [chevronId]="'Budget'"></app-questions>
+    <app-harvester></app-harvester> -->
+    <app-questions [chevronId]="'Budget'"  [currentPageName]="currentPageName"></app-questions>
 
     <!-- <app-loanbudget-group></app-loanbudget-group> -->
 
