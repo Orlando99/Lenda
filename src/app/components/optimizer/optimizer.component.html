@@ -1,5 +1,12 @@
 <div class="my-container">
-    <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+
+  <div class="page-header">
+      <span class="text">Optimizer</span>
+      <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
+  </div>
+  
+  <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '14px' }"></ngx-loading>
+  
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
@@ -8,7 +15,7 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
+      <!-- <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a> -->
 
       <h3>   Irrigated Crops</h3>
       <div class="container bottom">

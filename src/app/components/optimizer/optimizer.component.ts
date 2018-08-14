@@ -13,9 +13,13 @@ import { JsonConvert } from 'json2typescript';
 import { EmptyEditor } from '../../aggridfilters/emptybox';
 import { setgriddefaults, calculatecolumnwidths } from '../../aggriddefinations/aggridoptions';
 import { NumericEditor } from '../../aggridfilters/numericaggrid';
+import { Page, PublishService } from '../../services/publish.service';
+import { OptimizerService } from './optimizer.service';
 @Component({
   selector: 'app-optimizer',
-  templateUrl: './optimizer.component.html'
+  templateUrl: './optimizer.component.html',
+  styleUrls: ['./optimizer.component.scss'],
+  providers : [OptimizerService]
 })
 export class OptimizerComponent implements OnInit {
 
@@ -31,6 +35,7 @@ export class OptimizerComponent implements OnInit {
   public context;
   public rowClassRules;
   private refdata;
+  private currentPageName : Page =  Page.optimizer;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined || params.data==undefined) {
@@ -173,7 +178,9 @@ export class OptimizerComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService
+    public loanapi: LoanApiService,
+    private publishService : PublishService,
+    private optimizerService : OptimizerService
   ) {
     this.frameworkcomponents= { emptyeditor:EmptyEditor, numericCellEditor: NumericEditor};
     this.context = { componentParent: this };
@@ -285,30 +292,37 @@ export class OptimizerComponent implements OnInit {
       return '';
   }
 
+   /**
+   * Sync to database - publish button event
+   */
   synctoDb() {
-
-    this.loading = true;
-    this.loanapi.syncloanobject(this.loanmodel).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
-
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-      this.loading = false;
-    })
+    this.publishService.syncCompleted();
+    this.optimizerService.syncToDb(this.localstorage.retrieve(environment.loankey));
   }
+  // synctoDb() {
+
+  //   this.loading = true;
+  //   this.loanapi.syncloanobject(this.loanmodel).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
+
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //     this.loading = false;
+  //   })
+  // }
 
   rowvaluechangedirr($event) {
 
@@ -320,6 +334,7 @@ export class OptimizerComponent implements OnInit {
         this.loanmodel.srccomponentedit = "optimizercomponent";
         this.loanmodel.lasteditrowindex = $event.rowIndex;
         this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+        this.publishService.enableSync(Page.optimizer);
       }
     }
   }
@@ -333,6 +348,7 @@ export class OptimizerComponent implements OnInit {
         this.loanmodel.srccomponentedit = "optimizercomponent";
         this.loanmodel.lasteditrowindex = $event.rowIndex;
         this.loancalculationservice.performcalculationonloanobject(this.loanmodel, true);
+        this.publishService.enableSync(Page.optimizer);
       }
 
     }
