@@ -1,0 +1,33 @@
+@import "./../../../sass/theme/variables";
+
+.page-header {
+    display: flex;
+    align-content: center;
+    background: $primary-color;
+    color: $white;
+    border-left: 1px solid #666;
+    font-size: $font-size-md;
+    padding: 5px 5px 5px 15px;
+    text-transform: uppercase;
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    margin-bottom: 20px;
+    + *::before {
+      content: ' ';
+      display: block;
+      height: 30px;
+    }
+
+    .text {
+        text-shadow: 1px 1px #333;
+    }
+
+    .flaticon {
+        font-size: $font-size-md;
+        cursor: pointer;
+        margin-top: 3px;
+        margin-left: 10px;
+        display: inherit;
+    }
+}

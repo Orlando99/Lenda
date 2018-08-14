@@ -8,6 +8,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
+import { PublishService, Page } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-aph',
@@ -27,7 +28,8 @@ export class AphComponent implements OnInit {
   constructor(private localstorageservice: LocalStorageService,
   private loanserviceworker : LoancalculationWorker,
   public loanapi:LoanApiService,
-  private toaster: ToastsManager,) {
+  private toaster: ToastsManager,
+  private publishService : PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor() };
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
@@ -120,28 +122,28 @@ export class AphComponent implements OnInit {
     }
   }
 
-  synctoDb(){
+  // synctoDb(){
     
-      this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-        if(res.ResCode == 1){
-          this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //     this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+  //       if(res.ResCode == 1){
+  //         this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
            
-            if (res.ResCode == 1) {
-              this.toaster.success("Records Synced");
-              let jsonConvert: JsonConvert = new JsonConvert();
-              this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-            }
-            else{
-              this.toaster.error("Could not fetch Loan Object from API")
-            }
-          });
-        }
-        else{
-          this.toaster.error("Error in Sync");
-        }
-      });
+  //           if (res.ResCode == 1) {
+  //             this.toaster.success("Records Synced");
+  //             let jsonConvert: JsonConvert = new JsonConvert();
+  //             this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //           }
+  //           else{
+  //             this.toaster.error("Could not fetch Loan Object from API")
+  //           }
+  //         });
+  //       }
+  //       else{
+  //         this.toaster.error("Error in Sync");
+  //       }
+  //     });
     
-  }
+  // }
 
   rowvaluechanged(value : any){
     
@@ -158,6 +160,7 @@ export class AphComponent implements OnInit {
     this.localloanobject.srccomponentedit = "APH";
     this.localloanobject.lasteditrowindex =edittedCUIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(Page.insurance);
   }
 
   onGridReady(params) {
