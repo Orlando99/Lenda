@@ -16,7 +16,6 @@ import { NamingConventionComponent } from "./components/naming-convention/naming
 import { FarmComponent } from "./components/farm/farm.component";
 import { BudgetComponent } from "./components/budget/budget.component";
 import { InsuranceComponent } from "./components/insurance/insurance.component";
-import{ DistributerComponent } from "./components/budget/distributer/distributer.component"
 import { LoanviewerComponent } from "./components/loanviewer/loanviewer.component";
 import { WorkInProgressComponent } from "./components/work-in-progress/work-in-progress.component";
 import { CreateLoanComponent } from "./components/create-loan/create-loan.component";
