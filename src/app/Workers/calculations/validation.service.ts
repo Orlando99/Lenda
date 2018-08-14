@@ -54,6 +54,7 @@ export class ValidationService {
       itemseffected.forEach(element => {
         let mainpolicyid = element.Policy_id;
         //Insurance Types Check
+        debugger
         if (!arraysEqual(element.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type), itemchanged.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type))) {
           itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_SecInsurance", errorsection: "Insurance", details: ["dirty"] });
         }
