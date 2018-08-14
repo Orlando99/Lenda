@@ -93,9 +93,6 @@ import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AssociationComponent } from './components/insurance/association/association.component';
 import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
 import { InsuranceapiService } from './services/insurance/insuranceapi.service';
-import { DistributerComponent } from './components/budget/distributer/distributer.component';
-import { ThirdpartyComponent } from './components/budget/thirdparty/thirdparty.component';
-import { HarvesterComponent } from './components/budget/harvester/harvester.component';
 import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info.component';
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
@@ -239,8 +236,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     PercentageDirective,
     BudgetComponent,
     CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
-    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent,
-    HarvesterComponent,
+    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,
