@@ -12,6 +12,7 @@ import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { JsonConvert } from 'json2typescript';
+import { Page, PublishService } from '../../../services/publish.service';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -46,6 +47,7 @@ export class BorrowerInfoComponent implements OnInit {
   //in this case local storage Associaltion list have other rows as well, so simply lading picking the record from rowIndex won't work
   private latestUpdatedObject;
 
+  @Input() currentPageName: Page;
   @Input('allowIndividualSave')
   allowIndividualSave: boolean;
   @Input('mode')
@@ -75,7 +77,8 @@ export class BorrowerInfoComponent implements OnInit {
     public logging: LoggingService,
     private loanApiService: LoanApiService,
     private toaster: ToastsManager,
-    private alertify: AlertifyService, public loanapi: LoanApiService) {
+    private alertify: AlertifyService, public loanapi: LoanApiService,
+    private publishService : PublishService) {
 
 
     // this.components = { numericCellEditor: getNumericCellEditor() };
@@ -175,16 +178,20 @@ export class BorrowerInfoComponent implements OnInit {
           this.onFormValueChange.emit({ value: value, valid: this.borrowerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
-          this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
         }
       }
     );
   }
 
+  updateLocalStorage(){
+    this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+    this.publishService.enableSync(this.currentPageName);
+  }
   coBorrowerCountChange = (data)=>{
     if(this.localloanobj && this.localloanobj.LoanMaster[0]){
       this.localloanobj.LoanMaster[0].Co_Borrower_Count = data.count;
       this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+      this.publishService.enableSync(this.currentPageName);
     }
   }
 
@@ -213,60 +220,51 @@ export class BorrowerInfoComponent implements OnInit {
         assoc.ActionStatus = assoc.ActionStatus || 2;
       });
       this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
+      this.publishService.enableSync(this.currentPageName);
       this.selectedAssociaionTypeCode = data.value;
     }
   }
 
-  synctoDb() {
-    // if (this.borrowerInfoForm.valid) {
-    //   this.loanApiService.syncloanborrower(this.loan_id, this.borrowerInfoForm.value as loan_borrower).subscribe((successResponse) => {
-    //     this.toaster.success("Borrower details saved successfully");
-    //     this.isSubmitted = true;
-    //   }, (errorResponse) => {
-    //     this.toaster.error("Error Occurered while saving borrower details");
+  // synctoDb() {
+    
 
-    //   });
-    // } else {
-    //   this.toaster.error("Borrower details form doesn't seem to have data in correct format, please correct them before saving.");
-    // }
-
-    let loanMaster = this.localloanobj.LoanMaster[0];
-    loanMaster.Borrower_First_Name = this.borrowerInfoForm.value.Borrower_First_Name;
-    loanMaster.Borrower_MI = this.borrowerInfoForm.value.Borrower_MI;
-    loanMaster.Borrower_Last_Name = this.borrowerInfoForm.value.Borrower_Last_Name;
-    loanMaster.Borrower_SSN_Hash = this.borrowerInfoForm.value.Borrower_SSN_Hash;
-    loanMaster.Co_Borrower_ID = this.borrowerInfoForm.value.Co_Borrower_ID;
-    loanMaster.Borrower_Address = this.borrowerInfoForm.value.Borrower_Address;
-    loanMaster.Borrower_City = this.borrowerInfoForm.value.Borrower_First_Name;
-    loanMaster.Borrower_State_ID = this.borrowerInfoForm.value.Borrower_State_ID;
-    loanMaster.Borrower_Zip = this.borrowerInfoForm.value.Borrower_Zip;
-    loanMaster.Borrower_Phone = this.borrowerInfoForm.value.Borrower_Phone;
-    loanMaster.Borrower_email = this.borrowerInfoForm.value.Borrower_email;
-    loanMaster.Borrower_DOB = this.borrowerInfoForm.value.Borrower_DOB;
-    loanMaster.Spouse_First_Name = this.borrowerInfoForm.value.Spouse_First_Name;
-    loanMaster.Spouse__MI = this.borrowerInfoForm.value.Spouse__MI;
-    loanMaster.Spouse_Last_name = this.borrowerInfoForm.value.Spouse_Last_name;
-    loanMaster.Spouse_Phone = this.borrowerInfoForm.value.Spouse_Phone;
-    loanMaster.Spouse_Email = this.borrowerInfoForm.value.Spouse_Email;
-    this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobj.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    });
-  }
+  //   // let loanMaster = this.localloanobj.LoanMaster[0];
+  //   // loanMaster.Borrower_First_Name = this.borrowerInfoForm.value.Borrower_First_Name;
+  //   // loanMaster.Borrower_MI = this.borrowerInfoForm.value.Borrower_MI;
+  //   // loanMaster.Borrower_Last_Name = this.borrowerInfoForm.value.Borrower_Last_Name;
+  //   // loanMaster.Borrower_SSN_Hash = this.borrowerInfoForm.value.Borrower_SSN_Hash;
+  //   // loanMaster.Co_Borrower_ID = this.borrowerInfoForm.value.Co_Borrower_ID;
+  //   // loanMaster.Borrower_Address = this.borrowerInfoForm.value.Borrower_Address;
+  //   // loanMaster.Borrower_City = this.borrowerInfoForm.value.Borrower_First_Name;
+  //   // loanMaster.Borrower_State_ID = this.borrowerInfoForm.value.Borrower_State_ID;
+  //   // loanMaster.Borrower_Zip = this.borrowerInfoForm.value.Borrower_Zip;
+  //   // loanMaster.Borrower_Phone = this.borrowerInfoForm.value.Borrower_Phone;
+  //   // loanMaster.Borrower_email = this.borrowerInfoForm.value.Borrower_email;
+  //   // loanMaster.Borrower_DOB = this.borrowerInfoForm.value.Borrower_DOB;
+  //   // loanMaster.Spouse_First_Name = this.borrowerInfoForm.value.Spouse_First_Name;
+  //   // loanMaster.Spouse__MI = this.borrowerInfoForm.value.Spouse__MI;
+  //   // loanMaster.Spouse_Last_name = this.borrowerInfoForm.value.Spouse_Last_name;
+  //   // loanMaster.Spouse_Phone = this.borrowerInfoForm.value.Spouse_Phone;
+  //   // loanMaster.Spouse_Email = this.borrowerInfoForm.value.Spouse_Email;
+  //   this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobj.Loan_Full_ID).subscribe(res => {
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   });
+  // }
 
   // addrow() {
 
