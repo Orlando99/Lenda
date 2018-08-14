@@ -13,9 +13,9 @@ export class ValidationService {
     this.refdata = this.localstorage.retrieve(environment.referencedatakey);
   }
   //this will validate the Unit Options in Insurance table
-  validateInsuranceTable(itemchanged: Insurance_Policy, itemseffected: Array<Insurance_Policy>,currenterrors:Array<errormodel>) {
+  validateInsuranceTable(itemchanged: Insurance_Policy, itemseffected: Array<Insurance_Policy>, currenterrors: Array<errormodel>) {
     //get current errors 
-   
+
     // //remove all errors first
     // _.remove(currenterrors, function (param) {
     //   return itemseffected.map(p => p.Policy_id).includes(parseInt(param.cellid.split('_')[1]));
@@ -32,7 +32,7 @@ export class ValidationService {
     // now lets loop throught the effected elements and compare with reference item
     //first loop will check for all crops according to county so only Unit will be checked
     itemseffected.forEach(element => {
-       
+
       let mainpolicyid = element.Policy_id;
       //unit check 
       if (element.Unit == itemchanged.Unit) {
@@ -50,10 +50,11 @@ export class ValidationService {
     //So lets select unique crops first 
     //This thing currently only runs if you have all EUs in County
     if (allinsuranceitems.find(p => p.Unit != "EU") == undefined) { // check if all items have EU
-       
+
       itemseffected.forEach(element => {
         let mainpolicyid = element.Policy_id;
         //Insurance Types Check
+        debugger
         if (!arraysEqual(element.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type), itemchanged.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type))) {
           itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_SecInsurance", errorsection: "Insurance", details: ["dirty"] });
         }
@@ -116,14 +117,14 @@ export class ValidationService {
   }
 
   validateInsurancePolicies(params: any, inspolicies: Array<Insurance_Policy>) {
-     //get all policies in county
-     let currenterrors = this.localstorage.retrieve(environment.errorbase) as Array<errormodel>;
-      let policyids=inspolicies.filter(p=>p.County_Id==params.data.Countyid).map(p=>p.Policy_id);
-       _.remove(currenterrors, function (param) {
-         return policyids.includes(parseInt(param.cellid.split('_')[1]));
-        })
+    //get all policies in county
+    let currenterrors = this.localstorage.retrieve(environment.errorbase) as Array<errormodel>;
+    let policyids = inspolicies.filter(p => p.County_Id == params.data.Countyid).map(p => p.Policy_id);
+    _.remove(currenterrors, function (param) {
+      return policyids.includes(parseInt(param.cellid.split('_')[1]));
+    })
     let insuranceunit = params.data;
-    let attachedPolicy=inspolicies.find(p=>p.Policy_id==insuranceunit.mainpolicyId);
+    let attachedPolicy = inspolicies.find(p => p.Policy_id == insuranceunit.mainpolicyId);
     //These are the policies in same county ..
     //Check for EU by default
     if (inspolicies.filter(p => p.County_Id == insuranceunit.Countyid).find(p => p.Unit == "EU") != undefined) {
@@ -133,21 +134,21 @@ export class ValidationService {
         //let not working
         var effectedpolicies = inspolicies.filter(p => p.County_Id == insuranceunit.Countyid && p.Policy_id != insuranceunit.mainpolicyId);
         let invokerpolicy = inspolicies.find(p => p.Policy_id == insuranceunit.mainpolicyId);
-        this.validateInsuranceTable(invokerpolicy, effectedpolicies,currenterrors);
+        this.validateInsuranceTable(invokerpolicy, effectedpolicies, currenterrors);
       }
       else {
-         
+
         let invokerpolicy = inspolicies.find(p => p.County_Id == insuranceunit.Countyid && p.Unit == "EU");
         let effectedpolicies: any[] = inspolicies.filter(p => p.County_Id == insuranceunit.Countyid && p.Policy_id != invokerpolicy.Policy_id);
-        this.validateInsuranceTable(invokerpolicy, effectedpolicies,currenterrors);
+        this.validateInsuranceTable(invokerpolicy, effectedpolicies, currenterrors);
       }
     }
 
     //No EU Found .. lets check the EP Then
 
     else if (inspolicies.filter(p => p.County_Id == insuranceunit.Countyid).find(p => p.Unit == "EP") != undefined) {
-      let subpolicyverificationrequired =false;
-       let EpErrors=[];
+      let subpolicyverificationrequired = false;
+      let EpErrors = [];
       //lets first attach croppractice to insuranceitems
       inspolicies.forEach(element => {
         element.Practice_Type = this.getcroppracticefrompraticeid(element.Crop_Practice_Id);
@@ -213,14 +214,14 @@ export class ValidationService {
         let itemseffeceted = itemswithreciprocalpratice.filter(p => p.Policy_id != invokerpolicy.Policy_id);
         EpErrors.push(...this.validateitemsforunit(invokerpolicy, itemseffeceted, ["OU", "EP"]));
       }
-      subpolicyverificationrequired=itemswithreciprocalpratice.map(p=>p.Unit).every( (val, i, arr) => val === arr[0] ) ;
+      subpolicyverificationrequired = itemswithreciprocalpratice.map(p => p.Unit).every((val, i, arr) => val === arr[0]);
       // if(subpolicyverificationrequired){
       //   // 
       //   let uniquesets=_.uniqBy(inspolicies,["County_Id","",""])
       // }
-       //here push the errors
-       currenterrors.push(...EpErrors);
-       this.localstorage.store(environment.errorbase, _.uniq(currenterrors));
+      //here push the errors
+      currenterrors.push(...EpErrors);
+      this.localstorage.store(environment.errorbase, _.uniq(currenterrors));
     }
     //  this.retrieveerrors();
     //  seterrors(this.errorlist);
@@ -235,9 +236,9 @@ export class ValidationService {
       }
       itemseffected.forEach(element => {
         //add error
-        if (!restrictpolicies.includes(element.Unit)){
-        errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", errorsection: "Insurance", details: ["dirty"] });
-      }
+        if (!restrictpolicies.includes(element.Unit)) {
+          errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+        }
       });
     }
     else {
@@ -253,6 +254,19 @@ export class ValidationService {
 
   getcroppracticefrompraticeid(id: number) {
     return this.refdata.CropList.find(p => p.Crop_And_Practice_ID == id).Practice_type_code;
+  }
+
+
+  //Page load validations
+  validateinsurancePoliciesatload(rowdata: Array<any>, insurancepolicies: Array<Insurance_Policy>) {
+    //Lets first get the counties 
+    debugger
+    let counties = _.uniq(rowdata.map(p => p.Countyid));
+    counties.forEach(element => {
+      //just pick the first row
+      var params ={data: rowdata.find(p => p.Countyid == element)};
+      this.validateInsurancePolicies(params, insurancepolicies.filter(p => p.County_Id == element));
+    });
   }
 }
 
@@ -275,3 +289,5 @@ function arraysEqual(_arr1, _arr2) {
   return true;
 
 }
+
+

@@ -7,7 +7,7 @@ import { isNumber } from "util";
 @Component({
     selector: 'Empty-cell',
     template: `
-    <div fxLayout="row" class="grayedcell">
+    <div #container fxLayout="row" class="grayedcell">
     </div>
     `
 })
@@ -15,6 +15,7 @@ export class EmptyEditor implements ICellEditorAngularComp, AfterViewInit {
     private params: any;
     public selectedValue:any;
     public values=[];
+    public value=0;
     public style={};
     @ViewChild('container', {read: ViewContainerRef}) public container;
 
@@ -27,8 +28,9 @@ export class EmptyEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     agInit(params: any): void {
-    
-        // this.params = params;
+    debugger
+        this.params = params;
+        
         // this.values=params.values;
         // if(isNumber(params.value))
         // this.selectedValue=parseInt(params.value);

@@ -569,6 +569,7 @@ export class PoliciesComponent implements OnInit {
 
     }
 
+    this.validationservice.validateinsurancePoliciesatload(this.rowData,this.loanmodel.InsurancePolicies)
     setTimeout(() => {
       this.retrieveerrors();
       seterrors(this.errorlist);
@@ -699,8 +700,8 @@ export class PoliciesComponent implements OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     //params.api.sizeColumnsToFit();//autoresizing
-    this.retrieveerrors();
     this.getgriddata();
+   
   }
   //Grid Functions End
   // synctoDb() {
