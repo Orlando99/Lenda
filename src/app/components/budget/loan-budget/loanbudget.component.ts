@@ -21,7 +21,7 @@ export class LoanbudgetComponent implements OnInit {
   // ----
   frameworkcomponents;
   context;
-  cellvaluechanged;
+  
   // ---
   @Input() cropPractice: Loan_Crop_Practice;
   columnDefs: Array<any>;
