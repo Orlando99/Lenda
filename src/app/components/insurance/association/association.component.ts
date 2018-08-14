@@ -19,6 +19,8 @@ import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
 import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
+import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { Page, PublishService } from '../../../services/publish.service';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
@@ -40,6 +42,8 @@ export class AssociationComponent implements OnInit, OnChanges {
   withoutChevron : boolean = false;
   @Output('onRowCountChange')
   onRowCountChange: EventEmitter<any> = new EventEmitter<any>();
+  @Input() currentPageName: Page;
+
   // Aggrid
   public rowData = new Array<Loan_Association>();
   public components;
@@ -70,7 +74,8 @@ export class AssociationComponent implements OnInit, OnChanges {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi:LoanApiService
+    public loanapi:LoanApiService,
+    private publishService : PublishService
   ) {
     this.frameworkcomponents = { emaileditor:EmailEditor,selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumericCellEditor: getAlphaNumericCellEditor(), phoneCellEditor: getPhoneCellEditor() };
@@ -115,17 +120,34 @@ export class AssociationComponent implements OnInit, OnChanges {
 
         { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
         // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
-        { headerName: 'Contact', field: 'Contact',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
-        { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
+        { headerName: 'Contact', field: 'Contact',width: 100,  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
+        { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable-color'] },
         // { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable-color'], cellEditor: "numericCellEditor"},
-        { headerName: 'Phone', field: 'Phone',width:100, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
+        { headerName: 'Phone', field: 'Phone',width:140, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
         { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
             cellEditorParams : {values : Preferred_Contact_Ind_Options},
             valueFormatter : PreferredContactFormatter
           },
-        { headerName: '', field: 'value', width: 80, cellRenderer: "deletecolumn" },
+        { headerName: '', field: 'value', width: 50, cellRenderer: "deletecolumn" },
       ];
+
+      if(this.associationTypeCode == 'REB'){
+        let rebatorColummns = [
+          { headerName: 'Exp Rebate',width:120, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
+              cellEditorParams: (params)=> {
+                return { value : params.data.Amount || 0}
+              },
+              valueFormatter: function (params) {
+                return PriceFormatter(params.value);
+              }
+          },
+          { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function (params) {
+            return 'bu';
+          }}
+        ];
+        this.columnDefs.splice(this.columnDefs.length-2,0,...rebatorColummns);
+      }
       ///
       this.context = { componentParent: this };
 
@@ -172,34 +194,35 @@ export class AssociationComponent implements OnInit, OnChanges {
     this.localloanobject.srccomponentedit = this.associationTypeCode+"AssociationComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+    this.publishService.enableSync(this.currentPageName);
   }
 
-  synctoDb() {
-    this.gridApi.showLoadingOverlay();	
-  this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
-    if(res.ResCode==1){
-     this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  // synctoDb() {
+  //   this.gridApi.showLoadingOverlay();	
+  // this.loanapi.syncloanobject(this.localloanobject).subscribe(res=>{
+  //   if(res.ResCode==1){
+  //    this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
 
-       this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
-       if (res.ResCode == 1) {
-         this.toaster.success("Records Synced");
-         let jsonConvert: JsonConvert = new JsonConvert();
-         this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-       }
-       else{
-         this.toaster.error("Could not fetch Loan Object from API")
-       }
-       this.gridApi.hideOverlay()
-     });
-    }
-    else{
-      this.gridApi.hideOverlay()
-      this.toaster.error("Error in Sync");
-    }
-  })
+  //      this.logging.checkandcreatelog(3,'Overview',"APi LOAN GET with Response "+res.ResCode);
+  //      if (res.ResCode == 1) {
+  //        this.toaster.success("Records Synced");
+  //        let jsonConvert: JsonConvert = new JsonConvert();
+  //        this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //      }
+  //      else{
+  //        this.toaster.error("Could not fetch Loan Object from API")
+  //      }
+  //      this.gridApi.hideOverlay()
+  //    });
+  //   }
+  //   else{
+  //     this.gridApi.hideOverlay()
+  //     this.toaster.error("Error in Sync");
+  //   }
+  // })
 
 
-  }
+  // }
 
   //Grid Events
   addrow() {
@@ -223,6 +246,7 @@ export class AssociationComponent implements OnInit, OnChanges {
     });
     this.localloanobject.Association.push(newItem);
     this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
+    this.publishService.enableSync(this.currentPageName);
   }
 
   DeleteClicked(rowIndex: any) {
@@ -257,6 +281,7 @@ export class AssociationComponent implements OnInit, OnChanges {
 
         this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+        this.publishService.enableSync(this.currentPageName);
       }
     })
 
