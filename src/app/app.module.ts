@@ -235,7 +235,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CurrencyDirective,
     PercentageDirective,
     BudgetComponent,
-    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
+    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, LoanviewerComponent,
     LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,
     LoanbudgetComponent,
     FarmerInfoComponent,
