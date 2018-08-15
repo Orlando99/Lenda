@@ -35,7 +35,7 @@ export class OptimizerComponent implements OnInit {
   public context;
   public rowClassRules;
   private refdata;
-  private currentPageName : Page =  Page.optimizer;
+  currentPageName : Page =  Page.optimizer;
   defaultColDef = {
     cellClass: function (params) {
       if (params.data.ID == undefined || params.data==undefined) {
