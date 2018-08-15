@@ -91,6 +91,8 @@ export class Insurance_Subpolicy
     FCMC:number=undefined;
     @JsonProperty("Deduct", IntConverter)
     Deduct:number=undefined;
+    Deduct_amt:number=undefined;
+    Deduct_pct:number=undefined;
     Icc:number=0;
     ActionStatus:number=0;
 }

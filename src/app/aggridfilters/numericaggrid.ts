@@ -16,9 +16,9 @@ export class NumericEditor implements ICellEditorAngularComp, AfterViewInit {
 
 
     agInit(params: any): void {
-         
+         debugger
         this.params = params;
-        this.value = parseFloat(this.params.value);
+        this.value = parseFloat(this.params.value==null?0:this.params.value);
         if(this.params.decimals!=undefined){
             this.acceptsdecimals=true;
             this.decimalscount=this.params.decimals;

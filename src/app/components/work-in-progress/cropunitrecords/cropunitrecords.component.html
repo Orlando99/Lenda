@@ -126,24 +126,65 @@
           RAMP Premium : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"RAMP","Premium")}}<br>
           </span>
       </td>
-      
-      <td style="width: 42px;"><div>{{returndecimalcapedvalue(record.FC_Pcivalue)}}</div>
-      <div>{{returndecimalcapedvalue(record.FC_Disc_Pcivalue)}}</div></td>
 
-      <td style="width: 42px;">
-        <div>{{returndecimalcapedvalue(record.FC_Abcvalue)}}</div>
+      <td  class="CellWithComment" style="width: 42px;"><div>{{returndecimalcapedvalue(record.FC_Pcivalue)}}</div>
+        <div>{{returndecimalcapedvalue(record.FC_Disc_Pcivalue)}}</div>
+        <span class="CellComment">
+          Icc : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"PCI","Icc")}}<br>
+          FCMC : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"PCI","FCMC")}}<br>
+          Acres : {{record.CU_Acres}}<br>
+          Ins Share : {{record.FC_Insurance_Share}}<br>
+          PCI Premium : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"PCI","Premium")}}<br>
+          </span>
+      </td>
+
+    <td  class="CellWithComment" style="width: 42px;"><div>{{returndecimalcapedvalue(record.FC_Abcvalue)}}</div>
         <div>{{returndecimalcapedvalue(record.FC_Disc_Abcvalue)}}</div>
-      </td>
-
-
-      <td style="width: 42px;">
-        <div>{{returndecimalcapedvalue(record.FC_Icevalue)}}</div>
-        <div>{{returndecimalcapedvalue(record.FC_Disc_Icevalue)}}</div>
+        <span class="CellComment">
+          Upper limit :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ABC","Upper_Limit")}}<br>
+          Level Perc : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Level")}}  % <br>
+          Lower limit : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ABC","Lower_Limit")}}<br>
+          Price : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Price")}}<br>
+          Acres : {{record.CU_Acres}}<br>
+          Ins Share : {{record.FC_Insurance_Share}}<br>
+          Ins APH : {{record.Ins_APH}}<br>
+          ABC Premium : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ABC","Premium")}}<br>
+          </span>
       </td>
       
-      <td style="width: 42px;">
-        <div>{{returndecimalcapedvalue(record.FC_Crophailvalue)}}</div>
+      <td  class="CellWithComment" style="width: 42px;"><div>{{returndecimalcapedvalue(record.FC_Icevalue)}}</div>
+        <div>{{returndecimalcapedvalue(record.FC_Disc_Icevalue)}}</div>
+        <span class="CellComment">
+          Upper limit :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Upper_Limit")}}<br>
+          Level Perc : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Level")}}  % <br>
+          Lower limit : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Lower_Limit")}}<br>
+          Price : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Price")}}<br>
+          Late Deduct :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Late_Deduct")}} <br>
+          Deduct Pct :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Deduct_pct")}} %<br>
+          Deduct Amount :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Deduct_amt")}}<br>
+          Price Perc : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Price_Pct")}} %<br>
+          Yield Perc : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Yield_Pct")}} %<br>
+          Acres : {{record.CU_Acres}}<br>
+          Ins Share : {{record.FC_Insurance_Share}}<br>
+          Ins APH : {{record.Ins_APH}}<br>
+          ICE Premium : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"ICE","Premium")}}<br>
+          </span>
+      </td>
+      <td  class="CellWithComment" style="width: 42px;"><div>{{returndecimalcapedvalue(record.FC_Crophailvalue)}}</div>
         <div>{{returndecimalcapedvalue(record.FC_Disc_Crophailvalue)}}</div>
+        <span class="CellComment">
+          Sub Type :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Ins_SubType")}}<br>
+          Upper limit :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Upper_Limit")}}<br>
+          Level Perc : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Level")}}  % <br>
+          Price : {{getinsurancerecordparameter(record.FC_CountyID,record.Crop_Practice_ID,"Price")}}<br>
+          Deduct Pct :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Deduct_pct")}} <br>
+          Price Perc : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Price_Pct")}} %<br>
+          Liability :{{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Liability")}}<br>
+          Acres : {{record.CU_Acres}}<br>
+          Ins Share : {{record.FC_Insurance_Share}}<br>
+          Ins APH : {{record.Ins_APH}}<br>
+          CH Premium : {{getsubpolicyparams(record.FC_CountyID,record.Crop_Practice_ID,"CROPHAIL","Premium")}}<br>
+          </span>
       </td>
     </tr>
     

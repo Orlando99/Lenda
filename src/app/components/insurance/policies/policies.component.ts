@@ -275,10 +275,10 @@ export class PoliciesComponent implements OnInit {
   }
 
   addNumericColumn(element: string, editortype: string) {
-
+     debugger
     let header = element;
     let column: any = {
-      headerName: header, pickfield: element, field: element, editable: true,
+      headerName: header, pickfield: element, field: element, editable: element=="Icc_PCI"?false:true, //only iccc field is non editable we can create an array if later needed
       cellEditorSelector: function (params) {
         let pos = params.colDef.pickfield.lastIndexOf("_") + 1;
         let policyname = params.colDef.pickfield.substr(pos, params.colDef.pickfield.length - pos)
@@ -344,7 +344,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['Upper_Limit_RAMP', 'Lower_Limit_RAMP', 'Price_Pct_RAMP', 'Liability_RAMP', 'Premium_RAMP']
     }
     if (value == "ICE") {
-      rendervalues = ['Upper_Level_ICE', 'Lower_Level_ICE', 'Premium_ICE', 'Deduct_ICE']
+      rendervalues = ['Upper_Limit_ICE', 'Lower_Limit_ICE', 'Premium_ICE', 'Deduct_ICE','Yield_Pct_ICE','Price_Pct_ICE']
     }
     if (value == "ABC") {
       rendervalues = ['Upper_Limit_ABC', 'Lower_Limit_ABC', 'Premium_ABC']
@@ -353,7 +353,7 @@ export class PoliciesComponent implements OnInit {
       rendervalues = ['FCMC_PCI', 'Premium_PCI','Icc_PCI']
     }
     if (value == "CROPHAIL") {
-      rendervalues = ['Upper_Limit_CROPHAIL', 'Price_Pct_CROPHAIL', 'Liability_CROPHAIL', 'Deduct_CROPHAIL', 'Premium_CROPHAIL', 'Wind_CROPHAIL']
+      rendervalues = ['Upper_Limit_CROPHAIL', 'Price_Pct_CROPHAIL', 'Liability_CROPHAIL', 'Deduct_Pct_CROPHAIL', 'Premium_CROPHAIL', 'Wind_CROPHAIL']
     }
 
     rendervalues.forEach(element => {
@@ -535,6 +535,8 @@ export class PoliciesComponent implements OnInit {
           row.Price = this.refdata.CropList.find(p => p.Crop_And_Practice_ID == item.Crop_Practice_Id).Price;
         row.Premium = item.Premium;
         item.Subpolicies.filter(p => p.ActionStatus != 3).forEach(policy => {
+          if(policy.Ins_Type!="STAX" && policy.Ins_Type!="SCO" && policy.Ins_Type!="PCI")
+          {
           var newsubcol = policy.Ins_Type.toString() + "_Subtype";
           row[policy.Ins_Type.toString() + "_st"] = policy.Ins_SubType;
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {
@@ -562,6 +564,7 @@ export class PoliciesComponent implements OnInit {
                 }
               }
             })
+          }
           }
           let renderedvalues = this.ShowHideColumnsonselection(policy.Ins_Type);
 
