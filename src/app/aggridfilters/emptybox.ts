@@ -28,7 +28,7 @@ export class EmptyEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     agInit(params: any): void {
-    debugger
+    
         this.params = params;
         
         // this.values=params.values;

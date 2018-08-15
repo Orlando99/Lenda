@@ -13,6 +13,7 @@ import { JsonConvert } from 'json2typescript';
 import { EmptyEditor } from '../../aggridfilters/emptybox';
 import { setgriddefaults, calculatecolumnwidths } from '../../aggriddefinations/aggridoptions';
 import { NumericEditor } from '../../aggridfilters/numericaggrid';
+import { numberWithOneDecPrecValueFormatter } from '../../Workers/utility/aggrid/formatters';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html'
@@ -38,6 +39,7 @@ export class OptimizerComponent implements OnInit {
       }
     },
     cellRenderer: function (params) {
+      
       if (params.value != undefined)
         return '<span id=' + params.column.colId + "_" + params.data.ID + '>' + params.value + '</span>';
       else
@@ -81,10 +83,11 @@ export class OptimizerComponent implements OnInit {
           component: 'numericCellEditor'
         }; 
       },
+      valueFormatter: numberWithOneDecPrecValueFormatter,
       valueSetter: function (value) {
-         debugger
         let result = value.context.componentParent.validateacresvalue(value.data.ID, parseFloat(value.newValue));
         if (result) {
+          
           value.data.Acres = parseFloat(value.newValue);
           // //unset error
           // var el = document.getElementById('Acres_'+value.data.ID);

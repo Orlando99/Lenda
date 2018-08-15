@@ -54,7 +54,7 @@ export class ValidationService {
       itemseffected.forEach(element => {
         let mainpolicyid = element.Policy_id;
         //Insurance Types Check
-        debugger
+        
         if (!arraysEqual(element.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type), itemchanged.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type))) {
           itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_SecInsurance", errorsection: "Insurance", details: ["dirty"] });
         }
@@ -116,7 +116,7 @@ export class ValidationService {
     this.localstorage.store(environment.errorbase, _.uniq(currenterrors));
   }
 
-  validateInsurancePolicies(params: any, inspolicies: Array<Insurance_Policy>) {
+  validateInsurancePolicies(params: any, inspolicies: Array<Insurance_Policy>){
     //get all policies in county
     let currenterrors = this.localstorage.retrieve(environment.errorbase) as Array<errormodel>;
     let policyids = inspolicies.filter(p => p.County_Id == params.data.Countyid).map(p => p.Policy_id);
@@ -156,7 +156,7 @@ export class ValidationService {
       insuranceunit.Practice_Type = this.getcroppracticefrompraticeid(attachedPolicy.Crop_Practice_Id);
       //we know that if one practice has EP the all items with same practice should have EP 
       //so lets validate that first
-      debugger
+      
       let inspoliciesincountywithpratice = inspolicies.filter(p => p.County_Id == insuranceunit.Countyid && p.Practice_Type == insuranceunit.Practice_Type);
       let retrictreiprocaltoEP = false;
       //now we need to check the edited policy have EP/OU
@@ -222,7 +222,9 @@ export class ValidationService {
       //here push the errors
       currenterrors.push(...EpErrors);
       this.localstorage.store(environment.errorbase, _.uniq(currenterrors));
+      return currenterrors.length;
     }
+   
     //  this.retrieveerrors();
     //  seterrors(this.errorlist);
   }
@@ -260,7 +262,7 @@ export class ValidationService {
   //Page load validations
   validateinsurancePoliciesatload(rowdata: Array<any>, insurancepolicies: Array<Insurance_Policy>) {
     //Lets first get the counties 
-    debugger
+    
     let counties = _.uniq(rowdata.map(p => p.Countyid));
     counties.forEach(element => {
       //just pick the first row
@@ -289,5 +291,7 @@ function arraysEqual(_arr1, _arr2) {
   return true;
 
 }
+
+
 
 

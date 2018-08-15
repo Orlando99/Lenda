@@ -113,12 +113,14 @@ export class LoancropunitcalculationworkerService {
           element.FC_Ins_Unit = insurancepolicy.Unit;
           element.FC_Primary_limit = insurancepolicy.Level;
 
-          let crop_adj_price=input.LoanCrops.find(p=>p.Crop_Code==element.Crop_Code).Adj_Price;
+          element.Z_Crop_Adj_Price=parseFloat(input.LoanCrops.find(p=>p.Crop_Code==element.Crop_Code).Adj_Price.toFixed(2));
           //Mkt Value
           try {
             //z price to be flipped to Adj_price
             // Ins_Aph flipped to Crop yield
-            element.Mkt_Value = element.Ins_APH * element.CU_Acres * crop_adj_price * farm.Percent_Prod / 100;
+            
+            element.FC_CropYield=input.CropYield.find(p=>p.CropType==element.Crop_Code && p.Practice==element.Crop_Practice_Type_Code).CropYield;
+            element.Mkt_Value = element.FC_CropYield * element.CU_Acres * element.Z_Crop_Adj_Price * farm.Percent_Prod / 100;
             element.Disc_Mkt_Value = element.Mkt_Value * 47.5 / 100;
             if (insurancepolicy.MPCI_Subplan == "ARH") {
               //Then MPCI Leveli %= Loan_InsurancePolicy.Level_PCT* Loan_InsurancePolicy.Yield_PCT * Loan_InsurancePolicy.Price_PCT
@@ -160,9 +162,10 @@ export class LoancropunitcalculationworkerService {
             element.FC_Rampvalue=0;
             element.FC_Crophailvalue=0;
             subpolicies.forEach(subpolicy => {
-              
+              debugger
               if (subpolicy.Ins_Type.toLowerCase() == "hmax") {
                 //Hmax calculations
+                
                 try {
                   if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
                     let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
@@ -205,7 +208,7 @@ export class LoancropunitcalculationworkerService {
                 try {
                   subpolicy.Upper_Limit = 90;
                   if (insurancepolicy.Level < subpolicy.Upper_Limit) {
-                    let liability = insurancepolicy.Price * subpolicy.Yield * subpolicy.Prot_Factor * subpolicy.Yield_Pct / 100;
+                    let liability = insurancepolicy.Price * subpolicy.Yield * subpolicy.Prot_Factor/100 * subpolicy.Yield_Pct / 100;
                     let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
                     element.FC_Staxvalue = ((CoveragetoMPCI / 100 * liability) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                     element.FC_Disc_Staxvalue=element.FC_Staxvalue * 80/100;
@@ -365,6 +368,7 @@ export class LoancropunitcalculationworkerService {
 
           //CEI Value
           try {
+            
             element.CEI_Value = element.Mkt_Value - element.Ins_Value;
             if(element.CEI_Value<0){
               element.CEI_Value=0;

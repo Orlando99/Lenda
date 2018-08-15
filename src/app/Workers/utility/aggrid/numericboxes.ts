@@ -156,7 +156,7 @@ export function formatPhoneNumber(params) {
 }
 
 export function getPhoneCellEditor() {
-  debugger
+  
   function isCharNumeric(charStr) {
     return !!/\d/.test(charStr);
   }

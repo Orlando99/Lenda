@@ -103,6 +103,8 @@ export class Loan_Crop_Unit
      Ins_APH:number=0
      FC_Level1Perc:number=undefined;
 
+     //Extra unscategorized properties
+     Z_Crop_Adj_Price:number=undefined;
 }
 
 export class Loan_Crop_Unit_FC{

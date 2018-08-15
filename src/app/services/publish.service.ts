@@ -64,7 +64,7 @@ export class PublishService {
    */
   public syncCompleted(): void {
     PublishService._syncItems = [];
-    debugger
+    
     this.localStorageService.store(environment.syncRequiredItems, PublishService._syncItems);
     PublishService._syncRequired.next(PublishService._syncItems);
   }

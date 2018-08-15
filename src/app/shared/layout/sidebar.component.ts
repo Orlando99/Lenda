@@ -49,7 +49,7 @@ export class SidebarComponent implements OnInit {
     // Start subscribing if sync is required
     this.publishService.listenToSyncRequired().subscribe((syncItems) => {
       this.syncItems = syncItems;
-      debugger
+      
     });
   }
 

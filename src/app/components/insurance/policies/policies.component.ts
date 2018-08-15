@@ -25,6 +25,7 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 import { errormodel } from '../../../models/commonmodels';
 import { ValidationService } from '../../../Workers/calculations/validation.service';
 import { BooleanEditor } from '../../../aggridfilters/booleanaggrid.';
+import { autoSizeAll } from '../../../aggriddefinations/aggridoptions';
 
 @Component({
   selector: 'app-policies',
@@ -92,7 +93,9 @@ export class PoliciesComponent implements OnInit {
   }
 
   onPaginationChanged(event:any){
+    if(event.newPage)
     seterrors(this.errorlist);
+   
   }
   declarecoldefs() {
     this.defaultColDef = {
@@ -110,7 +113,6 @@ export class PoliciesComponent implements OnInit {
         cellClass: 'editable-color',
         //cellRenderer: 'columnTooltip',
         headerTooltip: 'Agent',
-        hide:true,
         editable: true,
         cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
@@ -128,30 +130,29 @@ export class PoliciesComponent implements OnInit {
         field: 'ProposedAIP',
         pickfield: 'ProposedAIP',
         headerTooltip: 'ProposedAIP',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: 'editable-color',
         editable: true,
-        hide:true,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
       {
         headerName: 'State | County',
         headerTooltip: 'State | County',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         field: 'StateandCountry'
         , pickfield: 'StateandCountry'
       },
       {
         headerName: 'Crop',
         headerTooltip: 'Crop',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         field: 'CropName', pickfield: 'CropName'
       },
       {
         headerName: 'Practice',
         headerTooltip: 'Practice',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         field: 'Practice', pickfield: 'Practice'
       },
       {
@@ -159,7 +160,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'SubPlanType',
         field: 'MPCI_Subplan',
         pickfield: 'SubPlanType',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
         hide:true,
@@ -171,7 +172,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Unit',
         field: 'Unit',
         pickfield: 'Unit',
-        // cellRenderer: 'columnTooltip',
+        // //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
         cellEditor: "selectEditor",
@@ -188,7 +189,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Options',
         field: 'SecInsurance',
         pickfield: 'SecInsurance',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         autoHeight: true,
         editable: true,
@@ -203,7 +204,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Level',
         field: 'Level',
         pickfield: 'Level',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
         cellEditor: "numericCellEditor",
@@ -223,7 +224,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Price',
         field: 'Price',
         pickfield: 'Price',
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
         cellEditor: "numericCellEditor",
@@ -241,7 +242,7 @@ export class PoliciesComponent implements OnInit {
         field: 'Premium',
         pickfield: 'Premium',
         editable: true,
-        cellRenderer: 'columnTooltip',
+        //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         cellEditorParams: {
           decimals: 2
@@ -254,6 +255,11 @@ export class PoliciesComponent implements OnInit {
       }
     ];
     this.getgriddata();
+    if(this.columnApi!=undefined)
+    {
+      
+    //autoSizeAll(this.columnApi);
+  }
   }
 
   getUnit(unit) {
@@ -464,11 +470,13 @@ export class PoliciesComponent implements OnInit {
     // Ends Here
     // storage observer
     this.localstorage.observe(environment.loankey).subscribe(res => {
+      
       if(res!=null){
         
       this.loanmodel = res;
       this.declarecoldefs();
       this.getOptedInsuranceOptions();
+   
       
       }
     })
@@ -478,9 +486,9 @@ export class PoliciesComponent implements OnInit {
     this.loanmodel = this.localstorage.retrieve(environment.loankey);
     if (this.loanmodel != null && this.loanmodel != undefined) //if the data is still in calculation mode and components loads before it
     {
-      
     this.declarecoldefs();
     this.getOptedInsuranceOptions();
+    //autoSizeAll(this.columnApi);
    }
    
   }
@@ -563,15 +571,19 @@ export class PoliciesComponent implements OnInit {
 
         this.rowData.push(row);
       })
-
     }
 
-    this.validationservice.validateinsurancePoliciesatload(this.rowData,this.loanmodel.InsurancePolicies)
+    
     setTimeout(() => {
+      
+      if(this.columnApi!=undefined)
+      {
+        //autoSizeAll(this.columnApi);
+      }
       this.retrieveerrors();
       seterrors(this.errorlist);
       setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
-    }, 1000);
+    }, 10);
   }
 
   //DB Operations
@@ -605,9 +617,9 @@ export class PoliciesComponent implements OnInit {
       _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"])[event.rowIndex][event.colDef.field] = event.value;
       _.sortBy(this.loanmodel.InsurancePolicies,["County_Id","State_Id"])[event.rowIndex].ActionStatus = 2;
     }
-    this.loancalculationservice.performcalculationonloanobject(this.loanmodel);
+    
      
-    this.validationservice.validateInsurancePolicies(event, this.loanmodel.InsurancePolicies);
+    
   }
 
 
@@ -674,7 +686,7 @@ export class PoliciesComponent implements OnInit {
 
 
       //Delete unwanted Column here
-
+      //autoSizeAll(this.columnApi);
 
       //this.gridApi.ensureColumnVisible(this.columnDefs[this.columnDefs.length - 1].field)
     }
@@ -688,16 +700,32 @@ export class PoliciesComponent implements OnInit {
     this.deleteunwantedcolumn();
     this.gridApi.setColumnDefs(this.columnDefs);
     this.updatelocalloanobject($event);
-    this.updateSyncStatus();
-    this.getOptedInsuranceOptions()
+   let errors= this.validationservice.validateInsurancePolicies($event, this.loanmodel.InsurancePolicies);
+     if(errors==0)
+     {
+      this.loancalculationservice.performcalculationonloanobject(this.loanmodel,true);
+      this.updateSyncStatus();
+    }
+    else{
+      this.retrieveerrors();
+      seterrors(this.errorlist);
+      this.loancalculationservice.performcalculationonloanobject(this.loanmodel,false);
+    
+    }
+      this.getOptedInsuranceOptions()
+    
+   
+    
   }
 
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
     //params.api.sizeColumnsToFit();//autoresizing
-    this.getgriddata();
-   
+    //this.getgriddata();
+    this.validationservice.validateinsurancePoliciesatload(this.rowData,this.loanmodel.InsurancePolicies)
+    
+    //autoSizeAll(this.columnApi);
   }
   //Grid Functions End
   synctoDb() {
@@ -756,7 +784,7 @@ export class PoliciesComponent implements OnInit {
 
   onGridSizeChanged(params) {
     //params.api.sizeColumnsToFit();
-    params.api.resetRowHeights();
+    //params.api.resetRowHeights();
   }
 
   onGridScroll(params) {
@@ -781,6 +809,8 @@ export class PoliciesComponent implements OnInit {
 }
 
 function seterrors(obj) {
+  
+  console.log(new Date().getMilliseconds());
   var items = document.querySelectorAll('.ag-cell');
   for (var i = 0; i < items.length; i++) {
     items[i].classList.remove('dirty')
@@ -807,6 +837,7 @@ function seterrors(obj) {
       //cell.getElementsByClassName("tooltiptext")[0].innerHTML="Please check the values";
     });
   });
+  console.log(new Date().getMilliseconds());
 }
 
 function setmodifiedsingle(obj) {
@@ -824,6 +855,17 @@ function setmodifiedsingle(obj) {
   }
 }
 
+
+//  function getwidthaccordingtoheader(header:string){
+//   if(header.split('_').length==2)
+//   {
+//      return 115;
+//   }
+//   else
+//   {
+//     return 150;
+//   }
+//  }
 function setmodifiedall(arrayy) {
   arrayy.forEach(obj => {
     try {
