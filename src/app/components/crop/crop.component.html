@@ -3,7 +3,7 @@
                 <span class="text">Crop</span>
                 <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
         </div>
-    <app-rebator></app-rebator>
+    <app-association [header]="'Rebator'" [associationTypeCode]="'REB'" [currentPageName]="currentPageName"></app-association>
     <app-yield></app-yield>
     <app-price></app-price>
 </div>

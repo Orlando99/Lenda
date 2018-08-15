@@ -5,19 +5,12 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { Loan_Farm } from '../../../models/farmmodel.';
-import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
 import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
-import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
-import { AlertifyService } from '../../../alertify/alertify.service';
-import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { JsonConvert } from 'json2typescript';
 import { textValueSetter, getTextCellEditor } from '../../../Workers/utility/aggrid/textboxes';
 import { BudgetHelperService } from '../budget-helper.service';
 import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
+import { PublishService, Page } from '../../../services/publish.service';
+import { autoSizeAll } from '../../../aggriddefinations/aggridoptions';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-loanbudget',
@@ -29,7 +22,7 @@ export class LoanbudgetComponent implements OnInit {
   // ----
   frameworkcomponents;
   context;
-  cellvaluechanged;
+  
   // ---
   @Input() cropPractice: Loan_Crop_Practice;
   columnDefs: Array<any>;
@@ -44,7 +37,8 @@ export class LoanbudgetComponent implements OnInit {
 
   constructor(private localStorageService: LocalStorageService,
     private budgetService: BudgetHelperService,
-    private loanserviceworker: LoancalculationWorker) {
+    private loanserviceworker: LoancalculationWorker,
+    private publishService : PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor(), textCellEditor: getTextCellEditor() };
   }
@@ -60,7 +54,7 @@ export class LoanbudgetComponent implements OnInit {
         headerName: "Per Acre Budget",
         children: [
           {
-            headerName: 'ARM', field: 'ARM_Budget_Acre', width: 120, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'], valueSetter: numberValueSetter,
+            headerName: 'ARM', field: 'ARM_Budget_Acre',  cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'], valueSetter: numberValueSetter,
             valueFormatter: function (params) {
               return PriceFormatter(params.value);
             },
@@ -69,7 +63,7 @@ export class LoanbudgetComponent implements OnInit {
             }
           },
           {
-            headerName: 'Distributer', field: 'Distributor_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
+            headerName: 'Distributer', field: 'Distributor_Budget_Acre',  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
             valueFormatter: function (params) {
               return PriceFormatter(params.value);
             },
@@ -78,7 +72,7 @@ export class LoanbudgetComponent implements OnInit {
             }
           },
           {
-            headerName: '3rd Party', field: 'Third_Party_Budget_Acre', width: 120, cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
+            headerName: '3rd Party', field: 'Third_Party_Budget_Acre',  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
             valueFormatter: function (params) {
               return PriceFormatter(params.value);
             },
@@ -87,7 +81,7 @@ export class LoanbudgetComponent implements OnInit {
             }
           },
           {
-            headerName: totalRowHeader, field: 'Total_Budget_Acre', width: 120, editable: false, cellClass: ['text-right'],
+            headerName: totalRowHeader, field: 'Total_Budget_Acre',  editable: false, cellClass: ['text-right'],
             valueFormatter: function (params) {
               return PriceFormatter(params.value);
             }
@@ -192,6 +186,7 @@ export class LoanbudgetComponent implements OnInit {
 
     params.api.sizeColumnsToFit();
     this.getgridheight();
+    autoSizeAll(this.columnApi);
   }
 
   rowvaluechanged(value: any) {
@@ -204,6 +199,7 @@ export class LoanbudgetComponent implements OnInit {
     this.localLoanObject.srccomponentedit = "LoanBudgetComponent" + this.cropPractice.Crop_Practice_ID;
     this.localLoanObject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localLoanObject);
+    this.publishService.enableSync(Page.budget);
     
   }
 

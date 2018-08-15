@@ -3,13 +3,24 @@ import { Loan_Crop_Practice, Loan_Budget, loan_model } from '../../models/loanmo
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import { preserveWhitespacesDefault } from '@angular/compiler';
+import { LoggingService } from '../../services/Logs/logging.service';
+import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
+import { LoanApiService } from '../../services/loan/loanapi.service';
+import { ToasterService } from '../../services/toaster.service';
+import { JsonConvert } from 'json2typescript';
 
 @Injectable()
 export class BudgetHelperService {
 
 
   refData: any;
-  constructor(private localStorageService: LocalStorageService) {
+  constructor(private localStorageService: LocalStorageService, 
+    private loanapi : LoanApiService,
+    private toasterService: ToasterService,
+    private logging: LoggingService,
+    private loanCalculationService : LoancalculationWorker
+
+  ) {
     this.refData = localStorageService.retrieve(environment.referencedatakey);
   }
 
@@ -127,6 +138,27 @@ export class BudgetHelperService {
 
   }
 
+  syncToDb(localloanobject: loan_model) {
+    this.loanapi.syncloanobject(localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
+        this.loanapi.getLoanById(localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+          if (res.ResCode == 1) {
+            this.toasterService.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanCalculationService.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else {
+            this.toasterService.error("Could not fetch Loan Object from API")
+          }
+        });
+      }
+      else {
+        this.toasterService.error("Error in Sync");
+      }
+    });
+
+  }
   // caculateTotalsBeforeStore(localLoanObject: loan_model) {
   //   //TODO-SANKET remove below line, once the api data is up to date
 

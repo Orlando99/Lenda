@@ -1,5 +1,10 @@
 <div class="basic-container">
 
+    <div class="page-header">
+        <span class="text">Farm</span>
+        <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
+    </div>
+
   <mat-accordion>
     <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
@@ -9,18 +14,18 @@
       </mat-expansion-panel-header>
 
 
-     <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a>
+     <!-- <a (click)="synctoDb()" [ngClass]="syncenabled()"  class="waves-effect waves-light btn" style="margin: 0 0 0px 18px;"  ><i class="material-icons left">cloud</i>Publish</a> -->
       <!-- <button (click)="addrow()" mat-raised-button color="primary">Add </button> -->
-     <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
-
+      
       <div class="container bottom">
         <div class="row">
           <ag-grid-angular [ngStyle]="style" class="ag-theme-balham roboto-font" [animateRows]="true" [enableSorting]="true" [enableFilter]="true"
-            [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" [singleClickEdit]="true"
-            (cellEditingStopped)="rowvaluechanged($event)" suppressColumnVirtualisation=true (cellEditingStarted)="cellEditingStarted($event)" [rowData]="rowData"
-            (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"  [gridAutoHeight]="'true'">
-          </ag-grid-angular>
-        </div>
+          [context]="context" [frameworkComponents]="frameworkcomponents" [components]="components" [singleClickEdit]="true"
+          (cellEditingStopped)="rowvaluechanged($event)" suppressColumnVirtualisation=true (cellEditingStarted)="cellEditingStarted($event)" [rowData]="rowData"
+          (gridReady)="onGridReady($event)" [columnDefs]="columnDefs"  [gridAutoHeight]="'true'">
+        </ag-grid-angular>
+      </div>
+      <a (click)="addrow()" class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add</a>
       </div>
       <br>
     </mat-expansion-panel>

@@ -21,12 +21,15 @@ import { getAlphaNumericCellEditor } from '../../Workers/utility/aggrid/alphanum
 import { getDateCellEditor, getDateValue, formatDateValue } from '../../Workers/utility/aggrid/dateboxes';
 import { ModelStatus, status } from '../../models/syncstatusmodel';
 import { setgriddefaults } from '../../aggriddefinations/aggridoptions';
+import { PublishService, Page } from '../../services/publish.service';
+import { FarmService } from './farm.service';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
   templateUrl: './farm.component.html',
   styleUrls: ['./farm.component.scss'],
-  encapsulation:ViewEncapsulation.None
+  encapsulation:ViewEncapsulation.None,
+  providers:[FarmService]
 })
 export class FarmComponent implements OnInit {
   public refdata: any = {};
@@ -44,6 +47,8 @@ export class FarmComponent implements OnInit {
   private columnApi;
   public syncFarmStatus: status;
   defaultColDef: any;
+  currentPageName : Page = Page.farm;
+  
   //region Ag grid Configuration
   style = {
     marginTop: '10px',
@@ -66,11 +71,12 @@ export class FarmComponent implements OnInit {
   // Aggrid ends
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    public farmservice: FarmapiService,
+    public farmservice: FarmService,
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService
+    public loanapi: LoanApiService,
+    private publishService : PublishService
   ) {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.components = { numericCellEditor: getNumericCellEditor(), alphaNumericCellEditor: getAlphaNumericCellEditor(), dateCellEditor: getDateCellEditor() };
@@ -264,32 +270,43 @@ export class FarmComponent implements OnInit {
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.updateSyncStatus();
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject, value.colDef.calculationinvoke);
+    this.publishService.enableSync(Page.farm);
   }
 
+  /**
+   * Sync to database - publish button event
+   */
   synctoDb() {
-    this.gridApi.showLoadingOverlay();
-    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-          this.gridApi.hideOverlay()
-        });
-      }
-      else {
-        this.gridApi.hideOverlay()
-        this.toaster.error("Error in Sync");
-      }
-    })
-
+    
+      this.publishService.syncCompleted();
+      this.farmservice.syncToDb(this.localstorageservice.retrieve(environment.loankey));
+     
+    
   }
+  // synctoDb() {
+  //   this.gridApi.showLoadingOverlay();
+  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //         this.gridApi.hideOverlay()
+  //       });
+  //     }
+  //     else {
+  //       this.gridApi.hideOverlay()
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   })
+
+  // }
 
   //Grid Events
   addrow() {
@@ -304,6 +321,7 @@ export class FarmComponent implements OnInit {
       rowIndex: this.rowData.length - 1,
       colKey: "Farm_State_ID"
     });
+    this.publishService.enableSync(Page.farm);
   
   }
 
@@ -325,6 +343,7 @@ export class FarmComponent implements OnInit {
         this.localloanobject.srccomponentedit = undefined;
         this.localloanobject.lasteditrowindex = undefined;
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
+        this.publishService.enableSync(Page.farm);
       }
     
     })

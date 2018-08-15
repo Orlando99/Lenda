@@ -17,7 +17,7 @@ export class BorrowerComponent implements OnInit {
 
   public creditscore;
   public creditdate:Date;
-  public currentPageName: string = Page.borrower;
+  public currentPageName: Page = Page.borrower;
   constructor(private borrowerService : BorrowerService,
     private localStorageService : LocalStorageService,private publishService : PublishService,
   private loanCalculationService : LoancalculationWorker,private taoster:ToastsManager) { }
@@ -33,9 +33,9 @@ export class BorrowerComponent implements OnInit {
   updatecreditvalues(){
     var loan:loan_model=this.localStorageService.retrieve(environment.loankey);
     loan.LoanMaster[0].Credit_Score=this.creditscore;
-    loan.LoanMaster[0].Credit_Score_Date=this.creditdate.toDateString();
+    loan.LoanMaster[0].Credit_Score_Date=this.creditdate;
     this.loanCalculationService.performcalculationonloanobject(loan,false);
-    this.taoster.success("Saved Successfully");
+    this.publishService.enableSync(this.currentPageName);
   }
 
   
@@ -43,8 +43,12 @@ export class BorrowerComponent implements OnInit {
    * Sync to database - publish button event
    */
   synctoDb() {
-    this.publishService.syncCompleted();
-    this.borrowerService.syncToDb(this.localStorageService.retrieve(environment.loankey));
+    setTimeout(()=> { 
+      // waiting for 0.5 sec to get the blur events excecuted meanwhile
+      this.publishService.syncCompleted();
+      this.borrowerService.syncToDb(this.localStorageService.retrieve(environment.loankey));
+     }, 500);
+    
   }
 
 }

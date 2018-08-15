@@ -26,6 +26,7 @@ import { errormodel } from '../../../models/commonmodels';
 import { ValidationService } from '../../../Workers/calculations/validation.service';
 import { BooleanEditor } from '../../../aggridfilters/booleanaggrid.';
 import { autoSizeAll } from '../../../aggriddefinations/aggridoptions';
+import { PublishService, Page } from '../../../services/publish.service';
 
 @Component({
   selector: 'app-policies',
@@ -55,6 +56,7 @@ export class PoliciesComponent implements OnInit {
   public optedInsuranceOptions : Array<any> = [];
 
   public errorlist: Array<errormodel> = new Array<errormodel>();
+  currentPageName : Page = Page.insurance;
 
   retrieveerrors() {
     this.errorlist = (this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p => p.errorsection = "Insurance");
@@ -447,7 +449,8 @@ export class PoliciesComponent implements OnInit {
     private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService
+    public loanapi: LoanApiService,
+    private publishService : PublishService
   ) {
 
     this.frameworkcomponents = {
@@ -620,6 +623,8 @@ export class PoliciesComponent implements OnInit {
     
      
     
+    this.validationservice.validateInsurancePolicies(event, this.loanmodel.InsurancePolicies);
+    this.publishService.enableSync(Page.insurance);
   }
 
 
@@ -728,29 +733,29 @@ export class PoliciesComponent implements OnInit {
     //autoSizeAll(this.columnApi);
   }
   //Grid Functions End
-  synctoDb() {
-    this.loanapi.syncloanobject(this.loanmodel).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
+  // synctoDb() {
+  //   this.loanapi.syncloanobject(this.loanmodel).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.loanmodel.Loan_Full_ID).subscribe(res => {
 
-          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    })
+  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loancalculationservice.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   })
 
 
-  }
+  // }
 
   //update Loan Status
   updateSyncStatus() {

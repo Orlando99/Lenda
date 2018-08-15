@@ -7,21 +7,28 @@ import { environment } from '../../../environments/environment.prod';
 import { loan_model } from '../../models/loanmodel';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
+import { Page, PublishService } from '../../services/publish.service';
+import { CommitteeService } from './committee.service';
 
 @Component({
   selector: 'app-committee',
   templateUrl: './committee.component.html',
-  styleUrls: ['./committee.component.scss']
+  styleUrls: ['./committee.component.scss'],
+  providers : [CommitteeService]
 })
 export class CommitteeComponent implements OnInit {
 
   public committeeForm: FormGroup;
   localloanobj: loan_model;
   isFormUpdated: boolean = false;
+  currentPageName : Page = Page.committee;
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     private loanapi: LoanApiService,
-    private toaster: ToastsManager
+    private toaster: ToastsManager,
+    private publishService : PublishService,
+    private committeeService : CommitteeService
+
   ) { }
 
   ngOnInit() {
@@ -100,29 +107,39 @@ export class CommitteeComponent implements OnInit {
     loanMaster.Rate_Percent = this.committeeForm.value.Rate_Percent;
     loanMaster.Rate_Fee_Amount = this.committeeForm.value.Rate_Fee_Amount;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
+    this.publishService.enableSync(Page.committee);
   }
 
+  /**
+   * Sync to database - publish button event
+   */
   synctoDb() {
-
-    this.updateLocalStorage();
-
-    this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localloanobj.Loan_Full_ID).subscribe(res => {
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    });
+    setTimeout(()=> { 
+      // waiting for 0.5 sec to get the blur events excecuted meanwhile
+      this.publishService.syncCompleted();
+      this.committeeService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
+     }, 500);
+    
   }
+  // synctoDb() {
+
+  //   this.loanapi.syncloanobject(this.localloanobj).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localloanobj.Loan_Full_ID).subscribe(res => {
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   });
+  // }
 
 }

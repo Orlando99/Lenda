@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { loan_model, Loan_Association } from '../../../models/loanmodel';
+import { loan_model, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -47,7 +47,7 @@ export class BuyerAssociationComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    // height: '110px',
+   
     boxSizing: 'border-box'
   };
 
@@ -114,7 +114,7 @@ export class BuyerAssociationComponent implements OnInit {
         this.rowData = this.rowData = this.localloanobject.Association !== null ? this.localloanobject.Association.filter(p => p.ActionStatus != 3 && p.Assoc_Type_Code == "BUY") : [];
 
       }
-      this.getgridheight();
+      
       this.gridApi.refreshCells();
       // this.adjustgrid();
     });
@@ -138,9 +138,7 @@ export class BuyerAssociationComponent implements OnInit {
     }
   }
 
-  getgridheight() {
-    // this.style.height = (30 * (this.rowData.length + 2)).toString() + "px";
-  }
+  
 
   // synctoDb() {
   //   this.collateralService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
@@ -195,7 +193,7 @@ export class BuyerAssociationComponent implements OnInit {
   addrow() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID;
-    newItem.Assoc_Type_Code = "BUY";
+    newItem.Assoc_Type_Code = AssocitionTypeCode.Buyer;
     newItem.Assoc_ID = 0;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });

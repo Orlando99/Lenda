@@ -92,7 +92,7 @@ export class EquipmentComponent implements OnInit {
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    this.collateralService.getgridheight(this.rowData);
+    //this.collateralService.getgridheight(this.rowData);
     this.adjustgrid();
   }
 

@@ -8,9 +8,9 @@
               </mat-panel-title>
             </mat-expansion-panel-header>
       
-          <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled">
+          <!-- <button (click)="synctoDb()" class="btn-unstyle" [disabled]="!syncenabled">
                   <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Publish</a>
-                </button>
+                </button> -->
 
           <ag-grid-angular  
             [ngStyle]="style"
@@ -45,14 +45,14 @@
          </ag-grid-angular>
 
          <mat-accordion>
-            <mat-expansion-panel  style="margin : 0 10px">
+            <mat-expansion-panel  class="side-margin">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   Questions
                 </mat-panel-title>
               </mat-expansion-panel-header>
           
-              <app-questions *ngFor=" let insOption of optedInsuranceOptions" [chevronHeader]="insOption" [chevronId]="'Insurance_'+insOption" [displayAsChildChevron]="true" [expanded]="false"></app-questions>
+              <app-questions *ngFor=" let insOption of optedInsuranceOptions" [chevronHeader]="insOption" [chevronId]="'Insurance_'+insOption" [displayAsChildChevron]="true" [currentPageName]="currentPageName" ></app-questions>
              
             </mat-expansion-panel>
           </mat-accordion>

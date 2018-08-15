@@ -26,7 +26,12 @@
             [rowData]="rowData"
             (gridReady)="onGridReady($event)"
             [columnDefs]="columnDefs"
-            [gridAutoHeight]=true>
+            [gridAutoHeight]=true
+            [showToolPanel]="false"
+            [toolPanelSuppressRowGroups]="true"
+            [toolPanelSuppressValues]="true"
+            [toolPanelSuppressPivots]="true"
+            [toolPanelSuppressPivotMode]="true">
           </ag-grid-angular>
         </div>
 

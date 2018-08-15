@@ -93,9 +93,6 @@ import { InsuranceComponent } from './components/insurance/insurance.component';
 import { AssociationComponent } from './components/insurance/association/association.component';
 import { DeleteButtonRenderer } from './aggridcolumns/deletebuttoncolumn';
 import { InsuranceapiService } from './services/insurance/insuranceapi.service';
-import { DistributerComponent } from './components/budget/distributer/distributer.component';
-import { ThirdpartyComponent } from './components/budget/thirdparty/thirdparty.component';
-import { HarvesterComponent } from './components/budget/harvester/harvester.component';
 import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info.component';
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
@@ -129,7 +126,6 @@ import { CropComponent } from './components/crop/crop.component';
 import { PriceComponent } from './components/crop/price/price.component';
 import { YieldComponent } from './components/crop/yield/yield.component';
 import { YieldDialogComponent } from './components/crop/yield/yield.component';
-import { RebatorComponent } from './components/crop/rebator/rebator.component';
 
 
 //Collateral
@@ -230,7 +226,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent, RebatorComponent, PriceComponent, YieldComponent, YieldDialogComponent,
+    CropComponent, PriceComponent, YieldComponent, YieldDialogComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
@@ -239,9 +235,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CurrencyDirective,
     PercentageDirective,
     BudgetComponent,
-    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent, HarvesterComponent, LoanviewerComponent,
-    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent, DistributerComponent, ThirdpartyComponent,
-    HarvesterComponent,
+    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, LoanviewerComponent,
+    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,

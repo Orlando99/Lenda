@@ -17,12 +17,14 @@ import { LoanApiService } from '../../services/loan/loanapi.service';
 import { JsonConvert } from 'json2typescript';
 import { BudgetHelperService } from './budget-helper.service';
 import { PriceFormatter } from '../../Workers/utility/aggrid/formatters';
+import { PublishService, Page } from '../../services/publish.service';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 
 @Component({
   selector: 'app-budget',
   templateUrl: './budget.component.html',
-  styleUrls: ['./budget.component.scss']
+  styleUrls: ['./budget.component.scss'],
+  providers : [BudgetHelperService]
 })
 export class BudgetComponent implements OnInit {
   // Following properties are added as produ build was failing
@@ -41,6 +43,7 @@ export class BudgetComponent implements OnInit {
   columnApi;
   pinnedBottomRowData;
   public getRowStyle;
+  currentPageName : Page = Page.budget;
   // constructor() {
 
   // this.posts =[];
@@ -59,6 +62,7 @@ export class BudgetComponent implements OnInit {
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
+    private publishService : PublishService
   ) {
 
 
@@ -165,26 +169,34 @@ export class BudgetComponent implements OnInit {
     this.style.height = (29 * (this.rowData.length + 3)).toString() + "px";
   }
 
+  /**
+   * Sync to database - publish button event
+   */
   synctoDb() {
-
-    this.loanapi.syncloanobject(this.localLoanObject).subscribe(res => {
-      if (res.ResCode == 1) {
-        this.loanapi.getLoanById(this.localLoanObject.Loan_Full_ID).subscribe(res => {
-          //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-          if (res.ResCode == 1) {
-            this.toaster.success("Records Synced");
-            let jsonConvert: JsonConvert = new JsonConvert();
-            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-          }
-          else {
-            this.toaster.error("Could not fetch Loan Object from API")
-          }
-        });
-      }
-      else {
-        this.toaster.error("Error in Sync");
-      }
-    })
-
+    this.publishService.syncCompleted();
+    this.budgetService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
   }
+
+  // synctoDb() {
+
+  //   this.loanapi.syncloanobject(this.localLoanObject).subscribe(res => {
+  //     if (res.ResCode == 1) {
+  //       this.loanapi.getLoanById(this.localLoanObject.Loan_Full_ID).subscribe(res => {
+  //         //this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+  //         if (res.ResCode == 1) {
+  //           this.toaster.success("Records Synced");
+  //           let jsonConvert: JsonConvert = new JsonConvert();
+  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+  //         }
+  //         else {
+  //           this.toaster.error("Could not fetch Loan Object from API")
+  //         }
+  //       });
+  //     }
+  //     else {
+  //       this.toaster.error("Error in Sync");
+  //     }
+  //   })
+
+  // }
 }
