@@ -46,7 +46,6 @@ export class CollateralService {
   style = {
     marginTop: '10px',
     width: '97%',
-    height: '110px',
     boxSizing: 'border-box'
   };
 
@@ -159,7 +158,7 @@ export class CollateralService {
       });
     }
 
-    this.getgridheight(rowData);
+    
   }
 
   rowValueChanged(value: any, localloanobject: loan_model, component, source, uniqueKey) {
@@ -222,9 +221,7 @@ export class CollateralService {
   /**
    * Helper methods
    */
-  getgridheight(rowData) {
-    this.style.height = (30 * (rowData.length + 2) - 2).toString() + "px";
-  }
+  
 
   public adjustgrid(gridApi) {
     try {

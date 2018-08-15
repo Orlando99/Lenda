@@ -47,7 +47,7 @@ export class BuyerAssociationComponent implements OnInit {
   style = {
     marginTop: '10px',
     width: '97%',
-    // height: '110px',
+   
     boxSizing: 'border-box'
   };
 
@@ -114,7 +114,7 @@ export class BuyerAssociationComponent implements OnInit {
         this.rowData = this.rowData = this.localloanobject.Association !== null ? this.localloanobject.Association.filter(p => p.ActionStatus != 3 && p.Assoc_Type_Code == "BUY") : [];
 
       }
-      this.getgridheight();
+      
       this.gridApi.refreshCells();
       // this.adjustgrid();
     });
@@ -138,9 +138,7 @@ export class BuyerAssociationComponent implements OnInit {
     }
   }
 
-  getgridheight() {
-    // this.style.height = (30 * (this.rowData.length + 2)).toString() + "px";
-  }
+  
 
   // synctoDb() {
   //   this.collateralService.syncToDb(this.localstorageservice.retrieve(environment.loankey));
