@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
-import { loan_model, Loan_Association } from '../../../models/loanmodel';
+import { loan_model, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -37,7 +37,7 @@ export class AssociationComponent implements OnInit, OnChanges {
   @Input('header')
   header :string = '';
   @Input('associationTypeCode')
-  associationTypeCode :string = '';
+  associationTypeCode :AssocitionTypeCode;
   @Input("withoutChevron")
   withoutChevron : boolean = false;
   @Output('onRowCountChange')

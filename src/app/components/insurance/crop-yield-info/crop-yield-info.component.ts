@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { loan_model, Loan_Association } from '../../../models/loanmodel';
+import { loan_model, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -150,7 +150,7 @@ export class CropYieldInfoComponent implements OnInit {
   addrow() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
-    newItem.Assoc_Type_Code="AGT";
+    newItem.Assoc_Type_Code=AssocitionTypeCode.Agent;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({

@@ -5,7 +5,22 @@ import { Loan_Farm } from "./farmmodel.";
 import {LoanQResponse} from './loan-response.model';
 import { ModelStatus, status } from "./syncstatusmodel";
 import { Insurance_Policy } from "./insurancemodel";
+import { IDType } from "../components/borrower/borrower-info/borrower-info.component";
 
+export enum AssocitionTypeCode{
+    Partner = 'PRP',
+    Joint = 'JNT',
+    Corporation = 'COP',
+    LLC = 'LLC',
+    Agent = 'AGT',
+    Agency = 'AGY',
+    AIP = 'AIP',
+    Buyer = 'BUY',
+    Distributor = 'DIS',
+    Harvester = 'HAR',
+    Rebator = 'REB',
+    ThirdParty= 'THR'
+}
 
 @JsonObject
 export class borrower_model
@@ -213,7 +228,7 @@ export class borrower_model
         @JsonProperty("Loan_Full_ID", StringConverter,false)
         Loan_Full_ID: string='';
         @JsonProperty("Assoc_Type_Code", StringConverter,false)
-        Assoc_Type_Code: string='';
+        Assoc_Type_Code: AssocitionTypeCode;
         @JsonProperty("Assoc_Name", StringConverter,false)
         Assoc_Name: string='';
         @JsonProperty("Contact", StringConverter,false)
@@ -500,6 +515,7 @@ export class borrower_model
         Borrower_Phone : string;
         Borrower_email : string;
         Borrower_DOB : Date;
+        Borrower_ID_Type : IDType;
         Borrower_SSN_Hash : string;
         Borrower_Entity_Type_Code : number;
         Spouse_Last_name : string;
@@ -507,6 +523,8 @@ export class borrower_model
         Spouse__MI : string;
         Spouse_Phone : string;
         Spouse_Email : string;
+        Borrower_DL_state: string;
+        Borrower_Dl_Num:string;
     }
 
 
