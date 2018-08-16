@@ -16,7 +16,10 @@
           </thead>
           <tbody>
             <tr style="cursor:pointer" (click)="navigatetoloan(loan.Loan_Full_ID)" *ngFor="let loan of loanlist"  >
-              <ng-template [ngIf]= "loanService.getFilter() == undefined || loanService.getFilter() == '' || (loan.Loan_Full_ID == loanService.getFilter() || loan.Borrower_First_Name?.toLowerCase() == loanService.getFilter()?.toLowerCase() )">
+              <!-- <ng-template [ngIf]= "loanService.getFilter() == undefined || loanService.getFilter() == '' || (loan.Loan_Full_ID == loanService.getFilter() || loan.Borrower_First_Name?.toLowerCase() == loanService.getFilter()?.toLowerCase()
+              || loan.Borrower_Last_Name?.toLowerCase() == loanService.getFilter()?.toLowerCase() || loan.Loan_Full_ID.indexOf(loanService.getFilter())!== -1)"> -->
+              <ng-template [ngIf]= "loanService.getFilter() == undefined || loanService.getFilter() == '' || (loan.Borrower_First_Name?.toLowerCase().indexOf(loanService.getFilter()?.toLowerCase())!== -1
+              || loan.Borrower_Last_Name?.toLowerCase().indexOf(loanService.getFilter()?.toLowerCase())!== -1 || loan.Loan_Full_ID?.indexOf(loanService.getFilter())!== -1)">
                 <th scope="row">{{loan.Loan_Full_ID}}</th>
                 <td>
                   {{loan.Loan_Full_ID}}
