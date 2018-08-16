@@ -1,22 +1,17 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { loan_model } from '../../../models/loanmodel';
-import { lookupStateRefValue, lookupCountyValue, extractStateValues, lookupStateValue, Statevaluesetter, getfilteredcounties, Countyvaluesetter, lookupStateValueinRefobj } from '../../../Workers/utility/aggrid/stateandcountyboxes';
+import { lookupCountyValue, lookupStateValueinRefobj } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { environment } from '../../../../environments/environment.prod';
 import * as _ from 'lodash'
 import { ChipsListEditor } from '../../../aggridcolumns/chipscelleditor';
-import { GridOptions } from 'ag-grid';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter, lookupCropValuewithoutmapping } from '../../../Workers/utility/aggrid/cropboxes';
-import { PercentageFormatter, PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
-import { numberValueSetter, getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
+import { numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { NumericEditor } from '../../../aggridfilters/numericaggrid';
-import { DebugContext } from '@angular/core/src/view';
 import { EmptyEditor } from '../../../aggridfilters/emptybox';
-import { Insurance_Policy, Insurance_Subpolicy } from '../../../models/insurancemodel';
+import { Insurance_Subpolicy } from '../../../models/insurancemodel';
 import { status } from '../../../models/syncstatusmodel';
-import { JsonConvert } from 'json2typescript';
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
@@ -25,8 +20,8 @@ import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.c
 import { errormodel } from '../../../models/commonmodels';
 import { ValidationService } from '../../../Workers/calculations/validation.service';
 import { BooleanEditor } from '../../../aggridfilters/booleanaggrid.';
-import { autoSizeAll } from '../../../aggriddefinations/aggridoptions';
 import { PublishService, Page } from '../../../services/publish.service';
+import { percentageFormatter, currencyFormatter, EmptyFormatter } from '../../../aggridformatters/valueformatters';
 
 @Component({
   selector: 'app-policies',
@@ -90,7 +85,7 @@ export class PoliciesComponent implements OnInit {
     return { values: ['MPCI', 'HMAX', 'STAX'] };
   }
   //validations
-  checkcropandinsurancecombination(crop: string, maintype: string, subtype: string) {
+  checkcropandinsurancecombination() {
 
   }
 
@@ -210,9 +205,7 @@ export class PoliciesComponent implements OnInit {
         cellClass: ['editable-color'],
         editable: true,
         cellEditor: "numericCellEditor",
-        valueFormatter: function (params) {
-          return PercentageFormatter(params.value);
-        },
+        valueFormatter: percentageFormatter,
         valueSetter: function (params) {
           numberValueSetter(params);
           if (params.newValue) {
@@ -234,9 +227,7 @@ export class PoliciesComponent implements OnInit {
           decimals: 2
         },
         valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return  (params.value);
-        }
+        valueFormatter:currencyFormatter
       },
       {
         headerName: 'Premium',
@@ -251,9 +242,7 @@ export class PoliciesComponent implements OnInit {
         },
         cellEditor: "numericCellEditor",
         valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
+        valueFormatter: currencyFormatter
       }
     ];
     this.getgriddata();
@@ -274,6 +263,58 @@ export class PoliciesComponent implements OnInit {
     return units.filter(u => u.key === parseInt(unit));
   }
 
+  getformatterforcolumn(columnname){
+    
+    columnname=columnname.substr(0,columnname.lastIndexOf("_"))
+    debugger
+    let formatter;
+    switch (columnname) {
+      case "Price_Pct":
+      formatter=percentageFormatter
+        break;
+
+        case "Yield_Pct":
+        formatter=percentageFormatter
+        break;
+
+        case "Price_Pct":
+        formatter=percentageFormatter
+        break;
+
+        case "Premium":
+        formatter=currencyFormatter
+        break;
+
+        case "Upper_Limit":
+        formatter=percentageFormatter
+        break;
+
+        case "Lower_Limit":
+        formatter=percentageFormatter
+        break;
+
+        case "Liability":
+        formatter=currencyFormatter
+        break;
+
+        case "Deduct":
+        formatter=currencyFormatter
+        break;
+
+        case "Deduct_amt":
+        formatter=currencyFormatter
+        break;  
+
+        case "Deduct_pct":
+        formatter=percentageFormatter
+        break; 
+
+      default:
+      formatter=EmptyFormatter
+        break;
+    }
+    return formatter;
+  }
   addNumericColumn(element: string, editortype: string) {
      debugger
     let header = element;
@@ -305,7 +346,7 @@ export class PoliciesComponent implements OnInit {
             return 'grayedcell';
           }
         }
-      }
+      },valueFormatter:this.getformatterforcolumn(header)
     };
     if (editortype == "booleaneditor") {
       column.valueFormatter = function (params) {
@@ -446,7 +487,6 @@ export class PoliciesComponent implements OnInit {
     private localstorage: LocalStorageService,
     private loancalculationservice: LoancalculationWorker,
     private validationservice: ValidationService,
-    private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
@@ -790,12 +830,12 @@ export class PoliciesComponent implements OnInit {
     return status;
   }
 
-  onGridSizeChanged(params) {
+  onGridSizeChanged() {
     //params.api.sizeColumnsToFit();
     //params.api.resetRowHeights();
   }
 
-  onGridScroll(params) {
+  onGridScroll() {
     //params.api.stopEditing();
   }
 

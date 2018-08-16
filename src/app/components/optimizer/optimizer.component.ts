@@ -16,6 +16,7 @@ import { NumericEditor } from '../../aggridfilters/numericaggrid';
 import { numberWithOneDecPrecValueFormatter } from '../../Workers/utility/aggrid/formatters';
 import { Page, PublishService } from '../../services/publish.service';
 import { OptimizerService } from './optimizer.service';
+import { acresFormatter } from '../../aggridformatters/valueformatters';
 @Component({
   selector: 'app-optimizer',
   templateUrl: './optimizer.component.html',
@@ -42,14 +43,15 @@ export class OptimizerComponent implements OnInit {
       if (params.data.ID == undefined || params.data==undefined) {
         return "aggregatecol";
       }
-    },
-    cellRenderer: function (params) {
-      
-      if (params.value != undefined)
-        return '<span id=' + params.column.colId + "_" + params.data.ID + '>' + params.value + '</span>';
-      else
-        return "<span></span>"
     }
+    // ,
+    // cellRenderer: function (params) {
+      
+    //   if (params.value != undefined)
+    //     return '<span id=' + params.column.colId + "_" + params.data.ID + '>' + params.value + '</span>';
+    //   else
+    //     return "<span></span>"
+    // }
   };
   style = {
     marginTop: '10px',
@@ -88,7 +90,7 @@ export class OptimizerComponent implements OnInit {
           component: 'numericCellEditor'
         }; 
       },
-      valueFormatter: numberWithOneDecPrecValueFormatter,
+      valueFormatter: acresFormatter,
       valueSetter: function (value) {
         let result = value.context.componentParent.validateacresvalue(value.data.ID, parseFloat(value.newValue));
         if (result) {
@@ -113,10 +115,6 @@ export class OptimizerComponent implements OnInit {
           return false;
         }
 
-      },
-      cellEditorParams: {
-        decimals: 1
-        
       },
     },
 
@@ -235,7 +233,7 @@ export class OptimizerComponent implements OnInit {
           row.Practice = "IRR";
           row.State = lookupStateAbvRefValue(farm.Farm_State_ID, this.refdata);
           row.County = lookupCountyRefValue(farm.Farm_County_ID, this.refdata);
-          row.Prodpercentage = farm.Percent_Prod +" %";
+          row.Prodpercentage = farm.Percent_Prod;
           row.Landlord = farm.Landowner;
           row.FSN = farm.FSN;
           row.Crop = crop.Crop_Code;
@@ -249,7 +247,7 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres=";
-          row.ExcessIns = "" + farm.Irr_Acres;
+          row.ExcessIns = "" + farm.Irr_Acres.toFixed(1);
           this.rowDataIIR.push(row);
         }
       });
@@ -279,7 +277,7 @@ export class OptimizerComponent implements OnInit {
           let row: any = {};
           row.Acres = _.sumBy(distinctrows, function (o) { return o.CU_Acres; })
           row.RC = "TotalAcres =";
-          row.ExcessIns = "" + farm.NI_Acres;
+          row.ExcessIns = "" + farm.NI_Acres.toFixed(1);
           this.rowDataNIR.push(row);
         }
       });

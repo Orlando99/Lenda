@@ -241,6 +241,7 @@ export class LoancropunitcalculationworkerService {
               else if (subpolicy.Ins_Type.toLowerCase() == "ice") {
                 // subpolicy.Upper_Limit = 95;
                 // subpolicy.Lower_Limit = 85;  //did manually as if now
+                debugger
                 try {
                   subpolicy.Deduct_pct = 5;
                   subpolicy.Deduct_amt = 0;

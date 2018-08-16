@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
-import { currencyFormatter, insuredFormatter, discFormatter, numberFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
+import { numberFormatter, currencyFormatter, percentageFormatter, insuredFormatter } from '../../../aggridformatters/valueformatters';
 
 /**
  * Shared service for Stored Crop
@@ -26,7 +26,7 @@ export class StoredCropService {
         //   return setNetMktValue(params);}
       },
       {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellStyle: { textAlign: "right" }, width: 110, cellClass: ['editable-color', 'text-right'],
+        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: percentageFormatter, cellStyle: { textAlign: "right" }, width: 110, cellClass: ['editable-color', 'text-right'],
         pinnedRowCellRenderer: function () { return ' '; }
       },
       {

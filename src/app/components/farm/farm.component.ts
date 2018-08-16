@@ -23,6 +23,7 @@ import { ModelStatus, status } from '../../models/syncstatusmodel';
 import { setgriddefaults } from '../../aggriddefinations/aggridoptions';
 import { PublishService, Page } from '../../services/publish.service';
 import { FarmService } from './farm.service';
+import { StateidtonameFormatter, CountyidtonameFormatter, percentageFormatter, currencyFormatter, acresFormatter, UnitperacreFormatter } from '../../aggridformatters/valueformatters';
 /// <reference path="../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-farm',
@@ -94,25 +95,19 @@ export class FarmComponent implements OnInit {
         cellEditorParams: {
           values: extractStateValues(this.refdata.StateList)
         },
-        valueFormatter: function (params) {
-          return lookupStateValue(params.colDef.cellEditorParams.values, parseInt(params.value));
-        },
+        valueFormatter: StateidtonameFormatter,
         valueSetter: Statevaluesetter
         
       },
       {
         headerName: 'County', field: 'Farm_County_ID', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: getfilteredcounties,
-        valueFormatter: function (params) {
-          return params.value ? lookupCountyValue(params.value) : '';
-        },
+        valueFormatter: CountyidtonameFormatter,
         valueSetter: Countyvaluesetter
       },
       {
         headerName: '% Prod',headerClass:"rightaligned",field: 'Percent_Prod', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor",
-        valueFormatter: function (params) {
-          return PercentageFormatter(params.value);
-        },
+        valueFormatter: percentageFormatter,
         valueSetter: function (params) {
           numberValueSetter(params);
           if (params.newValue) {
@@ -131,17 +126,12 @@ export class FarmComponent implements OnInit {
       },
       {
         headerName: 'Rent',headerClass:"rightaligned", field: 'Share_Rent', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
+        valueFormatter: currencyFormatter
       },
       {
         headerName: 'Rent UoM', field: 'Rent_UOM', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }] },
-        valueFormatter: function (params) {
-          let selected = [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }].find(v => v.key == params.value);
-          return selected ? selected.value : undefined;
-        }
+        valueFormatter: UnitperacreFormatter
       },
       {
         headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "dateCellEditor",
@@ -158,15 +148,13 @@ export class FarmComponent implements OnInit {
       },
       {
         headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
+        valueFormatter: currencyFormatter 
       },
       {
         headerName: '% Rent',headerClass:"rightaligned", cellClass: 'rightaligned',field: 'Rentperc',
         cellEditorParams: function (params) {
         },
-        valueFormatter: function (params) {
+        valueFormatter: function (params) { //need to discuss
           if (params.data.Percent_Prod) {
             return PercentageFormatter(100 - params.data.Percent_Prod);
           }
@@ -184,15 +172,15 @@ export class FarmComponent implements OnInit {
       },
       {
         headerName: 'IR Acres',headerClass:"rightaligned", field: 'Irr_Acres', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-        valueFormatter: numberWithOneDecPrecValueFormatter
+        valueFormatter: acresFormatter
       },
       {
         headerName: 'NI Acres',headerClass:"rightaligned", field: 'NI_Acres', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-        valueFormatter: numberWithOneDecPrecValueFormatter
+        valueFormatter: acresFormatter
       },
       {
         headerName: 'Total Acres',headerClass:"rightaligned",cellClass:"rightaligned", field: 'FC_Total_Acres', cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,
-        valueFormatter: numberWithOneDecPrecValueFormatter
+        valueFormatter: acresFormatter
       },
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
     ];

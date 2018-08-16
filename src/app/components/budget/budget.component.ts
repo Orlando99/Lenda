@@ -18,6 +18,7 @@ import { JsonConvert } from 'json2typescript';
 import { BudgetHelperService } from './budget-helper.service';
 import { PriceFormatter } from '../../Workers/utility/aggrid/formatters';
 import { PublishService, Page } from '../../services/publish.service';
+import { currencyFormatter } from '../../aggridformatters/valueformatters';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 
 @Component({
@@ -73,21 +74,13 @@ export class BudgetComponent implements OnInit {
         headerName: "Per Acre Budget",
         children: [
           { headerName: 'ARM', field: 'ARM_Budget_Acre',hide:true, width: 120, cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          }},
+          valueFormatter:currencyFormatter},
           { headerName: 'Distributer', field: 'Distributor_Budget_Acre',hide:true, width: 120,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter:currencyFormatter},
           { headerName: '3rd Party', field: 'Third_Party_Budget_Acre',hide:true, width: 120,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter},
           { headerName: 'Total', field: 'Total_Budget_Acre', width: 120,hide:true,cellClass: ['text-right'], editable: false,
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter },
         ]
       },
       {
@@ -95,21 +88,13 @@ export class BudgetComponent implements OnInit {
         children: [
           { headerName: 'Additional Credit Notes', field: '',editable:true, width: 240, cellClass: ['text-right']},
           { headerName: 'ARM', field: 'ARM_Budget_Crop', editable: false,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter },
           { headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter },
           { headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter},
           { headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false,cellClass: ['text-right'],
-          valueFormatter: function (params) {
-            return PriceFormatter(params.value);
-          } },
+          valueFormatter: currencyFormatter},
         ]
       }
     ];

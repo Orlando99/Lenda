@@ -6,9 +6,8 @@ import { environment } from '../../../../environments/environment.prod';
 import { Loan_Crop_Unit } from '../../../models/cropmodel';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { ToastsManager } from 'ng2-toastr';
-import { JsonConvert } from 'json2typescript';
 import { PublishService, Page } from '../../../services/publish.service';
+import { CropidtonameFormatter } from '../../../aggridformatters/valueformatters';
 
 @Component({
   selector: 'app-aph',
@@ -21,14 +20,11 @@ export class AphComponent implements OnInit {
   public rowData = [];
   private localloanobject: loan_model;
   public components;
-  private gridApi;
-  private columnApi;
   public refdata: any = {};
   
   constructor(private localstorageservice: LocalStorageService,
   private loanserviceworker : LoancalculationWorker,
   public loanapi:LoanApiService,
-  private toaster: ToastsManager,
   private publishService : PublishService) {
 
     this.components = { numericCellEditor: getNumericCellEditor() };
@@ -50,14 +46,10 @@ export class AphComponent implements OnInit {
       },
       {
         headerName: 'Crop', field: 'Crop_Code',
-        valueFormatter: (params) => {
-          let matchedCrop = this.refdata.Crops.find(crp=>crp.Crop_Code == params.data.Crop_Code);
-          return matchedCrop ? matchedCrop.Crop_Name || '' : '';
-        },
+        valueFormatter: CropidtonameFormatter,
       },
       {
         headerName: 'Practice', field: 'Crop_Practice_Type_Code',
-       
         width: 70
       },
       {
@@ -79,7 +71,7 @@ export class AphComponent implements OnInit {
       },
       {
         headerName: 'UoM', field: 'UoM',
-        valueFormatter: function (params) {
+        valueFormatter: function () {
           return 'bu';
         },
 
@@ -164,8 +156,6 @@ export class AphComponent implements OnInit {
   }
 
   onGridReady(params) {
-    this.gridApi = params.api;
-    this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();//autoresizing
   }
 

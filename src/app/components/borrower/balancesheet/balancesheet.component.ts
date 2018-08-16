@@ -10,9 +10,9 @@ import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
-import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 import { Page, PublishService } from '../../../services/publish.service';
+import { currencyFormatter, percentageFormatter } from '../../../aggridformatters/valueformatters';
 
 @Component({
   selector: 'app-balancesheet',
@@ -37,16 +37,14 @@ export class BalancesheetComponent implements OnInit {
    columnDefs = [
     { headerName: 'Financials', field: 'Financials', },
     { headerName: 'Assets', field: 'Assets', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    },
+    valueFormatter: currencyFormatter,
     editable : (params)=>{
      return params.data.Financials !== 'Total';
     }  },
     { headerName: 'Discount', field: 'Discount', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
     valueFormatter: function (params) {
       if(params.data.Financials !== 'Total'){
-      return PercentageFormatter(params.value);
+      return percentageFormatter(params);
       }else{
         return '';
       }
@@ -55,20 +53,14 @@ export class BalancesheetComponent implements OnInit {
      return params.data.Financials !== 'Total';
     }},
     { headerName: 'AdjValue', field: 'AdjValue',cellClass: ['text-right'],
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    }, },
+    valueFormatter: currencyFormatter },
     { headerName: 'Debt', field: 'Debt', cellEditor: "numericCellEditor", cellClass: ['editable-color','text-right'], valueSetter: numberValueSetter,
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    },
+    valueFormatter: currencyFormatter,
     editable : (params)=>{
      return params.data.Financials !== 'Total';
     }},
     { headerName: 'Discounted NW', field: 'DiscountedNW',cellClass: ['text-right'],
-    valueFormatter: function (params) {
-      return PriceFormatter(params.value);
-    }, }
+    valueFormatter: currencyFormatter }
   ];
 
   onGridReady(params) {

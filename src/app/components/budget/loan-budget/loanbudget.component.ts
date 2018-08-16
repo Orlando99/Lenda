@@ -11,6 +11,7 @@ import { BudgetHelperService } from '../budget-helper.service';
 import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { PublishService, Page } from '../../../services/publish.service';
 import { autoSizeAll } from '../../../aggriddefinations/aggridoptions';
+import { currencyFormatter } from '../../../aggridformatters/valueformatters';
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
   selector: 'app-loanbudget',
@@ -55,36 +56,28 @@ export class LoanbudgetComponent implements OnInit {
         children: [
           {
             headerName: 'ARM', field: 'ARM_Budget_Acre',  cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'], valueSetter: numberValueSetter,
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            },
+            valueFormatter: currencyFormatter,
             editable: (params) => {
               return params.data.FC_Expense_Name !== totalRowHeader + ':';
             }
           },
           {
             headerName: 'Distributer', field: 'Distributor_Budget_Acre',  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            },
+            valueFormatter: currencyFormatter,
             editable: (params) => {
               return params.data.FC_Expense_Name !== totalRowHeader + ':';
             }
           },
           {
             headerName: '3rd Party', field: 'Third_Party_Budget_Acre',  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color', 'text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            },
+            valueFormatter:currencyFormatter,
             editable: (params) => {
               return params.data.FC_Expense_Name !== totalRowHeader + ':';
             }
           },
           {
             headerName: totalRowHeader, field: 'Total_Budget_Acre',  editable: false, cellClass: ['text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            }
+            valueFormatter: currencyFormatter
           },
         ]
       },
@@ -93,27 +86,19 @@ export class LoanbudgetComponent implements OnInit {
         children: [
           {
             headerName: 'ARM', field: 'ARM_Budget_Crop', cellClass: ['text-right'], editable: false,
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            }
+            valueFormatter: currencyFormatter
           },
           {
             headerName: 'Distributer', field: 'Distributor_Budget_Crop', editable: false, cellClass: ['text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            }
+            valueFormatter: currencyFormatter
           },
           {
             headerName: '3rd Party', field: 'Third_Party_Budget_Crop', editable: false, cellClass: ['text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            }
+            valueFormatter: currencyFormatter
           },
           {
             headerName: 'Total', field: 'Total_Budget_Crop_ET', editable: false, cellClass: ['text-right'],
-            valueFormatter: function (params) {
-              return PriceFormatter(params.value);
-            }
+            valueFormatter: currencyFormatter
           },
         ]
       }

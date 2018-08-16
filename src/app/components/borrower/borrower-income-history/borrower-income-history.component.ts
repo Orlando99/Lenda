@@ -1,23 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../../environments/environment.prod';
-import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
+import { loan_model } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { currencyFormatter, insuredFormatter, discFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
-import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
-import { JsonConvert } from 'json2typescript';
-import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { GridOptions } from 'ag-grid';
-import { debug } from 'util';
 import * as  _ from 'lodash';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
 import { Page, PublishService } from '../../../services/publish.service';
+import { currencyFormatter } from '../../../aggridformatters/valueformatters';
 
 @Component({
   selector: 'app-borrower-income-history',

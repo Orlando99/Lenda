@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { loan_model, Loan_Collateral } from '../../../models/loanmodel';
-import { currencyFormatter, insuredFormatter, discFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
+import { percentageFormatter, currencyFormatter, insuredFormatter } from '../../../aggridformatters/valueformatters';
 
 /**
  * Shared service for FSA
@@ -23,7 +23,7 @@ export class EquipmentService {
         //   return setNetMktValue(params);}
       },
       {
-        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: discFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
+        headerName: 'Discount %', field: 'Disc_Value', editable: true, cellEditor: "numericCellEditor", valueFormatter: percentageFormatter, cellClass: ['editable-color', 'text-right'], width: 130,
         pinnedRowCellRenderer: function () { return '-'; }
       },
       {

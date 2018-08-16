@@ -3,11 +3,11 @@ import { loan_model, Loan_Collateral, Loan_Marketing_Contract } from '../../../m
 import * as _ from 'lodash';
 import { environment } from '../../../../environments/environment';
 import { LocalStorageService } from 'ngx-webstorage';
-import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { MarketingcontractcalculationService } from '../../../Workers/calculations/marketingcontractcalculation.service';
 import CollateralSettings from './../collateral-types.model';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
+import { currencyFormatter, percentageFormatter } from '../../../aggridformatters/valueformatters';
 
 /**
  * Shared service for Marketing Contracts
@@ -112,21 +112,15 @@ export class MarketingContractsService {
       {
         headerName: 'Price', field: 'Price', editable: true, width: 150, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
         valueSetter: numberValueSetter,
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
+        valueFormatter: currencyFormatter
       },
       {
         headerName: 'Mkt Value', field: 'Market_Value', width: 180, cellClass: ['text-right'],
-        valueFormatter: function (params) {
-          return PriceFormatter(params.value);
-        }
+        valueFormatter: currencyFormatter
       },
       {
         headerName: 'Contract %', field: 'Contract_Per', width: 100, cellClass: ['text-right'],
-        valueFormatter: function (params) {
-          return PercentageFormatter(params.value);
-        }
+        valueFormatter: percentageFormatter
       },
       { headerName: '', field: 'value', cellRenderer: "deletecolumn" },
 

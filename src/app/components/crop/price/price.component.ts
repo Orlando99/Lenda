@@ -1,27 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { SidebarModule } from 'ng-sidebar';
-import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Crop } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
-import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
-import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
-import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
+import { CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { AlertifyService } from '../../../alertify/alertify.service';
-import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
-import { GridPanel } from 'ag-grid';
 import { PublishService, Page } from '../../../services/publish.service';
+import {CroptypeidtonameFormatter, CropidtonameFormatter, currencyFormatter, percentageFormatter } from '../../../aggridformatters/valueformatters';
 
 @Component({
-  selector: 'app-price',
+  selector: 'app-price',  
   templateUrl: './price.component.html',
   styleUrls: ['./price.component.scss']
 })
@@ -48,7 +42,6 @@ export class PriceComponent implements OnInit {
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
-    private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi: LoanApiService,
@@ -81,49 +74,30 @@ export class PriceComponent implements OnInit {
     this.columnDefs = [
       {
         headerName: 'Crop', field: 'Crop_Code', width:70,
-        valueFormatter: (params) => {
-          let values : Array<any>= extractCropValues(this.refdata.CropList);
-          return lookupCropValue(values, params.value);
-        }
+        valueFormatter: CropidtonameFormatter 
       },
       {
         headerName: 'Crop type', field: 'Crop_Type_Code',
-        valueFormatter: function (params) {
-          return lookupCropTypeValue(params.value);
-        },
+        valueFormatter: CroptypeidtonameFormatter,
         valueSetter: CropTypevaluesetter
       },
       { headerName: 'Crop Price', field: 'Crop_Price',cellClass: 'text-right',
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
+      valueFormatter: currencyFormatter},
       { headerName: 'Basis Adj', field: 'Basic_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
+      valueFormatter: currencyFormatter},
       { headerName: 'Marketing Adj', field: 'Marketing_Adj',cellClass: 'text-right',
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      } },
+      valueFormatter: currencyFormatter},
       { headerName: 'Rebate Adj', field: 'Rebate_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
+      valueFormatter: currencyFormatter},
       { headerName: 'Adj Price', field: 'Adj_Price',cellClass: 'text-right',
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
+      valueFormatter: currencyFormatter},
       { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false,cellClass: 'text-right', },
       { headerName: 'Contract Price', field: 'Contract_Price', editable: false ,cellClass: 'text-right',
-      valueFormatter: function (params) {
-        return PriceFormatter(params.value);
-      }},
+      valueFormatter: currencyFormatter},
       { headerName: '% Booked', field: 'Percent_booked',cellClass: 'text-right',
-      valueFormatter: function (params) {
-        return PercentageFormatter(params.value);
-      } },
+      valueFormatter: percentageFormatter},
       { headerName: 'Ins UOM', field: 'Bu', editable: false,
-      valueFormatter: function (params) {
+      valueFormatter: function () {
         return 'Bu';
       } },
 
@@ -284,7 +258,7 @@ export class PriceComponent implements OnInit {
   //   this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   //   this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
   // }
-  onGridSizeChanged(Event: any) {
+  onGridSizeChanged() {
     //this.gridApi.sizeColumnsToFit();
   }
 

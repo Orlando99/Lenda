@@ -37,33 +37,19 @@ export function currencyFormatter (params) {
    
 }
 
-export function numberFormatter(params){
-     return formatNumber(params.value);
-}
-
-export function discFormatter(params){
-    return formatNumber(params.value) + "%";
-}
-
-export function insuredFormatter (params) {
-    if(params.cellEditorparams){
-        return params.cellEditorparams.values[1].value;
-    }else{
-        if(params.value == 1){
-            return 'Yes';
-        }else{
-            return 'No';
-        }
-    }
-    
-}
-
-
-
-
 
 function formatNumber(number) {
     // this puts commas into the number eg 1000 goes to 1,000,
     // i pulled this from stack overflow, i have no idea how it works
     return Math.floor(number).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 }
+export function discFormatter(params){
+    return formatNumber(params.value) + "%";
+}
+
+
+
+
+
+
+

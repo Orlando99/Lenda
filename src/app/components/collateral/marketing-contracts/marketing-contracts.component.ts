@@ -11,7 +11,6 @@ import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utilit
 import { environment } from '../../../../environments/environment.prod';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
-import { currencyFormatter, discFormatter, insuredFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 import { JsonConvert } from 'json2typescript';
 import { lookupStateValue } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import * as _ from 'lodash';
