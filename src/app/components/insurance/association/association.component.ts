@@ -5,22 +5,17 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
-import { Loan_Farm } from '../../../models/farmmodel.';
 import { InsuranceapiService } from '../../../services/insurance/insuranceapi.service';
 import { numberValueSetter, getNumericCellEditor, formatPhoneNumber, getPhoneCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
-import { extractStateValues, lookupStateValue, Statevaluesetter, extractCountyValues, lookupCountyValue, Countyvaluesetter, getfilteredcounties } from '../../../Workers/utility/aggrid/stateandcountyboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { NumericEditor } from '../../../aggridfilters/numericaggrid';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { JsonConvert } from 'json2typescript';
 import { EmailEditor } from '../../../Workers/utility/aggrid/emailboxes';
 import { Preferred_Contact_Ind_Options, PreferredContactFormatter } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
-import { PriceFormatter } from '../../../Workers/utility/aggrid/formatters';
 import { Page, PublishService } from '../../../services/publish.service';
+import { currencyFormatter } from '../../../Workers/utility/aggrid/collateralboxes';
 
 /// <reference path="../../../Workers/utility/aggrid/numericboxes.ts" />
 @Component({
@@ -52,7 +47,6 @@ export class AssociationComponent implements OnInit, OnChanges {
   public editType;
   public pinnedBottomRowData = [];
   private gridApi;
-  private columnApi;
   //region Ag grid Configuration
 
 
@@ -63,7 +57,6 @@ export class AssociationComponent implements OnInit, OnChanges {
 
   onGridReady(params) {
     this.gridApi = params.api;
-    this.columnApi = params.columnApi;
     params.api.sizeColumnsToFit();
   }
   //End here
@@ -71,7 +64,6 @@ export class AssociationComponent implements OnInit, OnChanges {
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public insuranceservice: InsuranceapiService,
-    private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
     public loanapi:LoanApiService,
@@ -118,12 +110,12 @@ export class AssociationComponent implements OnInit, OnChanges {
 
       this.columnDefs = [
 
-        { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
+        { headerName: this.header, field: 'Assoc_Name', editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" } ,
         // { headerName: 'Agency', width: 80, field: 'Assoc_Type_Code',  editable: false },
         { headerName: 'Contact', field: 'Contact',width: 100,  editable: true,cellClass: ['editable-color'],cellEditor: "alphaNumericCellEditor" },
         { headerName: 'Location', field: 'Location',  editable: true,cellClass: ['editable-color'] },
         // { headerName: 'Phone', field: 'Phone', editable: true,cellClass: ['editable-color'], cellEditor: "numericCellEditor"},
-        { headerName: 'Phone', field: 'Phone',width:140, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color','text-right']},
+        { headerName: 'Phone', field: 'Phone',width:140, editable: true,  cellEditor: "phoneCellEditor", valueFormatter:formatPhoneNumber, cellClass: ['editable-color']},
         { headerName: 'Email', field: 'Email', editable: true,cellClass: ['editable-color']},
         { headerName: 'Pref Contact',width:140, field: 'Preferred_Contact_Ind',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
             cellEditorParams : {values : Preferred_Contact_Ind_Options},
@@ -134,15 +126,13 @@ export class AssociationComponent implements OnInit, OnChanges {
 
       if(this.associationTypeCode == 'REB'){
         let rebatorColummns = [
-          { headerName: 'Exp Rebate',width:120, field: 'Amount',  editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','text-right'],
+          { headerName: 'Exp Rebate',width:120, field: 'Amount',  headerClass: "rightaligned", editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','rightaligned'],
               cellEditorParams: (params)=> {
                 return { value : params.data.Amount || 0}
               },
-              valueFormatter: function (params) {
-                return PriceFormatter(params.value);
-              }
+              valueFormatter: currencyFormatter
           },
-          { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function (params) {
+          { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function () {
             return 'bu';
           }}
         ];
@@ -238,7 +228,6 @@ export class AssociationComponent implements OnInit, OnChanges {
     newItem.Loan_Full_ID=this.localloanobject.Loan_Full_ID;
     newItem.Assoc_Type_Code=this.associationTypeCode;
     newItem.Preferred_Contact_Ind=1;
-    var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
       rowIndex: this.rowData.length-1,
