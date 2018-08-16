@@ -202,7 +202,8 @@ export class PoliciesComponent implements OnInit {
         field: 'Level',
         pickfield: 'Level',
         //cellRenderer: 'columnTooltip',
-        cellClass: ['editable-color'],
+        headerClass: "rightaligned",
+        cellClass: ['editable-color','rightaligned'],
         editable: true,
         cellEditor: "numericCellEditor",
         valueFormatter: percentageFormatter,
@@ -220,7 +221,8 @@ export class PoliciesComponent implements OnInit {
         field: 'Price',
         pickfield: 'Price',
         //cellRenderer: 'columnTooltip',
-        cellClass: ['editable-color'],
+        headerClass: "rightaligned",
+        cellClass: ['editable-color','rightaligned'],
         editable: true,
         cellEditor: "numericCellEditor",
         cellEditorParams: {
@@ -236,7 +238,8 @@ export class PoliciesComponent implements OnInit {
         pickfield: 'Premium',
         editable: true,
         //cellRenderer: 'columnTooltip',
-        cellClass: ['editable-color'],
+        headerClass: "rightaligned",
+        cellClass: ['editable-color','rightaligned'],
         cellEditorParams: {
           decimals: 2
         },
@@ -319,7 +322,8 @@ export class PoliciesComponent implements OnInit {
      debugger
     let header = element;
     let column: any = {
-      headerName: header, pickfield: element, field: element, editable: element=="Icc_PCI"?false:true, //only iccc field is non editable we can create an array if later needed
+      headerName: header, pickfield: element, field: element,headerClass: "rightaligned",
+     editable: element=="Icc_PCI"?false:true, //only iccc field is non editable we can create an array if later needed
       cellEditorSelector: function (params) {
         let pos = params.colDef.pickfield.lastIndexOf("_") + 1;
         let policyname = params.colDef.pickfield.substr(pos, params.colDef.pickfield.length - pos)
@@ -343,8 +347,12 @@ export class PoliciesComponent implements OnInit {
         let policyname = params.colDef.pickfield.substr(pos, params.colDef.pickfield.length - pos)
         if (policyname.length > 0) {
           if (!params.data.SecInsurance.includes(policyname)) {
-            return 'grayedcell';
+            return 'grayedcell rightaligned'; 
           }
+          else{
+            return 'editable-color rightaligned'; 
+          }
+
         }
       },valueFormatter:this.getformatterforcolumn(header)
     };
@@ -830,14 +838,7 @@ export class PoliciesComponent implements OnInit {
     return status;
   }
 
-  onGridSizeChanged() {
-    //params.api.sizeColumnsToFit();
-    //params.api.resetRowHeights();
-  }
-
-  onGridScroll() {
-    //params.api.stopEditing();
-  }
+  
 
   getOptedInsuranceOptions(){
     this.optedInsuranceOptions = [];

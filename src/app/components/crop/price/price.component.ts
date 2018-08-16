@@ -35,7 +35,7 @@ export class PriceComponent implements OnInit {
     width: '100%',
     boxSizing: 'border-box'
   };
-  defaultColDef: { headerComponentParams: { template: string; },width : number };
+  defaultColDef: { headerComponentParams: { template: string; },width : number};
   stylesidebar={
     width: '95%',
   };
@@ -68,7 +68,7 @@ export class PriceComponent implements OnInit {
           '  </div>' +
           '</div>'
       },
-      width: 100,
+      width: 100
   };
     //Coldef here
     this.columnDefs = [
@@ -81,20 +81,20 @@ export class PriceComponent implements OnInit {
         valueFormatter: CroptypeidtonameFormatter,
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Crop_Price',cellClass: 'text-right',
+      { headerName: 'Crop Price', field: 'Crop_Price', headerClass: "rightaligned", cellClass: "rightaligned",
       valueFormatter: currencyFormatter},
-      { headerName: 'Basis Adj', field: 'Basic_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      { headerName: 'Basis Adj', field: 'Basic_Adj',headerClass: "rightaligned", cellClass: ['editable-color','rightaligned'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
       valueFormatter: currencyFormatter},
-      { headerName: 'Marketing Adj', field: 'Marketing_Adj',cellClass: 'text-right',
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj', headerClass: "rightaligned", cellClass: "rightaligned",
       valueFormatter: currencyFormatter},
-      { headerName: 'Rebate Adj', field: 'Rebate_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      { headerName: 'Rebate Adj', field: 'Rebate_Adj',headerClass: "rightaligned", cellClass: ['editable-color','rightaligned'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
       valueFormatter: currencyFormatter},
-      { headerName: 'Adj Price', field: 'Adj_Price',cellClass: 'text-right',
+      { headerName: 'Adj Price', field: 'Adj_Price', headerClass: "rightaligned", cellClass: "rightaligned",
       valueFormatter: currencyFormatter},
-      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false,cellClass: 'text-right', },
-      { headerName: 'Contract Price', field: 'Contract_Price', editable: false ,cellClass: 'text-right',
+      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false, headerClass: "rightaligned", cellClass: "rightaligned" },
+      { headerName: 'Contract Price', field: 'Contract_Price', editable: false , headerClass: "rightaligned", cellClass: "rightaligned",
       valueFormatter: currencyFormatter},
-      { headerName: '% Booked', field: 'Percent_booked',cellClass: 'text-right',
+      { headerName: '% Booked', field: 'Percent_booked', headerClass: "rightaligned", cellClass: "rightaligned",
       valueFormatter: percentageFormatter},
       { headerName: 'Ins UOM', field: 'Bu', editable: false,
       valueFormatter: function () {
@@ -258,9 +258,7 @@ export class PriceComponent implements OnInit {
   //   this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
   //   this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
   // }
-  onGridSizeChanged() {
-    //this.gridApi.sizeColumnsToFit();
-  }
+ 
 
   onColumnhiderequested(event,header:string){
     let checked=event.srcElement.checked;
