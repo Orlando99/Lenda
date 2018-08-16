@@ -111,13 +111,38 @@ export class FarmComponent implements OnInit {
         valueSetter: function (params) {
           numberValueSetter(params);
           if (params.newValue) {
-            params.data['Rentperc'] = 100 - parseFloat(params.newValue);
+            if(!(!!params.data.Owned)){
+              params.data['Rentperc'] = 100 - parseFloat(params.newValue);
+            }
           }
           return true;
         }
         
       },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false },
+      {
+        headerName: 'Owned', field: 'Owned', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "selectEditor",
+        cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
+        valueFormatter: function(params){
+          let selectedOption =  [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }].find(o=>o.key = params.value);
+          return selectedOption ? selectedOption.value : 'No';
+
+        },
+        valueSetter: function (params) {
+          params.data['Owned'] = parseInt(params.newValue);
+          if(params.data['Owned']==1){
+            params.data['Share_Rent'] = 0;
+            params.data['Rent_UOM'] = 1;
+            params.data['Cash_Rent_Due_Date'] = '';
+            params.data['Cash_Rent_Waived'] = 0;
+            params.data['Rentperc'] = 0;
+          }else{
+            params.data['Rentperc'] = 100 - parseFloat(params.newValue);
+          }
+
+          return true;
+        }
+      },
       { headerName: 'FSN', field: 'FSN',headerClass:"rightaligned", cellClass: 'editable-color rightaligned', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       { headerName: 'Section', field: 'Section', cellClass: 'editable-color', editable: true, calculationinvoke: false, cellEditor: "alphaNumericCellEditor" },
       {
@@ -125,16 +150,43 @@ export class FarmComponent implements OnInit {
         cellEditorParams: { values: [{ key: 'AAA', value: 'AAA' }, { key: 'BBB', value: 'BBB' }, { key: 'NR', value: 'NR' }] },
       },
       {
-        headerName: 'Rent',headerClass:"rightaligned", field: 'Share_Rent', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        headerName: 'Rent',headerClass:"rightaligned", field: 'Share_Rent', cellClass: 'rightaligned',
+        cellClassRules:{
+          'editable-color' : function(params){ 
+            return (!(!!params.data.Owned));
+          }
+        },
+        editable: function(params){
+          return !(!!params.data.Owned);
+        },
+        cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
         valueFormatter: currencyFormatter
-      },
-      {
-        headerName: 'Rent UoM', field: 'Rent_UOM', cellClass: 'editable-color', editable: true, cellEditor: "selectEditor",
+      },{
+        headerName: 'Rent UoM', field: 'Rent_UOM', 
+        cellClassRules:{
+          'editable-color' : function(params){ 
+            return (!(!!params.data.Owned));
+          }
+        },
+        editable: function(params){
+          return !(!!params.data.Owned);
+        },
+        cellEditor: "selectEditor",
         cellEditorParams: { values: [{ key: 1, value: '$ per acre' }, { key: 2, value: '$ Total' }] },
         valueFormatter: UnitperacreFormatter
       },
       {
-        headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "dateCellEditor",
+        headerName: '$ Rent Due',headerClass:"rightaligned", field: 'Cash_Rent_Due_Date', cellClass: 'rightaligned',
+        cellClassRules:{
+          'editable-color' : function(params){ 
+            return (!(!!params.data.Owned));
+          }
+        },
+        editable: function(params){
+          
+          return !(!!params.data.Owned);
+        },
+        cellEditor: "dateCellEditor",
         cellEditorParams: getDateValue,
         valueFormatter: formatDateValue,
         valueSetter: function (params) {
@@ -147,15 +199,24 @@ export class FarmComponent implements OnInit {
         }
       },
       {
-        headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-        valueFormatter: currencyFormatter 
+        headerName: 'Waived', headerClass:"rightaligned",field: 'Cash_Rent_Waived', 
+        cellClassRules:{
+          'editable-color' : function(params){ 
+            return (!(!!params.data.Owned));
+          }
+        },
+        //cellClass: 'editable-color rightaligned', 
+        editable: function(params){
+          return !(!!params.data.Owned);
+        },
+        cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+        valueFormatter:currencyFormatter,
+        
       },
       {
         headerName: '% Rent',headerClass:"rightaligned", cellClass: 'rightaligned',field: 'Rentperc',
-        cellEditorParams: function (params) {
-        },
-        valueFormatter: function (params) { //need to discuss
-          if (params.data.Percent_Prod) {
+        valueFormatter: function (params) {
+          if (!(!!params.data.Owned) && params.data.Percent_Prod) {
             return PercentageFormatter(100 - params.data.Percent_Prod);
           }
           else {

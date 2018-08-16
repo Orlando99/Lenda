@@ -26,9 +26,9 @@
             </span>
 
             <span class="ml-25 input-group-flat search-box">
-              <div class="search">
+              <div class="search" *ngIf="router.url == '/home/loans'">
                 <mat-icon>search</mat-icon>
-                <input class="input-flat-form-control" type="text" placeholder="Search">
+                <input #input class="input-flat-form-control" type="text" placeholder="Search" (input)="update(input.value)">
               </div>
             </span>
 
@@ -44,7 +44,7 @@
                     <button mat-menu-item>
                       <a [routerLink]="['/home/admin']">Admin</a>
                     </button>
-                    <button mat-menu-item>
+                    <button mat-menu-item *ngIf="router.url == '/home/loans'">
                       <a [routerLink]="['/home/createloan']">Create Loan</a>
                     </button>
                   </mat-menu>
