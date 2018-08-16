@@ -141,6 +141,10 @@ export class HeaderComponent implements OnInit {
 
     }
   }
+
+  update (value) {
+    this.loanservice.setFilter(value);
+  }
 }
 
 

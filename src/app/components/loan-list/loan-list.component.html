@@ -1,39 +1,40 @@
 <div class="row">
-  <div class="col-sm-12">
-
-    <div class="table-responsive" *ngIf="loanlist.length">
-      <table class="table table-styling">
-        <thead>
-          <tr class="table-secondary">
-            <th>Loan No</th>
-            <th>Loan Full Id</th>
-            <th>Borrower</th>
-            <th>Application Date</th>
-            <th>Borrower ID Type</th>
-
-
-          </tr>
-        </thead>
-        <tbody>
-          <tr style="cursor:pointer" (click)="navigatetoloan(loan.Loan_Full_ID)" *ngFor="let loan of loanlist">
-
-            <th scope="row">{{loan.Loan_Full_ID}}</th>
-            <td>
-               {{loan.Loan_Full_ID}}
-            </td>
-            <td>{{(loan.Borrower_First_Name ||'') +' '+ (loan.Borrower_Last_Name||'')}}</td>
-            <td>{{loan.Application_Date | date:short}}</td>
-
-            <td>{{loan.Borrower_ID_Type}}</td>
-
-          </tr>
-        </tbody>
-      </table>
+    <div class="col-sm-12">
+  
+      <div class="table-responsive" *ngIf="loanlist.length">
+        <table class="table table-styling">
+          <thead>
+            <tr class="table-secondary">
+              <th>Loan No</th>
+              <th>Loan Full Id</th>
+              <th>Borrower</th>
+              <th>Application Date</th>
+              <th>Borrower ID Type</th>
+  
+  
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="cursor:pointer" (click)="navigatetoloan(loan.Loan_Full_ID)" *ngFor="let loan of loanlist"  >
+              <ng-template [ngIf]= "loanService.getFilter() == undefined || loanService.getFilter() == '' || (loan.Loan_Full_ID == loanService.getFilter() || loan.Borrower_First_Name?.toLowerCase() == loanService.getFilter()?.toLowerCase() )">
+                <th scope="row">{{loan.Loan_Full_ID}}</th>
+                <td>
+                  {{loan.Loan_Full_ID}}
+                </td>
+                <td>{{(loan.Borrower_First_Name ||'') +' '+ (loan.Borrower_Last_Name||'')}}</td>
+                <td>{{loan.Application_Date | date:short}}</td>
+  
+                <td>{{loan.Borrower_ID_Type}}</td>
+            </ng-template>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+      <!-- <div *ngIf="!loanlist.length">
+        Loading...
+      </div> -->
+      <!-- Custom Table color with hover and stripped table end -->
     </div>
-
-    <!-- <div *ngIf="!loanlist.length">
-      Loading...
-    </div> -->
-    <!-- Custom Table color with hover and stripped table end -->
   </div>
-</div>
+  

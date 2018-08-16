@@ -8,7 +8,7 @@ import { loan_model, loan_borrower, loan_farmer } from '../../models/loanmodel';
 const API_URL = environment.apiUrl;
 @Injectable()
 export class LoanApiService {
-
+  headerFilter: string;
   constructor(private apiservice: ApiService) { }
 
   getLoanList(): Observable<ResponseModel> {
@@ -38,6 +38,14 @@ export class LoanApiService {
   createLoan(loanObj){
     const route = '/api/Loan/CreateLoan';
     return this.apiservice.post(route, loanObj).map(res => res);
+  }
+
+  getFilter(): string {
+    return this.headerFilter;
+  }
+
+  setFilter(filter): void {
+    this.headerFilter = filter;
   }
 
 }
