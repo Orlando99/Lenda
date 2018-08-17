@@ -2,7 +2,7 @@
 
 <h2 mat-dialog-title>Add New Crop</h2>
 <div mat-dialog-content>
-    <app-borrower-info-form [borrowerInfo]="coBorrowerInfo"></app-borrower-info-form>
+    <app-borrower-info-form [borrowerInfo]="coBorrowerInfo" (onFormValueChange)="onFormValueChange($event)"></app-borrower-info-form>
 
 </div>
 
@@ -11,7 +11,7 @@
     <button class="mat-raised-button alertifybtndone green modal-trigger" (click)="onNoClick()">
       Cancel
     </button>
-    <button class="alertifybtncancel btn-outline modal-close modal-cancel mat-raised-button"  [mat-dialog-close]="coBorrowerInfo">
+    <button [disabled]="!isFormValid" class="alertifybtncancel btn-outline modal-close modal-cancel mat-raised-button"  [mat-dialog-close]="coBorrowerInfo">
       OK
     </button>
   </div>

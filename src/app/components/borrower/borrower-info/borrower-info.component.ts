@@ -110,11 +110,19 @@ export class BorrowerInfoComponent implements OnInit {
 export class CoBorrowerDialogComponent {
 
   coBorrowerInfo : borrower_model;
+  isFormValid : boolean;
   constructor(
     public dialogRef: MatDialogRef<CoBorrowerDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { coBorrowerInfo}) {
       if(data.coBorrowerInfo){
         this.coBorrowerInfo = data.coBorrowerInfo;
+      }
+    }
+
+    onFormValueChange(data ){
+      if(data){
+        this.coBorrowerInfo = data.value;
+        this.isFormValid = data.isFormValid;
       }
     }
 
