@@ -97,7 +97,7 @@ import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
 import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
-import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
+import { BorrowerInfoComponent, CoBorrowerDialogComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
 import { LoanviewerComponent } from './components/loanviewer/loanviewer.component';
 import { NgxJsonViewerModule } from 'ngx-json-viewer';
@@ -195,6 +195,7 @@ import { ValidationService } from './Workers/calculations/validation.service';
 import { BtnPublishComponent } from './ui-components/btn-publish/btn-publish.component';
 import { BooleanEditor } from './aggridfilters/booleanaggrid.';
 import { ExceptionService } from './Workers/calculations/exception.service';
+import { BorrowerInfoFormComponent } from './components/borrower/borrower-info/borrower-info-form/borrower-info-form.component';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -225,7 +226,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     BorrowerComponent,
     BalancesheetComponent,
     ProjectedincomeComponent,
-    CropComponent, PriceComponent, YieldComponent, YieldDialogComponent,
+    CropComponent, PriceComponent, YieldComponent, YieldDialogComponent,CoBorrowerDialogComponent,
     AdminComponent,
     NamingConventionComponent,
     AggridTxtAreaComponent,
@@ -291,7 +292,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     LiquidityAnalysisComponent,
     BorrowerRatingComponent,
     AdminSidebarComponent,
-    BtnPublishComponent
+    BtnPublishComponent,
+    BorrowerInfoFormComponent
   ],
   imports: [
     BrowserModule,
@@ -418,7 +420,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
       useClass: GlobalErrorHandler
     }
   ],
-  entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent],
+  entryComponents: [DeleteButtonRenderer, ConfirmComponent, EmailEditor, YieldDialogComponent,CoBorrowerDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
