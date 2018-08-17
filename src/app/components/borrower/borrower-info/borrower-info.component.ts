@@ -5,7 +5,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { loan_model, loan_borrower, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
+import { loan_model, loan_borrower, Loan_Association, AssociationTypeCode } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -26,18 +26,18 @@ export class BorrowerInfoComponent implements OnInit {
   entityType = [
     { key: 'IND', value: 'Individual' },
     { key: 'INDWS', value: 'Individual w/ Spouse' },
-    { key: AssocitionTypeCode.Partner, value: 'Partner' },
-    { key: AssocitionTypeCode.Joint, value: 'Joint' },
-    { key: AssocitionTypeCode.Corporation, value: 'Corporation' },
-    { key: AssocitionTypeCode.LLC, value: 'LLC' },
+    { key: AssociationTypeCode.Partner, value: 'Partner' },
+    { key: AssociationTypeCode.Joint, value: 'Joint' },
+    { key: AssociationTypeCode.Corporation, value: 'Corporation' },
+    { key: AssociationTypeCode.LLC, value: 'LLC' },
   ];
   idTypes = [{key : IDType.SSN, value : 'SSN'}, {key : IDType.Tax_ID, value : 'Tax ID'}];
-  individualEntities = ['IND','INDWS',AssocitionTypeCode.Partner];
-  orgnaizationEntities = [AssocitionTypeCode.Joint,AssocitionTypeCode.Corporation,AssocitionTypeCode.LLC];
+  individualEntities = ['IND','INDWS',AssociationTypeCode.Partner];
+  orgnaizationEntities = [AssociationTypeCode.Joint,AssociationTypeCode.Corporation,AssociationTypeCode.LLC];
   selectedEntityGroups : EntityGroup = EntityGroup.Individual;
   EntityGroup : typeof EntityGroup = EntityGroup;
 
-  associationTypeCodes = [AssocitionTypeCode.Partner,AssocitionTypeCode.Joint,AssocitionTypeCode.Corporation,AssocitionTypeCode.LLC];
+  associationTypeCodes = [AssociationTypeCode.Partner,AssociationTypeCode.Joint,AssociationTypeCode.Corporation,AssociationTypeCode.LLC];
   selectedAssociaionTypeCode : string = '';
   loan_id: number;
   isSubmitted: boolean; // to enable or disable the sync button as there is not support to un-dirty the form after submit

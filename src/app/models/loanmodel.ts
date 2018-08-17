@@ -7,7 +7,7 @@ import { ModelStatus, status } from "./syncstatusmodel";
 import { Insurance_Policy } from "./insurancemodel";
 import { IDType } from "../components/borrower/borrower-info/borrower-info.component";
 
-export enum AssocitionTypeCode{
+export enum AssociationTypeCode{
     Partner = 'PRP',
     Joint = 'JNT',
     Corporation = 'COP',
@@ -19,7 +19,10 @@ export enum AssocitionTypeCode{
     Distributor = 'DIS',
     Harvester = 'HAR',
     Rebator = 'REB',
-    ThirdParty= 'THR'
+    ThirdParty= 'THR',
+    LienHolder= 'LEI',
+    Guarantor = 'GUA'
+
 }
 
 @JsonObject
@@ -228,7 +231,7 @@ export class borrower_model
         @JsonProperty("Loan_Full_ID", StringConverter,false)
         Loan_Full_ID: string='';
         @JsonProperty("Assoc_Type_Code", StringConverter,false)
-        Assoc_Type_Code: AssocitionTypeCode;
+        Assoc_Type_Code: AssociationTypeCode;
         @JsonProperty("Assoc_Name", StringConverter,false)
         Assoc_Name: string='';
         @JsonProperty("Contact", StringConverter,false)

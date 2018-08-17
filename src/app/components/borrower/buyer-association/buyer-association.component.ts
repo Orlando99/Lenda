@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { loan_model, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
+import { loan_model, Loan_Association, AssociationTypeCode } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -193,7 +193,7 @@ export class BuyerAssociationComponent implements OnInit {
   addrow() {
     var newItem = new Loan_Association();
     newItem.Loan_Full_ID = this.localloanobject.Loan_Full_ID;
-    newItem.Assoc_Type_Code = AssocitionTypeCode.Buyer;
+    newItem.Assoc_Type_Code = AssociationTypeCode.Buyer;
     newItem.Assoc_ID = 0;
     var res = this.rowData.push(newItem);
     this.gridApi.updateRowData({ add: [newItem] });
