@@ -33,24 +33,24 @@ export class FinanceStatsComponent implements OnInit {
     if(this.localloanobj && this.localloanobj.Borrower){
     this.balanceSheetConfig = {
       data : [
-        {
-          col1: 'Assets',
-          amount: this.localloanobj.Borrower.FC_Borrower_TotalAssets,
-          col3 : 'FICO',
-          col4 : this.localloanobj.Borrower.FC_Borrower_FICO
-        },
-        {
-          col1: 'Debt',
-          amount: this.localloanobj.Borrower.FC_Borrower_TotalDebt,
-          col3 : 'Current',
-          col4 : this.localloanobj.Borrower.Borrower_Current_Assets
-        },
-        {
-          col1: 'Equity',
-          amount: this.localloanobj.Borrower.FC_Borrower_TotalEquity,
-          col3 : 'Debt/Equity',
-          col4 : '43.2%'
-        }
+        // {
+        //   col1: 'Assets',
+        //   amount: this.localloanobj.Borrower.FC_Borrower_TotalAssets,
+        //   col3 : 'FICO',
+        //   col4 : this.localloanobj.Borrower.FC_Borrower_FICO
+        // },
+        // {
+        //   col1: 'Debt',
+        //   amount: this.localloanobj.Borrower.FC_Borrower_TotalDebt,
+        //   col3 : 'Current',
+        //   col4 : this.localloanobj.Borrower.Borrower_Current_Assets
+        // },
+        // {
+        //   col1: 'Equity',
+        //   amount: this.localloanobj.Borrower.FC_Borrower_TotalEquity,
+        //   col3 : 'Debt/Equity',
+        //   col4 : '43.2%'
+        // }
       ],
       highlightRowsIndex : [2]
     };

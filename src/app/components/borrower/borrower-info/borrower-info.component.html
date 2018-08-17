@@ -4,208 +4,16 @@
 
 
 <div class="container bottom width-auto">
-	<div *ngIf="borrowerInfoForm" class="row">
-		<form [formGroup]="borrowerInfoForm">
+	
+	<app-borrower-info-form [borrowerInfo]="borrowerInfo" (onFormValueChange)="onFormValueChange($event)"></app-borrower-info-form>
 
-			<div class="row">
-				<div class="input-field col m2">
-
-					<mat-form-field>
-						<mat-select placeholder="Entity Type" formControlName="Co_Borrower_ID" (selectionChange)="onEntityTypeChange($event)">
-							<mat-option *ngFor="let type of entityType" [value]="type.key">
-								{{ type.value }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-				<div class="input-field col m2">
-
-					<mat-form-field>
-						<input matInput placeholder="First Name" formControlName="Borrower_First_Name" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m1">
-
-					<mat-form-field>
-						<input matInput placeholder="Middle Initial" formControlName="Borrower_MI" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m2">
-
-					<mat-form-field>
-						<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m2">
-
-					<mat-form-field>
-						<mat-select placeholder="ID Type" formControlName="Borrower_ID_Type" [disabled]="true">
-							<mat-option *ngFor="let type of idTypes" [value]="type.key">
-								{{ type.value }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-				<div class="input-field col m2">
-
-					<mat-form-field>
-						<input matInput [placeholder]="getPlaceholder()" formControlName="Borrower_SSN_Hash" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-
-			</div>
-			<div class="row">
-				<div class="input-field col m2" *ngIf="selectedEntityGroups == EntityGroup.Individual">
-					<mat-form-field id="forceStyle">
-						<mat-select placeholder="DL State" formControlName="Borrower_DL_state" (blur)="updateLocalStorage($event)">
-							<mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
-								{{ state.State_Name }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-
-				<div class="input-field col m1" *ngIf="selectedEntityGroups == EntityGroup.Individual">
-					<mat-form-field>
-						<input matInput type="number" placeholder="DL No" formControlName="Borrower_Dl_Num" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-
-				<div class="input-field col m4">
-
-					<mat-form-field>
-						<input matInput placeholder="Address" formControlName="Borrower_Address" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-
-				<div class="input-field col m2">
-					<mat-form-field>
-						<input matInput placeholder="City" formControlName="Borrower_City" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-
-
-				<div class="input-field col m2">
-					<mat-form-field id="forceStyle">
-						<mat-select placeholder="State" formControlName="Borrower_State_ID" (blur)="updateLocalStorage($event)">
-							<mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
-								{{ state.State_Name }}
-							</mat-option>
-						</mat-select>
-					</mat-form-field>
-				</div>
-				<div class="input-field col m1">
-					<mat-form-field>
-						<input matInput placeholder="Zip" formControlName="Borrower_Zip" pattern="^\d{5}(?:[-\s]\d{4})?$" (blur)="updateLocalStorage($event)">
-						<mat-error *ngIf="borrowerInfoForm.get('Borrower_Zip').hasError('pattern') && !borrowerInfoForm.get('Borrower_Zip').hasError('required')">
-							Please enter a valid zip code
-						</mat-error>
-					</mat-form-field>
-				</div>
-			</div>
-			<div class="input-field col m3">
-				<mat-form-field>
-					<input matInput placeholder="Phone  [(123)123-1234]" formControlName="Borrower_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$"
-					 (blur)="updateLocalStorage($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Borrower_Phone').hasError('pattern') && !borrowerInfoForm.get('Borrower_Phone').hasError('required')">
-						Please enter a valid phone no
-					</mat-error>
-				</mat-form-field>
-			</div>
-			<div class="input-field col m3">
-				<mat-form-field>
-					<input matInput placeholder="Email" formControlName="Borrower_email" (blur)="updateLocalStorage($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Borrower_email').hasError('email') && !borrowerInfoForm.get('Borrower_email').hasError('required')">
-						Please enter a valid email
-					</mat-error>
-				</mat-form-field>
-			</div>
-			<div class="input-field col m2">
-				<mat-form-field>
-					<input matInput placeholder="DOB Or Incorporation  [mm/dd/yyyy]" formControlName="Borrower_DOB" pattern="^(0?[1-9]|1[0-2])/(0?[1-9]|1[0-9]|2[0-9]|3[01])/\d{4}$"
-					 (blur)="updateLocalStorage($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Borrower_DOB').hasError('pattern') && !borrowerInfoForm.get('Borrower_DOB').hasError('required')">
-						Please enter a valid DOB
-					</mat-error>
-				</mat-form-field>
-			</div>
-			<div class="input-field col m2">
-				<mat-form-field>
-					<input matInput placeholder="Crop Year" formControlName="Crop_Year" pattern="^\d{4}$" (blur)="updateLocalStorage($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Crop_Year').hasError('pattern') && !borrowerInfoForm.get('Crop_Year').hasError('required')">
-						Please enter a valid year
-					</mat-error>
-				</mat-form-field>
-
-			</div>
-			<div class="w-100"></div>
-			<br>
-
-			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID =='INDWS'">
-				<div class="input-field col m3">
-					<mat-form-field>
-						<input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m3">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Middle Initial" formControlName="Spouse__MI" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m3">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Last Name" formControlName="Spouse_Last_name" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div class="input-field col m3">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Phone [(123)123-1234]" formControlName="Spouse_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$"
-						 (blur)="updateLocalStorage($event)">
-						<mat-error *ngIf="borrowerInfoForm.get('Spouse_Phone').hasError('pattern') && !borrowerInfoForm.get('Spouse_Phone').hasError('required')">
-							Please enter a valid phone no
-						</mat-error>
-					</mat-form-field>
-				</div>
-				<div class="input-field col m3">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Email" formControlName="Spouse_Email" (blur)="updateLocalStorage($event)">
-						<mat-error *ngIf="borrowerInfoForm.get('Spouse_Email').value && borrowerInfoForm.get('Spouse_Email').hasError('email')">
-							Please enter a valid email
-						</mat-error>
-					</mat-form-field>
-				</div>
-
-				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
-					<mat-form-field>
-						<input matInput placeholder="Spouse" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
-					<mat-form-field>
-						<input matInput placeholder="Spouse SSN" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Phone" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-				<div *ngIf="borrowerInfoForm && borrowerInfoForm.value.Co_Borrower_ID === 'Individual w/ Spouse'" class="input-field col m2">
-					<mat-form-field>
-						<input matInput placeholder="Spouse Email" (blur)="updateLocalStorage($event)">
-					</mat-form-field>
-				</div>
-			</div>
-
-
-		</form>
-
-	</div>
+	<a (click)="onAddCoBorrower()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
+		<i class="material-icons left">add</i>Add Co-Borrower
+	</a>
 	<!-- Table -->
-	<!-- <div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Co_Borrower_ID) >=0">
-		<h3>{{getTypeNameOfCB(borrowerInfoForm.value.Co_Borrower_ID)}}</h3>
-		<a (click)="addrow()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
-			<i class="material-icons left">add</i>Add</a>
+	<!-- <div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Borrower_Entity_Type_Code) >=0">
+		<h3>{{getTypeNameOfCB(borrowerInfoForm.value.Borrower_Entity_Type_Code)}}</h3>
+		
 
 			<div class="container bottom">
 				<div class="row">
@@ -230,8 +38,8 @@
 			  </div>  
 	</div> -->
 
-	<div class="row" *ngIf="mode!='create' && selectedAssociaionTypeCode">
+	<!-- <div class="row" *ngIf="mode!='create' && selectedAssociaionTypeCode">
 		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [currentPageName]="currentPageName" [associationTypeCode]="selectedAssociaionTypeCode"
 		 [withoutChevron]="true" (onRowCountChange)="coBorrowerCountChange($event)"></app-association>
-	</div>
+	</div> -->
 </div>
