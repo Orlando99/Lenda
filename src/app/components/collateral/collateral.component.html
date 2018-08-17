@@ -94,7 +94,6 @@
   <app-association [header]="'Buyer'" [associationTypeCode]="'BUY'" *ngIf="pageSettings.buyer.isActive" [currentPageName]="currentPageName"></app-association>
   <app-association [header]="'Guarantor'" [associationTypeCode]="'GUA'" *ngIf="pageSettings.guarantor.isActive" [currentPageName]="currentPageName"></app-association>
  
-  <!-- <app-buyer-association [currentPageName]="currentPageName" *ngIf="pageSettings.buyer.isActive"></app-buyer-association> -->
   <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
   <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
   <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>

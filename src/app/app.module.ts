@@ -96,7 +96,6 @@ import { InsuranceapiService } from './services/insurance/insuranceapi.service';
 import { FarmsInfoComponent } from './components/insurance/farms-info/farms-info.component';
 import { CropYieldInfoComponent } from './components/insurance/crop-yield-info/crop-yield-info.component';
 import { LoanCropUnitsInfoComponent } from './components/insurance/loan-crop-units-info/loan-crop-units-info.component';
-import { BuyerAssociationComponent } from './components/borrower/buyer-association/buyer-association.component';
 import { FarmerInfoComponent } from './components/borrower/farmer-info/farmer-info.component';
 import { BorrowerInfoComponent } from './components/borrower/borrower-info/borrower-info.component';
 import { QuestionsComponent } from './components/borrower/questions/questions.component';
@@ -235,8 +234,8 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     CurrencyDirective,
     PercentageDirective,
     BudgetComponent,
-    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, BuyerAssociationComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, LoanviewerComponent,
-    LoanCropUnitsInfoComponent, BuyerAssociationComponent, QuestionsComponent,
+    CropbasedbudgetComponent, InsuranceComponent, AssociationComponent, FarmsInfoComponent, CropYieldInfoComponent, LoanCropUnitsInfoComponent, FarmerInfoComponent, BorrowerInfoComponent, QuestionsComponent, LoanviewerComponent,
+    LoanCropUnitsInfoComponent, QuestionsComponent,
     LoanbudgetComponent,
     FarmerInfoComponent,
     BorrowerInfoComponent,
