@@ -116,7 +116,12 @@ export class FarmComponent implements OnInit {
             }
           }
           return true;
-        }
+        },
+        cellClassRules:{
+          'dirty' : function(params){ 
+            return (((!!params.data.Owned)) && params.data.Percent_Prod !=100);
+          }
+        },
         
       },
       { headerName: 'Landlord', field: 'Landowner', cellClass: 'editable-color', editable: true, calculationinvoke: false },
@@ -136,6 +141,9 @@ export class FarmComponent implements OnInit {
             params.data['Cash_Rent_Due_Date'] = '';
             params.data['Cash_Rent_Waived'] = 0;
             params.data['Rentperc'] = 0;
+            params.data['Percent_Prod'] = 100;
+            params.data['Permission_To_Insure'] = 1;
+            
           }else{
             params.data['Rentperc'] = 100 - parseFloat(params.newValue);
           }
@@ -229,7 +237,12 @@ export class FarmComponent implements OnInit {
         cellEditorParams: { values: [{ key: 1, value: 'Yes' }, { key: 0, value: 'No' }] },
         valueFormatter: function (params) {
           return params.value == 1 ? 'Yes' : 'No';
-        }
+        },
+        cellClassRules:{
+          'dirty' : function(params){ 
+            return ((!!params.data.Owned) && params.data.Permission_To_Insure !=1);
+          }
+        },
       },
       {
         headerName: 'IR Acres',headerClass:"rightaligned", field: 'Irr_Acres', cellClass: 'editable-color rightaligned', editable: true, cellEditor: "numericCellEditor", valueSetter: numberWithOneDecPrecValueSetter,

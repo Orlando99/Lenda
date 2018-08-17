@@ -92,6 +92,7 @@ export class OptimizerComponent implements OnInit {
       },
       valueFormatter: acresFormatter,
       valueSetter: function (value) {
+         
         let result = value.context.componentParent.validateacresvalue(value.data.ID, parseFloat(value.newValue));
         if (result) {
           

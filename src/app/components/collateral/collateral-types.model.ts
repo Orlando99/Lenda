@@ -1,18 +1,20 @@
+import { AssociationTypeCode } from "../../models/loanmodel";
+
 export default {
   lineHolder: {
-    key: 'TBD1',
-    source: '',
-    sourceKey: ''
+    key: AssociationTypeCode.LienHolder,
+    source: 'Association',
+    sourceKey: 'Assoc_Type_Code'
   },
   buyer: {
-    key: 'BUY',
+    key: AssociationTypeCode.Buyer,
     source: 'Association',
     sourceKey: 'Assoc_Type_Code'
   },
   guarantor: {
-    key: 'TBD2',
-    source: '',
-    sourceKey: 'TBD'
+    key: AssociationTypeCode.Guarantor,
+    source: 'Association',
+    sourceKey: 'Assoc_Type_Code'
   },
   collaterlData: {
     key: 'TBD3',

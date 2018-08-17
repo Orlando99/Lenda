@@ -5,13 +5,10 @@ import { Loan_Farm } from "./farmmodel.";
 import {LoanQResponse} from './loan-response.model';
 import { ModelStatus, status } from "./syncstatusmodel";
 import { Insurance_Policy } from "./insurancemodel";
-import { IDType } from "../components/borrower/borrower-info/borrower-info.component";
+import { IDType } from "../components/borrower/borrower-info/borrower-info-form/borrower-info-form.component";
 
-export enum AssocitionTypeCode{
-    Partner = 'PRP',
-    Joint = 'JNT',
-    Corporation = 'COP',
-    LLC = 'LLC',
+
+export enum AssociationTypeCode{
     Agent = 'AGT',
     Agency = 'AGY',
     AIP = 'AIP',
@@ -19,201 +16,328 @@ export enum AssocitionTypeCode{
     Distributor = 'DIS',
     Harvester = 'HAR',
     Rebator = 'REB',
-    ThirdParty= 'THR'
+    ThirdParty= 'THR',
+    LienHolder= 'LEI',
+    Guarantor = 'GUA'
+
 }
 
-@JsonObject
-export class borrower_model
+export enum BorrowerEntityType{
+    Individual = 'IND',
+    IndividualWithSpouse = 'INS',
+    Partner = 'PRP',
+    Joint = 'JNT',
+    Corporation = 'COP',
+    LLC = 'LLC',
+}
+
+// @JsonObject
+// export class borrower_model
+//     {
+//         @JsonProperty("Loan_PK_ID", IntConverter,false)
+//         Loan_PK_ID: number=undefined;
+
+//         @JsonProperty("Loan_Full_ID", IntConverter,false)
+//         Loan_Full_ID: number=undefined;
+
+//         @JsonProperty("Borrower_ID", IntConverter,false)
+//         Borrower_ID: number=undefined;
+
+//         @JsonProperty("Borrower_ID_Type_Code", IntConverter,false)
+//         Borrower_ID_Type_Code: number=undefined;
+
+//         @JsonProperty("Borrower_SSN_Hash", StringConverter,false)
+//         Borrower_SSN_Hash: string="";
+
+//         @JsonProperty("Borrower_Entity_Type_Code", IntConverter,false)
+//         Borrower_Entity_Type_Code: number=undefined;
+
+//         @JsonProperty("Borrower_Entity_Notes", StringConverter,false)
+//         Borrower_Entity_Notes: string="";
+
+//         @JsonProperty("Borrower_Last_Name", StringConverter,false)
+//         Borrower_Last_Name: string="";
+
+//         @JsonProperty("Borrower_First_Name", StringConverter,false)
+//         Borrower_First_Name:string="";
+
+//         @JsonProperty("Borrower_MI", StringConverter,false)
+//         Borrower_MI: string="";
+
+//         @JsonProperty("Borrower_Address", StringConverter,false)
+//         Borrower_Address: string="";
+
+//         @JsonProperty("Borrower_City", StringConverter,false)
+//         Borrower_City: string="";
+
+//         @JsonProperty("Borrower_State_ID", StringConverter,false)
+//         Borrower_State_ID: string="";
+
+//         @JsonProperty("Borrower_Zip", IntConverter,false)
+//         Borrower_Zip: number=undefined
+
+//         @JsonProperty("Borrower_Phone", StringConverter,false)
+//         Borrower_Phone: string="";
+
+//         @JsonProperty("Borrower_Email", StringConverter,false)
+//         Borrower_Email: string="";
+
+//         @JsonProperty("Borrower_Preferred_Contact_ind", IntConverter,false)
+//         Borrower_Preferred_Contact_ind: number=undefined;
+
+//         @JsonProperty("Borrower_DL_State", StringConverter,false)
+//         Borrower_DL_State: string="";
+
+//         @JsonProperty("Borrower_DL_Num", IntConverter,false)
+//         Borrower_DL_Num: number=undefined
+
+//         @JsonProperty("Borrower_DOB", StringConverter,false)
+//         Borrower_DOB:string="";
+
+//         @JsonProperty("Borrower_County", IntConverter,false)
+//         Borrower_County: number=undefined;
+
+//         @JsonProperty("Borrower_Lat", IntConverter,false)
+//         Borrower_Lat: number=undefined;
+
+//         @JsonProperty("Borrower_Long", IntConverter,false)
+//         Borrower_Long: number=undefined;
+
+//         @JsonProperty("Borrower_Farmer_ID", IntConverter,false)
+//         Borrower_Farmer_ID: number=undefined;
+
+//         @JsonProperty("Borrower_3yr_Tax_Returns", IntConverter,false)
+//         Borrower_3yr_Tax_Returns: number=undefined;
+
+//         @JsonProperty("Borrower_Banruptcy_status", IntConverter,false)
+//         Borrower_Banruptcy_status: number=undefined;
+
+//         @JsonProperty("Borrower_Judgement_Ind", IntConverter,false)
+//         Borrower_Judgement_Ind: number=undefined;
+
+//         @JsonProperty("Borrower_CPA_financials", IntConverter,false)
+//         Borrower_CPA_financials: number=undefined;
+
+//         @JsonProperty("Borrower_Credit_Score", IntConverter,false)
+//         Borrower_Credit_Score: number=undefined;
+
+//         @JsonProperty("Borrower_Credit_score_date", StringConverter,false)
+//         Borrower_Credit_score_date:  string ="";
+
+//         @JsonProperty("Borrower_Financials_Date", StringConverter,false)
+//         Borrower_Financials_Date:  string ="";
+
+//         @JsonProperty("Borrower_Current_Assets", IntConverter,false)
+//         Borrower_Current_Assets: number=undefined;
+
+//         @JsonProperty("Borrower_Current_Assets_Disc", IntConverter,false)
+//         Borrower_Current_Assets_Disc: number=undefined;
+
+//         @JsonProperty("Borrower_Intermediate_Assets", IntConverter,false)
+//         Borrower_Intermediate_Assets: number=undefined;
+
+//         @JsonProperty("Borrower_Intermediate_Assets_Disc", IntConverter,false)
+//         Borrower_Intermediate_Assets_Disc: number=undefined;
+
+//         @JsonProperty("Borrower_Fixed_Assets", IntConverter,false)
+//         Borrower_Fixed_Assets: number=undefined;
+
+//         @JsonProperty("Borrower_Fixed_Assets_Disc", IntConverter,false)
+//         Borrower_Fixed_Assets_Disc: number=undefined;
+
+//         @JsonProperty("Borrower_Fixed_Liabilities", IntConverter,false)
+//         Borrower_Fixed_Liabilities: number=undefined;
+
+//         @JsonProperty("Borrower_Intermediate_Liabilities", IntConverter,false)
+//         Borrower_Intermediate_Liabilities: number=undefined;
+
+//         @JsonProperty("Borrower_Current_Liabilities", IntConverter,false)
+//         Borrower_Current_Liabilities: number=undefined;
+
+//         @JsonProperty("Borrower_Rating", IntConverter,false)
+//         Borrower_Rating: number=undefined;
+
+//         @JsonProperty("Borrower_Income_detail_Ind", IntConverter,false)
+//         Borrower_Income_detail_Ind: number=undefined;
+
+//         @JsonProperty("Spouse_SSN_Hash", IntConverter,false)
+//         Spouse_SSN_Hash: number=undefined;
+
+//         @JsonProperty("Spouse_Last_Name", StringConverter,false)
+//         Spouse_Last_Name: string="";
+
+//         @JsonProperty("Spouse_First_Name", StringConverter,false)
+//         Spouse_First_Name: string="";
+
+//         @JsonProperty("Spouse_MI", StringConverter,false)
+//         Spouse_MI: string="";
+
+//         @JsonProperty("Spouse_Address", StringConverter,false)
+//         Spouse_Address: string="";
+
+//         @JsonProperty("Spouse_City", StringConverter,false)
+//         Spouse_City: string="";
+
+//         @JsonProperty("Spouse_State", StringConverter,false)
+//         Spouse_State: string="";
+
+//         @JsonProperty("Spouse_Zip", StringConverter,false)
+//         Spouse_Zip: string="";
+
+//         @JsonProperty("Spouse_Phone", StringConverter,false)
+//         Spouse_Phone: string="";
+
+//         @JsonProperty("Spouse_Email", StringConverter,false)
+//         Spouse_Email: string="";
+
+//         @JsonProperty("Spouse_Preferred_Contact_Ind", IntConverter,false)
+//         Spouse_Preferred_Contact_Ind: number=undefined;
+
+//         @JsonProperty("Date_Time", StringConverter,false)
+//         Date_Time: string ="";
+
+//         @JsonProperty("Status", IntConverter,false)
+//         Status: number=undefined;
+
+//         @JsonProperty("ActionStatus", IntConverter,false)
+//         ActionStatus: number=0;
+
+//         FC_Borrower_TotalAssets:number=0;
+//         FC_Borrower_TotalDebt:number=0;
+//         FC_Borrower_TotalEquity:number=0;
+//         FC_Borrower_Current_Equity:number=0;
+//         FC_Borrower_Intermediate_Equity:number=0;
+//         FC_Borrower_Fixed_Equity:number=0;
+//         FC_Borrower_NetRatio:number=0;
+//         FC_Borrower_Current_Ratio:number=0;
+//         FC_Borrower_FICO:number=0;
+//         //for balancesheet
+//         FC_Borrower_Current_Adjvalue:number=0;
+//         FC_Borrower_Intermediate_Adjvalue:number=0;
+//         FC_Borrower_Fixed_Adjvalue:number=0;
+//         FC_Borrower_Total_Adjvalue:number=0;
+//         FC_Borrower_Current_Discvalue:number=0;
+//         FC_Borrower_Intermediate_Discvalue:number=0;
+//         FC_Borrower_Fixed_Discvalue:number=0;
+//         FC_Borrower_Total_Discvalue:number=0;
+//         Borrower_CPA_Financials : string;
+//         CPA_Prepared_Financials:boolean;
+//         App_Logpriority:Logpriority=Logpriority.VeryHigh;
+
+//     }
+
+
+    @JsonObject
+    export class borrower_model
     {
-        @JsonProperty("Loan_PK_ID", IntConverter,false)
-        Loan_PK_ID: number=undefined;
+        @JsonProperty("CoBorrower_ID" , IntConverter,false)
+        CoBorrower_ID : number = undefined;
 
-        @JsonProperty("Loan_Full_ID", IntConverter,false)
-        Loan_Full_ID: number=undefined;
+        @JsonProperty("Loan_Full_ID" , StringConverter,false)
+        Loan_Full_ID : string = '';
 
-        @JsonProperty("Borrower_ID", IntConverter,false)
-        Borrower_ID: number=undefined;
+        @JsonProperty("Borrower_ID_Type" , IntConverter,false)
+        Borrower_ID_Type : number = undefined;
 
-        @JsonProperty("Borrower_ID_Type_Code", IntConverter,false)
-        Borrower_ID_Type_Code: number=undefined;
+        @JsonProperty("Borrower_SSN_Hash" , StringConverter,false)
+        Borrower_SSN_Hash : string = '';
 
-        @JsonProperty("Borrower_SSN_Hash", StringConverter,false)
-        Borrower_SSN_Hash: string="";
+        @JsonProperty("Borrower_Entity_Type_Code" , StringConverter,false)
+        Borrower_Entity_Type_Code : string = '';
 
-        @JsonProperty("Borrower_Entity_Type", IntConverter,false)
-        Borrower_Entity_Type: number=undefined;
+        @JsonProperty("Borrower_Last_Name" , StringConverter,false)
+        Borrower_Last_Name : string = '';
 
-        @JsonProperty("Borrower_Entity_Notes", StringConverter,false)
-        Borrower_Entity_Notes: string="";
+        @JsonProperty("Borrower_First_Name" , StringConverter,false)
+        Borrower_First_Name : string = '';
 
-        @JsonProperty("Borrower_Last_Name", StringConverter,false)
-        Borrower_Last_Name: string="";
+        @JsonProperty("Borrower_MI" , StringConverter,false)
+        Borrower_MI : string = '';
 
-        @JsonProperty("Borrower_First_Name", StringConverter,false)
-        Borrower_First_Name:string="";
+        @JsonProperty("Borrower_Address" , StringConverter,false)
+        Borrower_Address : string = '';
 
-        @JsonProperty("Borrower_MI", StringConverter,false)
-        Borrower_MI: string="";
+        @JsonProperty("Borrower_City" , StringConverter,false)
+        Borrower_City : string = '';
 
-        @JsonProperty("Borrower_Address", StringConverter,false)
-        Borrower_Address: string="";
+        @JsonProperty("Borrower_State_ID" , StringConverter,false)
+        Borrower_State_ID : string = '';
 
-        @JsonProperty("Borrower_City", StringConverter,false)
-        Borrower_City: string="";
+        @JsonProperty("Borrower_Zip" , IntConverter,false)
+        Borrower_Zip : number = undefined;
 
-        @JsonProperty("Borrower_State_ID", StringConverter,false)
-        Borrower_State_ID: string="";
+        @JsonProperty("Borrower_Phone" , StringConverter,false)
+        Borrower_Phone : string = '';
 
-        @JsonProperty("Borrower_Zip", IntConverter,false)
-        Borrower_Zip: number=undefined
+        @JsonProperty("Borrower_email" , StringConverter,false)
+        Borrower_email : string = '';
 
-        @JsonProperty("Borrower_Phone", StringConverter,false)
-        Borrower_Phone: string="";
+        @JsonProperty("Borrower_DL_state" , StringConverter,false)
+        Borrower_DL_state : string = '';
 
-        @JsonProperty("Borrower_Email", StringConverter,false)
-        Borrower_Email: string="";
+        @JsonProperty("Borrower_Dl_Num" , StringConverter,false)
+        Borrower_Dl_Num : string = '';
 
-        @JsonProperty("Borrower_Preferred_Contact_ind", IntConverter,false)
-        Borrower_Preferred_Contact_ind: number=undefined;
+        @JsonProperty("Borrower_DOB" , StringConverter,false)
+        Borrower_DOB : string = '';
 
-        @JsonProperty("Borrower_DL_State", StringConverter,false)
-        Borrower_DL_State: string="";
+        @JsonProperty("Borrower_Preferred_Contact_Ind" , IntConverter,false)
+        Borrower_Preferred_Contact_Ind : number = undefined;
 
-        @JsonProperty("Borrower_DL_Num", IntConverter,false)
-        Borrower_DL_Num: number=undefined
+        @JsonProperty("Borrower_County_ID" , IntConverter,false)
+        Borrower_County_ID : number = undefined;
 
-        @JsonProperty("Borrower_DOB", StringConverter,false)
-        Borrower_DOB:string="";
+        @JsonProperty("Borrower_Lat" , IntConverter,false)
+        Borrower_Lat : number = undefined;
 
-        @JsonProperty("Borrower_County", IntConverter,false)
-        Borrower_County: number=undefined;
+        @JsonProperty("Borrower_Long" , IntConverter,false)
+        Borrower_Long : number = undefined;
 
-        @JsonProperty("Borrower_Lat", IntConverter,false)
-        Borrower_Lat: number=undefined;
+        @JsonProperty("Spouse_SSN_Hash" , StringConverter,false)
+        Spouse_SSN_Hash : string = '';
 
-        @JsonProperty("Borrower_Long", IntConverter,false)
-        Borrower_Long: number=undefined;
+        @JsonProperty("Spouse_Last_name" , StringConverter,false)
+        Spouse_Last_name : string = '';
 
-        @JsonProperty("Borrower_Farmer_ID", IntConverter,false)
-        Borrower_Farmer_ID: number=undefined;
+        @JsonProperty("Spouse_First_Name" , StringConverter,false)
+        Spouse_First_Name : string = '';
 
-        @JsonProperty("Borrower_3yr_Tax_Returns", IntConverter,false)
-        Borrower_3yr_Tax_Returns: number=undefined;
+        @JsonProperty("Spouse__MI" , StringConverter,false)
+        Spouse__MI : string = '';
 
-        @JsonProperty("Borrower_Banruptcy_status", IntConverter,false)
-        Borrower_Banruptcy_status: number=undefined;
+        @JsonProperty("Spouse__Address" , StringConverter,false)
+        Spouse__Address : string = '';
 
-        @JsonProperty("Borrower_Judgement_Ind", IntConverter,false)
-        Borrower_Judgement_Ind: number=undefined;
+        @JsonProperty("Spouse_City" , StringConverter,false)
+        Spouse_City : string = '';
 
-        @JsonProperty("Borrower_CPA_financials", IntConverter,false)
-        Borrower_CPA_financials: number=undefined;
+        @JsonProperty("Spouse_State" , StringConverter,false)
+        Spouse_State : string = '';
 
-        @JsonProperty("Borrower_Credit_Score", IntConverter,false)
-        Borrower_Credit_Score: number=undefined;
+        @JsonProperty("Spouse_Zip" , IntConverter,false)
+        Spouse_Zip : number = undefined;
 
-        @JsonProperty("Borrower_Credit_score_date", StringConverter,false)
-        Borrower_Credit_score_date:  string ="";
+        @JsonProperty("Spouse_Phone" , StringConverter,false)
+        Spouse_Phone : string = '';
 
-        @JsonProperty("Borrower_Financials_Date", StringConverter,false)
-        Borrower_Financials_Date:  string ="";
+        @JsonProperty("Spouse_Email" , StringConverter,false)
+        Spouse_Email : string = '';
 
-        @JsonProperty("Borrower_Current_Assets", IntConverter,false)
-        Borrower_Current_Assets: number=undefined;
+        @JsonProperty("Spouse_Preffered_Contact_Ind" , IntConverter,false)
+        Spouse_Preffered_Contact_Ind : number = undefined;
 
-        @JsonProperty("Borrower_Current_Assets_Disc", IntConverter,false)
-        Borrower_Current_Assets_Disc: number=undefined;
+        @JsonProperty("IsDelete" , IntConverter,false)
+        IsDeletes : number = undefined;
 
-        @JsonProperty("Borrower_Intermediate_Assets", IntConverter,false)
-        Borrower_Intermediate_Assets: number=undefined;
+        @JsonProperty("ActionStatus" , IntConverter,false)
+        ActionStatus : number = undefined;
 
-        @JsonProperty("Borrower_Intermediate_Assets_Disc", IntConverter,false)
-        Borrower_Intermediate_Assets_Disc: number=undefined;
 
-        @JsonProperty("Borrower_Fixed_Assets", IntConverter,false)
-        Borrower_Fixed_Assets: number=undefined;
-
-        @JsonProperty("Borrower_Fixed_Assets_Disc", IntConverter,false)
-        Borrower_Fixed_Assets_Disc: number=undefined;
-
-        @JsonProperty("Borrower_Fixed_Liabilities", IntConverter,false)
-        Borrower_Fixed_Liabilities: number=undefined;
-
-        @JsonProperty("Borrower_Intermediate_Liabilities", IntConverter,false)
-        Borrower_Intermediate_Liabilities: number=undefined;
-
-        @JsonProperty("Borrower_Current_Liabilities", IntConverter,false)
-        Borrower_Current_Liabilities: number=undefined;
-
-        @JsonProperty("Borrower_Rating", IntConverter,false)
-        Borrower_Rating: number=undefined;
-
-        @JsonProperty("Borrower_Income_detail_Ind", IntConverter,false)
-        Borrower_Income_detail_Ind: number=undefined;
-
-        @JsonProperty("Spouse_SSN_Hash", IntConverter,false)
-        Spouse_SSN_Hash: number=undefined;
-
-        @JsonProperty("Spouse_Last_Name", StringConverter,false)
-        Spouse_Last_Name: string="";
-
-        @JsonProperty("Spouse_First_Name", StringConverter,false)
-        Spouse_First_Name: string="";
-
-        @JsonProperty("Spouse_MI", StringConverter,false)
-        Spouse_MI: string="";
-
-        @JsonProperty("Spouse_Address", StringConverter,false)
-        Spouse_Address: string="";
-
-        @JsonProperty("Spouse_City", StringConverter,false)
-        Spouse_City: string="";
-
-        @JsonProperty("Spouse_State", StringConverter,false)
-        Spouse_State: string="";
-
-        @JsonProperty("Spouse_Zip", StringConverter,false)
-        Spouse_Zip: string="";
-
-        @JsonProperty("Spouse_Phone", StringConverter,false)
-        Spouse_Phone: string="";
-
-        @JsonProperty("Spouse_Email", StringConverter,false)
-        Spouse_Email: string="";
-
-        @JsonProperty("Spouse_Preferred_Contact_Ind", IntConverter,false)
-        Spouse_Preferred_Contact_Ind: number=undefined;
-
-        @JsonProperty("Date_Time", StringConverter,false)
-        Date_Time: string ="";
-
-        @JsonProperty("Status", IntConverter,false)
-        Status: number=undefined;
-
-        @JsonProperty("ActionStatus", IntConverter,false)
-        ActionStatus: number=0;
-
-        FC_Borrower_TotalAssets:number=0;
-        FC_Borrower_TotalDebt:number=0;
-        FC_Borrower_TotalEquity:number=0;
-        FC_Borrower_Current_Equity:number=0;
-        FC_Borrower_Intermediate_Equity:number=0;
-        FC_Borrower_Fixed_Equity:number=0;
-        FC_Borrower_NetRatio:number=0;
-        FC_Borrower_Current_Ratio:number=0;
-        FC_Borrower_FICO:number=0;
-        //for balancesheet
-        FC_Borrower_Current_Adjvalue:number=0;
-        FC_Borrower_Intermediate_Adjvalue:number=0;
-        FC_Borrower_Fixed_Adjvalue:number=0;
-        FC_Borrower_Total_Adjvalue:number=0;
-        FC_Borrower_Current_Discvalue:number=0;
-        FC_Borrower_Intermediate_Discvalue:number=0;
-        FC_Borrower_Fixed_Discvalue:number=0;
-        FC_Borrower_Total_Discvalue:number=0;
-        Borrower_CPA_Financials : string;
-        CPA_Prepared_Financials:boolean;
-        App_Logpriority:Logpriority=Logpriority.VeryHigh;
+        //extra to handle to existing code: should be removed
+        Borrower_3yr_Tax_Returns : number;
+        Borrower_CPA_Financials  : string;
+        CPA_Prepared_Financials : boolean;
+        FC_Borrower_FICO : number;
 
     }
     @JsonObject
@@ -228,7 +352,7 @@ export class borrower_model
         @JsonProperty("Loan_Full_ID", StringConverter,false)
         Loan_Full_ID: string='';
         @JsonProperty("Assoc_Type_Code", StringConverter,false)
-        Assoc_Type_Code: AssocitionTypeCode;
+        Assoc_Type_Code: AssociationTypeCode;
         @JsonProperty("Assoc_Name", StringConverter,false)
         Assoc_Name: string='';
         @JsonProperty("Contact", StringConverter,false)

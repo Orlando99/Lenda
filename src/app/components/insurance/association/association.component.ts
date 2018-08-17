@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angular/core';
-import { loan_model, Loan_Association, AssocitionTypeCode } from '../../../models/loanmodel';
+import { loan_model, Loan_Association, AssociationTypeCode } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
 import { ToastsManager } from 'ng2-toastr';
@@ -32,7 +32,7 @@ export class AssociationComponent implements OnInit, OnChanges {
   @Input('header')
   header :string = '';
   @Input('associationTypeCode')
-  associationTypeCode :AssocitionTypeCode;
+  associationTypeCode :AssociationTypeCode;
   @Input("withoutChevron")
   withoutChevron : boolean = false;
   @Output('onRowCountChange')
@@ -124,19 +124,22 @@ export class AssociationComponent implements OnInit, OnChanges {
         { headerName: '', field: 'value', width: 50, cellRenderer: "deletecolumn" },
       ];
 
-      if(this.associationTypeCode == 'REB'){
-        let rebatorColummns = [
-          { headerName: 'Exp Rebate',width:120, field: 'Amount',  headerClass: "rightaligned", editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','rightaligned'],
+      if(this.associationTypeCode == AssociationTypeCode.Rebator || this.associationTypeCode == AssociationTypeCode.LienHolder){
+        
+         let amountCol =  { headerName: 'Amount',width:120, field: 'Amount',  headerClass: "rightaligned", editable: true,  cellEditor: "numericCellEditor", valueSetter: numberValueSetter, cellClass: ['editable-color','rightaligned'],
               cellEditorParams: (params)=> {
                 return { value : params.data.Amount || 0}
               },
               valueFormatter: currencyFormatter
-          },
-          { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function () {
+          };
+          this.columnDefs.splice(this.columnDefs.length-2,0,amountCol);
+        }
+        if(this.associationTypeCode == AssociationTypeCode.Rebator){
+          let InsUOMCol = { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function () {
             return 'bu';
-          }}
-        ];
-        this.columnDefs.splice(this.columnDefs.length-2,0,...rebatorColummns);
+          }};
+          this.columnDefs.splice(this.columnDefs.length-2,0,InsUOMCol);
+        
       }
       ///
       this.context = { componentParent: this };
@@ -230,7 +233,7 @@ export class AssociationComponent implements OnInit, OnChanges {
     newItem.Preferred_Contact_Ind=1;
     this.gridApi.updateRowData({ add: [newItem] });
     this.gridApi.startEditingCell({
-      rowIndex: this.rowData.length-1,
+      rowIndex: this.rowData.length,
       colKey: "Assoc_Name"
     });
     this.localloanobject.Association.push(newItem);
