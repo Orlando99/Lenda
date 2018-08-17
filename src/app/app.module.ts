@@ -196,6 +196,7 @@ import { BtnPublishComponent } from './ui-components/btn-publish/btn-publish.com
 import { BooleanEditor } from './aggridfilters/booleanaggrid.';
 import { ExceptionService } from './Workers/calculations/exception.service';
 import { BorrowerInfoFormComponent } from './components/borrower/borrower-info/borrower-info-form/borrower-info-form.component';
+import { BlankCellRenderer } from './aggridcolumns/tooltip/aggridrenderers';
 
 
 LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999ec");
@@ -210,6 +211,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     AppComponent,
     SpinerComponent,
     DeleteButtonRenderer,
+    BlankCellRenderer,
     ConfirmComponent,
     LoginComponent,
     PageNotFoundComponent,
@@ -334,7 +336,7 @@ LicenseManager.setLicenseKey("MTUzNjQ0NzYwMDAwMA==712c48d48d0a3ec85f3243b1295999
     MatButtonToggleModule,
     LoadingModule,
     NgxJsonViewerModule,
-    AgGridModule.withComponents([NumericEditor,BooleanEditor, SelectEditor, ChipsListEditor, EmptyEditor, AgGridTooltipComponent]),
+    AgGridModule.withComponents([NumericEditor,BooleanEditor, SelectEditor, ChipsListEditor, EmptyEditor, BlankCellRenderer,AgGridTooltipComponent]),
     ToastModule.forRoot(),
     SidebarModule.forRoot(),
     ChartsModule,

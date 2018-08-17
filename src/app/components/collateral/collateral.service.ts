@@ -162,6 +162,7 @@ export class CollateralService {
   }
 
   rowValueChanged(value: any, localloanobject: loan_model, component, source, uniqueKey) {
+    
     var obj = value.data;
     if (obj[uniqueKey] == 0) {
       let lastIndex = localloanobject[source].length - 1;
@@ -183,6 +184,7 @@ export class CollateralService {
   deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source, uniqueKey) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
+        debugger
         var obj = rowData[rowIndex];
         if (obj[uniqueKey] == 0) {
           rowData.splice(rowIndex, 1);
@@ -253,4 +255,6 @@ export class CollateralService {
       }
     }
   }
+
+  
 }

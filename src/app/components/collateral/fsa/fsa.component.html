@@ -2,7 +2,7 @@
   <mat-expansion-panel  [expanded]="!!(rowData && rowData.length)">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        FSA
+        Additional Collateral
       </mat-panel-title>
     </mat-expansion-panel-header>
 
@@ -10,7 +10,7 @@
       <div class="row" >
         <ag-grid-angular
         class="ag-theme-balham roboto-font"
-        [animateRows]="true" [enableSorting]="true"
+        [animateRows]="true" [enableSorting]="false"
         [enableFilter]="true"
         [context]="context"
         (gridSizeChanged)="onGridSizeChanged($event)"
@@ -20,7 +20,6 @@
         (cellEditingStopped)="rowvaluechanged($event)"
         [rowData]="rowData"
         (gridReady)="onGridReady($event)"
-        [pinnedBottomRowData]="pinnedBottomRowData"
         [columnDefs]="columnDefs"
         [gridAutoHeight]=true>
         </ag-grid-angular>

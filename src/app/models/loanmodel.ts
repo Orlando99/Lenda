@@ -588,8 +588,14 @@ export enum BorrowerEntityType{
         Collateral_Type_Code: number=0;
         @JsonProperty("Collateral_Sub_Type_Code", IntConverter,false)
         Collateral_Sub_Type_Code: number=0;
+        @JsonProperty("Crop_Detail", StringConverter,false)
+        Crop_Detail: string='';
+        @JsonProperty("Crop_Type", StringConverter,false)
+        Crop_Type: string='';
         @JsonProperty("Collateral_Description", StringConverter,false)
         Collateral_Description: string='';
+        @JsonProperty("Measure_Code", StringConverter,false)
+        Measure_Code: string='';
         @JsonProperty("Insurance_Category_Code", IntConverter,false)
         Insurance_Category_Code: number=0;
         @JsonProperty("Insurance_Type_Code", IntConverter,false)
@@ -602,14 +608,14 @@ export enum BorrowerEntityType{
         Prior_Lien_Amount: number=0;
         @JsonProperty("Net_Market_Value", IntConverter,false)
         Net_Market_Value: number=0;
-        @JsonProperty("Disc_Value", IntConverter,false)
-        Disc_Value: number=0;
+        @JsonProperty("Disc_Pct", IntConverter,false)
+        Disc_Pct: number=0;
         @JsonProperty("Insurance_Value", IntConverter,false)
         Insurance_Value: number=0;
         @JsonProperty("Insurance_Disc_Value", IntConverter,false)
         Insurance_Disc_Value: number=0;
-        @JsonProperty("Disc_CEI_Value", IntConverter,false)
-        Disc_CEI_Value: number=0;
+        @JsonProperty("Disc_Mkt_Value", IntConverter,false)
+        Disc_Mkt_Value: number=0;
         @JsonProperty("Lien_Holder", StringConverter,false)
         Lien_Holder: string='';
         @JsonProperty("Status", IntConverter,false)
