@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BorrowerEntityType, loan_borrower } from '../../../../models/loanmodel';
+import { BorrowerEntityType, loan_borrower, borrower_model } from '../../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../environments/environment.prod';
 
@@ -31,8 +31,10 @@ export class BorrowerInfoFormComponent implements OnInit {
   associationTypeCodes = [BorrowerEntityType.Partner,BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
-  @Input() set borrowerInfo(borrowerInfo) {
+  @Input() set borrowerInfo(borrowerInfo : borrower_model) {
     if (borrowerInfo) {
+      borrowerInfo.Borrower_Entity_Type_Code = borrowerInfo.Borrower_Entity_Type_Code || BorrowerEntityType.Individual;
+      borrowerInfo.Borrower_ID_Type = borrowerInfo.Borrower_ID_Type || IDType.SSN;
       // let borrower = new loan_borrower();
       // borrower.Borrower_First_Name = borrowerInfo.value.Farmer_First_Name ? borrowerInfo.value.Farmer_First_Name.slice() : "";
       // borrower.Borrower_Last_Name = borrowerInfo.value.Farmer_Last_Name ? borrowerInfo.value.Farmer_Last_Name.slice() : "";
@@ -49,8 +51,6 @@ export class BorrowerInfoFormComponent implements OnInit {
       // borrower.Borrower_DL_state = borrowerInfo.value.Borrower_DL_state ? borrowerInfo.value.Borrower_DL_state.slice() : "";
       // borrower.Borrower_Dl_Num = borrowerInfo.value.Borrower_Dl_Num ? borrowerInfo.value.Borrower_Dl_Num.slice() : "";
       this.createForm(borrowerInfo);
-    }else{
-      this.createForm({});
     }
   }
 

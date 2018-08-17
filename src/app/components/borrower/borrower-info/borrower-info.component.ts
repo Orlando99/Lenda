@@ -70,9 +70,10 @@ export class BorrowerInfoComponent implements OnInit {
   }
 
   onAddCoBorrower(){
+    let borrower = this.getNewBorrowerInstance();
     const dialogRef = this.dialog.open(CoBorrowerDialogComponent, {
-      width: '250px',
-      data: {coBorrowerInfo:{ }}
+            panelClass: 'borrower-dialog',
+      data: {coBorrowerInfo: borrower}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -99,6 +100,7 @@ export class BorrowerInfoComponent implements OnInit {
   getNewBorrowerInstance(){
     let borrower = new borrower_model();
     borrower.Borrower_Entity_Type_Code = BorrowerEntityType.Individual;
+    return borrower;
   }
 }
 
