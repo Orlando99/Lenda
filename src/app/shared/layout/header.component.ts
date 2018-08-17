@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private globalService: GlobalService,
     public dialog: MatDialog,
-    private router: Router,
+    public router: Router,
     private activatedRoute: ActivatedRoute,
     public localst: LocalStorageService,
     private notificationFeedService: NotificationFeedsService,
