@@ -3,24 +3,20 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BorrowerEntityType, loan_borrower, borrower_model } from '../../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../environments/environment.prod';
+import { BorrowerService } from '../../borrower.service';
 
 @Component({
   selector: 'app-borrower-info-form',
   templateUrl: './borrower-info-form.component.html',
-  styleUrls: ['./borrower-info-form.component.scss']
+  styleUrls: ['./borrower-info-form.component.scss'],
+  providers : [BorrowerService]
 })
 export class BorrowerInfoFormComponent implements OnInit {
 
   borrowerInfoForm: FormGroup;
   stateList: Array<any>;
-  entityType = [
-    { key: BorrowerEntityType.Individual, value: 'Individual' },
-    { key: BorrowerEntityType.IndividualWithSpouse, value: 'Individual w/ Spouse' },
-    { key: BorrowerEntityType.Partner, value: 'Partner' },
-    { key: BorrowerEntityType.Joint, value: 'Joint' },
-    { key: BorrowerEntityType.Corporation, value: 'Corporation' },
-    { key: BorrowerEntityType.LLC, value: 'LLC' },
-  ];
+
+  entityType = [];
   idTypes = [{key : IDType.SSN, value : 'SSN'}, {key : IDType.Tax_ID, value : 'Tax ID'}];
   individualEntities = [BorrowerEntityType.Individual, BorrowerEntityType.IndividualWithSpouse,BorrowerEntityType.Partner];
   orgnaizationEntities = [BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
@@ -31,10 +27,23 @@ export class BorrowerInfoFormComponent implements OnInit {
   associationTypeCodes = [BorrowerEntityType.Partner,BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
-  @Input() set borrowerInfo(borrowerInfo : borrower_model) {
-    if (borrowerInfo) {
-      borrowerInfo.Borrower_Entity_Type_Code = borrowerInfo.Borrower_Entity_Type_Code || BorrowerEntityType.Individual;
-      borrowerInfo.Borrower_ID_Type = borrowerInfo.Borrower_ID_Type || IDType.SSN;
+  @Input() borrowerInfo : borrower_model;
+
+  constructor(private fb: FormBuilder,
+  private localStorageService : LocalStorageService,
+  private borrowerService : BorrowerService) {
+
+
+  }
+
+  ngOnInit() {
+    this.stateList = this.localStorageService.retrieve(environment.referencedatakey).StateList;
+    this.entityType = this.borrowerService.entityType;
+
+    if (this.borrowerInfo) {
+
+      this.borrowerInfo.Borrower_Entity_Type_Code = this.borrowerInfo.Borrower_Entity_Type_Code || BorrowerEntityType.Individual;
+      this.borrowerInfo.Borrower_ID_Type = this.borrowerInfo.Borrower_ID_Type || IDType.SSN;
       // let borrower = new loan_borrower();
       // borrower.Borrower_First_Name = borrowerInfo.value.Farmer_First_Name ? borrowerInfo.value.Farmer_First_Name.slice() : "";
       // borrower.Borrower_Last_Name = borrowerInfo.value.Farmer_Last_Name ? borrowerInfo.value.Farmer_Last_Name.slice() : "";
@@ -50,18 +59,9 @@ export class BorrowerInfoFormComponent implements OnInit {
       // borrower.Borrower_State_ID = borrowerInfo.value.Farmer_State ? borrowerInfo.value.Farmer_State.slice() : "";
       // borrower.Borrower_DL_state = borrowerInfo.value.Borrower_DL_state ? borrowerInfo.value.Borrower_DL_state.slice() : "";
       // borrower.Borrower_Dl_Num = borrowerInfo.value.Borrower_Dl_Num ? borrowerInfo.value.Borrower_Dl_Num.slice() : "";
-      this.createForm(borrowerInfo);
+      this.createForm(this.borrowerInfo);
+      
     }
-  }
-
-  constructor(private fb: FormBuilder,
-  private localStorageService : LocalStorageService) {
-
-
-  }
-
-  ngOnInit() {
-    this.stateList = this.localStorageService.retrieve(environment.referencedatakey).StateList;
   }
 
 
@@ -74,10 +74,10 @@ export class BorrowerInfoFormComponent implements OnInit {
       
     }
   }
-  getTypeNameOfCB(cbTypeID){
-    let entity = this.entityType.find(et=>et.key == cbTypeID);
-    return entity ? entity.value : '';
-  }
+  // getTypeNameOfCB(cbTypeID){
+  //   let entity = this.entityType.find(et=>et.key == cbTypeID);
+  //   return entity ? entity.value : '';
+  // }
   createForm(formData) {
     this.borrowerInfoForm = this.fb.group({
       Borrower_First_Name: [formData.Borrower_First_Name || '', Validators.required],
@@ -115,7 +115,8 @@ export class BorrowerInfoFormComponent implements OnInit {
   }
   onValueChange(){
     if(this.borrowerInfoForm.value){
-      this.onFormValueChange.emit({value : this.borrowerInfoForm.value, isFormValid : this.borrowerInfoForm.valid});
+      this.borrowerInfo = Object.assign(this.borrowerInfo, this.borrowerInfoForm.value);
+      this.onFormValueChange.emit({value : this.borrowerInfo, isFormValid : this.borrowerInfoForm.valid});
     }
   }
   formatDate(strDate) {

@@ -4,12 +4,20 @@ import { LoggingService } from '../../services/Logs/logging.service';
 import { LoancalculationWorker } from '../../Workers/calculations/loancalculationworker';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { ToasterService } from '../../services/toaster.service';
-import { loan_model } from '../../models/loanmodel';
+import { loan_model, BorrowerEntityType } from '../../models/loanmodel';
 import { JsonConvert } from 'json2typescript';
 
 @Injectable()
 export class BorrowerService {
 
+  entityType = [
+    { key: BorrowerEntityType.Individual, value: 'Individual' },
+    { key: BorrowerEntityType.IndividualWithSpouse, value: 'Individual w/ Spouse' },
+    { key: BorrowerEntityType.Partner, value: 'Partner' },
+    { key: BorrowerEntityType.Joint, value: 'Joint' },
+    { key: BorrowerEntityType.Corporation, value: 'Corporation' },
+    { key: BorrowerEntityType.LLC, value: 'LLC' },
+  ];
   constructor(public localstorageservice: LocalStorageService,
     public logging: LoggingService,
     public loanserviceworker: LoancalculationWorker,
@@ -37,4 +45,8 @@ export class BorrowerService {
     });
   }
 
+  getTypeNameOfCB(cbTypeID){
+    let entity = this.entityType.find(et=>et.key == cbTypeID);
+    return entity ? entity.value : '';
+  }
 }

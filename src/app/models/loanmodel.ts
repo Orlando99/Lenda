@@ -327,7 +327,7 @@ export enum BorrowerEntityType{
         Spouse_Preffered_Contact_Ind : number = undefined;
 
         @JsonProperty("IsDelete" , IntConverter,false)
-        IsDeletes : number = undefined;
+        IsDelete : number = undefined;
 
         @JsonProperty("ActionStatus" , IntConverter,false)
         ActionStatus : number = undefined;
@@ -383,6 +383,9 @@ export enum BorrowerEntityType{
 
         @JsonProperty("Borrower", borrower_model)
         Borrower: borrower_model=null;
+
+        @JsonProperty("CoBorrower", ArrayConverter,true)
+        CoBorrower: Array<borrower_model>=[];
 
         @JsonProperty("LoanCropUnits", ArrayConverter,true)
         LoanCropUnits:Loan_Crop_Unit[]=[];
