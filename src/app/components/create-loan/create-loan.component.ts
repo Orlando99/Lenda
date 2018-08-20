@@ -71,7 +71,7 @@ export class CreateLoanComponent implements OnInit {
 
     let loanObj = Object.assign({}, this.farmerParamsObj.value, this.borrowerParamsObj.value,{Crop_Year : this.cropYear});
 
-    if (this.farmerParamsObj.isValid && this.borrowerParamsObj.isValid) {
+    if (this.farmerParamsObj.isValid && this.borrowerParamsObj.isValid && this.cropYear) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
         this.toaster.success("Details saved successfully, navigating to Loan Dashboard...");
         this.loanApiService.getLoanById(successResponse.Data).subscribe(res => {
