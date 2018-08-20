@@ -674,6 +674,8 @@ export enum BorrowerEntityType{
         Farmer_Last_Name : string;
         Farmer_First_Name : string;
         Farmer_MI : string;
+        Farmer_DL_State : string;
+        Farmer_DL_Num : string;
         Farmer__Address : string;
         Farmer_City : string;
         Farmer_State : string;
@@ -681,6 +683,7 @@ export enum BorrowerEntityType{
         Farmer_Phone : string;
         Farmer_Email : string;
         Farmer_DOB : string;
+        Farmer_Preferred_Contact_Ind : number;
         Year_Begin_Farming : number;
         Year_Begin_Client :number;
     }

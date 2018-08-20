@@ -49,6 +49,8 @@ export class CreateLoanComponent implements OnInit {
       this.borrowerParamsObj.value.Borrower_MI = this.farmerParamsObj.value.Farmer_MI;
       this.borrowerParamsObj.value.Borrower_Last_Name = this.farmerParamsObj.value.Farmer_Last_Name;
       this.borrowerParamsObj.value.Borrower_SSN_Hash = this.farmerParamsObj.value.Farmer_SSN_Hash;
+      this.borrowerParamsObj.value.Borrower_DL_state = this.farmerParamsObj.value.Farmer_DL_State;
+      this.borrowerParamsObj.value.Borrower_Dl_Num = this.farmerParamsObj.value.Farmer_DL_Num;
       this.borrowerParamsObj.value.Borrower_Address = this.farmerParamsObj.value.Farmer__Address;
       this.borrowerParamsObj.value.Borrower_City = this.farmerParamsObj.value.Farmer_City;
       this.borrowerParamsObj.value.Borrower_State_ID = this.farmerParamsObj.value.Farmer_State;
@@ -56,6 +58,7 @@ export class CreateLoanComponent implements OnInit {
       this.borrowerParamsObj.value.Borrower_Phone = this.farmerParamsObj.value.Farmer_Phone;
       this.borrowerParamsObj.value.Borrower_email = this.farmerParamsObj.value.Farmer_Email;
       this.borrowerParamsObj.value.Borrower_DOB = this.farmerParamsObj.value.Farmer_DOB;
+      this.borrowerParamsObj.value.Borrower_Preferred_Contact_Ind = this.farmerParamsObj.value.Farmer_Preferred_Contact_Ind;
       this.borrowerInfo = Object.assign(new borrower_model(), this.borrowerParamsObj.value);
       //this.borrowerInfoObj.value = Object.assign(this.borrowerInfoObj.value, this.farmerInfo.value);
       this.borrowerParamsObj.isValid = Object.assign(this.borrowerParamsObj.isValid, this.farmerParamsObj.isValid);

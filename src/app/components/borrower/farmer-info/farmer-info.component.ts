@@ -64,6 +64,8 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_MI: [formData.Farmer_MI || ''],
       Farmer_Last_Name: [formData.Farmer_Last_Name || '', Validators.required],
       Farmer_SSN_Hash: [formData.Farmer_SSN_Hash || '', Validators.required],
+      Farmer_DL_State: [formData.Farmer_DL_State || '', Validators.required],
+      Farmer_DL_Num: [formData.Farmer_DL_Num || '', Validators.required],
       Farmer__Address: [formData.Farmer__Address || '', Validators.required],
       Farmer_City: [formData.Farmer_City || '', Validators.required],
       Farmer_State: [formData.Farmer_State || '', Validators.required],

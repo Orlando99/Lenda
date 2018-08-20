@@ -7,61 +7,83 @@
     <div class="container bottom width-auto">
       <div *ngIf="farmerInfoForm" class="row">
         <form [formGroup]="farmerInfoForm">
-          <div class="input-field col m3">
+          <div class="row">
+            <div class="input-field col m3">
 
-            <mat-form-field>
-              <input matInput placeholder="First Name" formControlName="Farmer_First_Name">
-            </mat-form-field>
-          </div>
-          <div class="input-field col m1">
+              <mat-form-field>
+                <input matInput placeholder="First Name" formControlName="Farmer_First_Name">
+              </mat-form-field>
+            </div>
+            <div class="input-field col m1">
 
-            <mat-form-field>
-              <input matInput placeholder="Middle Initial" formControlName="Farmer_MI">
-            </mat-form-field>
-          </div>
-          <div class="input-field col m3">
+              <mat-form-field>
+                <input matInput placeholder="Middle Initial" formControlName="Farmer_MI">
+              </mat-form-field>
+            </div>
+            <div class="input-field col m3">
 
-            <mat-form-field>
-              <input matInput placeholder="Last Name" formControlName="Farmer_Last_Name">
-            </mat-form-field>
-          </div>
-          <div class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="Last Name" formControlName="Farmer_Last_Name">
+              </mat-form-field>
+            </div>
+            <div class="input-field col m2">
 
-            <mat-form-field>
-              <input matInput placeholder="SSN" formControlName="Farmer_SSN_Hash">
-            </mat-form-field>
-          </div>
-          <div class="input-field col m4">
+              <mat-form-field>
+                <input matInput placeholder="SSN" formControlName="Farmer_SSN_Hash">
+              </mat-form-field>
+            </div>
+        </div>
 
-            <mat-form-field>
-              <input matInput placeholder="Address" formControlName="Farmer__Address">
-            </mat-form-field>
+          <div class="row">
+            <div class="input-field col m2">
+              <mat-form-field id="forceStyle">
+                <mat-select placeholder="DL State" formControlName="Farmer_DL_State">
+                  <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
+                    {{ state.State_Name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+    
+            <div class="input-field col m1">
+              <mat-form-field>
+                <input matInput type="number" placeholder="DL No" formControlName="Farmer_DL_Num">
+              </mat-form-field>
+            </div>
+            <div class="input-field col m4">
+  
+              <mat-form-field>
+                <input matInput placeholder="Address" formControlName="Farmer__Address">
+              </mat-form-field>
+            </div>
+  
+            <div class="input-field col m2">
+              <mat-form-field>
+                <input matInput placeholder="City" formControlName="Farmer_City">
+              </mat-form-field>
+            </div>
+  
+            <div class="input-field col m2">
+  
+              <mat-form-field id="forceStyle">
+                <mat-select placeholder="State" formControlName="Farmer_State">
+                  <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev" >
+                    {{ state.State_Name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="input-field col m1">
+              <mat-form-field>
+                <input matInput placeholder="Zip" formControlName="Farmer_Zip" pattern="^\d{5}(?:[-\s]\d{4})?$">
+                <mat-error *ngIf="farmerInfoForm.get('Farmer_Zip').hasError('pattern') && !farmerInfoForm.get('Farmer_Zip').hasError('required')">
+                  Please enter a valid zip code
+                </mat-error>
+              </mat-form-field>
+            </div>
+            
           </div>
-
-          <div class="input-field col m2">
-            <mat-form-field>
-              <input matInput placeholder="City" formControlName="Farmer_City">
-            </mat-form-field>
-          </div>
-
-          <div class="input-field col m2">
-
-            <mat-form-field id="forceStyle">
-              <mat-select placeholder="State" formControlName="Farmer_State">
-                <mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev" >
-                  {{ state.State_Name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="input-field col m2">
-            <mat-form-field>
-              <input matInput placeholder="Zip" formControlName="Farmer_Zip" pattern="^\d{5}(?:[-\s]\d{4})?$">
-              <mat-error *ngIf="farmerInfoForm.get('Farmer_Zip').hasError('pattern') && !farmerInfoForm.get('Farmer_Zip').hasError('required')">
-                Please enter a valid zip code
-              </mat-error>
-            </mat-form-field>
-          </div>
+          
           <div class="input-field col m2">
             <mat-form-field>
               <input matInput placeholder="Phone [(123)123-1234]" formControlName="Farmer_Phone" pattern="^\([0-9]{3}\)[0-9]{3}-[0-9]{4}$">
@@ -70,6 +92,7 @@
               </mat-error>
             </mat-form-field>
           </div>
+
           <div class="input-field col m2">
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Email" formControlName="Farmer_Email">
