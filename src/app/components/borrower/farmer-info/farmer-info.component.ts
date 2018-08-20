@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { loan_model, loan_farmer } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { Page, PublishService } from '../../../services/publish.service';
+import { Preferred_Contact_Ind_Options } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 
 @Component({
   selector: 'app-farmer-info',
@@ -31,6 +32,7 @@ export class FarmerInfoComponent implements OnInit {
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
 
+  Preferred_Contact_Ind_Options = Preferred_Contact_Ind_Options;
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public logging: LoggingService,
@@ -71,6 +73,7 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_DOB: [formData.Farmer_DOB ? this.formatDate(formData.Farmer_DOB) : '', [Validators.required, Validators.pattern]],
       Year_Begin_Farming: [formData.Year_Begin_Farming || '', Validators.required],
       Year_Begin_Client: [formData.Year_Begin_Client || '', Validators.required],
+      Farmer_Preferred_Contact_Ind: [formData.Farmer_Preferred_Contact_Ind ? (formData.Farmer_Preferred_Contact_Ind as number).toString() : '', Validators.required],
 
     })
 

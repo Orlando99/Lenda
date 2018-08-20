@@ -4,6 +4,7 @@ import { BorrowerEntityType, borrower_model } from '../../../../models/loanmodel
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../environments/environment.prod';
 import { BorrowerService } from '../../borrower.service';
+import { Preferred_Contact_Ind_Options } from '../../../../Workers/utility/aggrid/preferredcontactboxes';
 
 @Component({
   selector: 'app-borrower-info-form',
@@ -24,6 +25,8 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
   BorrowerEntityType : typeof BorrowerEntityType = BorrowerEntityType;
 
   associationTypeCodes = [BorrowerEntityType.Partner,BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
+
+  Preferred_Contact_Ind_Options = Preferred_Contact_Ind_Options;
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() borrowerInfo : borrower_model;
@@ -79,11 +82,13 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
       Borrower_Phone: [formData.Borrower_Phone || '', Validators.required],
       Borrower_email: [formData.Borrower_email || '', [Validators.required, Validators.email]],
       Borrower_DOB: [formData.Borrower_DOB ? this.formatDate(formData.Borrower_DOB) : '', Validators.required],
+      Borrower_Preferred_Contact_Ind: [formData.Borrower_Preferred_Contact_Ind? (formData.Borrower_Preferred_Contact_Ind as number).toString() : '', Validators.required],
       Spouse_First_Name: [formData.Spouse_First_Name || ''],
       Spouse__MI: [formData.Spouse__MI || ''],
       Spouse_Last_name: [formData.Spouse_Last_name || ''],
       Spouse_Phone: [formData.Spouse_Phone || ''],
       Spouse_Email: [formData.Spouse_Email || ''],
+      Spouse_Preffered_Contact_Ind: [formData.Spouse_Preffered_Contact_Ind ? (formData.Spouse_Preffered_Contact_Ind as number).toString() : '', Validators.required],
 
     })
   }

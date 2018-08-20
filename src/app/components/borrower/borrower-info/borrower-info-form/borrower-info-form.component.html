@@ -126,21 +126,32 @@
 					</mat-error>
 				</mat-form-field>
 			</div>
+
+			<div class="input-field col m2">
+				<mat-form-field id="forceStyle">
+					<mat-select placeholder="Preferred Contact" formControlName="Borrower_Preferred_Contact_Ind" (blur)="onValueChange($event)">
+						<mat-option *ngFor="let option of Preferred_Contact_Ind_Options" [value]="option.key">
+							{{ option.value }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</div>
+
 			<div class="w-100"></div>
 			<br>
 
 			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm && borrowerInfoForm.value.Borrower_Entity_Type_Code ==BorrowerEntityType.IndividualWithSpouse">
-				<div class="input-field col m3">
+				<div class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m3">
+				<div class="input-field col m1">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Middle Initial" formControlName="Spouse__MI" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m3">
+				<div class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Last Name" formControlName="Spouse_Last_name" (blur)="onValueChange($event)">
 					</mat-form-field>
@@ -155,6 +166,16 @@
 					</mat-form-field>
 
 
+				</div>
+
+				<div class="input-field col m2">
+					<mat-form-field id="forceStyle">
+						<mat-select placeholder="Preferred Contact" formControlName="Spouse_Preffered_Contact_Ind" (blur)="onValueChange($event)">
+							<mat-option *ngFor="let option of Preferred_Contact_Ind_Options" [value]="option.key">
+								{{ option.value }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 				</div>
 				
 			</div>
