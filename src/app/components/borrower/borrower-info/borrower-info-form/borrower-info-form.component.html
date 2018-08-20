@@ -127,15 +127,6 @@
 					</mat-error>
 				</mat-form-field>
 			</div>
-			<div class="input-field col m2">
-				<mat-form-field>
-					<input matInput placeholder="Crop Year" formControlName="Crop_Year" pattern="^\d{4}$" (blur)="onValueChange($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Crop_Year').hasError('pattern') && !borrowerInfoForm.get('Crop_Year').hasError('required')">
-						Please enter a valid year
-					</mat-error>
-				</mat-form-field>
-
-			</div>
 			<div class="w-100"></div>
 			<br>
 

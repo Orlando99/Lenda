@@ -66,7 +66,7 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
     this.borrowerInfoForm = this.fb.group({
       Borrower_First_Name: [formData.Borrower_First_Name || '', Validators.required],
       Borrower_MI: [formData.Borrower_MI || ''],
-      Borrower_Last_Name: [formData.Borrower_Last_Name || '', Validators.required],
+      Borrower_Last_Name: [formData.Borrower_Last_Name || ''],
       Borrower_ID_Type : [{value :formData.Borrower_ID_Type || '',disabled : true}, Validators.required],
       Borrower_SSN_Hash: [formData.Borrower_SSN_Hash || '', Validators.required],
       Borrower_Entity_Type_Code: [formData.Borrower_Entity_Type_Code || '', Validators.required],
@@ -79,7 +79,6 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
       Borrower_Phone: [formData.Borrower_Phone || '', Validators.required],
       Borrower_email: [formData.Borrower_email || '', [Validators.required, Validators.email]],
       Borrower_DOB: [formData.Borrower_DOB ? this.formatDate(formData.Borrower_DOB) : '', Validators.required],
-      Crop_Year : [formData.Crop_Year || (formData=={} ? (new Date()).getFullYear() : ''), Validators.required],
       Spouse_First_Name: [formData.Spouse_First_Name || ''],
       Spouse__MI: [formData.Spouse__MI || ''],
       Spouse_Last_name: [formData.Spouse_Last_name || ''],

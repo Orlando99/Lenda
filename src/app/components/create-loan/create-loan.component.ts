@@ -20,6 +20,7 @@ export class CreateLoanComponent implements OnInit {
   useFarmer;
   private borrowerParamsObj: borrower_params = new borrower_params();
   borrowerInfo : borrower_model = new borrower_model();
+  cropYear : number;
   constructor(private loanApiService: LoanApiService, private toaster: ToastsManager, private route : Router,
     private loancalculationservice: LoancalculationWorker,
     private localstorageservice: LocalStorageService) { }
@@ -65,7 +66,7 @@ export class CreateLoanComponent implements OnInit {
   onSave(event:any) {
 
 
-    let loanObj = Object.assign({}, this.farmerParamsObj.value, this.borrowerParamsObj.value);
+    let loanObj = Object.assign({}, this.farmerParamsObj.value, this.borrowerParamsObj.value,{Crop_Year : this.cropYear});
 
     if (this.farmerParamsObj.isValid && this.borrowerParamsObj.isValid) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
