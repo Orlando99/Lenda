@@ -5,7 +5,7 @@ import {ICellRendererAngularComp} from "ag-grid-angular";
     selector: 'child-cell',
     template: `
     <span>
-      <i (click)="invokeParentMethod()" class="material-icons ag-grid-delete">
+      <i (click)="invokeParentMethod()" class="material-icons grid-action ag-grid-delete">
         delete
       </i>
     </span>`,

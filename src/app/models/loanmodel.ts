@@ -18,7 +18,9 @@ export enum AssociationTypeCode{
     Rebator = 'REB',
     ThirdParty= 'THR',
     LienHolder= 'LEI',
-    Guarantor = 'GUA'
+    Guarantor = 'GUA',
+    ReferredFrom = 'REF',
+    CreditRererrence = 'CRF'
 
 }
 
@@ -327,7 +329,7 @@ export enum BorrowerEntityType{
         Spouse_Preffered_Contact_Ind : number = undefined;
 
         @JsonProperty("IsDelete" , IntConverter,false)
-        IsDeletes : number = undefined;
+        IsDelete : number = undefined;
 
         @JsonProperty("ActionStatus" , IntConverter,false)
         ActionStatus : number = undefined;
@@ -383,6 +385,9 @@ export enum BorrowerEntityType{
 
         @JsonProperty("Borrower", borrower_model)
         Borrower: borrower_model=null;
+
+        @JsonProperty("CoBorrower", ArrayConverter,true)
+        CoBorrower: Array<borrower_model>=[];
 
         @JsonProperty("LoanCropUnits", ArrayConverter,true)
         LoanCropUnits:Loan_Crop_Unit[]=[];
@@ -633,31 +638,6 @@ export enum BorrowerEntityType{
 
     }
 
-    export class loan_borrower{
-        Loan_ID  : number;
-        Borrower_Last_Name : string; 
-        Borrower_First_Name  : string;
-        Borrower_MI : string;
-        Borrower_Address : string;
-        Borrower_City : string;
-        Borrower_State_ID : string;
-        Borrower_Zip : number;
-        Borrower_Phone : string;
-        Borrower_email : string;
-        Borrower_DOB : Date;
-        Borrower_ID_Type : IDType;
-        Borrower_SSN_Hash : string;
-        Borrower_Entity_Type_Code : number;
-        Spouse_Last_name : string;
-        Spouse_First_Name : string;
-        Spouse__MI : string;
-        Spouse_Phone : string;
-        Spouse_Email : string;
-        Borrower_DL_state: string;
-        Borrower_Dl_Num:string;
-    }
-
-
     export class Loan_Marketing_Contract{
         Contract_ID: number;
         Z_Loan_ID: number;
@@ -702,12 +682,16 @@ export enum BorrowerEntityType{
         Farmer_Last_Name : string;
         Farmer_First_Name : string;
         Farmer_MI : string;
+        Farmer_DL_State : string;
+        Farmer_DL_Num : string;
         Farmer__Address : string;
         Farmer_City : string;
         Farmer_State : string;
         Farmer_Zip : number
         Farmer_Phone : string;
         Farmer_Email : string;
+        Farmer_DOB : string;
+        Farmer_Preferred_Contact_Ind : number;
         Year_Begin_Farming : number;
         Year_Begin_Client :number;
     }

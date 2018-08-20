@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment.prod';
 import { loan_model, loan_farmer } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { Page, PublishService } from '../../../services/publish.service';
+import { Preferred_Contact_Ind_Options } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 
 @Component({
   selector: 'app-farmer-info',
@@ -31,6 +32,7 @@ export class FarmerInfoComponent implements OnInit {
   @Output('onFormValueChange')
   onFormValueChange: EventEmitter<any> = new EventEmitter<any>();
 
+  Preferred_Contact_Ind_Options = Preferred_Contact_Ind_Options;
   constructor(private fb: FormBuilder, public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
     public logging: LoggingService,
@@ -62,6 +64,8 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_MI: [formData.Farmer_MI || ''],
       Farmer_Last_Name: [formData.Farmer_Last_Name || '', Validators.required],
       Farmer_SSN_Hash: [formData.Farmer_SSN_Hash || '', Validators.required],
+      Farmer_DL_State: [formData.Farmer_DL_State || '', Validators.required],
+      Farmer_DL_Num: [formData.Farmer_DL_Num || '', Validators.required],
       Farmer__Address: [formData.Farmer__Address || '', Validators.required],
       Farmer_City: [formData.Farmer_City || '', Validators.required],
       Farmer_State: [formData.Farmer_State || '', Validators.required],
@@ -71,6 +75,7 @@ export class FarmerInfoComponent implements OnInit {
       Farmer_DOB: [formData.Farmer_DOB ? this.formatDate(formData.Farmer_DOB) : '', [Validators.required, Validators.pattern]],
       Year_Begin_Farming: [formData.Year_Begin_Farming || '', Validators.required],
       Year_Begin_Client: [formData.Year_Begin_Client || '', Validators.required],
+      Farmer_Preferred_Contact_Ind: [formData.Farmer_Preferred_Contact_Ind ? (formData.Farmer_Preferred_Contact_Ind as number).toString() : '', Validators.required],
 
     })
 
@@ -78,7 +83,7 @@ export class FarmerInfoComponent implements OnInit {
       (value: any) => {
         this.isSubmitted = false;
         if (this.mode === 'create') {
-          this.onFormValueChange.emit({ value: value, valid: this.farmerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
+          this.onFormValueChange.emit({ value: value, isValid: this.farmerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
@@ -102,18 +107,18 @@ export class FarmerInfoComponent implements OnInit {
   }
 
 
-  synctoDb() {
-    if (this.farmerInfoForm.valid) {
-      this.loanApiService.syncloanfarmer(this.loan_id, this.farmerInfoForm.value as loan_farmer).subscribe((successResponse) => {
-        this.toaster.success("Farmer details saved successfully");
-        this.isSubmitted = true;
-      }, (errorResponse) => {
-        this.toaster.error("Error Occurered while saving Farmer details");
+  // synctoDb() {
+  //   if (this.farmerInfoForm.valid) {
+  //     this.loanApiService.syncloanfarmer(this.loan_id, this.farmerInfoForm.value as loan_farmer).subscribe((successResponse) => {
+  //       this.toaster.success("Farmer details saved successfully");
+  //       this.isSubmitted = true;
+  //     }, (errorResponse) => {
+  //       this.toaster.error("Error Occurered while saving Farmer details");
 
-      });
-    } else {
-      this.toaster.error("Farmer details form doesn't seem to have data in correct format, please correct them before saving.");
-    }
-  }
+  //     });
+  //   } else {
+  //     this.toaster.error("Farmer details form doesn't seem to have data in correct format, please correct them before saving.");
+  //   }
+  // }
 
 }

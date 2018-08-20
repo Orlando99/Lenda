@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { loan_model, loan_borrower, borrower_model } from '../../models/loanmodel';
+import { loan_model} from '../../models/loanmodel';
 import { environment } from '../../../environments/environment.prod';
 import { LoggingService } from '../../services/Logs/logging.service';
 @Injectable()

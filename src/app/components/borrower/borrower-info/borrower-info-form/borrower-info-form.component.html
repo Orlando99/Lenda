@@ -15,23 +15,26 @@
 				<div class="input-field col m2">
 
 					<mat-form-field>
-						<input matInput placeholder="First Name" formControlName="Borrower_First_Name" (blur)="onValueChange($event)">
+						<input matInput 
+						[placeholder]="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Organization ? 'Name' : 'FirstName'"
+						 formControlName="Borrower_First_Name" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m1">
+				<div class="input-field col m1" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 
 					<mat-form-field>
-						<input matInput placeholder="Middle Initial" formControlName="Borrower_MI" (blur)="onValueChange($event)">
+						<input matInput placeholder="Middle Initial" formControlName="Borrower_MI"
+						(blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m2">
+				<div class="input-field col m2" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 
 					<mat-form-field>
-						<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name" (blur)="onValueChange($event)">
+						<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name" 
+						 (blur)="onValueChange($event)" >
 					</mat-form-field>
 				</div>
-				<div class="input-field col m2">
-
+				<!-- <div class="input-field col m2">
 					<mat-form-field>
 						<mat-select placeholder="ID Type" formControlName="Borrower_ID_Type">
 							<mat-option *ngFor="let type of idTypes" [value]="type.key">
@@ -39,7 +42,7 @@
 							</mat-option>
 						</mat-select>
 					</mat-form-field>
-				</div>
+				</div> -->
 				<div class="input-field col m2">
 
 					<mat-form-field>
@@ -49,7 +52,7 @@
 
 			</div>
 			<div class="row">
-				<div class="input-field col m2" *ngIf="selectedEntityGroups == EntityGroup.Individual">
+				<div class="input-field col m2" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 					<mat-form-field id="forceStyle">
 						<mat-select placeholder="DL State" formControlName="Borrower_DL_state" (blur)="onValueChange($event)">
 							<mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
@@ -59,7 +62,7 @@
 					</mat-form-field>
 				</div>
 
-				<div class="input-field col m1" *ngIf="selectedEntityGroups == EntityGroup.Individual">
+				<div class="input-field col m1" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 					<mat-form-field>
 						<input matInput type="number" placeholder="DL No" formControlName="Borrower_Dl_Num" (blur)="onValueChange($event)">
 					</mat-form-field>
@@ -123,30 +126,32 @@
 					</mat-error>
 				</mat-form-field>
 			</div>
-			<div class="input-field col m2">
-				<mat-form-field>
-					<input matInput placeholder="Crop Year" formControlName="Crop_Year" pattern="^\d{4}$" (blur)="onValueChange($event)">
-					<mat-error *ngIf="borrowerInfoForm.get('Crop_Year').hasError('pattern') && !borrowerInfoForm.get('Crop_Year').hasError('required')">
-						Please enter a valid year
-					</mat-error>
-				</mat-form-field>
 
+			<div class="input-field col m2">
+				<mat-form-field id="forceStyle">
+					<mat-select placeholder="Preferred Contact" formControlName="Borrower_Preferred_Contact_Ind" (blur)="onValueChange($event)">
+						<mat-option *ngFor="let option of Preferred_Contact_Ind_Options" [value]="option.key">
+							{{ option.value }}
+						</mat-option>
+					</mat-select>
+				</mat-form-field>
 			</div>
+
 			<div class="w-100"></div>
 			<br>
 
 			<div style="float:left;padding-top:50px" *ngIf="borrowerInfoForm && borrowerInfoForm.value.Borrower_Entity_Type_Code ==BorrowerEntityType.IndividualWithSpouse">
-				<div class="input-field col m3">
+				<div class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse First Name" formControlName="Spouse_First_Name" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m3">
+				<div class="input-field col m1">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Middle Initial" formControlName="Spouse__MI" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m3">
+				<div class="input-field col m2">
 					<mat-form-field>
 						<input matInput placeholder="Spouse Last Name" formControlName="Spouse_Last_name" (blur)="onValueChange($event)">
 					</mat-form-field>
@@ -159,11 +164,22 @@
 							Please enter a valid phone no
 						</mat-error>
 					</mat-form-field>
+
+
+				</div>
+
+				<div class="input-field col m2">
+					<mat-form-field id="forceStyle">
+						<mat-select placeholder="Preferred Contact" formControlName="Spouse_Preffered_Contact_Ind" (blur)="onValueChange($event)">
+							<mat-option *ngFor="let option of Preferred_Contact_Ind_Options" [value]="option.key">
+								{{ option.value }}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 				</div>
 				
 			</div>
 
 
 		</form>
-
 	</div>

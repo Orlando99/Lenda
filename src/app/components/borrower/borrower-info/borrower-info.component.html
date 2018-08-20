@@ -42,4 +42,44 @@
 		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [currentPageName]="currentPageName" [associationTypeCode]="selectedAssociaionTypeCode"
 		 [withoutChevron]="true" (onRowCountChange)="coBorrowerCountChange($event)"></app-association>
 	</div> -->
+
+	<table>
+		<thead>
+			<tr>
+				<th>Entity</th>
+				<th>Contact</th>
+				<th>Location</th>
+				<th>Phone</th>
+				<th>Email</th>
+				<th>Pref Contact</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let coborrower of coborrowers; let index = index">
+				<td>{{getBorrowerTypeName(coborrower.Borrower_Entity_Type_Code)}}</td>
+				<td>{{coborrower.Borrower_First_Name}}</td>
+				<td>{{coborrower.Borrower_Address}}</td>
+				<td>{{coborrower.Borrower_Phone}}</td>
+				<td>{{coborrower.Borrower_email}}</td>
+				<td>{{getPreferredContactValue(coborrower.Borrower_Preferred_Contact_Ind)}}</td>
+				<td>
+					<span>
+						<i (click)="onEditCoBorrower(coborrower,index)" class="material-icons grid-action">
+						  edit
+						</i>
+					  </span>
+				</td>
+				<td>
+						<span>
+								<i (click)="onDeleteCoborrower(coborrower,index)" class="material-icons grid-action ag-grid-delete">
+								  delete
+								</i>
+						</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
 </div>
