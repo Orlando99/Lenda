@@ -18,8 +18,8 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
 
   entityType = [];
   idTypes = [{key : IDType.SSN, value : 'SSN'}, {key : IDType.Tax_ID, value : 'Tax ID'}];
-  individualEntities = [BorrowerEntityType.Individual, BorrowerEntityType.IndividualWithSpouse,BorrowerEntityType.Partner];
-  orgnaizationEntities = [BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
+  individualEntities = [BorrowerEntityType.Individual, BorrowerEntityType.IndividualWithSpouse];
+  orgnaizationEntities = [BorrowerEntityType.Partner, BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
   selectedEntityGroups : EntityGroup = EntityGroup.Individual;
   EntityGroup : typeof EntityGroup = EntityGroup;
   BorrowerEntityType : typeof BorrowerEntityType = BorrowerEntityType;
