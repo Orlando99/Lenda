@@ -15,6 +15,7 @@ import { JsonConvert } from 'json2typescript';
 import { Page, PublishService } from '../../../services/publish.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material';
 import { BorrowerService } from '../borrower.service';
+import { Preferred_Contact_Ind_Options } from '../../../Workers/utility/aggrid/preferredcontactboxes';
 @Component({
   selector: 'app-borrower-info',
   templateUrl: './borrower-info.component.html',
@@ -171,6 +172,10 @@ export class BorrowerInfoComponent implements OnInit {
   getBorrowerTypeName(code){
     return this.borrowerService.getTypeNameOfCB(code);
   }
+  getPreferredContactValue(preferenceKey){
+    let selectedPref = Preferred_Contact_Ind_Options.find(p=>p.key == preferenceKey);
+    return selectedPref ? selectedPref.value : 'NA'
+  }
 }
 
 @Component({
@@ -192,7 +197,7 @@ export class CoBorrowerDialogComponent {
     onFormValueChange(data ){
       if(data){
         this.coBorrowerInfo = data.value;
-        this.isFormValid = data.isFormValid;
+        this.isFormValid = data.isValid;
       }
     }
 

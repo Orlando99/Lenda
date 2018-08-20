@@ -63,7 +63,7 @@
 				<td>{{coborrower.Borrower_Address}}</td>
 				<td>{{coborrower.Borrower_Phone}}</td>
 				<td>{{coborrower.Borrower_email}}</td>
-				<td>NA</td>
+				<td>{{getPreferredContactValue(coborrower.Borrower_Preferred_Contact_Ind)}}</td>
 				<td>
 					<span>
 						<i (click)="onEditCoBorrower(coborrower,index)" class="material-icons grid-action">

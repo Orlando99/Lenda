@@ -88,7 +88,7 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
       Spouse_Last_name: [formData.Spouse_Last_name || ''],
       Spouse_Phone: [formData.Spouse_Phone || ''],
       Spouse_Email: [formData.Spouse_Email || ''],
-      Spouse_Preffered_Contact_Ind: [formData.Spouse_Preffered_Contact_Ind ? (formData.Spouse_Preffered_Contact_Ind as number).toString() : '', Validators.required],
+      Spouse_Preffered_Contact_Ind: [formData.Spouse_Preffered_Contact_Ind ? (formData.Spouse_Preffered_Contact_Ind as number).toString() : ''],
 
     })
   }
