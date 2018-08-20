@@ -15,19 +15,23 @@
 				<div class="input-field col m2">
 
 					<mat-form-field>
-						<input matInput placeholder="First Name" formControlName="Borrower_First_Name" (blur)="onValueChange($event)">
+						<input matInput 
+						[placeholder]="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Organization ? 'Name' : 'FirstName'"
+						 formControlName="Borrower_First_Name" (blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m1">
+				<div class="input-field col m1" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 
 					<mat-form-field>
-						<input matInput placeholder="Middle Initial" formControlName="Borrower_MI" (blur)="onValueChange($event)">
+						<input matInput placeholder="Middle Initial" formControlName="Borrower_MI"
+						(blur)="onValueChange($event)">
 					</mat-form-field>
 				</div>
-				<div class="input-field col m2">
+				<div class="input-field col m2" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 
 					<mat-form-field>
-						<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name" (blur)="onValueChange($event)">
+						<input matInput placeholder="Last Name" formControlName="Borrower_Last_Name" 
+						 (blur)="onValueChange($event)" >
 					</mat-form-field>
 				</div>
 				<div class="input-field col m2">
@@ -49,7 +53,7 @@
 
 			</div>
 			<div class="row">
-				<div class="input-field col m2" *ngIf="selectedEntityGroups == EntityGroup.Individual">
+				<div class="input-field col m2" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 					<mat-form-field id="forceStyle">
 						<mat-select placeholder="DL State" formControlName="Borrower_DL_state" (blur)="onValueChange($event)">
 							<mat-option *ngFor="let state of stateList" [value]="state.State_Abbrev">
@@ -59,7 +63,7 @@
 					</mat-form-field>
 				</div>
 
-				<div class="input-field col m1" *ngIf="selectedEntityGroups == EntityGroup.Individual">
+				<div class="input-field col m1" *ngIf="getEntityGroup(borrowerInfoForm.value.Borrower_Entity_Type_Code) == EntityGroup.Individual">
 					<mat-form-field>
 						<input matInput type="number" placeholder="DL No" formControlName="Borrower_Dl_Num" (blur)="onValueChange($event)">
 					</mat-form-field>

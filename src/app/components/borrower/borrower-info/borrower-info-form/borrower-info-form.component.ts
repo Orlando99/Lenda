@@ -20,7 +20,6 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
   idTypes = [{key : IDType.SSN, value : 'SSN'}, {key : IDType.Tax_ID, value : 'Tax ID'}];
   individualEntities = [BorrowerEntityType.Individual, BorrowerEntityType.IndividualWithSpouse];
   orgnaizationEntities = [BorrowerEntityType.Partner, BorrowerEntityType.Joint,BorrowerEntityType.Corporation,BorrowerEntityType.LLC];
-  selectedEntityGroups : EntityGroup = EntityGroup.Individual;
   EntityGroup : typeof EntityGroup = EntityGroup;
   BorrowerEntityType : typeof BorrowerEntityType = BorrowerEntityType;
 
@@ -62,10 +61,7 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
       
     }
   }
-  // getTypeNameOfCB(cbTypeID){
-  //   let entity = this.entityType.find(et=>et.key == cbTypeID);
-  //   return entity ? entity.value : '';
-  // }
+
   createForm(formData) {
     this.borrowerInfoForm = this.fb.group({
       Borrower_First_Name: [formData.Borrower_First_Name || '', Validators.required],
@@ -91,15 +87,14 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
       Spouse_Email: [formData.Spouse_Email || ''],
 
     })
-    if(this.individualEntities.includes(formData.Borrower_Entity_Type_Code)){
-      this.selectedEntityGroups = EntityGroup.Individual;
-    }else if(this.orgnaizationEntities.includes(formData.Borrower_Entity_Type_Code)){
-      this.selectedEntityGroups = EntityGroup.Organization;
+  }
+  getEntityGroup(entityTypeCode : BorrowerEntityType){
+    if(this.orgnaizationEntities.includes(entityTypeCode)){
+      return EntityGroup.Organization;
     }else{
-      throw "Invalid Borrower_Entity_Type_Code";
+      return EntityGroup.Individual;
       
     }
-
   }
   onValueChange(){
     if(this.borrowerInfoForm.getRawValue()){
@@ -120,11 +115,9 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
     
     if(this.individualEntities.includes(data.value)){
       this.borrowerInfoForm.controls['Borrower_ID_Type'].setValue(IDType.SSN);
-      this.selectedEntityGroups = EntityGroup.Individual;
       this.onValueChange();
     }else if(this.orgnaizationEntities.includes(data.value)){
       this.borrowerInfoForm.controls['Borrower_ID_Type'].setValue(IDType.Tax_ID);
-      this.selectedEntityGroups = EntityGroup.Organization;
       this.onValueChange();
     }else{
       throw "Invalid Borrower_Entity_Type_Code";
