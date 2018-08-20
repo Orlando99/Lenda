@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { ResponseModel } from '../../models/resmodels/reponse.model';
 import { environment } from '../../../environments/environment.prod';
 import { ApiService } from '../api.service';
-import { loan_model, loan_borrower, loan_farmer } from '../../models/loanmodel';
+import { loan_model, loan_farmer, borrower_model } from '../../models/loanmodel';
 const API_URL = environment.apiUrl;
 @Injectable()
 export class LoanApiService {
@@ -26,14 +26,14 @@ export class LoanApiService {
     return this.apiservice.post(route, loanobj).map(res => res);
   }
 
-  syncloanborrower(loanId : number,  loanborrowerobj: loan_borrower): Observable<ResponseModel> {
-    const route = '/api/Loan/EditLoanBorrower?loanId='+loanId;
-    return this.apiservice.put(route, loanborrowerobj).map(res => res);
-  }
-  syncloanfarmer(loanId : number,  loanfarmerObject: loan_farmer): Observable<ResponseModel> {
-    const route = '/api/Loan/EditLoanFarmer?loanId='+loanId;
-    return this.apiservice.put(route, loanfarmerObject).map(res => res);
-  }
+  // syncloanborrower(loanId : number,  loanborrowerobj: borrower_model): Observable<ResponseModel> {
+  //   const route = '/api/Loan/EditLoanBorrower?loanId='+loanId;
+  //   return this.apiservice.put(route, loanborrowerobj).map(res => res);
+  // }
+  // syncloanfarmer(loanId : number,  loanfarmerObject: loan_farmer): Observable<ResponseModel> {
+  //   const route = '/api/Loan/EditLoanFarmer?loanId='+loanId;
+  //   return this.apiservice.put(route, loanfarmerObject).map(res => res);
+  // }
 
   createLoan(loanObj){
     const route = '/api/Loan/CreateLoan';

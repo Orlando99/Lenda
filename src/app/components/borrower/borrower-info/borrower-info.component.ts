@@ -5,7 +5,7 @@ import { LoancalculationWorker } from '../../../Workers/calculations/loancalcula
 import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
 import { environment } from '../../../../environments/environment.prod';
-import { loan_model, loan_borrower, Loan_Association, borrower_model, BorrowerEntityType } from '../../../models/loanmodel';
+import { loan_model,  borrower_model, BorrowerEntityType } from '../../../models/loanmodel';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { getNumericCellEditor } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
@@ -46,7 +46,7 @@ export class BorrowerInfoComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.mode === 'create') {
+    if (this.mode === 'create' || !this.borrowerInfo) {
       this.borrowerInfo = {};
     }
     this.localloanobj = this.localstorageservice.retrieve(environment.loankey);
@@ -132,7 +132,9 @@ export class BorrowerInfoComponent implements OnInit {
   // }
 
   onFormValueChange(data){
-    if(this.localloanobj.LoanMaster[0]){
+    if(this.localloanobj.LoanMaster[0] && this.localloanobj.Borrower){
+      this.localloanobj.Borrower = Object.assign(this.localloanobj.Borrower , data.value);
+      this.localloanobj.Borrower.ActionStatus =2;
       this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0] , data.value);
       this.loanserviceworker.performcalculationonloanobject(this.localloanobj,false);
       this.publishService.enableSync(this.currentPageName);

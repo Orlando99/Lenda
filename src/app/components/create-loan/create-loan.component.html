@@ -8,7 +8,7 @@
 
   <h3>Borrower</h3>
   <mat-checkbox [(ngModel)]="useFarmer" (ngModelChange)="useFarmerChange($event)">Use Farmer Information</mat-checkbox>
-  <!-- <app-borrower-info [borrowerInfo]="farmerInfoCopy" [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info> -->
+  <app-borrower-info-form [borrowerInfo]="borrowerInfo" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info-form> 
 
     <a class="waves-effect waves-light btn" (click)="onSave($event)" style="margin-bottom: 50px">Save and Continue</a>
 

@@ -78,7 +78,7 @@ export class FarmerInfoComponent implements OnInit {
       (value: any) => {
         this.isSubmitted = false;
         if (this.mode === 'create') {
-          this.onFormValueChange.emit({ value: value, valid: this.farmerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
+          this.onFormValueChange.emit({ value: value, isValid: this.farmerInfoForm.valid, successCallback: this.savedByparentSuccessssCallback });
         } else {
           this.localloanobj.LoanMaster[0] = Object.assign(this.localloanobj.LoanMaster[0], value);
           this.loanserviceworker.performcalculationonloanobject(this.localloanobj);
@@ -102,18 +102,18 @@ export class FarmerInfoComponent implements OnInit {
   }
 
 
-  synctoDb() {
-    if (this.farmerInfoForm.valid) {
-      this.loanApiService.syncloanfarmer(this.loan_id, this.farmerInfoForm.value as loan_farmer).subscribe((successResponse) => {
-        this.toaster.success("Farmer details saved successfully");
-        this.isSubmitted = true;
-      }, (errorResponse) => {
-        this.toaster.error("Error Occurered while saving Farmer details");
+  // synctoDb() {
+  //   if (this.farmerInfoForm.valid) {
+  //     this.loanApiService.syncloanfarmer(this.loan_id, this.farmerInfoForm.value as loan_farmer).subscribe((successResponse) => {
+  //       this.toaster.success("Farmer details saved successfully");
+  //       this.isSubmitted = true;
+  //     }, (errorResponse) => {
+  //       this.toaster.error("Error Occurered while saving Farmer details");
 
-      });
-    } else {
-      this.toaster.error("Farmer details form doesn't seem to have data in correct format, please correct them before saving.");
-    }
-  }
+  //     });
+  //   } else {
+  //     this.toaster.error("Farmer details form doesn't seem to have data in correct format, please correct them before saving.");
+  //   }
+  // }
 
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BorrowerEntityType, loan_borrower, borrower_model } from '../../../../models/loanmodel';
+import { BorrowerEntityType, borrower_model } from '../../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../../../environments/environment.prod';
 import { BorrowerService } from '../../borrower.service';
@@ -11,7 +11,7 @@ import { BorrowerService } from '../../borrower.service';
   styleUrls: ['./borrower-info-form.component.scss'],
   providers : [BorrowerService]
 })
-export class BorrowerInfoFormComponent implements OnInit {
+export class BorrowerInfoFormComponent implements OnInit,OnChanges {
 
   borrowerInfoForm: FormGroup;
   stateList: Array<any>;
@@ -40,25 +40,13 @@ export class BorrowerInfoFormComponent implements OnInit {
     this.stateList = this.localStorageService.retrieve(environment.referencedatakey).StateList;
     this.entityType = this.borrowerService.entityType;
 
+    
+  }
+  ngOnChanges(){
     if (this.borrowerInfo) {
 
       this.borrowerInfo.Borrower_Entity_Type_Code = this.borrowerInfo.Borrower_Entity_Type_Code || BorrowerEntityType.Individual;
       this.borrowerInfo.Borrower_ID_Type = this.borrowerInfo.Borrower_ID_Type || IDType.SSN;
-      // let borrower = new loan_borrower();
-      // borrower.Borrower_First_Name = borrowerInfo.value.Farmer_First_Name ? borrowerInfo.value.Farmer_First_Name.slice() : "";
-      // borrower.Borrower_Last_Name = borrowerInfo.value.Farmer_Last_Name ? borrowerInfo.value.Farmer_Last_Name.slice() : "";
-      // borrower.Borrower_Address = borrowerInfo.value.Farmer__Address ? borrowerInfo.value.Farmer__Address.slice() : "";
-      // borrower.Borrower_City = borrowerInfo.value.Farmer_City ? borrowerInfo.value.Farmer_City.slice() : "";
-      // borrower.Borrower_DOB = borrowerInfo.value.Farmer_DOB ? borrowerInfo.value.Farmer_DOB.slice() : "";
-      // borrower.Borrower_Phone = borrowerInfo.value.Farmer_Phone ? borrowerInfo.value.Farmer_Phone.slice() : "";
-      // borrower.Borrower_Zip = borrowerInfo.value.Farmer_Zip ? borrowerInfo.value.Farmer_Zip.slice() : "";
-      // borrower.Borrower_email = borrowerInfo.value.Farmer_Email ? borrowerInfo.value.Farmer_Email.slice() : "";
-      // borrower.Borrower_MI = borrowerInfo.value.Farmer_MI ? borrowerInfo.value.Farmer_MI.slice() : "";
-      // borrower.Borrower_ID_Type = borrowerInfo.value.Borrower_ID_Type ? borrowerInfo.value.Borrower_ID_Type : '' ,
-      // borrower.Borrower_SSN_Hash = borrowerInfo.value.Farmer_SSN_Hash ? borrowerInfo.value.Farmer_SSN_Hash.slice() : "";
-      // borrower.Borrower_State_ID = borrowerInfo.value.Farmer_State ? borrowerInfo.value.Farmer_State.slice() : "";
-      // borrower.Borrower_DL_state = borrowerInfo.value.Borrower_DL_state ? borrowerInfo.value.Borrower_DL_state.slice() : "";
-      // borrower.Borrower_Dl_Num = borrowerInfo.value.Borrower_Dl_Num ? borrowerInfo.value.Borrower_Dl_Num.slice() : "";
       this.createForm(this.borrowerInfo);
       
     }
@@ -86,8 +74,8 @@ export class BorrowerInfoFormComponent implements OnInit {
       Borrower_ID_Type : [{value :formData.Borrower_ID_Type || '',disabled : true}, Validators.required],
       Borrower_SSN_Hash: [formData.Borrower_SSN_Hash || '', Validators.required],
       Borrower_Entity_Type_Code: [formData.Borrower_Entity_Type_Code || '', Validators.required],
-      Borrower_DL_state : [formData.Borrower_DL_state || '',Validators.required],
-      Borrower_Dl_Num : [formData.Borrower_Dl_Num || '',Validators.required],
+      Borrower_DL_state : [formData.Borrower_DL_state || ''],
+      Borrower_Dl_Num : [formData.Borrower_Dl_Num || ''],
       Borrower_Address: [formData.Borrower_Address || '', Validators.required],
       Borrower_City: [formData.Borrower_City || '', Validators.required],
       Borrower_State_ID: [formData.Borrower_State_ID || '', Validators.required],
@@ -116,7 +104,7 @@ export class BorrowerInfoFormComponent implements OnInit {
   onValueChange(){
     if(this.borrowerInfoForm.value){
       this.borrowerInfo = Object.assign(this.borrowerInfo, this.borrowerInfoForm.value);
-      this.onFormValueChange.emit({value : this.borrowerInfo, isFormValid : this.borrowerInfoForm.valid});
+      this.onFormValueChange.emit({value : this.borrowerInfo, isValid : this.borrowerInfoForm.valid});
     }
   }
   formatDate(strDate) {

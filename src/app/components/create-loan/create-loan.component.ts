@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { loan_farmer, loan_borrower, loan_model } from '../../models/loanmodel';
+import { loan_farmer, loan_model, BorrowerEntityType, borrower_model } from '../../models/loanmodel';
 import { LoanApiService } from '../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { Router } from '@angular/router';
@@ -15,10 +15,11 @@ import { LocalStorageService } from 'ngx-webstorage';
 })
 export class CreateLoanComponent implements OnInit {
 
-  farmerInfo: farmer_params = new farmer_params();
+  private farmerParamsObj: farmer_params = new farmer_params();
   farmerSuccessCallback;
   useFarmer;
-  borrowerInfo: borrower_params = new borrower_params();
+  private borrowerParamsObj: borrower_params = new borrower_params();
+  borrowerInfo : borrower_model = new borrower_model();
   constructor(private loanApiService: LoanApiService, private toaster: ToastsManager, private route : Router,
     private loancalculationservice: LoancalculationWorker,
     private localstorageservice: LocalStorageService) { }
@@ -29,23 +30,34 @@ export class CreateLoanComponent implements OnInit {
     if(localLoanObject){
       this.localstorageservice.clear(environment.loankey);
     }
+    this.borrowerInfo.Borrower_Entity_Type_Code = BorrowerEntityType.Individual;
   }
   onFarmerFormValueChange(data) {
-    this.farmerInfo = Object.assign(new farmer_params(), data);
+    this.farmerParamsObj = Object.assign(new farmer_params(), data);
 
   }
 
   onBorrowerFormValueChange(data) {
-    this.borrowerInfo = Object.assign(new borrower_params(), data);
+    this.borrowerParamsObj = Object.assign(new borrower_params(), data);
+    this.borrowerInfo = this.borrowerParamsObj.value;
   }
 
-  farmerInfoCopy;
-
   useFarmerChange(e) {
-    console.log(e)
     if (e) {
-      this.farmerInfoCopy = this.farmerInfo;
-      console.log(this.borrowerInfo)
+      this.borrowerParamsObj.value.Borrower_First_Name = this.farmerParamsObj.value.Farmer_First_Name;
+      this.borrowerParamsObj.value.Borrower_MI = this.farmerParamsObj.value.Farmer_MI;
+      this.borrowerParamsObj.value.Borrower_Last_Name = this.farmerParamsObj.value.Farmer_Last_Name;
+      this.borrowerParamsObj.value.Borrower_SSN_Hash = this.farmerParamsObj.value.Farmer_SSN_Hash;
+      this.borrowerParamsObj.value.Borrower_Address = this.farmerParamsObj.value.Farmer__Address;
+      this.borrowerParamsObj.value.Borrower_City = this.farmerParamsObj.value.Farmer_City;
+      this.borrowerParamsObj.value.Borrower_State_ID = this.farmerParamsObj.value.Farmer_State;
+      this.borrowerParamsObj.value.Borrower_Zip = this.farmerParamsObj.value.Farmer_Zip;
+      this.borrowerParamsObj.value.Borrower_Phone = this.farmerParamsObj.value.Farmer_Phone;
+      this.borrowerParamsObj.value.Borrower_email = this.farmerParamsObj.value.Farmer_Email;
+      this.borrowerParamsObj.value.Borrower_DOB = this.farmerParamsObj.value.Farmer_DOB;
+      this.borrowerInfo = this.borrowerParamsObj.value;
+      //this.borrowerInfoObj.value = Object.assign(this.borrowerInfoObj.value, this.farmerInfo.value);
+      this.borrowerParamsObj.isValid = Object.assign(this.borrowerParamsObj.isValid, this.farmerParamsObj.isValid);
 
     }
   }
@@ -53,13 +65,11 @@ export class CreateLoanComponent implements OnInit {
   onSave(event:any) {
 
 
-    let loanObj = Object.assign({}, this.farmerInfo.value, this.borrowerInfo.value);
+    let loanObj = Object.assign({}, this.farmerParamsObj.value, this.borrowerParamsObj.value);
 
-    if (this.farmerInfo.valid && this.borrowerInfo.valid) {
+    if (this.farmerParamsObj.isValid && this.borrowerParamsObj.isValid) {
       this.loanApiService.createLoan(loanObj).subscribe((successResponse) => {
         this.toaster.success("Details saved successfully, navigating to Loan Dashboard...");
-        this.farmerInfo.successCallback && this.farmerInfo.successCallback();
-        this.borrowerInfo.successCallback && this.borrowerInfo.successCallback();
         this.loanApiService.getLoanById(successResponse.Data).subscribe(res => {
          
           if (res.ResCode == 1) {
@@ -80,7 +90,7 @@ export class CreateLoanComponent implements OnInit {
         this.toaster.error("Error Occurered while saving Farmer details");
 
       });
-      console.log(Object.assign({}, this.farmerInfo.value, this.borrowerInfo.value));
+      console.log(Object.assign({}, this.farmerParamsObj.value, this.borrowerParamsObj.value));
     } else {
       this.toaster.error("The data doesn't seem to have data in correct format, please correct them before saving.");
     }
@@ -89,13 +99,13 @@ export class CreateLoanComponent implements OnInit {
 }
 
 class farmer_params {
-  valid: boolean = false;
+  isValid: boolean = false;
   value: loan_farmer = new loan_farmer();
   successCallback: Function;
 }
 
 class borrower_params {
-  valid: boolean = false;
-  value: loan_borrower = new loan_borrower();
+  isValid: boolean = false;
+  value: borrower_model = new borrower_model();
   successCallback: Function;
 }
