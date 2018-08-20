@@ -95,11 +95,11 @@
   <app-association [header]="'Guarantor'" [associationTypeCode]="'GUA'" *ngIf="pageSettings.guarantor.isActive" [currentPageName]="currentPageName"></app-association>
  
   <app-fsa *ngIf="pageSettings.fsa.isActive"></app-fsa>
-  <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
+  <!-- <app-livestock *ngIf="pageSettings.livestock.isActive"></app-livestock>
   <app-storedcrop *ngIf="pageSettings.storedCrop.isActive"></app-storedcrop>
   <app-equipment *ngIf="pageSettings.equipment.isActive"></app-equipment>
   <app-realestate *ngIf="pageSettings.realestate.isActive"></app-realestate>
-  <app-others *ngIf="pageSettings.other.isActive"></app-others>
+  <app-others *ngIf="pageSettings.other.isActive"></app-others> -->
   <app-questions [currentPageName]="currentPageName" *ngIf="pageSettings.questions.isActive" [chevronId]="'Collateral'"></app-questions>
   <app-marketing-contracts *ngIf="pageSettings.crossCollateral.isActive"></app-marketing-contracts>
 

@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { Loan_Collateral, loan_model } from '../../../models/loanmodel';
 import { currencyFormatter, percentageFormatter, insuredFormatter } from '../../../aggridformatters/valueformatters';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
+import { LocalStorageService } from 'ngx-webstorage';
+import { environment } from '../../../../environments/environment.prod';
 
 /**
  * Shared service for FSA
  */
 @Injectable()
 export class FsaService {
-  constructor(public loanserviceworker:LoancalculationWorker) {
+  constructor(public loanserviceworker:LoancalculationWorker,public localst:LocalStorageService) {
   }
 
   getColumnDefs(loanobj:loan_model) {
@@ -46,7 +48,7 @@ export class FsaService {
           else
             return false;
         }, cellEditorSelector: function (params) {
-          debugger
+          
           if (params.data.Collateral_Category_Code == "SCP") {
             return {
               component: "alphaNumeric"
@@ -71,7 +73,7 @@ export class FsaService {
         else
           return false;
       }, cellEditorSelector: function (params) {
-        debugger
+        
         if (params.data.Collateral_Category_Code == "SCP") {
           return {
             component: "alphaNumeric"
@@ -91,7 +93,7 @@ export class FsaService {
       { headerName: 'Description', field: 'Collateral_Description', editable: true, cellEditor: "alphaNumeric", cellClass: ['editable-color'] },
       { headerName: 'Measure Code', field: 'Measure_Code', editable: true, cellClass: ['editable-color'] ,cellEditor:"selectEditor", cellEditorParams: this.getmeasureItems() },
       {
-        headerName: 'Discount %', field: 'Disc_Pct', editable: true, cellEditor: "numericCellEditor", valueFormatter: percentageFormatter, cellClass: ['editable-color', 'text-right'],
+        headerName: 'Discount %', field: 'Disc_Pct', editable: true, cellEditor: "numericCellEditor", valueFormatter: percentageFormatter, headerClass: "rightaligned", cellClass: ['editable-color', 'rightaligned'],
         valueGetter:function(params){
           try{
              if(params.data.Disc_Pct==-1){
@@ -107,7 +109,7 @@ export class FsaService {
         pinnedRowCellRenderer: function () { return '-'; }
       },
       {
-        headerName: 'Quantity', field: 'Qty', editable: function (params) {
+        headerName: 'Quantity', field: 'Qty',headerClass: "rightaligned", editable: function (params) {
           if (params.data.Collateral_Category_Code == "SCP") {
             return true;
           }
@@ -133,12 +135,12 @@ export class FsaService {
             return 'grayedcell';
           }
           else
-            return 'editable-color';
+            return 'editable-color rightaligned';
         }
 
       },
       {
-        headerName: 'Price', field: 'Price',editable: function (params) {
+        headerName: 'Price', field: 'Price', headerClass: "rightaligned",editable: function (params) {
           if (params.data.Collateral_Category_Code == "SCP") {
             return true;
           }
@@ -164,17 +166,17 @@ export class FsaService {
             return 'grayedcell';
           }
           else
-            return 'editable-color';
+            return 'editable-color rightaligned';
         }
 
       },
       { 
-        headerName: 'Mkt Value', field: 'Market_Value', cellEditor: "numericCellEditor", valueFormatter: currencyFormatter,  cellClass: function (params) {
+        headerName: 'Mkt Value', field: 'Market_Value',headerClass: "rightaligned", cellEditor: "numericCellEditor", valueFormatter: currencyFormatter,  cellClass: function (params) {
           if (params.data.Collateral_Category_Code == "SCP")  {
             return 'grayedcell';
           }
           else
-            return 'editable-color';
+            return 'editable-color rightaligned';
         },
         editable: function (params) {
           if (params.data.Collateral_Category_Code != "SCP") {
@@ -183,8 +185,9 @@ export class FsaService {
           else
             return false;
         }, valueGetter: function (params) {
-          debugger
+          
           if (params.data.Collateral_Category_Code != "SCP") {
+            debugger
             return params.data.Market_Value;
           }
           else
@@ -192,15 +195,18 @@ export class FsaService {
         }
 
       },
-      { headerName: 'Prior Lien', field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'text-right'] },
-      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, cellClass: 'editable-color', cellEditor: "selectEditor",cellEditorParams:this.getLienholders(loanobj) },
+      { headerName: 'Prior Lien',headerClass: "rightaligned", field: 'Prior_Lien_Amount', editable: true, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellStyle: { textAlign: "right" }, cellClass: ['editable-color', 'rightaligned'] },
+      { headerName: 'Lienholder', field: 'Lien_Holder', editable: true, cellClass: 'editable-color', cellEditor: "selectEditor",cellEditorParams:function(params) {  
+        return getLienholders();
+       }
+      },
       {
-        headerName: 'NetMkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter, cellClass: ['text-right']
+        headerName: 'NetMkt Value', field: 'Net_Market_Value', editable: false, cellEditor: "numericCellEditor", valueFormatter: currencyFormatter,headerClass: "rightaligned", cellClass: ['rightaligned']
         // valueGetter: function (params) {
         //   return setNetMktValue(params);}
       },
       {
-        headerName: 'Disc Value', field: 'Disc_Mkt_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['text-right'],
+        headerName: 'Disc Mkt Value',headerClass: "rightaligned", field: 'Disc_Mkt_Value', editable: false, cellEditor: "numericCellEditor", cellClass: ['rightaligned'],
         // valueGetter: function (params) {
         //   return setDiscValue(params);
         // },
@@ -214,8 +220,8 @@ export class FsaService {
         valueFormatter: insuredFormatter
       },
       {
-        headerName: 'Ins Value', field: 'Ins_Value', editable: false, valueFormatter: currencyFormatter, cellClass: ['text-right'],valueGetter:function(params){
-          debugger
+        headerName: 'Ins Value',headerClass: "rightaligned", field: 'Ins_Value', editable: false, valueFormatter: currencyFormatter, cellClass: ['rightaligned'],valueGetter:function(params){
+          
           if(params.data.Insured_Flag==1){
             params.data.Ins_Value=params.data.Net_Market_Value;
               return params.data.Net_Market_Value;
@@ -226,8 +232,8 @@ export class FsaService {
 
       },
       {
-        headerName: 'Disc Ins Value', field: 'Disc_Ins_Value', editable: false, valueFormatter: currencyFormatter, cellClass: ['text-right'],valueGetter:function(params){
-          debugger
+        headerName: 'Disc Ins Value',headerClass: "rightaligned", field: 'Disc_Ins_Value', editable: false, valueFormatter: currencyFormatter, cellClass: ['rightaligned'],valueGetter:function(params){
+          
           if(params.data.Insured_Flag==1){
             params.data.Disc_Ins_Value=params.data.Disc_Mkt_Value;
               return params.data.Disc_Mkt_Value;
@@ -237,7 +243,7 @@ export class FsaService {
         }
 
       },
-      { headerName: '', width: 100, field: 'value', cellRenderer: "deletecolumn", pinnedRowCellRenderer: function () { return ' '; } }
+      { headerName: '', field: 'value', cellRenderer: "deletecolumn", pinnedRowCellRenderer: function () { return ' '; } }
     ];
   }
 
@@ -292,7 +298,7 @@ export class FsaService {
   }
 
   rowValueChanged(value: any, localloanobject: loan_model, component, source, uniqueKey) {
-    debugger
+    
     var obj = value.data;
     if (obj[uniqueKey] == 0) {
       let lastIndex = localloanobject[source].length - 1;
@@ -372,15 +378,17 @@ export class FsaService {
     return { values: this.MeasureItems };
   }
 
-  getLienholders(loanobj:loan_model){
-    debugger
-    let values=[];
-    loanobj.Association.filter(p=>p.Assoc_Type_Code=="LEI").forEach(element => {
-      values.push({value:element.Assoc_Name,key:element.Assoc_Name});
-    });
-    return {values:values}
-  }
+ 
 
 
 
+}
+function getLienholders(){
+  debugger
+  var loanobj=JSON.parse('[' + window.localStorage.getItem("ng2-webstorage|currentselectedloan") + ']')[0];
+  var values=[];
+  loanobj.Association.filter(p=>p.Assoc_Type_Code=="LEI").forEach(element => {
+    values.push({value:element.Assoc_Name,key:element.Assoc_Name});
+  });
+  return {values:values}
 }

@@ -241,7 +241,7 @@ export class LoancropunitcalculationworkerService {
               else if (subpolicy.Ins_Type.toLowerCase() == "ice") {
                 // subpolicy.Upper_Limit = 95;
                 // subpolicy.Lower_Limit = 85;  //did manually as if now
-                debugger
+                
                 try {
                   subpolicy.Deduct_pct = 5;
                   subpolicy.Deduct_amt = 0;
@@ -279,7 +279,7 @@ export class LoancropunitcalculationworkerService {
                       break;
                   }
                   //User inputs Processing here
-                  debugger
+                  
                   if (subpolicy.Lower_Limit != undefined && subpolicy.Lower_Limit <= insurancepolicy.Level) {
                     let band = subpolicy.Upper_Limit - subpolicy.Lower_Limit;
                     let CoveragetoMPCI = subpolicy.Upper_Limit - insurancepolicy.Level;
@@ -345,7 +345,7 @@ export class LoancropunitcalculationworkerService {
                   }
                   if (subpolicy.Ins_SubType == "Prod Plan" || subpolicy.Ins_SubType == "Comp Plan") {
                     subpolicy.Deduct_pct = 10;
-                    debugger
+                    
                     element.FC_Crophailvalue = ((element.Ins_APH * insurancepolicy.Price * (crophaillevelpct/100 - subpolicy.Deduct_pct/100)) - subpolicy.Premium) * element.CU_Acres * element.FC_Insurance_Share / 100;
                   }
                   element.FC_Disc_Crophailvalue=element.FC_Crophailvalue * 80/100;

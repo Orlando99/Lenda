@@ -110,7 +110,7 @@ export class CollateralService {
 
   getRowData(localloanobject, categoryCode, source, sourceKey) {
     if (sourceKey === '') {
-      // Marketing Contracts
+      // FSA Contracts
       return localloanobject[source] !== null ?
         localloanobject[source].filter(lc => {
           return lc.ActionStatus !== 3
@@ -184,7 +184,7 @@ export class CollateralService {
   deleteClicked(rowIndex: any, localloanobject: loan_model, rowData, source, uniqueKey) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-        debugger
+        
         var obj = rowData[rowIndex];
         if (obj[uniqueKey] == 0) {
           rowData.splice(rowIndex, 1);

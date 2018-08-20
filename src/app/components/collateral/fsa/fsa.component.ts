@@ -12,8 +12,7 @@ import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { ToastsManager } from 'ng2-toastr';
 import { JsonConvert } from 'json2typescript';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
-import { GridOptions } from 'ag-grid';
-import { debug } from 'util';
+import * as _ from 'lodash'
 import { getAlphaNumericCellEditor } from '../../../Workers/utility/aggrid/alphanumericboxes';
 import { CollateralService } from '../collateral.service';
 import { FsaService } from './fsa.service';
@@ -42,6 +41,7 @@ export class FSAComponent implements OnInit {
   public deleteAction = false;
   public pinnedBottomRowData;
   public rowClassRules;
+  defaultColDef: { menuTabs: any[]; };
 
   constructor(public localstorageservice: LocalStorageService,
     private toaster: ToastsManager,
@@ -59,15 +59,20 @@ export class FSAComponent implements OnInit {
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
     this.columnDefs = this.fsaService.getColumnDefs(this.localloanobject);
     this.context = { componentParent: this };
+    this.defaultColDef = {
+      menuTabs: []
+    };
   }
 
   ngOnInit() {
     // Observe the localstorage for changes
     this.subscribeToChanges();
-
+    
     // on initialization
 
     this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source,'');
+    //Sort and put StoredCropatbottom this is component specific Code
+    this.rowData=_.sortBy(this.rowData,['Collateral_Category_Code']);
     this.fsaService.computeTotal(this.localloanobject); // we will still calculate the totals
     //this.collateralService.adjustgrid(this.gridApi);
   }
@@ -75,6 +80,8 @@ export class FSAComponent implements OnInit {
   subscribeToChanges() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
       this.rowData = this.collateralService.getRowData(res, CollateralSettings.fsa.key, CollateralSettings.fsa.source,'');
+        //Sort and put StoredCropatbottom this is component specific Code
+    this.rowData=_.sortBy(this.rowData,['Collateral_Category_Code']);
     });
   }
 
@@ -84,7 +91,7 @@ export class FSAComponent implements OnInit {
 
   private adjustgrid() {
     try {
-      //  this.gridApi.sizeColumnsToFit();
+      this.columnApi.columnController.autoSizeAllColumns("contextMenu")
     }
     catch (ex) {
     }
@@ -104,13 +111,13 @@ export class FSAComponent implements OnInit {
   }
 
   rowvaluechanged(value: any) {
-    debugger
+    
     this.fsaService.rowValueChanged(value, this.localloanobject,"AdditionalCollateral", CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
     this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
-    debugger
+    
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
     this.publishService.enableSync(Page.collateral);
   }

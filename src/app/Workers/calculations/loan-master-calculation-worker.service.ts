@@ -93,10 +93,11 @@ export class LoanMasterCalculationWorkerService {
   }
 
   performDashboardCaclulation(localLoanObject : loan_model): any {
+    debugger
     let starttime = new Date().getTime();
     if(localLoanObject.LoanMaster && localLoanObject.LoanMaster[0]){
       let loanMaster = localLoanObject.LoanMaster[0];
-      
+      debugger
       loanMaster.Risk_Cushion_Amount = loanMaster.Disc_value_Insurance +loanMaster.Disc_CEI_Value + (0 + loanMaster.Ag_Pro_Requested_Credit) - 
                                       (loanMaster.ARM_Commitment  + loanMaster.Dist_Commitment+ loanMaster.Rate_Fee_Amount);
       loanMaster.Risk_Cushion_Amount = parseFloat(loanMaster.Risk_Cushion_Amount.toFixed(2)); 

@@ -94,13 +94,14 @@ export class PoliciesComponent implements OnInit {
     seterrors(this.errorlist);
    
   }
+
+  getdynamicwidth(header:string){
+    debugger
+    return header.length*15;
+  }
   declarecoldefs() {
     this.defaultColDef = {
-      cellClassRules: {
-        "edited-color": function (params) {
-          return params.data.ActionStatus == 2;
-        }
-      }
+      menuTabs: []
     };
     this.columnDefs = [
       {
@@ -110,6 +111,7 @@ export class PoliciesComponent implements OnInit {
         cellClass: 'editable-color',
         //cellRenderer: 'columnTooltip',
         headerTooltip: 'Agent',
+        width:80,
         editable: true,
         cellEditor: "selectEditor",
         cellEditorParams: this.getAgents(),
@@ -130,6 +132,7 @@ export class PoliciesComponent implements OnInit {
         //cellRenderer: 'columnTooltip',
         cellClass: 'editable-color',
         editable: true,
+        width:120,
         cellEditor: "agSelectCellEditor",
         cellEditorParams: this.getAIPs()
       },
@@ -137,18 +140,21 @@ export class PoliciesComponent implements OnInit {
         headerName: 'State | County',
         headerTooltip: 'State | County',
         //cellRenderer: 'columnTooltip',
-        field: 'StateandCountry'
-        , pickfield: 'StateandCountry'
+        field: 'StateandCountry',
+        width:120,
+        pickfield: 'StateandCountry'
       },
       {
         headerName: 'Crop',
         headerTooltip: 'Crop',
+        width:80,
         //cellRenderer: 'columnTooltip',
         field: 'CropName', pickfield: 'CropName'
       },
       {
         headerName: 'Practice',
         headerTooltip: 'Practice',
+        width:90,
         //cellRenderer: 'columnTooltip',
         field: 'Practice', pickfield: 'Practice'
       },
@@ -169,6 +175,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Unit',
         field: 'Unit',
         pickfield: 'Unit',
+        width:70,
         // //cellRenderer: 'columnTooltip',
         cellClass: ['editable-color'],
         editable: true,
@@ -201,6 +208,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Level',
         field: 'Level',
         pickfield: 'Level',
+        width:80,
         //cellRenderer: 'columnTooltip',
         headerClass: "rightaligned",
         cellClass: ['editable-color','rightaligned'],
@@ -220,6 +228,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Price',
         field: 'Price',
         pickfield: 'Price',
+        width:80,
         //cellRenderer: 'columnTooltip',
         headerClass: "rightaligned",
         cellClass: ['editable-color','rightaligned'],
@@ -236,6 +245,7 @@ export class PoliciesComponent implements OnInit {
         headerTooltip: 'Premium',
         field: 'Premium',
         pickfield: 'Premium',
+        width:90,
         editable: true,
         //cellRenderer: 'columnTooltip',
         headerClass: "rightaligned",
@@ -248,6 +258,8 @@ export class PoliciesComponent implements OnInit {
         valueFormatter: currencyFormatter
       }
     ];
+  
+    debugger
     this.getgriddata();
     if(this.columnApi!=undefined)
     {
@@ -269,7 +281,7 @@ export class PoliciesComponent implements OnInit {
   getformatterforcolumn(columnname){
     
     columnname=columnname.substr(0,columnname.lastIndexOf("_"))
-    debugger
+    
     let formatter;
     switch (columnname) {
       case "Price_Pct":
@@ -319,10 +331,10 @@ export class PoliciesComponent implements OnInit {
     return formatter;
   }
   addNumericColumn(element: string, editortype: string) {
-     debugger
+     
     let header = element;
     let column: any = {
-      headerName: header, pickfield: element, field: element,headerClass: "rightaligned",
+      headerName: header,  width:(header.split('_').length>2?160:120),pickfield: element, field: element,headerClass: "rightaligned",
      editable: element=="Icc_PCI"?false:true, //only iccc field is non editable we can create an array if later needed
       cellEditorSelector: function (params) {
         let pos = params.colDef.pickfield.lastIndexOf("_") + 1;
@@ -340,6 +352,18 @@ export class PoliciesComponent implements OnInit {
           }
         }
 
+      },
+      cellRenderer:function(params){
+        let pos = params.colDef.pickfield.lastIndexOf("_") + 1;
+        let policyname = params.colDef.pickfield.substr(pos, params.colDef.pickfield.length - pos)
+        if (policyname.length > 0) {
+          if (params.data.SecInsurance.includes(policyname)) {
+            return params.valueFormatted;
+          }
+          else {
+            return "";
+          }
+        }
       },
       cellClass: function (params) {
 
@@ -590,7 +614,7 @@ export class PoliciesComponent implements OnInit {
           if (this.columnDefs.find(p => p.pickfield == newsubcol) == undefined) {
 
             this.columnDefs.push({
-              headerName: newsubcol, pickfield: newsubcol, field: policy.Ins_Type + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(policy.Ins_Type),
+              headerName: newsubcol, pickfield: newsubcol, width:120, field: policy.Ins_Type + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(policy.Ins_Type),
               cellEditorSelector: function (params) {
 
                 let column = params.colDef.pickfield.split('_')[0];
@@ -636,7 +660,7 @@ export class PoliciesComponent implements OnInit {
       }
       this.retrieveerrors();
       seterrors(this.errorlist);
-      setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
+      //setmodifiedall(this.localstorage.retrieve(environment.modifiedbase));
     }, 10);
   }
 
@@ -690,13 +714,18 @@ export class PoliciesComponent implements OnInit {
     var items = $event.data.SecInsurance.toString().split(",");
     // Options
 
-    let modifiedvalues = this.localstorage.retrieve(environment.modifiedbase) as Array<String>;
 
-    if (!modifiedvalues.includes("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field)) {
-      modifiedvalues.push("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field);
-      this.localstorage.store(environment.modifiedbase, modifiedvalues); +
-        setmodifiedsingle("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field);
-    }
+         //MODIFIED YELLOW VALUES
+    // let modifiedvalues = this.localstorage.retrieve(environment.modifiedbase) as Array<String>;
+
+    // if (!modifiedvalues.includes("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field)) {
+    //   modifiedvalues.push("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field);
+    //   this.localstorage.store(environment.modifiedbase, modifiedvalues); +
+    //     setmodifiedsingle("Ins_" + $event.data.mainpolicyId + "_" + $event.colDef.field);
+    // }
+    //MODIFIED YELLOW VALUES
+
+
     if ($event.data.SecInsurance != "" && $event.colDef.field == "SecInsurance") {
       items.forEach(element => {
         console.log(element);
@@ -704,7 +733,7 @@ export class PoliciesComponent implements OnInit {
         if (this.columnDefs.find(p => p.pickfield.split('_')[0] == element) == undefined) {
           this.ShowHideColumnsonselection(element);
           this.columnDefs.push({
-            headerName: element + '_Subtype', pickfield: element + '_Subtype', field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
+            headerName: element + '_Subtype', pickfield: element + '_Subtype',  width:120, field: element + "_st", editable: true, cellEditorParams: this.getsubtypeforinsurance(element),
             cellEditorSelector: function (params) {
 
               let column = params.colDef.pickfield.split('_')[0];
@@ -904,17 +933,6 @@ function setmodifiedsingle(obj) {
   }
 }
 
-
-//  function getwidthaccordingtoheader(header:string){
-//   if(header.split('_').length==2)
-//   {
-//      return 115;
-//   }
-//   else
-//   {
-//     return 150;
-//   }
-//  }
 function setmodifiedall(arrayy) {
   arrayy.forEach(obj => {
     try {

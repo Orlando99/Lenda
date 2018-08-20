@@ -22,7 +22,7 @@ export function formatcurrency(number) {
 //THIS IS ACRES FORMATTER
 //********************************* */
 export function acresFormatter(params) {
-    debugger
+    
     if(isNaN(params.value))
     {
         params.value=0; 

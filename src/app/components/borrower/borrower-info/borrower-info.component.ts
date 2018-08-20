@@ -76,7 +76,7 @@ export class BorrowerInfoComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      debugger;
+      ;
     });
   }
  

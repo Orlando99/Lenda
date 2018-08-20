@@ -18,8 +18,8 @@ export class Collateralcalculationworker {
 
     preparediscvalue(params) {
         // params.Disc_Value=Number(params.Market_Value) - (Number(params.Market_Value) * (Number(params.Disc_CEI_Value)/100));
-        debugger
-        params.Disc_CEI_Value = Math.max((Number(params.Market_Value)*(1-(Number(params.Disc_Pct)/100)))-Number(params.Prior_Lien_Amount))
+        
+        params.Disc_Value = Math.max((Number(params.Market_Value)*(1-(Number(params.Disc_Pct)/100)))-Number(params.Prior_Lien_Amount))
     }
 
     preparemktvalue(params) {
@@ -32,7 +32,7 @@ export class Collateralcalculationworker {
             for (let i = 0; i < input.LoanCollateral.length; i++) {
 
                 if ((input.LoanCollateral[i].Qty !== 0 && input.LoanCollateral[i].Qty !== null) || (input.LoanCollateral[i].Price !== 0 && input.LoanCollateral[i].Price !== null)) {
-                    this.preparemktvalue(input.LoanCollateral[i]);
+                    //this.preparemktvalue(input.LoanCollateral[i]);
                 }
                 this.preparenetmktvalue(input.LoanCollateral[i]);
                 this.preparediscvalue(input.LoanCollateral[i]);
@@ -87,6 +87,7 @@ export class Collateralcalculationworker {
         
         let starttime = new Date().getTime();
         let collaterallst=input.LoanCollateral.filter(lc=>{ return lc.Collateral_Category_Code === "LSK" && lc.ActionStatus !== 3});
+        debugger
         input.LoanMaster[0].FC_Market_Value_lst = this.totalMktValue(collaterallst);
         input.LoanMaster[0].FC_Lst_Prior_Lien_Amount = this.totalPriorLien(collaterallst);
         input.LoanMaster[0].Net_Market_Value_Livestock = this.totalNetMktValue(collaterallst);
