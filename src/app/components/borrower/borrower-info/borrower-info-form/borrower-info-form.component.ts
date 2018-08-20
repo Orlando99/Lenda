@@ -102,8 +102,8 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
 
   }
   onValueChange(){
-    if(this.borrowerInfoForm.value){
-      this.borrowerInfo = Object.assign(this.borrowerInfo, this.borrowerInfoForm.value);
+    if(this.borrowerInfoForm.getRawValue()){
+      this.borrowerInfo = Object.assign(this.borrowerInfo, this.borrowerInfoForm.getRawValue());
       this.onFormValueChange.emit({value : this.borrowerInfo, isValid : this.borrowerInfoForm.valid});
     }
   }
@@ -121,9 +121,11 @@ export class BorrowerInfoFormComponent implements OnInit,OnChanges {
     if(this.individualEntities.includes(data.value)){
       this.borrowerInfoForm.controls['Borrower_ID_Type'].setValue(IDType.SSN);
       this.selectedEntityGroups = EntityGroup.Individual;
+      this.onValueChange();
     }else if(this.orgnaizationEntities.includes(data.value)){
       this.borrowerInfoForm.controls['Borrower_ID_Type'].setValue(IDType.Tax_ID);
       this.selectedEntityGroups = EntityGroup.Organization;
+      this.onValueChange();
     }else{
       throw "Invalid Borrower_Entity_Type_Code";
     }
