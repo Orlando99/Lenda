@@ -55,7 +55,7 @@ export class CreateLoanComponent implements OnInit {
       this.borrowerParamsObj.value.Borrower_Phone = this.farmerParamsObj.value.Farmer_Phone;
       this.borrowerParamsObj.value.Borrower_email = this.farmerParamsObj.value.Farmer_Email;
       this.borrowerParamsObj.value.Borrower_DOB = this.farmerParamsObj.value.Farmer_DOB;
-      this.borrowerInfo = this.borrowerParamsObj.value;
+      this.borrowerInfo = Object.assign(new borrower_model(), this.borrowerParamsObj.value);
       //this.borrowerInfoObj.value = Object.assign(this.borrowerInfoObj.value, this.farmerInfo.value);
       this.borrowerParamsObj.isValid = Object.assign(this.borrowerParamsObj.isValid, this.farmerParamsObj.isValid);
 
