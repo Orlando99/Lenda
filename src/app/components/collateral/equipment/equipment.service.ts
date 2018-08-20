@@ -53,8 +53,8 @@ export class EquipmentService {
       footer.Prior_Lien_Amount = loanobject.LoanMaster[0].FC_Equip_Prior_Lien_Amount
       footer.Lien_Holder = '';
       footer.Net_Market_Value = loanobject.LoanMaster[0].Net_Market_Value_Equipment
-      footer.Disc_Value = 0;
-      footer.Disc_CEI_Value = loanobject.LoanMaster[0].Disc_value_Equipment
+      footer.Disc_Pct = 0;
+      footer.Disc_Mkt_Value = loanobject.LoanMaster[0].Disc_value_Equipment
       total.push(footer);
       return total;
     }

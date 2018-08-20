@@ -55,8 +55,8 @@ export class LiveStockService {
     footer.Prior_Lien_Amount = input.LoanMaster[0].FC_Lst_Prior_Lien_Amount
     footer.Lien_Holder = '';
     footer.Net_Market_Value = input.LoanMaster[0].Net_Market_Value_Livestock
-    footer.Disc_Value = 0;
-    footer.Disc_CEI_Value = input.LoanMaster[0].Disc_value_Livestock
+    footer.Disc_Pct = 0;
+    footer.Disc_Mkt_Value = input.LoanMaster[0].Disc_value_Livestock
     footer.Qty = input.LoanMaster[0].FC_total_Qty_lst
     footer.Price = input.LoanMaster[0].FC_total_Price_lst
     total.push(footer);

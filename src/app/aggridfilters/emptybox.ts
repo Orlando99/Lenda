@@ -28,25 +28,12 @@ export class EmptyEditor implements ICellEditorAngularComp, AfterViewInit {
     }
 
     agInit(params: any): void {
-    
-        this.params = params;
         
-        // this.values=params.values;
-        // if(isNumber(params.value))
-        // this.selectedValue=parseInt(params.value);
-        // else
-        // this.selectedValue=params.value;
-
-        // this.style = {
-           
-        //     width: params.eGridCell.offsetWidth.toString() +"px",
-        //     height: params.eGridCell.offsetHeight.toString() +"px",
-           
-        //   };
+       
     }
 
     getValue(): any {
-    //    return this.selectedValue;
+    return "";
 
     }
 

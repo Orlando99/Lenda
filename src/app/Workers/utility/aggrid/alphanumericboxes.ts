@@ -31,7 +31,7 @@ export function getAlphaNumericCellEditor() {
         event.srcElement.parentElement.className=event.srcElement.parentElement.className.replace("editable-color","edited-color")
       });
      
-      this.eInput.value = (params.charPress && isCharAlphaNumeric(params.charPress)) ? params.charPress : params.value;
+      this.eInput.value = (params.charPress && isCharAlphaNumeric(params.charPress)) ? params.charPress : (params.value==undefined?"":params.value);
       var that = this;
 
       this.eInput.addEventListener("keypress", function(event) {

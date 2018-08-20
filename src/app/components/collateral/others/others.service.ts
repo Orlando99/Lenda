@@ -53,8 +53,8 @@ export class OthersService {
       footer.Prior_Lien_Amount = loanobject.LoanMaster[0].FC_other_Prior_Lien_Amount
       footer.Lien_Holder = '';
       footer.Net_Market_Value = loanobject.LoanMaster[0].Net_Market_Value__Other
-      footer.Disc_Value = 0;
-      footer.Disc_CEI_Value = loanobject.LoanMaster[0].Disc_value_Other
+      footer.Disc_Pct = 0;
+      footer.Disc_Mkt_Value = loanobject.LoanMaster[0].Disc_value_Other
       total.push(footer);
       return total;
     }

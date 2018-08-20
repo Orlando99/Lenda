@@ -19,6 +19,8 @@ import { CollateralService } from '../collateral.service';
 import { FsaService } from './fsa.service';
 import CollateralSettings from './../collateral-types.model';
 import { PublishService, Page } from "../../../services/publish.service";
+import { EmptyEditor } from '../../../aggridfilters/emptybox';
+import { BlankCellRenderer } from '../../../aggridcolumns/tooltip/aggridrenderers';
 
 @Component({
   selector: 'app-fsa',
@@ -51,10 +53,11 @@ export class FSAComponent implements OnInit {
     public collateralService: CollateralService,
     public fsaService: FsaService,
     public publishService: PublishService) {
-    this.components = { numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() };
+    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
+    this.components = {blankcell:BlankCellRenderer, numericCellEditor: getNumericCellEditor(), alphaNumeric: getAlphaNumericCellEditor() ,emptyeditor:EmptyEditor};
     this.refdata = this.localstorageservice.retrieve(environment.referencedatakey);
     this.frameworkcomponents = { selectEditor: SelectEditor, deletecolumn: DeleteButtonRenderer };
-    this.columnDefs = this.fsaService.getColumnDefs();
+    this.columnDefs = this.fsaService.getColumnDefs(this.localloanobject);
     this.context = { componentParent: this };
   }
 
@@ -63,17 +66,15 @@ export class FSAComponent implements OnInit {
     this.subscribeToChanges();
 
     // on initialization
-    this.localloanobject = this.localstorageservice.retrieve(environment.loankey);
-    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
-    this.pinnedBottomRowData = this.fsaService.computeTotal(this.localloanobject);
-    this.collateralService.adjustgrid(this.gridApi);
+
+    this.rowData = this.collateralService.getRowData(this.localloanobject, CollateralSettings.fsa.key, CollateralSettings.fsa.source,'');
+    this.fsaService.computeTotal(this.localloanobject); // we will still calculate the totals
+    //this.collateralService.adjustgrid(this.gridApi);
   }
 
   subscribeToChanges() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      let result = this.collateralService.subscribeToChanges(res, this.localloanobject, CollateralSettings.fsa.key, this.rowData, this.pinnedBottomRowData);
-      this.rowData = result.rowData;
-      this.pinnedBottomRowData = result.pinnedBottomRowData;
+      this.rowData = this.collateralService.getRowData(res, CollateralSettings.fsa.key, CollateralSettings.fsa.source,'');
     });
   }
 
@@ -83,7 +84,7 @@ export class FSAComponent implements OnInit {
 
   private adjustgrid() {
     try {
-      this.gridApi.sizeColumnsToFit();
+      //  this.gridApi.sizeColumnsToFit();
     }
     catch (ex) {
     }
@@ -98,16 +99,18 @@ export class FSAComponent implements OnInit {
 
   //Grid Events
   addrow() {
-    this.collateralService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.key, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
+    this.fsaService.addRow(this.localloanobject, this.gridApi, this.rowData, CollateralSettings.fsa.source, CollateralSettings.fsa.sourceKey);
     this.publishService.enableSync(Page.collateral);
   }
 
   rowvaluechanged(value: any) {
-    this.collateralService.rowValueChanged(value, this.localloanobject, CollateralSettings.fsa.component, CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
+    debugger
+    this.fsaService.rowValueChanged(value, this.localloanobject,"AdditionalCollateral", CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
     this.publishService.enableSync(Page.collateral);
   }
 
   DeleteClicked(rowIndex: any) {
+    debugger
     this.collateralService.deleteClicked(rowIndex, this.localloanobject, this.rowData, CollateralSettings.fsa.source, CollateralSettings.fsa.pk);
     this.publishService.enableSync(Page.collateral);
   }

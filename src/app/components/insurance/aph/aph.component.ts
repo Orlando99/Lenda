@@ -53,7 +53,7 @@ export class AphComponent implements OnInit {
         width: 70
       },
       {
-        headerName: 'FSN', field: 'Farm_ID',
+        headerName: 'FSN', field: 'Farm_ID', headerClass: "rightaligned", cellClass: "rightaligned",
         valueFormatter: (params) => {
           let matchedFarm = this.localloanobject.Farms.find(f=>f.Farm_ID == params.data.Farm_ID);
           return matchedFarm ? matchedFarm.FSN || '' : '';
@@ -62,7 +62,7 @@ export class AphComponent implements OnInit {
         width: 70
       },
       {
-        headerName: 'APH', field: 'Ins_APH', editable: true, cellEditor: "numericCellEditor", cellClass: ['editable-color', 'text-right'],
+        headerName: 'APH', field: 'Ins_APH', editable: true, cellEditor: "numericCellEditor",  headerClass: "rightaligned",cellClass: ['editable-color', 'rightaligned'],
         cellEditorParams: (params)=> {
           return { value : params.data.Ins_APH || 0}
         },

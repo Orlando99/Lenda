@@ -96,11 +96,11 @@ export class YieldComponent implements OnInit {
     ];
 
     this.years.forEach(element => {
-     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color',  editable: true, cellEditor: "numericCellEditor", valueSetter: yieldValueSetter,cellStyle: { textAlign: "right" }})
+     this.columnDefs.push({ headerName: element.toString(), field: element.toString(), cellClass: 'editable-color rightaligned',  headerClass: "rightaligned", editable: true, cellEditor: "numericCellEditor", valueSetter: yieldValueSetter})
     });
 
-    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',   editable: false, cellStyle: { textAlign: "right" }});
-    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, cellClass: 'text-right',valueFormatter: APHRoundValueSetter });
+    this.columnDefs.push({ headerName: 'Crop Yield', field: 'CropYield',  headerClass: "rightaligned", cellClass: "rightaligned",  editable: false});
+    this.columnDefs.push({ headerName: 'APH', field: 'APH',   editable: false, headerClass: "rightaligned", cellClass: "rightaligned",valueFormatter: APHRoundValueSetter });
     this.columnDefs.push({ headerName: 'Units', field: 'Bu',   editable: false});
     this.columnDefs.push({  headerName: '', field: 'value',  cellRenderer: "deletecolumn", width: 120});
 
