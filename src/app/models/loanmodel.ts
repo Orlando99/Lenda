@@ -18,7 +18,9 @@ export enum AssociationTypeCode{
     Rebator = 'REB',
     ThirdParty= 'THR',
     LienHolder= 'LEI',
-    Guarantor = 'GUA'
+    Guarantor = 'GUA',
+    ReferredFrom = 'REF',
+    CreditRererrence = 'CRF'
 
 }
 

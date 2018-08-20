@@ -4,7 +4,7 @@
         <span class="text">Borrower</span>
         <app-btn-publish (publishClicked)="synctoDb()" [currentPageName]="currentPageName"></app-btn-publish>
     </div>
-
+        
     <mat-accordion>
         <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
@@ -38,6 +38,11 @@
 
     </mat-expansion-panel>
   </mat-accordion>
+
+
+  <app-association [header]="'Referred From'" [associationTypeCode]="'REF'" [currentPageName]="currentPageName" [expanded]="false"></app-association>
+          
+  <app-association [header]="'Credit Rererrence'" [associationTypeCode]="'CRF'" [currentPageName]="currentPageName" [expanded]="false"></app-association>
 
   <mat-accordion>
       <mat-expansion-panel [expanded]="true">

@@ -29,6 +29,9 @@ export class AssociationComponent implements OnInit, OnChanges {
   indexsedit = [];
   public columnDefs = [];
   private localloanobject: loan_model = new loan_model();
+  private ReferredTypes = ['Word of Mouth','Distributer','Agency','Bank','Other'];
+  private Responses = ['Positive','Nuetral','Negetive'];
+  
   @Input('header')
   header :string = '';
   @Input('associationTypeCode')
@@ -38,6 +41,7 @@ export class AssociationComponent implements OnInit, OnChanges {
   @Output('onRowCountChange')
   onRowCountChange: EventEmitter<any> = new EventEmitter<any>();
   @Input() currentPageName: Page;
+  @Input() expanded: boolean = true; 
 
   // Aggrid
   public rowData = new Array<Loan_Association>();
@@ -134,12 +138,24 @@ export class AssociationComponent implements OnInit, OnChanges {
           };
           this.columnDefs.splice(this.columnDefs.length-2,0,amountCol);
         }
-        if(this.associationTypeCode == AssociationTypeCode.Rebator){
+      if(this.associationTypeCode == AssociationTypeCode.Rebator){
           let InsUOMCol = { headerName: 'Ins UOM',width:120, field: 'Ins_UOM',valueFormatter: function () {
             return 'bu';
           }};
           this.columnDefs.splice(this.columnDefs.length-2,0,InsUOMCol);
         
+      }
+      if(this.associationTypeCode == AssociationTypeCode.ReferredFrom){
+        let REFColumn = { headerName: 'Type',width:140, field: 'Referred_Type',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
+        cellEditorParams : {values : this.getSelectBoxValueFromPremitiveArray(this.ReferredTypes)}
+        };
+        this.columnDefs.splice(this.columnDefs.length-2,0,REFColumn);
+      }
+      if(this.associationTypeCode == AssociationTypeCode.CreditRererrence){
+        let CRFColumn = { headerName: 'Response',width:140, field: 'Response',  editable: true,cellEditor: "selectEditor",cellClass: ['editable-color'],
+        cellEditorParams : {values : this.getSelectBoxValueFromPremitiveArray(this.Responses)}
+        };
+        this.columnDefs.splice(this.columnDefs.length-2,0,CRFColumn);
       }
       ///
       this.context = { componentParent: this };
@@ -167,7 +183,12 @@ export class AssociationComponent implements OnInit, OnChanges {
     }
   }
 
-
+  
+  getSelectBoxValueFromPremitiveArray(array : Array<string>){
+    let selectBoxOptions : Array< {key,value}>= [];
+    array.forEach(element => selectBoxOptions.push({key : element,value : element}));
+    return selectBoxOptions;
+  }
   rowvaluechanged(value: any) {
 
     var obj = value.data;
