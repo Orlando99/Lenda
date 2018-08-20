@@ -149,10 +149,15 @@ a.disabled {
 
 // Ag Grid Global Styles
 // ===
-.ag-grid-delete {
-  cursor: pointer;
-  color: $error-color;
+
+.grid-action{
   margin-top: 3px;
   font-size: 20px;
+  cursor: pointer;
+
+  
+}
+.ag-grid-delete {
+  color: $error-color;
 }
 // ===
