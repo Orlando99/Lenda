@@ -62,4 +62,19 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+
+
+  <mat-accordion>
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Exception
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+  
+        <div class="container bottom width-auto">
+          <app-exceptions [displayHeader]="false" [askForJudgement]="true"></app-exceptions>
+        </div>
+      </mat-expansion-panel>
+  </mat-accordion>
 </div>

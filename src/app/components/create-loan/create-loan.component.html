@@ -1,26 +1,29 @@
 <div class="basic-container">
   <span class="page-title"> Create Loan</span>
- 
+
 
 
   <h3>Farmer</h3>
-  <app-farmer-info [allowIndividualSave]="false" [mode]="'create'"  (onFormValueChange)="onFarmerFormValueChange($event)"></app-farmer-info>
+  <app-farmer-info [allowIndividualSave]="false" [mode]="'create'" (onFormValueChange)="onFarmerFormValueChange($event)"></app-farmer-info>
 
   <h3>Borrower</h3>
-  <mat-checkbox [(ngModel)]="useFarmer" (ngModelChange)="useFarmerChange($event)">Use Farmer Information</mat-checkbox>
-  <app-borrower-info-form [borrowerInfo]="borrowerInfo" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info-form> 
-  <div class="row">
-    <div class="input-field col m2">
-      <mat-form-field>
-        <input matInput placeholder="Crop Year" [(ngModel)]="cropYear"  pattern="^\d{4}$" [required]="true">
-        <mat-error *ngIf="cropYear && (cropYear.errors)">
-          Please enter a valid year
-        </mat-error>
-      </mat-form-field>
-      
+  <div class="container bottom width-auto">
+    <div class="row">
+      <div class="col">
+        <mat-checkbox [(ngModel)]="useFarmer" (ngModelChange)="useFarmerChange($event)">Use Farmer Information</mat-checkbox>
+      </div>
+    </div>
+    <app-borrower-info-form [borrowerInfo]="borrowerInfo" (onFormValueChange)="onBorrowerFormValueChange($event)"></app-borrower-info-form>
+    <div class="row">
+      <div class="input-field col m2">
+        <mat-form-field>
+          <input matInput placeholder="Crop Year" [(ngModel)]="cropYear" pattern="^\d{4}$" [required]="true">
+        </mat-form-field>
+
+      </div>
     </div>
   </div>
-    <a class="waves-effect waves-light btn" (click)="onSave($event)" style="margin-bottom: 50px">Save and Continue</a>
+  <a class="waves-effect waves-light btn" (click)="onSave($event)" style="margin-bottom: 50px">Save and Continue</a>
 
   <br/>
 </div>
