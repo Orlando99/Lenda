@@ -1,10 +1,17 @@
 <div class="content-section">
-  <span class="font-weight-600 section-heading">Exceptions</span>
+  <span *ngIf="displayHeader" class="font-weight-600 section-heading">Exceptions</span>
 
-  <p *ngFor="let exception of exceptionList">
-    <span [class.high-severity-text]="exception.severity==='high'" [class.low-severity-text]="exception.severity==='low'">
-      {{exception.message}}
-    </span>
-  </p>
+  <div *ngFor="let exception of localExceptionLogs" class="row">
+    <div [class.high-severity-text]="exception.level==2" [class.low-severity-text]="exception.level==1" class="exception-text"
+      >
+         {{exception.message}}
+    </div>
+    <div class="input-field col m4" style="margin-left: 20px" *ngIf="askForJudgement" >
+      <mat-form-field class="example-full-width">
+          <textarea matInput placeholder="Enter Judgement"></textarea>
+      </mat-form-field>
+    </div>
+    
+  </div>
 
 </div>

@@ -7,42 +7,10 @@
 	
 	<app-borrower-info-form [borrowerInfo]="borrowerInfo" (onFormValueChange)="onFormValueChange($event)"></app-borrower-info-form>
 
-	<a (click)="onAddCoBorrower()" class="waves-effect waves-light btn" style="margin: 0 0 10px 18px;" >
+	<a (click)="onAddCoBorrower()" class="waves-effect waves-light btn" style="margin: 0 0 10px 0px;" >
 		<i class="material-icons left">add</i>Add Co-Borrower
 	</a>
-	<!-- Table -->
-	<!-- <div class="row" *ngIf="mode!='create' && borrowerInfoForm && ['PRP','JNT','COP','LLC'].indexOf(borrowerInfoForm.value.Borrower_Entity_Type_Code) >=0">
-		<h3>{{getTypeNameOfCB(borrowerInfoForm.value.Borrower_Entity_Type_Code)}}</h3>
-		
-
-			<div class="container bottom">
-				<div class="row">
-				<ag-grid-angular  [ngStyle]="style"
-				class="ag-theme-balham roboto-font"
-				[animateRows]="true"
-				[enableSorting]="true"
-				[enableFilter]="true"
-				[context]="context"
-				(gridSizeChanged)="onGridSizeChanged($event)"
-				[frameworkComponents]="frameworkcomponents"
-				[components]="components"
-				[singleClickEdit]="true"
-				(cellEditingStopped)="rowvaluechanged($event)"
-				[rowData]="rowData" 
-				(gridReady)="onGridReady($event)"
-				[columnDefs]="columnDefs"
-				[gridAutoHeight]=true>
-				</ag-grid-angular>
-				</div>
-		
-			  </div>  
-	</div> -->
-
-	<!-- <div class="row" *ngIf="mode!='create' && selectedAssociaionTypeCode">
-		<app-association [header]="getTypeNameOfCB(selectedAssociaionTypeCode)" [currentPageName]="currentPageName" [associationTypeCode]="selectedAssociaionTypeCode"
-		 [withoutChevron]="true" (onRowCountChange)="coBorrowerCountChange($event)"></app-association>
-	</div> -->
-
+	
 	<table>
 		<thead>
 			<tr>
