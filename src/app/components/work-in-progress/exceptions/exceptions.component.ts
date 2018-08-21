@@ -1,4 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { ExceptionModel } from '../../../models/commonmodels';
+import { environment } from '../../../../environments/environment.prod';
+import { LocalStorageService } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-exceptions',
@@ -7,12 +10,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ExceptionsComponent implements OnInit {
 
-  @Input('exceptionList')
-  exceptionList : Array<any>;
+ 
+  localExceptionLogs : Array<ExceptionModel>;
   
-  constructor() { }
+  constructor(private localStorageService : LocalStorageService) { }
 
   ngOnInit() {
+    this.localExceptionLogs = this.localStorageService.retrieve(environment.exceptionStorageKey);
+
   }
 
 }
