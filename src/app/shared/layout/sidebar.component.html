@@ -22,7 +22,8 @@
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/insurance']">
       <mat-icon mat-list-icon><i class="flaticon flaticon-umbrella"></i></mat-icon>
-      <p matLine>Insurance</p>
+      <p matLine>Insurance - </p> <div style="color: #f34343;
+      font-size: 12px;">{{geterrorcountfortab('Insurance')}}</div>
       <i *ngIf="isSyncRequired('insurance')" class="save-icon material-icons">save</i>
     </mat-list-item>
     <mat-list-item routerLinkActive="active" [routerLink]="['/home/loanoverview/'+loanid+'/budget']">

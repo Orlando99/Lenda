@@ -17,7 +17,7 @@ import { LoggingService } from '../../../services/Logs/logging.service';
 import { AlertifyService } from '../../../alertify/alertify.service';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
 import { AgGridTooltipComponent } from '../../../aggridcolumns/tooltip/tooltip.component';
-import { errormodel } from '../../../models/commonmodels';
+import { errormodel, Chevronkeys } from '../../../models/commonmodels';
 import { ValidationService } from '../../../Workers/calculations/validation.service';
 import { BooleanEditor } from '../../../aggridfilters/booleanaggrid.';
 import { PublishService, Page } from '../../../services/publish.service';
@@ -54,7 +54,7 @@ export class PoliciesComponent implements OnInit {
   currentPageName : Page = Page.insurance;
 
   retrieveerrors() {
-    this.errorlist = (this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p => p.errorsection = "Insurance");
+    this.errorlist = (this.localstorage.retrieve(environment.errorbase) as Array<errormodel>).filter(p => p.chevron = Chevronkeys.InsurancePolices);
   }
 
   deleteunwantedcolumn(): any {

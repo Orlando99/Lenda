@@ -3,7 +3,7 @@ import { Insurance_Policy } from '../../models/insurancemodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { environment } from '../../../environments/environment.prod';
 import * as _ from 'lodash'
-import { errormodel } from '../../models/commonmodels';
+import { errormodel, Chevronkeys, validationlevel } from '../../models/commonmodels';
 
 
 @Injectable()
@@ -36,10 +36,10 @@ export class ValidationService {
       let mainpolicyid = element.Policy_id;
       //unit check 
       if (element.Unit == itemchanged.Unit) {
-        itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+        itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Unit", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
       }
       else {
-        itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+        itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Unit", tab: "Insurance", details: ["dirty"],chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
       }
     });
 
@@ -56,7 +56,7 @@ export class ValidationService {
         //Insurance Types Check
         
         if (!arraysEqual(element.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type), itemchanged.Subpolicies.filter(p => p.ActionStatus != 3).map(p => p.Ins_Type))) {
-          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_SecInsurance", errorsection: "Insurance", details: ["dirty"] });
+          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_SecInsurance", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
         else {
           //validate subpolicies here
@@ -65,7 +65,7 @@ export class ValidationService {
               if (key != "FK_Policy_Id" && key != "ActionStatus" && key != "Ins_SubType" && key != "Ins_Type" && key != "SubPolicy_Id") {
                 let compareto = element.Subpolicies.filter(p => p.ActionStatus != 3).find(p => p.Ins_Type == subpol.Ins_Type);
                 if (subpol[key] != compareto[key]) {
-                  itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_" + key + "_" + subpol.Ins_Type, errorsection: "Insurance", details: ["dirty"] });
+                  itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_" + key + "_" + subpol.Ins_Type, tab: "Insurance", details: ["dirty"],chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
                 }
               }
             })
@@ -74,27 +74,27 @@ export class ValidationService {
 
         //premium check
         if (element.Premium == itemchanged.Premium) {
-          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Premium", errorsection: "Insurance", details: ["dirty"] });
+          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Premium", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
 
         }
         else {
-          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Premium", errorsection: "Insurance", details: ["dirty"] });
+          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Premium", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
 
         //price check
         if (element.Price == itemchanged.Price) {
-          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Price", errorsection: "Insurance", details: ["dirty"] });
+          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Price", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
         else {
-          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Price", errorsection: "Insurance", details: ["dirty"] });
+          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Price", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
 
         //level check
         if (element.Level == itemchanged.Level) {
-          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Level", errorsection: "Insurance", details: ["dirty"] });
+          itemstoremove.push({ cellid: "Ins_" + mainpolicyid + "_Level", tab: "Insurance", details: ["dirty"],chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
         else {
-          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Level", errorsection: "Insurance", details: ["dirty"] });
+          itemstoadd.push({ cellid: "Ins_" + mainpolicyid + "_Level", tab: "Insurance", details: ["dirty"],chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
         ///
 
@@ -234,12 +234,12 @@ export class ValidationService {
     if (restrictpolicies.length > 0) {
       if (!restrictpolicies.includes(itemchanged.Unit)) {
         //add error to main policy and also add error to itemseffected
-        errorsadded.push({ cellid: "Ins_" + itemchanged.Policy_id + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+        errorsadded.push({ cellid: "Ins_" + itemchanged.Policy_id + "_Unit", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
       }
       itemseffected.forEach(element => {
         //add error
         if (!restrictpolicies.includes(element.Unit)) {
-          errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+          errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
       });
     }
@@ -247,7 +247,7 @@ export class ValidationService {
       itemseffected.forEach(element => {
         if (element.Unit !== itemchanged.Unit) {
           //add error
-          errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", errorsection: "Insurance", details: ["dirty"] });
+          errorsadded.push({ cellid: "Ins_" + element.Policy_id + "_Unit", tab: "Insurance", details: ["dirty"] ,chevron:Chevronkeys.InsurancePolices ,level:validationlevel.level2});
         }
       });
     }

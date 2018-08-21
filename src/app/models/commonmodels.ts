@@ -5,12 +5,18 @@ export class User {
 	role: Role;
 }
 export class errormodel{
-    errorsection : string;
+    tab : string;
     cellid : string;
-    details:string[];
-    ToolTipText?:string;
+	details:string[];
+	chevron:string; 
+	ToolTipText?:string;
+	level:validationlevel;
 }
 
+export enum validationlevel{
+	level1,
+	level2
+}
 export class ExceptionModel{
     section : string;
     message : string;
@@ -55,3 +61,9 @@ export const Users: User[] = [
 		role: Role.user
 	}
 ];	
+
+
+export const Chevronkeys = {
+	InsurancePolices: "InsPolicies",
+	
+  };

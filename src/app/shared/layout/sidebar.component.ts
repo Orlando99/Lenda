@@ -49,7 +49,9 @@ export class SidebarComponent implements OnInit {
     // Start subscribing if sync is required
     this.publishService.listenToSyncRequired().subscribe((syncItems) => {
       this.syncItems = syncItems;
-      
+      this.syncItems.forEach(element => {
+        this.geterrorcountfortab(element.page);
+      });
     });
   }
 
@@ -74,6 +76,11 @@ export class SidebarComponent implements OnInit {
     catch (ex) {
 
     }
+  }
+
+  geterrorcountfortab(section:string){
+    debugger
+    return (this.localstorage.retrieve(environment.errorbase) as [any]).filter(p=>p.tab.toString().toLowerCase()==section.toLowerCase()).length;
   }
 }
 
