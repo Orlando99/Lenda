@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Inject } from '@angular/core';
+import { Component, OnInit, EventEmitter, Inject, NgZone } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
@@ -11,7 +11,7 @@ export class ConfirmComponent {
   onDataRecieved = new EventEmitter();
   constructor(
     public dialogRef: MatDialogRef<ConfirmComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,private ngZone: NgZone
   ) { }
 
   onOkClick(): void {
@@ -22,12 +22,16 @@ export class ConfirmComponent {
     this.dialogRef.beforeClose().subscribe(res=>{
       //console.error(res)
     })
-    this.dialogRef.close();
+    this.ngZone.run(() => {
+      this.dialogRef.close();
+   });
     this.onDataRecieved.emit(true);
   }
 
   onCancelClick(): void {
-    this.dialogRef.close();
+    this.ngZone.run(() => {
+      this.dialogRef.close();
+   });
     this.onDataRecieved.emit(false);
   }
 }

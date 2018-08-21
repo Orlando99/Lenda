@@ -265,7 +265,6 @@ export class AssociationComponent implements OnInit, OnChanges {
   DeleteClicked(rowIndex: any) {
     this.alertify.confirm("Confirm", "Do you Really Want to Delete this Record?").subscribe(res => {
       if (res == true) {
-
         let assocObj  = this.rowData[rowIndex];
         let localObjIndex = this.localloanobject.Association.findIndex(assoc => assoc == assocObj);
         if(localObjIndex > -1){
@@ -278,20 +277,6 @@ export class AssociationComponent implements OnInit, OnChanges {
           this.localloanobject.srccomponentedit = undefined;
           this.localloanobject.lasteditrowindex = undefined;
         }
-        // var obj = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode)[rowIndex];
-
-        // if (obj.Assoc_ID === 0) {
-        //   let filteting = this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode);
-
-        //   this.localloanobject.Association.splice(this.localloanobject.Association.indexOf(filteting[rowIndex]), 1);
-
-        // }
-        // else {
-        //   obj.ActionStatus = 3;
-        // }
-
-        // console.log(res,rowIndex, obj, obj.Assoc_ID, this.localloanobject)
-
         this.onRowCountChange.emit({count : this.localloanobject.Association.filter(p => p.ActionStatus != 3 &&  p.Assoc_Type_Code==this.associationTypeCode).length});
         this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
         this.publishService.enableSync(this.currentPageName);

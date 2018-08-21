@@ -79,7 +79,7 @@ export class SidebarComponent implements OnInit {
   }
 
   geterrorcountfortab(section:string){
-    debugger
+    
     return (this.localstorage.retrieve(environment.errorbase) as [any]).filter(p=>p.tab.toString().toLowerCase()==section.toLowerCase()).length;
   }
 }
