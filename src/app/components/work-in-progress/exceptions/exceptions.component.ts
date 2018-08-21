@@ -12,6 +12,10 @@ export class ExceptionsComponent implements OnInit {
 
  
   localExceptionLogs : Array<ExceptionModel>;
+
+
+  @Input() displayHeader = true;
+  @Input() askForJudgement = false;
   
   constructor(private localStorageService : LocalStorageService) { }
 
