@@ -1,21 +1,24 @@
 import { Component, OnInit } from '@angular/core';
+import { SidebarModule } from 'ng-sidebar';
+import { modelparserfordb } from '../../../Workers/utility/modelparserfordb';
 import { environment } from '../../../../environments/environment.prod';
 import { loan_model, Loan_Crop } from '../../../models/loanmodel';
 import { LocalStorageService } from 'ngx-webstorage';
 import { LoancalculationWorker } from '../../../Workers/calculations/loancalculationworker';
+import { ToastsManager } from 'ng2-toastr';
 import { LoggingService } from '../../../services/Logs/logging.service';
+import { CropapiService } from '../../../services/crop/cropapi.service';
 import { getNumericCellEditor, numberValueSetter } from '../../../Workers/utility/aggrid/numericboxes';
 import { SelectEditor } from '../../../aggridfilters/selectbox';
 import { DeleteButtonRenderer } from '../../../aggridcolumns/deletebuttoncolumn';
-import { CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
+import { extractCropValues, lookupCropValue, Cropvaluesetter, getfilteredCropType, lookupCropTypeValue, CropTypevaluesetter } from '../../../Workers/utility/aggrid/cropboxes';
 import { AlertifyService } from '../../../alertify/alertify.service';
+import { JsonConvert } from 'json2typescript';
 import { LoanApiService } from '../../../services/loan/loanapi.service';
-import { setgriddefaults } from '../../../aggriddefinations/aggridoptions';
-import { PublishService, Page } from '../../../services/publish.service';
-import {CroptypeidtonameFormatter, CropidtonameFormatter, currencyFormatter, percentageFormatter } from '../../../aggridformatters/valueformatters';
+import { PriceFormatter, PercentageFormatter } from '../../../Workers/utility/aggrid/formatters';
 
 @Component({
-  selector: 'app-price',  
+  selector: 'app-price',
   templateUrl: './price.component.html',
   styleUrls: ['./price.component.scss']
 })
@@ -33,19 +36,21 @@ export class PriceComponent implements OnInit {
   private columnApi;
   style = {
     width: '100%',
+    height: '240px',
     boxSizing: 'border-box'
   };
-  defaultColDef: { headerComponentParams: { template: string; },width : number};
+  defaultColDef: { headerComponentParams: { template: string; },width : number };
   stylesidebar={
     width: '95%',
+    height: '240px'
   };
   //region Ag grid Configuration
   constructor(public localstorageservice: LocalStorageService,
     public loanserviceworker: LoancalculationWorker,
+    private toaster: ToastsManager,
     public logging: LoggingService,
     public alertify: AlertifyService,
-    public loanapi: LoanApiService,
-    private publishService : PublishService
+    public loanapi: LoanApiService
   ) {
 
     //Aggrid Specific Code
@@ -68,36 +73,55 @@ export class PriceComponent implements OnInit {
           '  </div>' +
           '</div>'
       },
-      width: 100
+      width: 100,
   };
     //Coldef here
     this.columnDefs = [
       {
         headerName: 'Crop', field: 'Crop_Code', width:70,
-        valueFormatter: CropidtonameFormatter 
+        valueFormatter: (params) => {
+          let values : Array<any>= extractCropValues(this.refdata.CropList);
+          return lookupCropValue(values, params.value);
+        }
       },
       {
         headerName: 'Crop type', field: 'Crop_Type_Code',
-        valueFormatter: CroptypeidtonameFormatter,
+        valueFormatter: function (params) {
+          return lookupCropTypeValue(params.value);
+        },
         valueSetter: CropTypevaluesetter
       },
-      { headerName: 'Crop Price', field: 'Crop_Price', headerClass: "rightaligned", cellClass: "rightaligned",
-      valueFormatter: currencyFormatter},
-      { headerName: 'Basis Adj', field: 'Basic_Adj',headerClass: "rightaligned", cellClass: ['editable-color','rightaligned'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
-      valueFormatter: currencyFormatter},
-      { headerName: 'Marketing Adj', field: 'Marketing_Adj', headerClass: "rightaligned", cellClass: "rightaligned",
-      valueFormatter: currencyFormatter},
-      { headerName: 'Rebate Adj', field: 'Rebate_Adj',headerClass: "rightaligned", cellClass: ['editable-color','rightaligned'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
-      valueFormatter: currencyFormatter},
-      { headerName: 'Adj Price', field: 'Adj_Price', headerClass: "rightaligned", cellClass: "rightaligned",
-      valueFormatter: currencyFormatter},
-      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false, headerClass: "rightaligned", cellClass: "rightaligned" },
-      { headerName: 'Contract Price', field: 'Contract_Price', editable: false , headerClass: "rightaligned", cellClass: "rightaligned",
-      valueFormatter: currencyFormatter},
-      { headerName: '% Booked', field: 'Percent_booked', headerClass: "rightaligned", cellClass: "rightaligned",
-      valueFormatter: percentageFormatter},
+      { headerName: 'Crop Price', field: 'Crop_Price',cellClass: 'text-right',
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: 'Basis Adj', field: 'Basic_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter ,
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: 'Marketing Adj', field: 'Marketing_Adj',cellClass: 'text-right',
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      } },
+      { headerName: 'Rebate Adj', field: 'Rebate_Adj', cellClass: ['editable-color','text-right'], editable: true, cellEditor: "numericCellEditor", valueSetter: numberValueSetter,
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: 'Adj Price', field: 'Adj_Price',cellClass: 'text-right',
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: 'Contract Qty', field: 'Contract_Qty', editable: false,cellClass: 'text-right', },
+      { headerName: 'Contract Price', field: 'Contract_Price', editable: false ,cellClass: 'text-right',
+      valueFormatter: function (params) {
+        return PriceFormatter(params.value);
+      }},
+      { headerName: '% Booked', field: 'Percent_booked',cellClass: 'text-right',
+      valueFormatter: function (params) {
+        return PercentageFormatter(params.value);
+      } },
       { headerName: 'Ins UOM', field: 'Bu', editable: false,
-      valueFormatter: function () {
+      valueFormatter: function (params) {
         return 'Bu';
       } },
 
@@ -108,7 +132,7 @@ export class PriceComponent implements OnInit {
   }
   ngOnInit() {
     this.localstorageservice.observe(environment.loankey).subscribe(res => {
-      // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
+      this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage updated");
       this.localloanobject = res;
       if (res.srccomponentedit == "PriceComponent") {
         //if the same table invoked the change .. change only the edited row
@@ -118,7 +142,7 @@ export class PriceComponent implements OnInit {
         this.rowData = [];
         this.rowData = this.localloanobject.LoanCrops !== null ? this.localloanobject.LoanCrops.filter(p => p.ActionStatus != 3):[];
       }
-      //this.getgridheight();
+      this.getgridheight();
       this.gridApi.refreshCells();
 
     })
@@ -127,7 +151,7 @@ export class PriceComponent implements OnInit {
   }
   getdataforgrid() {
     let obj: any = this.localstorageservice.retrieve(environment.loankey);
-    // this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
+    this.logging.checkandcreatelog(1, 'CropPrice', "LocalStorage retrieved");
     if (obj != null && obj != undefined) {
       this.localloanobject = obj;
       this.rowData = [];
@@ -138,29 +162,29 @@ export class PriceComponent implements OnInit {
 
 
 
-  // synctoDb() {
-  //   this.gridApi.showLoadingOverlay();
-  //   this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
-  //     if (res.ResCode == 1) {
-  //       this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
-  //         this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
-  //         if (res.ResCode == 1) {
-  //           this.toaster.success("Records Synced");
-  //           let jsonConvert: JsonConvert = new JsonConvert();
-  //           this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
-  //         }
-  //         else {
-  //           this.toaster.error("Could not fetch Loan Object from API")
-  //         }
-  //         this.gridApi.hideOverlay()
-  //       });
-  //     }
-  //     else {
-  //       this.gridApi.hideOverlay()
-  //       this.toaster.error("Error in Sync");
-  //     }
-  //   })
-  // }
+  synctoDb() {
+    this.gridApi.showLoadingOverlay();
+    this.loanapi.syncloanobject(this.localloanobject).subscribe(res => {
+      if (res.ResCode == 1) {
+        this.loanapi.getLoanById(this.localloanobject.Loan_Full_ID).subscribe(res => {
+          this.logging.checkandcreatelog(3, 'Overview', "APi LOAN GET with Response " + res.ResCode);
+          if (res.ResCode == 1) {
+            this.toaster.success("Records Synced");
+            let jsonConvert: JsonConvert = new JsonConvert();
+            this.loanserviceworker.performcalculationonloanobject(jsonConvert.deserialize(res.Data, loan_model));
+          }
+          else {
+            this.toaster.error("Could not fetch Loan Object from API")
+          }
+          this.gridApi.hideOverlay()
+        });
+      }
+      else {
+        this.gridApi.hideOverlay()
+        this.toaster.error("Error in Sync");
+      }
+    })
+  }
 
   // //Grid Events
   // addrow() {
@@ -211,22 +235,18 @@ export class PriceComponent implements OnInit {
 
       //the same caclulation is in marketing calculation service, which should be shisted to common place
       obj.Marketing_Adj = (obj.Contract_Price - (obj.Basic_Adj + obj.Crop_Price))*(obj.Percent_booked/100);
-      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj || 0) + (obj.Rebate_Adj || 0);
+      obj.Adj_Price = obj.Crop_Price + obj.Basic_Adj + obj.Marketing_Adj + obj.Rebate_Adj;
       
-    }else{
-      obj.Adj_Price = (obj.Crop_Price || 0) + (obj.Basic_Adj || 0) + (obj.Marketing_Adj ||0) + (obj.Rebate_Adj || 0);
     }
     //this shall have the last edit
     this.localloanobject.srccomponentedit = "PriceComponent";
     this.localloanobject.lasteditrowindex = value.rowIndex;
     this.loanserviceworker.performcalculationonloanobject(this.localloanobject);
-    this.publishService.enableSync(Page.crop);
   }
   onGridReady(params) {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
-    setgriddefaults(this.gridApi,this.columnApi);
-    //this.getgridheight();
+    this.getgridheight();
     //auto width and no scroll
   }
   // DeleteClicked(rowIndex: any) {
@@ -253,12 +273,20 @@ export class PriceComponent implements OnInit {
     return '';
   }
 
-  // getgridheight() {
+  getgridheight() {
 
-  //   this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
-  //   this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
-  // }
- 
+    this.style.height = (29 * (this.rowData.length + 2)).toString() + "px";
+    this.stylesidebar.height =(29 * (this.rowData.length + 2)).toString() + "px";
+  }
+  onGridSizeChanged(Event: any) {
+
+    try{
+    //this.gridApi.sizeColumnsToFit();
+  }
+  catch{
+
+  }
+  }
 
   onColumnhiderequested(event,header:string){
     let checked=event.srcElement.checked;
@@ -266,4 +294,7 @@ export class PriceComponent implements OnInit {
     //this.gridApi.sizeColumnsToFit();
   }
 }
+function adjustheader(): void {
 
+  document.getElementsByClassName("ag-header-cell-label")[0].setAttribute("style","width:100%")
+}
